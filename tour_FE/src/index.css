@@ -357,6 +357,7 @@ footer{background:var(--sea-dark);color:#B6C4D8;margin-top:92px}
 /* ---------- misc ---------- */
 .toast{position:fixed;left:50%;bottom:34px;transform:translate(-50%,16px);background:var(--navy);color:#fff;font-size:14px;font-weight:700;border-radius:10px;padding:13px 24px;box-shadow:0 14px 34px rgba(45,46,107,.35);opacity:0;pointer-events:none;transition:.3s;z-index:200}
 .toast.on{opacity:1;transform:translate(-50%,0)}
+.scroll-top-btn{position:fixed;right:24px;bottom:24px;z-index:90;width:48px;height:48px;border-radius:50%;background:#fff;color:var(--navy);border:2px solid var(--navy);box-shadow:0 8px 24px rgba(45,46,107,.14);display:flex;align-items:center;justify-content:center;cursor:pointer}
 .reveal{opacity:0;transform:translateY(28px);transition:opacity .85s cubic-bezier(.22,.7,.3,1),transform .85s cubic-bezier(.22,.7,.3,1);overflow-x:clip}
 .rv-l{transform:translateY(28px)}
 .rv-r{transform:translateY(28px)}
@@ -399,4 +400,5 @@ footer{background:var(--sea-dark);color:#B6C4D8;margin-top:92px}
   .foot-main{flex-direction:column;align-items:flex-start}
   .hero-cta{flex-direction:column}
   .btn-portal span{display:none}
+  .scroll-top-btn{right:18px;bottom:18px;width:44px;height:44px}
 }

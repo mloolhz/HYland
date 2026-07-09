@@ -33,7 +33,20 @@ export function SiteHeader() {
   return (
     <header className="site-head" id="siteHead" ref={headRef}>
       <div className="container nav-inner">
-        <a className="logo" href="#home" aria-label="ISLAND QUEST 홈">
+        <a
+          className="logo"
+          href="/"
+          aria-label="ISLAND QUEST 홈"
+          onClick={(e) => {
+            e.preventDefault();
+            const { pathname, search, hash } = window.location;
+            if (pathname === "/" && !search && !hash) {
+              window.location.reload();
+            } else {
+              window.location.href = "/";
+            }
+          }}
+        >
           <LogoIcon />
           <span className="logo-txt">
             <b>ISLAND QUEST</b>
