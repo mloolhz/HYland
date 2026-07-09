@@ -168,16 +168,20 @@ export function HeroSection({ loginInputRef }: HeroSectionProps) {
         </aside>
       </div>
 
-      <a
-        href="#map"
-        className={`hero-scroll-hint${showScrollHint ? "" : " is-hidden"}`}
-        aria-label="아래로 스크롤하여 더 알아보기"
-      >
+      <div className={`hero-scroll-hint${showScrollHint ? "" : " is-hidden"}`}>
         <span className="hero-scroll-label">스크롤하여 더 알아보기</span>
-        <span className="hero-scroll-chevron" aria-hidden="true">
-          ↓
-        </span>
-      </a>
+        <a href="#map" className="hero-scroll-chevron" aria-label="아래로 스크롤하여 더 알아보기">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M7 10l5 5 5-5M7 14l5 5 5-5"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </a>
+      </div>
     </section>
   );
 }
