@@ -69,7 +69,7 @@ export function LeaderboardSection({ onScrollToLogin }: LeaderboardSectionProps)
                     <span className="pd-rank">#{rank}</span>
                     <div
                       className="pd-ava"
-                      style={{ background: `linear-gradient(150deg, ${avaColor(name)}, #0E2B52)` }}
+                      style={{ background: `linear-gradient(150deg, ${avaColor(name)}, #2D2E6B)` }}
                     >
                       {name[0]}
                     </div>

@@ -7,10 +7,9 @@ import { HeroSection } from "./HeroSection";
 import { LeaderboardSection } from "./LeaderboardSection";
 import { MapSection } from "./MapSection";
 import { MissionSection } from "./MissionSection";
-import { PortalBand } from "./PortalBand";
+import { RelatedSitesBand } from "./RelatedSitesBand";
 import { SiteFooter } from "./SiteFooter";
 import { SiteHeader } from "./SiteHeader";
-import { StatsStrip } from "./StatsStrip";
 import { ToastProvider, useToast } from "./ToastProvider";
 
 function LandingPageContent() {
@@ -63,7 +62,6 @@ function LandingPageContent() {
     stagger(".ai-grid .ai-card", 120);
     stagger(".book-card .row", 70);
     stagger(".badge-grid .badge", 70);
-    stagger(".stats .stat", 90);
     stagger(".cats .cat", 55);
 
     return () => io.disconnect();
@@ -74,7 +72,6 @@ function LandingPageContent() {
     if (reduceMotion) return;
 
     const hs = document.querySelector(".hero-slides") as HTMLElement | null;
-    const pb = document.querySelector(".portal-band") as HTMLElement | null;
     let ticking = false;
 
     const onScroll = () => {
@@ -84,13 +81,6 @@ function LandingPageContent() {
         const y = window.scrollY;
         if (hs && y < window.innerHeight * 1.3) {
           hs.style.transform = `translateY(${y * 0.22}px)`;
-        }
-        if (pb) {
-          const r = pb.getBoundingClientRect();
-          if (r.top < window.innerHeight && r.bottom > 0) {
-            const p = (window.innerHeight - r.top) / (window.innerHeight + r.height);
-            pb.style.backgroundPosition = `center ${28 + p * 26}%`;
-          }
         }
         ticking = false;
       });
@@ -102,16 +92,15 @@ function LandingPageContent() {
 
   return (
     <>
-      <SiteHeader onScrollToLogin={scrollToLogin} />
+      <SiteHeader />
       <HeroSection loginInputRef={loginInputRef} />
-      <StatsStrip />
       <MapSection />
       <AISection />
       <BookingSection />
       <MissionSection />
       <LeaderboardSection onScrollToLogin={scrollToLogin} />
       <CommunitySection />
-      <PortalBand />
+      <RelatedSitesBand />
       <SiteFooter />
     </>
   );

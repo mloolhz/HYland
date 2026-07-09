@@ -31,14 +31,14 @@ export default function IslandMap() {
         <rect x="0" y="0" width="640" height="460" rx="14" fill="url(#wvp)"/>
 
         
-        <path d="M596 0 L640 0 L640 460 L590 460 Q574 400 588 340 Q602 292 584 250 Q568 208 588 158 Q604 108 586 56 Q576 24 596 0 Z" fill="#4C6FDF" stroke="#6C8AEA" strokeWidth="1.6"/>
-        <text x="617" y="140" fontSize="12.5" fontWeight="800" fill="#fff">인천</text>
-        <text x="613" y="330" fontSize="10" fill="rgba(255,255,255,.85)">송도</text>
-        <circle cx="586" cy="232" r="4.5" fill="#fff"/>
-        <text x="577" y="221" fontSize="10" fill="rgba(255,255,255,.9)" textAnchor="end">인천항</text>
+        <path className="land-main" d="M596 0 L640 0 L640 460 L590 460 Q574 400 588 340 Q602 292 584 250 Q568 208 588 158 Q604 108 586 56 Q576 24 596 0 Z" fill="#C9D6E2" stroke="#9FB2C4" strokeWidth="1.6"/>
+        <text x="617" y="140" fontSize="12.5" fontWeight="800" fill="#2D2E6B">인천</text>
+        <text x="613" y="330" fontSize="10" fill="#4A5F78">송도</text>
+        <circle cx="586" cy="232" r="4.5" fill="#0F5FCC"/>
+        <text x="577" y="221" fontSize="10" fill="#2D2E6B" textAnchor="end">인천항</text>
 
         
-        <g stroke="rgba(255,255,255,.85)" strokeWidth="2.4" fill="none" strokeLinecap="round">
+        <g stroke="rgba(46,74,116,.45)" strokeWidth="2.4" fill="none" strokeLinecap="round">
           <path d="M536 188 L588 170"/><path d="M534 224 L592 298"/>
         </g>
 
@@ -52,17 +52,21 @@ export default function IslandMap() {
 
         
         <g className="ferry">
-          <path d="M14 2 q4 3 8 2" stroke="rgba(255,255,255,.55)" strokeWidth="2" fill="none"/>
-          <path d="M-10 -1 L10 -1 Q9 5 2 5 L-6 5 Q-10 5 -10 -1 Z" fill="#fff"/>
-          <rect x="-5" y="-6" width="8" height="5" rx="1.4" fill="#fff"/>
-          <rect x="-3.4" y="-4.8" width="2.2" height="2.2" rx=".6" fill="#2151CE"/>
-          <animateMotion dur="30s" repeatCount="indefinite" rotate="auto" keyPoints="0;1;1;0;0" keyTimes="0;.42;.5;.92;1" calcMode="linear" path="M580 234 C470 208 250 148 110 64"/>
+          <g transform="rotate(180)">
+            <path d="M14 2 q4 3 8 2" stroke="rgba(255,255,255,.55)" strokeWidth="2" fill="none"/>
+            <path d="M-10 -1 L10 -1 Q9 5 2 5 L-6 5 Q-10 5 -10 -1 Z" fill="#fff"/>
+            <rect x="-5" y="-6" width="8" height="5" rx="1.4" fill="#fff"/>
+            <rect x="-3.4" y="-4.8" width="2.2" height="2.2" rx=".6" fill="#2151CE"/>
+          </g>
+          <animateMotion dur="30s" repeatCount="indefinite" rotate="auto" path="M580 234 C470 208 250 148 110 64"/>
         </g>
         <g className="ferry">
-          <path d="M12 1 q4 3 8 2" stroke="rgba(255,255,255,.5)" strokeWidth="1.8" fill="none"/>
-          <path d="M-8 -1 L8 -1 Q7 4 1.6 4 L-5 4 Q-8 4 -8 -1 Z" fill="#fff"/>
-          <rect x="-4" y="-5" width="6.4" height="4" rx="1.2" fill="#fff"/>
-          <animateMotion dur="22s" repeatCount="indefinite" rotate="auto" keyPoints="0;1;1;0;0" keyTimes="0;.42;.5;.92;1" calcMode="linear" path="M580 236 C498 282 372 320 302 334"/>
+          <g transform="rotate(180)">
+            <path d="M12 1 q4 3 8 2" stroke="rgba(255,255,255,.5)" strokeWidth="1.8" fill="none"/>
+            <path d="M-8 -1 L8 -1 Q7 4 1.6 4 L-5 4 Q-8 4 -8 -1 Z" fill="#fff"/>
+            <rect x="-4" y="-5" width="6.4" height="4" rx="1.2" fill="#fff"/>
+          </g>
+          <animateMotion dur="22s" repeatCount="indefinite" rotate="auto" path="M580 236 C498 282 372 320 302 334"/>
         </g>
 
         

@@ -105,7 +105,6 @@ export function CommunitySection() {
               LIVE
             </span>
             <b>실시간 탐험 후기</b>
-            <small>새 후기가 계속 올라와요</small>
           </div>
           <ul className="feed" aria-live="polite">
             {items.map(({ id, review }) => (

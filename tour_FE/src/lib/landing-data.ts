@@ -80,3 +80,21 @@ export function avaColor(name: string): string {
 export function formatNumber(n: number): string {
   return n.toLocaleString("ko-KR");
 }
+
+/** 관련사이트 — url에 링크 주소를 입력하세요 */
+export type RelatedSite = {
+  name: string;
+  url: string;
+};
+
+export const RELATED_SITES: RelatedSite[] = [
+  { name: "인천광역시", url: "https://www.incheon.go.kr/index" },
+  { name: "인천관광공사", url: "https://www.ito.or.kr/" },
+  { name: "인천항만공사", url: "https://www.icpa.or.kr/index.do" },
+  { name: "인천섬발전지원센터", url: "https://www.iisland.or.kr/" },
+  { name: "한국섬진흥원", url: "https://kidi.re.kr/home.do" },
+  { name: "옹진문화관광", url: "https://www.ongjin.go.kr/open_content/tour/" },
+  { name: "강화문화관광", url: "https://www.ganghwa.go.kr/open_content/tour/" },
+  { name: "서해구문화관광", url: "https://www.seohae.go.kr/open_content/tour/" },
+  { name: "인천투어(I TOUR)", url: "https://itour.incheon.go.kr/" },
+];

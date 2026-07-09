@@ -19,11 +19,8 @@ type HeroSectionProps = {
 
 export function HeroSection({ loginInputRef }: HeroSectionProps) {
   const [activeSlide, setActiveSlide] = useState(0);
+  const [showScrollHint, setShowScrollHint] = useState(true);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  const goSlide = useCallback((index: number) => {
-    setActiveSlide((index + SLIDE_COUNT) % SLIDE_COUNT);
-  }, []);
 
   const startHero = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
@@ -41,6 +38,13 @@ export function HeroSection({ loginInputRef }: HeroSectionProps) {
       if (timerRef.current) clearInterval(timerRef.current);
     };
   }, [startHero]);
+
+  useEffect(() => {
+    const onScroll = () => setShowScrollHint(window.scrollY < 48);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <section
@@ -78,6 +82,14 @@ export function HeroSection({ loginInputRef }: HeroSectionProps) {
             <a className="btn btn-white" href="#booking">
               레저 예약 보기
             </a>
+          </div>
+          <div className="cats" aria-label="레저 카테고리">
+            {CATEGORIES.map(([icon, label]) => (
+              <span className="cat" key={label}>
+                <i>{icon}</i>
+                {label}
+              </span>
+            ))}
           </div>
         </div>
 
@@ -154,31 +166,18 @@ export function HeroSection({ loginInputRef }: HeroSectionProps) {
           </div>
           <p className="pc-foot">로그인하면 방문 기록 · 미션 · 배지가 여권에 자동 저장돼요</p>
         </aside>
-
-        <div className="hero-foot">
-          <div className="cats" aria-label="레저 카테고리">
-            {CATEGORIES.map(([icon, label]) => (
-              <span className="cat" key={label}>
-                <i>{icon}</i>
-                {label}
-              </span>
-            ))}
-          </div>
-          <div className="hero-dots" aria-label="배경 사진 전환">
-            {Array.from({ length: SLIDE_COUNT }, (_, i) => (
-              <button
-                key={i}
-                className={`hdot${activeSlide === i ? " on" : ""}`}
-                aria-label={`사진 ${i + 1}`}
-                onClick={() => {
-                  goSlide(i);
-                  startHero();
-                }}
-              />
-            ))}
-          </div>
-        </div>
       </div>
+
+      <a
+        href="#map"
+        className={`hero-scroll-hint${showScrollHint ? "" : " is-hidden"}`}
+        aria-label="아래로 스크롤하여 더 알아보기"
+      >
+        <span className="hero-scroll-label">스크롤하여 더 알아보기</span>
+        <span className="hero-scroll-chevron" aria-hidden="true">
+          ↓
+        </span>
+      </a>
     </section>
   );
 }
