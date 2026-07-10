@@ -7,8 +7,10 @@ import { PasswordField } from "@/components/auth/PasswordField";
 import { PhoneVerification } from "@/components/auth/PhoneVerification";
 import { PasswordStrengthBar } from "@/components/auth/PasswordStrengthBar";
 import { TextField } from "@/components/auth/TextField";
+import { PasswordRules } from "@/components/auth/PasswordRules";
 import { isTermsValid, TermsAgreement } from "@/components/auth/TermsAgreement";
 import { mockCheckNickname, mockCheckUserId } from "@/constants/auth";
+import { isPasswordFullyValid, isPasswordAllowedChars } from "@/constants/validation";
 import { useAuthRedirect } from "@/hooks/useAuthRedirect";
 import { usePhoneVerification } from "@/hooks/usePhoneVerification";
 import {
@@ -16,7 +18,6 @@ import {
   validateNickname,
   validateUserId,
 } from "@/lib/authValidation";
-import { isPasswordValid } from "@/lib/passwordStrength";
 
 export function Signup() {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ export function Signup() {
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(false);
 
-  const passwordValid = password.length >= 8 && isPasswordValid(password);
+  const passwordValid = isPasswordFullyValid(password) && isPasswordAllowedChars(password);
   const confirmMatch = password === confirm && confirm.length > 0;
 
   const submitHint = useMemo(() => {
@@ -69,8 +70,11 @@ export function Signup() {
     (field: "password" | "confirm") => {
       const e: Record<string, string> = {};
       if (field === "password") {
-        if (password.length < 8) e.password = "비밀번호는 8자 이상이어야 합니다";
-        else if (!isPasswordValid(password)) e.password = "영문과 숫자를 모두 포함해주세요";
+        if (!isPasswordAllowedChars(password)) {
+          e.password = "사용할 수 없는 문자가 포함되어 있어요";
+        } else if (!isPasswordFullyValid(password)) {
+          e.password = "비밀번호 조건을 확인해주세요";
+        }
       }
       if (field === "confirm" && password !== confirm) {
         e.confirm = "비밀번호가 일치하지 않습니다";
@@ -105,9 +109,13 @@ export function Signup() {
     if (touched.password || errors.password) {
       setErrors((prev) => {
         const next = { ...prev };
-        if (value.length < 8) next.password = "비밀번호는 8자 이상이어야 합니다";
-        else if (!isPasswordValid(value)) next.password = "영문과 숫자를 모두 포함해주세요";
-        else delete next.password;
+        if (!isPasswordAllowedChars(value)) {
+          next.password = "사용할 수 없는 문자가 포함되어 있어요";
+        } else if (!isPasswordFullyValid(value)) {
+          next.password = "비밀번호 조건을 확인해주세요";
+        } else {
+          delete next.password;
+        }
         return next;
       });
     }
@@ -191,6 +199,7 @@ export function Signup() {
                 error={errors.password}
               />
               <PasswordStrengthBar password={password} />
+              <PasswordRules password={password} />
             </div>
 
             <PasswordField

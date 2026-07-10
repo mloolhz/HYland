@@ -152,9 +152,9 @@ export function Login() {
           </label>
 
           <nav className="auth-find-links" aria-label="계정 찾기">
-            <Link to="/find-id">아이디 찾기</Link>
+            <Link to="/find-account">아이디 찾기</Link>
             <span className="auth-find-divider" aria-hidden="true" />
-            <Link to="/find-password">비밀번호 찾기</Link>
+            <Link to="/find-account?tab=password">비밀번호 찾기</Link>
           </nav>
 
           <button type="submit" className="auth-submit" disabled={loading}>

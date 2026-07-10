@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { useState } from "react";
 import { TextField } from "./TextField";
 
@@ -10,6 +11,7 @@ type PasswordFieldProps = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   placeholder?: string;
+  icon?: ReactNode;
 };
 
 export function PasswordField({
@@ -21,6 +23,7 @@ export function PasswordField({
   onChange,
   onBlur,
   placeholder = "비밀번호",
+  icon = <i className="ti ti-lock" />,
 }: PasswordFieldProps) {
   const [visible, setVisible] = useState(false);
 
@@ -35,7 +38,7 @@ export function PasswordField({
       onChange={onChange}
       onBlur={onBlur}
       error={error}
-      icon={<i className="ti ti-lock" />}
+      icon={icon}
       rightSlot={
         <button
           type="button"

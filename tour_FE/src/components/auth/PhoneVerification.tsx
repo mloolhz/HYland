@@ -1,9 +1,12 @@
+import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import { formatTimer } from "@/lib/phone";
 import type { PhoneStep } from "@/hooks/usePhoneVerification";
 import { TextField } from "./TextField";
 
 type PhoneVerificationProps = {
+  idPrefix?: string;
+  phoneIcon?: ReactNode;
   phone: string;
   setPhone: (value: string) => void;
   code: string;
@@ -18,6 +21,8 @@ type PhoneVerificationProps = {
 };
 
 export function PhoneVerification({
+  idPrefix = "signup",
+  phoneIcon,
   phone,
   setPhone,
   code,
@@ -68,7 +73,7 @@ export function PhoneVerification({
       )}
 
       <TextField
-        id="signup-phone"
+        id={`${idPrefix}-phone`}
         label="전화번호"
         type="tel"
         autoComplete="tel"
@@ -79,6 +84,7 @@ export function PhoneVerification({
         onChange={(e) => setPhone(e.target.value)}
         error={errors.phone}
         disabled={step === "verified"}
+        icon={phoneIcon}
         rightSlot={
           step === "verified" ? (
             <span className="auth-dup-done auth-dup-done-icon">
@@ -101,7 +107,7 @@ export function PhoneVerification({
       {(step === "sent" || step === "verified") && (
         <div className="auth-code-row">
           <TextField
-            id="signup-code"
+            id={`${idPrefix}-code`}
             label="인증번호"
             type="text"
             inputMode="numeric"

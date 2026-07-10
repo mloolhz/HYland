@@ -7,6 +7,7 @@ import { Community } from "@/pages/Community";
 import { Login } from "@/pages/Login";
 import { MyActivity } from "@/pages/MyActivity";
 import { PostDetail } from "@/pages/PostDetail";
+import { FindAccount } from "@/pages/FindAccount";
 import { Signup } from "@/pages/Signup";
 import { Landing } from "@/pages/Landing";
 import "./index.css";
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
     children: [
       { path: "login", element: <Login /> },
       { path: "signup", element: <Signup /> },
+      { path: "find-account", element: <FindAccount /> },
     ],
   },
 ]);

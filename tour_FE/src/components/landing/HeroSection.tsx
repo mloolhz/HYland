@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { demoProps } from "./ToastProvider";
 
@@ -112,17 +113,13 @@ export function HeroSection({ loginInputRef }: HeroSectionProps) {
                 로그인
               </button>
               <div className="find-links">
-                <a href="#" {...demoProps("아이디 찾기는 준비 중이에요 🙂")}>
-                  아이디 찾기
-                </a>
-                <em>·</em>
-                <a href="#" {...demoProps("비밀번호 찾기는 준비 중이에요 🙂")}>
-                  비밀번호 찾기
-                </a>
-                <em>·</em>
-                <a href="#" {...demoProps("회원가입은 준비 중이에요 🙂")}>
+                <Link to="/find-account">아이디 찾기</Link>
+                <span className="find-divider" aria-hidden="true" />
+                <Link to="/find-account?tab=password">비밀번호 찾기</Link>
+                <span className="find-divider" aria-hidden="true" />
+                <Link to="/signup">
                   <b style={{ color: "var(--blue)" }}>회원가입</b>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
