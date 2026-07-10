@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { ActivityTabs, type ActivityTab } from "@/components/community/ActivityTabs";
 import { demoProps } from "@/components/landing/ToastProvider";
 import { EmptyState } from "@/components/community/EmptyState";
@@ -8,7 +8,8 @@ import { PostList } from "@/components/community/PostList";
 import { PopularIslands } from "@/components/community/PopularIslands";
 import { ProfileCard } from "@/components/community/ProfileCard";
 import { ISLAND_BTI } from "@/constants/island";
-import { isDemoLoggedIn, setDemoLoggedIn } from "@/constants/auth";
+import { isDemoLoggedIn } from "@/constants/auth";
+import { useAuthRedirect } from "@/hooks/useAuthRedirect";
 import { CONTAINER } from "@/constants/layout";
 import { paginate, totalPages } from "@/lib/posts";
 import { parsePageQuery } from "@/lib/query";
@@ -22,6 +23,8 @@ function parseTab(value: string | null): ActivityTab {
 
 export function MyActivity() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { buildLoginUrl } = useAuthRedirect();
   const [searchParams, setSearchParams] = useSearchParams();
   const tab = parseTab(searchParams.get("tab"));
   const page = parsePageQuery(searchParams.get("page"));
@@ -89,11 +92,7 @@ export function MyActivity() {
           <EmptyState
             title="로그인하고 내 활동 보기"
             ctaLabel="로그인"
-            onCta={() => {
-              setDemoLoggedIn();
-              navigate("/community/me", { replace: true });
-            }}
-            ctaDemo="데모: 로그인 없이 내 활동을 미리 볼 수 있어요"
+            onCta={() => navigate(buildLoginUrl(location.pathname + location.search))}
           />
         </div>
       </main>

@@ -4,10 +4,6 @@ import { LogoIcon } from "@/components/landing/LogoIcon";
 import { demoProps } from "@/components/landing/ToastProvider";
 import { CONTAINER } from "@/constants/layout";
 
-type NavbarProps = {
-  onScrollToLogin: () => void;
-};
-
 const ANCHOR_ITEMS = [
   { label: "섬 탐험", hash: "map" },
   { label: "레저 스포츠", hash: "booking" },
@@ -17,7 +13,7 @@ const ANCHOR_ITEMS = [
 
 const ROUTE_ITEMS = [{ label: "커뮤니티", path: "/community" }] as const;
 
-export function Navbar({ onScrollToLogin }: NavbarProps) {
+export function Navbar() {
   const headRef = useRef<HTMLElement>(null);
   const location = useLocation();
   const navigate = useNavigate();
@@ -67,12 +63,8 @@ export function Navbar({ onScrollToLogin }: NavbarProps) {
         <div className={CONTAINER + " util-inner"}>
           <span className="util-note">인천 섬 레저스포츠 통합 플랫폼 · ISLAND QUEST</span>
           <nav className="util-links" aria-label="유틸리티 메뉴">
-            <a href="#home" onClick={onScrollToLogin}>
-              로그인
-            </a>
-            <a href="#home" {...demoProps("회원가입은 준비 중이에요")}>
-              회원가입
-            </a>
+            <Link to="/login">로그인</Link>
+            <Link to="/signup">회원가입</Link>
             <a href="https://www.incheon.go.kr" target="_blank" rel="noopener noreferrer">
               인천광역시
             </a>

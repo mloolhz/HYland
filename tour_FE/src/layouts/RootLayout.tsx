@@ -45,7 +45,7 @@ function RootLayoutContent() {
 
   return (
     <>
-      <Navbar onScrollToLogin={scrollToLogin} />
+      <Navbar />
       <ScrollToTop />
       <Outlet context={{ loginInputRef, scrollToLogin }} />
       <SiteFooter />
