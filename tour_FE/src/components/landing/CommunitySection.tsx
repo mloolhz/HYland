@@ -1,4 +1,5 @@
 
+import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { avaColor, REVIEWS, type Review } from "@/lib/landing-data";
 import { demoProps } from "./ToastProvider";
@@ -93,9 +94,9 @@ export function CommunitySection() {
             <button className="btn btn-gold" {...demoProps("후기 작성은 로그인 후 이용할 수 있어요 ✍️")}>
               후기 남기기
             </button>
-            <button className="btn btn-outline" {...demoProps("전체 후기 페이지는 준비 중이에요 💬")}>
+            <Link className="btn btn-outline" to="/community">
               전체 후기 보기
-            </button>
+            </Link>
           </div>
         </div>
         <div className="live-card reveal rv-r" id="liveCard">
