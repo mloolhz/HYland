@@ -17,6 +17,17 @@
   --cm-resolved-text: #0f6e56;
   --cm-nav-h: 110px;
   --cm-sticky-top: 80px;
+  /* Type scale (body 14px base) */
+  --ts-meta: 13px;
+  --ts-body: 14px;
+  --ts-label: 14px;
+  --ts-sub: 15px;
+  --ts-title: 17px;
+  --ts-head: 22px;
+  --ts-chip: 12px;
+  --ts-lh-meta: 1.5;
+  --ts-lh-body: 1.7;
+  --ts-lh-title: 1.4;
 }
 
 .sr-only {
@@ -86,7 +97,7 @@
 
 .cm-header-eyebrow {
   display: block;
-  font-size: 11px;
+  font-size: var(--ts-chip);
   font-weight: 700;
   letter-spacing: 1px;
   color: #85b7eb;
@@ -94,7 +105,7 @@
 }
 
 .cm-header-title {
-  font-size: 20px;
+  font-size: var(--ts-head);
   font-weight: 500;
   color: #fff;
   line-height: 1.3;
@@ -102,7 +113,7 @@
 }
 
 .cm-header-desc {
-  font-size: 12px;
+  font-size: 14px;
   color: #b5d4f4;
 }
 
@@ -110,7 +121,7 @@
   flex: none;
   background: var(--cm-brand);
   color: #fff;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   padding: 10px 17px;
   border-radius: 6px;
@@ -159,8 +170,8 @@
   justify-content: center;
   min-width: auto;
   height: auto;
-  padding: 5px 9px;
-  font-size: 12px;
+  padding: 6px 11px;
+  font-size: var(--ts-label);
   font-weight: 600;
   color: var(--cm-muted);
   border: 0;
@@ -171,8 +182,8 @@
 }
 
 .cm-segment-btn svg {
-  width: 13px;
-  height: 13px;
+  width: 16px;
+  height: 16px;
 }
 
 .cm-segment-btn.is-active {
@@ -199,9 +210,9 @@
 }
 
 .cm-filter-pill {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
-  padding: 7px 14px;
+  padding: 8px 16px;
   border-radius: 20px;
   border: 0.5px solid var(--cm-line);
   color: var(--cm-muted);
@@ -246,17 +257,17 @@
 /* ── Post list (table) ── */
 .cm-post-row-grid {
   display: grid;
-  grid-template-columns: 60px minmax(0, 1fr) 96px 78px 54px;
+  grid-template-columns: 64px minmax(0, 1fr) 104px 88px 58px;
   gap: 14px;
   align-items: center;
 }
 
 .cm-post-row-grid--myPosts {
-  grid-template-columns: 60px minmax(0, 1fr) 78px 54px 44px;
+  grid-template-columns: 64px minmax(0, 1fr) 88px 58px 48px;
 }
 
 .cm-post-row-grid--liked {
-  grid-template-columns: 60px minmax(0, 1fr) 96px 78px 44px;
+  grid-template-columns: 64px minmax(0, 1fr) 104px 88px 48px;
 }
 
 .cm-list-col-center {
@@ -285,15 +296,15 @@
 }
 
 .cm-post-row-header {
-  padding: 11px 20px;
-  font-size: 11px;
+  padding: 12px 22px;
+  font-size: var(--ts-meta);
   color: var(--cm-faint);
   border-bottom: 1px solid #cbd5e1;
   background: #fff;
 }
 
 .cm-post-row {
-  padding: 18px 20px;
+  padding: 20px 22px;
   border-bottom: 0.5px solid #f1f5f9;
   color: inherit;
   text-decoration: none;
@@ -317,11 +328,11 @@ a.cm-post-row:hover {
 
 .cm-list-chip {
   display: inline-block;
-  font-size: 10px;
+  font-size: var(--ts-chip);
   font-weight: 700;
-  padding: 4px 8px;
+  padding: 4px 9px;
   border-radius: 3px;
-  max-width: 56px;
+  max-width: 64px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -349,14 +360,14 @@ a.cm-post-row:hover {
 }
 
 .cm-list-title {
-  font-size: 14px;
+  font-size: var(--ts-title);
   color: var(--cm-ink);
-  line-height: 1.5;
+  line-height: var(--ts-lh-title);
   min-width: 0;
 }
 
 .cm-list-resolved-text {
-  font-size: 12px;
+  font-size: var(--ts-meta);
   color: #3b6d11;
   font-weight: 500;
   margin-right: 5px;
@@ -370,22 +381,22 @@ a.cm-post-row:hover {
 }
 
 .cm-list-comment-count {
-  font-size: 12px;
+  font-size: var(--ts-meta);
   color: #2563eb;
   margin-left: 6px;
   flex-shrink: 0;
 }
 
 .cm-list-summary {
-  font-size: 11px;
+  font-size: var(--ts-body);
   color: var(--cm-faint);
   margin: 0;
-  line-height: 1.5;
+  line-height: var(--ts-lh-body);
 }
 
 .cm-list-meta-mobile {
   display: none;
-  font-size: 11px;
+  font-size: var(--ts-meta);
   color: #9aa4b2;
   margin: 4px 0 0;
   line-height: 1.5;
@@ -394,7 +405,7 @@ a.cm-post-row:hover {
 .cm-list-author,
 .cm-list-date,
 .cm-list-likes {
-  font-size: 12px;
+  font-size: var(--ts-meta);
   color: var(--cm-body);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -440,7 +451,7 @@ a.cm-post-row:hover {
 }
 
 .cm-list-reply-count {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--cm-brand);
   font-weight: 600;
 }
@@ -454,24 +465,24 @@ a.cm-post-row:hover {
 }
 
 .cm-list-q {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 800;
   flex: none;
 }
 
 .cm-list-badge-chip {
-  font-size: 10px;
+  font-size: var(--ts-chip);
   font-weight: 700;
-  padding: 2px 6px;
+  padding: 4px 9px;
   border-radius: 3px;
   background: var(--cm-badge-gold-bg);
   color: var(--cm-badge-gold-text);
 }
 
 .cm-list-resolved {
-  font-size: 10px;
+  font-size: var(--ts-chip);
   font-weight: 700;
-  padding: 2px 6px;
+  padding: 4px 9px;
   border-radius: 3px;
   background: #eaf3de;
   color: #3b6d11;
@@ -495,7 +506,7 @@ a.cm-post-row:hover {
   justify-content: space-between;
   gap: 12px;
   flex-wrap: wrap;
-  padding: 14px 20px;
+  padding: 16px 22px;
   background: #f8fafc;
   border-top: 0.5px solid #e2e8f0;
 }
@@ -511,7 +522,7 @@ a.cm-post-row:hover {
   border-radius: 5px;
   border: 0.5px solid var(--cm-line);
   background: #fff;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--cm-muted);
   cursor: pointer;
@@ -524,7 +535,7 @@ a.cm-post-row:hover {
 }
 
 .cm-list-search input {
-  font-size: 12px;
+  font-size: 14px;
   padding: 8px 12px;
   border: 0.5px solid var(--cm-line);
   border-radius: 6px;
@@ -541,7 +552,7 @@ a.cm-post-row:hover {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
   padding: 7px 12px;
   border: 0.5px solid var(--cm-line);
@@ -573,7 +584,7 @@ a.cm-post-row:hover {
 
 .cm-island-search {
   margin: 10px;
-  font-size: 12px;
+  font-size: 14px;
   padding: 8px 10px;
   border: 0.5px solid var(--cm-line);
   border-radius: 6px;
@@ -586,7 +597,7 @@ a.cm-post-row:hover {
 }
 
 .cm-island-group-title {
-  font-size: 10px;
+  font-size: var(--ts-meta);
   font-weight: 700;
   color: var(--cm-faint);
   padding: 8px 8px 4px;
@@ -600,7 +611,7 @@ a.cm-post-row:hover {
   padding: 7px 8px;
   border: 0;
   background: none;
-  font-size: 12px;
+  font-size: 14px;
   color: var(--cm-ink);
   cursor: pointer;
   border-radius: 4px;
@@ -620,7 +631,7 @@ a.cm-post-row:hover {
 
 .cm-island-option-count {
   margin-left: auto;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--cm-faint);
 }
 
@@ -634,7 +645,7 @@ a.cm-post-row:hover {
 
 .cm-island-reset,
 .cm-island-apply {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
   padding: 6px 12px;
   border-radius: 5px;
@@ -655,7 +666,7 @@ a.cm-post-row:hover {
   flex-wrap: wrap;
   gap: 8px;
   padding: 8px 0 4px;
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .cm-selected-label {
@@ -673,9 +684,9 @@ a.cm-post-row:hover {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 10px;
+  font-size: var(--ts-chip);
   font-weight: 700;
-  padding: 3px 8px;
+  padding: 4px 9px;
   border-radius: 3px;
 }
 
@@ -683,7 +694,7 @@ a.cm-post-row:hover {
   border: 0;
   background: none;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1;
   padding: 0;
   color: inherit;
@@ -692,7 +703,7 @@ a.cm-post-row:hover {
 
 .cm-selected-clear {
   margin-left: auto;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--cm-brand);
   border: 0;
   background: none;
@@ -703,7 +714,7 @@ a.cm-post-row:hover {
 /* ── Post detail ── */
 .cm-detail-back {
   display: inline-block;
-  font-size: 13px;
+  font-size: var(--ts-label);
   font-weight: 600;
   color: var(--cm-muted);
   margin-bottom: 16px;
@@ -722,7 +733,7 @@ a.cm-post-row:hover {
 }
 
 .cm-detail-title {
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 500;
   color: var(--cm-ink);
   line-height: 1.35;
@@ -744,7 +755,7 @@ a.cm-post-row:hover {
 }
 
 .cm-detail-content {
-  font-size: 15px;
+  font-size: 16px;
   color: var(--cm-body);
   line-height: 1.8;
   max-width: 68ch;
@@ -779,7 +790,7 @@ a.cm-post-row:hover {
 }
 
 .cm-detail-comments-title {
-  font-size: 15px;
+  font-size: var(--ts-sub);
   font-weight: 600;
   color: var(--cm-ink);
   margin-bottom: 12px;
@@ -847,7 +858,7 @@ a.cm-post-row:hover {
 }
 
 .cm-post-content {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--cm-body);
   line-height: 1.75;
   display: -webkit-box;
@@ -867,9 +878,9 @@ a.cm-post-row:hover {
 
 .cm-tag-island,
 .cm-tag-activity {
-  font-size: 11px;
+  font-size: var(--ts-chip);
   font-weight: 600;
-  padding: 3px 8px;
+  padding: 4px 9px;
   border-radius: 3px;
 }
 
@@ -892,7 +903,7 @@ a.cm-post-row:hover {
   justify-content: center;
   width: 20px;
   height: 20px;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 800;
   color: var(--cm-brand);
   background: #eff6ff;
@@ -900,18 +911,18 @@ a.cm-post-row:hover {
 }
 
 .cm-badge-rare {
-  font-size: 10px;
+  font-size: var(--ts-chip);
   font-weight: 700;
-  padding: 3px 7px;
+  padding: 4px 9px;
   border-radius: 3px;
   background: var(--cm-badge-gold-bg);
   color: var(--cm-badge-gold-text);
 }
 
 .cm-chip {
-  font-size: 10px;
+  font-size: var(--ts-chip);
   font-weight: 700;
-  padding: 2px 7px;
+  padding: 4px 9px;
   border-radius: 3px;
   white-space: nowrap;
 }
@@ -946,25 +957,25 @@ a.cm-post-row:hover {
 }
 
 .cm-post-ava {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 800;
   flex: none;
 }
 
 .cm-post-nick {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--cm-ink);
 }
 
 .cm-post-time {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--cm-faint);
 }
 
@@ -979,7 +990,7 @@ a.cm-post-row:hover {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--cm-faint);
   padding: 4px 8px;
@@ -1022,7 +1033,7 @@ a.cm-post-row:hover {
 .cm-comment-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   margin-bottom: 12px;
 }
 
@@ -1035,7 +1046,7 @@ a.cm-post-row:hover {
   background: #fff;
   border: 0.5px solid var(--cm-line);
   border-radius: 10px;
-  padding: 13px 16px;
+  padding: 15px 18px;
 }
 
 .cm-comment-bubble-top {
@@ -1059,19 +1070,19 @@ a.cm-post-row:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 800;
   flex: none;
 }
 
 .cm-comment-nick {
-  font-size: 12px;
+  font-size: var(--ts-label);
   font-weight: 500;
   color: var(--cm-ink);
 }
 
 .cm-comment-time {
-  font-size: 11px;
+  font-size: var(--ts-meta);
   color: var(--cm-faint);
 }
 
@@ -1121,7 +1132,7 @@ a.cm-post-row:hover {
   display: block;
   width: 100%;
   text-align: left;
-  font-size: 12px;
+  font-size: 14px;
   padding: 8px 12px;
   color: var(--cm-body);
   border: 0;
@@ -1134,9 +1145,9 @@ a.cm-post-row:hover {
 }
 
 .cm-comment-body {
-  font-size: 13px;
+  font-size: var(--ts-body);
   color: var(--cm-body);
-  line-height: 1.7;
+  line-height: var(--ts-lh-body);
   margin-bottom: 8px;
 }
 
@@ -1146,7 +1157,7 @@ a.cm-post-row:hover {
 }
 
 .cm-comment-action {
-  font-size: 11px;
+  font-size: var(--ts-meta);
   color: var(--cm-faint);
   border: 0;
   background: none;
@@ -1162,13 +1173,13 @@ a.cm-post-row:hover {
 .cm-replies {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   margin-top: 8px;
 }
 
 .cm-comment-reply-wrap {
   position: relative;
-  margin-left: 40px;
+  margin-left: 44px;
 }
 
 .cm-comment-reply-wrap::before {
@@ -1190,7 +1201,7 @@ a.cm-post-row:hover {
 
 .cm-inline-reply {
   margin-top: 8px;
-  margin-left: 40px;
+  margin-left: 44px;
   padding: 12px;
   background: #fff;
   border: 0.5px solid var(--cm-line);
@@ -1199,7 +1210,7 @@ a.cm-post-row:hover {
 
 .cm-mention-chip {
   display: inline-block;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--cm-brand);
   background: #eff6ff;
@@ -1210,7 +1221,7 @@ a.cm-post-row:hover {
 
 .cm-inline-reply textarea {
   width: 100%;
-  font-size: 13px;
+  font-size: 14px;
   padding: 8px 10px;
   border: 0.5px solid var(--cm-line);
   border-radius: 3px;
@@ -1226,7 +1237,7 @@ a.cm-post-row:hover {
 }
 
 .cm-inline-cancel {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--cm-muted);
   border: 0;
@@ -1235,7 +1246,7 @@ a.cm-post-row:hover {
 }
 
 .cm-thread-more {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--cm-brand);
   padding: 4px 0;
@@ -1246,7 +1257,7 @@ a.cm-post-row:hover {
 }
 
 .cm-thread-empty {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--cm-faint);
   margin-bottom: 12px;
 }
@@ -1254,7 +1265,7 @@ a.cm-post-row:hover {
 .cm-thread-login {
   width: 100%;
   text-align: center;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--cm-muted);
   padding: 10px;
@@ -1272,12 +1283,12 @@ a.cm-post-row:hover {
 }
 
 .cm-thread-input-ava {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background: var(--cm-brand);
   color: #fff;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 800;
   display: flex;
   align-items: center;
@@ -1289,7 +1300,7 @@ a.cm-post-row:hover {
   flex: 1;
   height: 36px;
   text-align: left;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--cm-faint);
   padding: 0 12px;
   border: 0.5px solid var(--cm-line);
@@ -1306,7 +1317,7 @@ a.cm-post-row:hover {
   flex: 1;
   min-width: 0;
   width: 100%;
-  font-size: 13px;
+  font-size: 14px;
   padding: 8px 12px;
   border: 0.5px solid var(--cm-line);
   border-radius: 3px;
@@ -1316,7 +1327,7 @@ a.cm-post-row:hover {
 
 .cm-thread-submit {
   margin-left: auto;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   color: #fff;
   background: var(--cm-navy);
@@ -1346,7 +1357,7 @@ a.cm-post-row:hover {
   border-radius: 50%;
   background: var(--cm-brand);
   color: #fff;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 800;
   display: flex;
   align-items: center;
@@ -1355,13 +1366,13 @@ a.cm-post-row:hover {
 
 .cm-profile-name {
   display: block;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
   color: #fff;
 }
 
 .cm-profile-bti {
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .cm-profile-bar-row {
@@ -1375,7 +1386,7 @@ a.cm-post-row:hover {
 .cm-profile-bar-label {
   display: flex;
   justify-content: space-between;
-  font-size: 11px;
+  font-size: 13px;
   color: #85b7eb;
   margin-bottom: 5px;
 }
@@ -1411,7 +1422,7 @@ a.cm-post-row:hover {
   margin-top: 11px;
   padding-top: 11px;
   border-top: 0.5px solid #0c447c;
-  font-size: 11px;
+  font-size: 13px;
   color: #85b7eb;
   text-decoration: none;
 }
@@ -1430,7 +1441,7 @@ a.cm-post-row:hover {
 
 .cm-activity-back {
   display: inline-block;
-  font-size: 11px;
+  font-size: 13px;
   color: #85b7eb;
   text-decoration: none;
   margin-bottom: 14px;
@@ -1471,12 +1482,12 @@ a.cm-post-row:hover {
 }
 
 .cm-activity-bti {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
 }
 
 .cm-activity-write {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   color: #1a3a6b;
   background: #fff;
@@ -1497,8 +1508,8 @@ a.cm-post-row:hover {
 
 .cm-activity-tab {
   flex: 1;
-  padding: 12px 24px;
-  font-size: 13px;
+  padding: 14px 24px;
+  font-size: var(--ts-sub);
   color: #5f6b7c;
   background: transparent;
   border: 0;
@@ -1536,7 +1547,7 @@ a.cm-post-row:hover {
   gap: 8px;
   padding: 10px 14px;
   background: #f8fafc;
-  font-size: 12px;
+  font-size: 14px;
   color: #5f6b7c;
   text-decoration: none;
 }
@@ -1546,9 +1557,9 @@ a.cm-post-row:hover {
 }
 
 .cm-my-comment-origin-chip {
-  font-size: 10px;
+  font-size: var(--ts-chip);
   font-weight: 700;
-  padding: 2px 6px;
+  padding: 4px 9px;
   border-radius: 3px;
   flex-shrink: 0;
 }
@@ -1561,7 +1572,7 @@ a.cm-post-row:hover {
 .cm-my-comment-reply-to {
   margin: 0;
   padding: 6px 14px 0;
-  font-size: 11px;
+  font-size: 13px;
   color: #9aa4b2;
 }
 
@@ -1572,13 +1583,13 @@ a.cm-post-row:hover {
 
 .cm-my-comment-text {
   margin: 0 0 8px;
-  font-size: 13px;
+  font-size: 14px;
   color: #4a5567;
   line-height: 1.6;
 }
 
 .cm-my-comment-meta {
-  font-size: 11px;
+  font-size: 13px;
   color: #9aa4b2;
   display: flex;
   gap: 4px;
@@ -1613,7 +1624,7 @@ a.cm-post-row:hover {
   padding: 12px 16px;
   background: #1a2433;
   color: #fff;
-  font-size: 13px;
+  font-size: 14px;
   border-radius: 8px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
@@ -1622,7 +1633,7 @@ a.cm-post-row:hover {
   border: 0;
   background: transparent;
   color: #85b7eb;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
 }
@@ -1651,7 +1662,7 @@ a.cm-post-row:hover {
 }
 
 .cm-popular-title {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--cm-ink);
   margin-bottom: 12px;
@@ -1680,7 +1691,7 @@ a.cm-post-row:hover {
 
 .cm-popular-rank {
   width: 18px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--cm-faint);
   flex: none;
@@ -1692,15 +1703,15 @@ a.cm-post-row:hover {
 
 .cm-popular-name {
   flex: 1;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--cm-ink);
 }
 
 .cm-popular-tag {
-  font-size: 10px;
+  font-size: var(--ts-chip);
   font-weight: 700;
-  padding: 2px 7px;
+  padding: 4px 9px;
   border-radius: 3px;
 }
 
@@ -1726,13 +1737,13 @@ a.cm-post-row:hover {
 }
 
 .cm-empty-desc {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--cm-muted);
   margin-bottom: 16px;
 }
 
 .cm-empty-cta {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   color: #fff;
   background: var(--cm-brand);
@@ -1746,7 +1757,7 @@ a.cm-post-row:hover {
 .cm-gallery-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 10px;
+  gap: 12px;
 }
 
 .cm-gallery-tile {
@@ -1771,9 +1782,9 @@ a.cm-post-row:hover {
   position: absolute;
   top: 8px;
   left: 8px;
-  font-size: 10px;
+  font-size: var(--ts-meta);
   font-weight: 700;
-  padding: 3px 7px;
+  padding: 4px 9px;
   border-radius: 3px;
   z-index: 2;
 }
@@ -1782,9 +1793,9 @@ a.cm-post-row:hover {
   position: absolute;
   top: 8px;
   right: 8px;
-  font-size: 10px;
+  font-size: var(--ts-meta);
   font-weight: 700;
-  padding: 3px 7px;
+  padding: 4px 9px;
   border-radius: 3px;
   background: var(--cm-badge-gold-bg);
   color: var(--cm-badge-gold-text);
@@ -1798,7 +1809,7 @@ a.cm-post-row:hover {
   display: flex;
   align-items: center;
   gap: 3px;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   color: #fff;
   background: rgba(26, 36, 51, 0.6);
@@ -1819,7 +1830,7 @@ a.cm-post-row:hover {
   padding: 0 10px;
   background: rgba(26, 36, 51, 0.72);
   color: #fff;
-  font-size: 11px;
+  font-size: 13px;
   z-index: 2;
   opacity: 0;
   transition: opacity 180ms;
@@ -1877,7 +1888,7 @@ a.cm-post-row:hover {
   top: 12px;
   right: 52px;
   z-index: 5;
-  font-size: 12px;
+  font-size: 14px;
   color: #fff;
   background: rgba(0, 0, 0, 0.45);
   padding: 4px 10px;
@@ -1972,7 +1983,7 @@ a.cm-post-row:hover {
   position: absolute;
   bottom: 12px;
   right: 12px;
-  font-size: 12px;
+  font-size: 14px;
   color: #fff;
   background: rgba(0, 0, 0, 0.5);
   padding: 4px 10px;
@@ -2016,13 +2027,13 @@ a.cm-post-row:hover {
 
 .cm-lightbox-author {
   display: block;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--cm-ink);
 }
 
 .cm-lightbox-meta {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--cm-faint);
   display: flex;
   align-items: center;
@@ -2038,7 +2049,7 @@ a.cm-post-row:hover {
 }
 
 .cm-lightbox-content {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--cm-body);
   line-height: 1.7;
   max-width: 68ch;
@@ -2046,20 +2057,20 @@ a.cm-post-row:hover {
 }
 
 .cm-lightbox-stats {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--cm-faint);
   margin-bottom: 16px;
 }
 
 .cm-lightbox-comments b {
   display: block;
-  font-size: 12px;
+  font-size: 14px;
   color: var(--cm-ink);
   margin-bottom: 8px;
 }
 
 .cm-lightbox-comment {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--cm-body);
   line-height: 1.6;
   margin-bottom: 8px;
@@ -2115,7 +2126,7 @@ a.cm-post-row:hover {
   .cm-post-row-grid,
   .cm-post-row-grid--myPosts,
   .cm-post-row-grid--liked {
-    grid-template-columns: 60px minmax(0, 1fr) 54px;
+    grid-template-columns: 64px minmax(0, 1fr) 58px;
   }
 
   .cm-list-meta-mobile {

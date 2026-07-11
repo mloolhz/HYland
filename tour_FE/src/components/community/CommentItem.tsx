@@ -88,7 +88,7 @@ type CommentBubbleProps = {
 
 export function CommentBubble({ comment, isReply, onReply, showReplyButton }: CommentBubbleProps) {
   const btiColors = ISLAND_BTI[comment.author.bti];
-  const avaSize = isReply ? 26 : 28;
+  const avaSize = isReply ? 30 : 32;
 
   return (
     <div id={`comment-${comment.id}`} className={`cm-comment-bubble${isReply ? " cm-comment-bubble-reply" : ""}`}>

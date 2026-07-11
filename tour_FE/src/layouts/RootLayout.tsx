@@ -4,6 +4,7 @@ import { SiteFooter } from "@/components/landing/SiteFooter";
 import { ToastProvider, useToast } from "@/components/landing/ToastProvider";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { Navbar } from "@/components/layout/Navbar";
+import { NotificationProvider } from "@/store/notifications";
 
 function RootLayoutContent() {
   const loginInputRef = useRef<HTMLInputElement>(null);
@@ -56,7 +57,9 @@ function RootLayoutContent() {
 export function RootLayout() {
   return (
     <ToastProvider>
-      <RootLayoutContent />
+      <NotificationProvider>
+        <RootLayoutContent />
+      </NotificationProvider>
     </ToastProvider>
   );
 }

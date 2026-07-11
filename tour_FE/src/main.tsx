@@ -10,9 +10,11 @@ import { PostDetail } from "@/pages/PostDetail";
 import { FindAccount } from "@/pages/FindAccount";
 import { Signup } from "@/pages/Signup";
 import { Landing } from "@/pages/Landing";
+import { Notifications } from "@/pages/Notifications";
 import "./index.css";
 import "./styles/community.css";
 import "./styles/auth.css";
+import "./styles/notification.css";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +24,7 @@ const router = createBrowserRouter([
       { path: "community", element: <Community /> },
       { path: "community/me", element: <MyActivity /> },
       { path: "community/:id", element: <PostDetail /> },
+      { path: "notifications", element: <Notifications /> },
     ],
   },
   {

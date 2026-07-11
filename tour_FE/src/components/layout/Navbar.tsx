@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { LogoIcon } from "@/components/landing/LogoIcon";
-import { demoProps } from "@/components/landing/ToastProvider";
+import { NotificationBell } from "@/components/notification/NotificationBell";
 import { CONTAINER } from "@/constants/layout";
 
 const ANCHOR_ITEMS = [
@@ -117,9 +117,7 @@ export function Navbar() {
           >
             인천섬포털 바로가기 <span>↗</span>
           </a>
-          <button className="icon-btn" {...demoProps("알림은 로그인 후 확인할 수 있어요 🔔")} aria-label="알림">
-            🔔
-          </button>
+          <NotificationBell />
         </div>
       </div>
     </header>

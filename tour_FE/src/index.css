@@ -335,7 +335,7 @@ input{font:inherit}
 .pb-txt p{font-size:14.5px;color:#D4E1F2;margin-top:8px}
 
 /* ---------- footer ---------- */
-footer{background:#122238;color:#B6C4D8;margin-top:92px}
+footer#guide{background:#122238;color:#B6C4D8;margin-top:92px}
 .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:34px;padding:56px 0 40px}
 .foot-brand b{display:block;color:#fff;font-size:18px;font-weight:900;margin-bottom:10px}
 .foot-brand p{font-size:13px;line-height:1.7;color:#8FA1B9}
