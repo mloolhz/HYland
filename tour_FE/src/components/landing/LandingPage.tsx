@@ -12,6 +12,7 @@ import { ScrollToTopButton } from "./ScrollToTopButton";
 import { SiteFooter } from "./SiteFooter";
 import { SiteHeader } from "./SiteHeader";
 import { ToastProvider, useToast } from "./ToastProvider";
+import { NotificationProvider } from "@/store/notifications";
 
 function LandingPageContent() {
   const loginInputRef = useRef<HTMLInputElement>(null);
@@ -111,7 +112,9 @@ function LandingPageContent() {
 export function LandingPage() {
   return (
     <ToastProvider>
-      <LandingPageContent />
+      <NotificationProvider>
+        <LandingPageContent />
+      </NotificationProvider>
     </ToastProvider>
   );
 }

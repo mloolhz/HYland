@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { demoProps } from "./ToastProvider";
 
 const SLIDE_COUNT = 5;
@@ -96,23 +97,42 @@ export function HeroSection({ loginInputRef }: HeroSectionProps) {
         <aside className="pass-card reveal" aria-label="바다패스 로그인">
           <div className="pc-head">
             <h3>나의 바다패스</h3>
-            <span className="pill">LOGIN</span>
           </div>
           <div className="pc-body">
             <img className="passport" src="/passport.png" alt="바다패스 여권" width={118} height={158} />
             <div className="pc-form">
               <div className="field">
-                <span>👤</span>
+                <span className="field-icon" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="2" />
+                    <path
+                      d="M5 20c0-3.314 3.134-6 7-6s7 2.686 7 6"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </span>
                 <input
                   ref={loginInputRef}
                   type="text"
                   id="login-id"
-                  placeholder="아이디 또는 이메일"
+                  placeholder="아이디"
                   autoComplete="username"
                 />
               </div>
               <div className="field">
-                <span>🔒</span>
+                <span className="field-icon" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" strokeWidth="2" />
+                    <path
+                      d="M8 11V8a4 4 0 1 1 8 0v3"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </span>
                 <input type="password" placeholder="비밀번호" autoComplete="current-password" />
               </div>
               <div className="keep-row">
@@ -120,21 +140,15 @@ export function HeroSection({ loginInputRef }: HeroSectionProps) {
                   <input type="checkbox" defaultChecked /> 로그인 상태 유지
                 </label>
               </div>
-              <button className="btn-login" {...demoProps("🛂 데모 페이지입니다. 로그인 기능은 추후 연동 예정이에요!")}>
+              <Link to="/login" className="btn-login">
                 로그인
-              </button>
+              </Link>
               <div className="find-links">
-                <a href="#" {...demoProps("아이디 찾기는 준비 중이에요 🙂")}>
-                  아이디 찾기
-                </a>
+                <Link to="/find-account">아이디·비밀번호 찾기</Link>
                 <em>·</em>
-                <a href="#" {...demoProps("비밀번호 찾기는 준비 중이에요 🙂")}>
-                  비밀번호 찾기
-                </a>
-                <em>·</em>
-                <a href="#" {...demoProps("회원가입은 준비 중이에요 🙂")}>
+                <Link to="/signup">
                   <b style={{ color: "var(--blue)" }}>회원가입</b>
-                </a>
+                </Link>
               </div>
             </div>
           </div>

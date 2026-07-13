@@ -82,13 +82,16 @@ input{font:inherit}
 .site-head:not(.scrolled) .btn-portal:hover{background:rgba(255,255,255,.24)}
 .site-head:not(.scrolled) .icon-btn{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.34);color:#fff}
 .site-head:not(.scrolled) .icon-btn:hover{background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.55)}
+.site-head:not(.scrolled) .noti-bell-btn{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.34);color:#fff}
+.site-head:not(.scrolled) .noti-bell-btn:hover{background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.55)}
+.site-head:not(.scrolled) .noti-bell-dot{border-color:rgba(255,255,255,.3)}
 .icon-btn svg{display:block}
-.nav-inner{height:74px;display:flex;align-items:center;gap:32px}
+.nav-inner{height:74px;display:flex;align-items:center;gap:32px;container-type:inline-size}
 .logo{display:flex;align-items:center;gap:10px;flex:none}
 .logo-txt b{display:block;font-size:18px;font-weight:900;color:var(--navy);letter-spacing:-.01em;line-height:1.15}
 .logo-txt span{font-size:11px;color:var(--muted);font-weight:600}
-.nav-links{display:flex;gap:2px;margin:0 auto}
-.nav-links a{position:relative;font-size:15.5px;font-weight:700;color:#33445F;padding:26px 14px;transition:color .15s}
+.nav-links{display:flex;flex-wrap:nowrap;gap:2px;margin:0 auto;flex-shrink:0}
+.nav-links a{position:relative;font-size:15.5px;font-weight:700;color:#33445F;padding:26px 14px;white-space:nowrap;flex-shrink:0;transition:color .15s}
 .nav-links a::after{content:"";position:absolute;left:14px;right:14px;bottom:0;height:3px;background:var(--blue);transform:scaleX(0);transition:transform .18s}
 .nav-links a:hover{color:var(--blue)}
 .nav-links a:hover::after{transform:scaleX(1)}
@@ -144,14 +147,14 @@ input{font:inherit}
 .pc-body{display:grid;grid-template-columns:104px 1fr;gap:16px;align-items:start}
 .passport{width:104px;border-radius:8px;box-shadow:0 8px 20px rgba(45,46,107,.25)}
 .field{position:relative;margin-bottom:9px}
-.field span{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px;opacity:.65}
+.field-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;justify-content:center;color:#94A3B8;pointer-events:none}
 .field input{width:100%;border:1px solid #CBD5E1;border-radius:8px;padding:11px 12px 11px 37px;font-size:14px;background:#fff;transition:.15s}
 .field input::placeholder{color:#9AA7B8}
 .field input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(15,95,204,.12)}
 .keep-row{display:flex;align-items:center;justify-content:space-between;margin:2px 0 10px;font-size:12.5px;color:var(--muted)}
 .keep-row label{display:flex;align-items:center;gap:6px;cursor:pointer}
 .keep-row input{accent-color:var(--blue)}
-.btn-login{width:100%;background:var(--blue);color:#fff;border-radius:8px;padding:12px;font-weight:800;font-size:15px;transition:.15s}
+.btn-login{display:block;width:100%;background:var(--blue);color:#fff;border-radius:8px;padding:12px;font-weight:800;font-size:15px;text-align:center;text-decoration:none;cursor:pointer;transition:.15s}
 .btn-login:hover{background:var(--blue-d)}
 .find-links{display:flex;justify-content:center;gap:8px;font-size:12px;color:var(--muted);margin-top:11px}
 .find-links a:hover{color:var(--blue);text-decoration:underline}
@@ -305,7 +308,7 @@ input{font:inherit}
 .lb-cta .btn{padding:10px 18px;font-size:13.5px}
 
 /* ---------- community live ---------- */
-.com-wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:44px;align-items:start}
+.com-wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:44px;align-items:center}
 .com-info h2{font-size:28px;font-weight:800;letter-spacing:-.02em;margin:12px 0 12px;color:var(--navy)}
 .com-info p{color:var(--muted);font-size:15px;margin-bottom:20px}
 .com-stats{display:flex;gap:0;margin-bottom:24px;border:1px solid var(--line);border-radius:10px;background:#fff;overflow:hidden}
@@ -386,6 +389,12 @@ footer{background:var(--sea-dark);color:#B6C4D8;margin-top:92px}
 }
 @media (max-width:860px){
   .nav-links{display:none}
+}
+@container (max-width:920px){
+  .nav-links:not(.nav-links--extended){display:none}
+}
+@container (max-width:1120px){
+  .nav-links--extended{display:none}
 }
 @media (max-width:640px){
   .sec{padding:60px 0}
