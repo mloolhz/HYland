@@ -76,30 +76,33 @@ input{font:inherit}
 .site-head:not(.scrolled) .logo-txt b{color:#fff}
 .site-head:not(.scrolled) .logo-txt span{color:rgba(255,255,255,.78)}
 .site-head:not(.scrolled) .nav-links a{color:rgba(255,255,255,.92)}
-.site-head:not(.scrolled) .nav-links a::after{background:#fff}
+.site-head:not(.scrolled) .nav-links a::after{background:var(--navy)}
 .site-head:not(.scrolled) .nav-links a:hover{color:#fff}
 .site-head:not(.scrolled) .btn-portal{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.34);backdrop-filter:blur(4px)}
-.site-head:not(.scrolled) .btn-portal:hover{background:rgba(255,255,255,.24)}
+.site-head:not(.scrolled) .btn-portal:hover{background:rgba(255,255,255,.24);border-color:var(--navy)}
+.site-head:not(.scrolled) .btn-portal-arrow{color:#fff}
 .site-head:not(.scrolled) .icon-btn{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.34);color:#fff}
-.site-head:not(.scrolled) .icon-btn:hover{background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.55)}
+.site-head:not(.scrolled) .icon-btn:hover{background:rgba(255,255,255,.22);border-color:var(--navy);color:#fff}
 .site-head:not(.scrolled) .noti-bell-btn{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.34);color:#fff}
-.site-head:not(.scrolled) .noti-bell-btn:hover{background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.55)}
+.site-head:not(.scrolled) .noti-bell-btn:hover{background:rgba(255,255,255,.22);border-color:var(--navy);color:#fff}
 .site-head:not(.scrolled) .noti-bell-dot{border-color:rgba(255,255,255,.3)}
 .icon-btn svg{display:block}
-.nav-inner{height:74px;display:flex;align-items:center;gap:32px;container-type:inline-size}
-.logo{display:flex;align-items:center;gap:10px;flex:none}
+.nav-inner{height:74px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:32px;container-type:inline-size}
+.logo{display:flex;align-items:center;gap:10px;flex:none;justify-self:start}
 .logo-txt b{display:block;font-size:18px;font-weight:900;color:var(--navy);letter-spacing:-.01em;line-height:1.15}
 .logo-txt span{font-size:11px;color:var(--muted);font-weight:600}
-.nav-links{display:flex;flex-wrap:nowrap;gap:2px;margin:0 auto;flex-shrink:0}
+.nav-links{display:flex;flex-wrap:nowrap;gap:2px;justify-self:center;margin:0;flex-shrink:0}
 .nav-links a{position:relative;font-size:15.5px;font-weight:700;color:#33445F;padding:26px 14px;white-space:nowrap;flex-shrink:0;transition:color .15s}
-.nav-links a::after{content:"";position:absolute;left:14px;right:14px;bottom:0;height:3px;background:var(--blue);transform:scaleX(0);transition:transform .18s}
-.nav-links a:hover{color:var(--blue)}
+.nav-links a::after{content:"";position:absolute;left:14px;right:14px;bottom:0;height:3px;background:var(--navy);transform:scaleX(0);transition:transform .18s}
+.nav-links a:hover{color:var(--navy)}
 .nav-links a:hover::after{transform:scaleX(1)}
-.head-actions{display:flex;align-items:center;gap:10px;flex:none;margin-left:auto}
-.btn-portal{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:700;color:#fff;border-radius:8px;padding:10px 16px;background:var(--navy);transition:background .15s}
-.btn-portal:hover{background:var(--navy2)}
+.head-actions{display:flex;align-items:center;gap:10px;flex:none;justify-self:end}
+.btn-portal{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:8px;padding:8px 12px;background:#fff;border:1px solid var(--line);transition:background .15s,border-color .15s}
+.btn-portal:hover{background:#fff;border-color:var(--navy)}
+.btn-portal-logo{display:block;height:22px;width:auto;max-width:140px;object-fit:contain}
+.btn-portal-arrow{font-size:14px;font-weight:700;color:var(--navy);line-height:1}
 .icon-btn{width:38px;height:38px;border-radius:8px;border:1px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;transition:.15s}
-.icon-btn:hover{border-color:var(--blue);background:var(--sky)}
+.icon-btn:hover{border-color:var(--navy);background:rgba(45,46,107,.06);color:var(--navy)}
 
 /* ---------- hero (photo slideshow) ---------- */
 .hero{position:relative;overflow:hidden;background:var(--hero-bg);min-height:100svh}
@@ -412,6 +415,7 @@ footer{background:var(--sea-dark);color:#B6C4D8;margin-top:92px}
   .related-site{font-size:18px}
   .foot-main{flex-direction:column;align-items:flex-start}
   .hero-cta{flex-direction:column}
-  .btn-portal span{display:none}
+  .btn-portal{padding:7px 10px}
+  .btn-portal-logo{height:20px;max-width:124px}
   .scroll-top-btn{right:32px;bottom:18px;width:44px;height:44px}
 }

@@ -161,9 +161,14 @@ export function HeroSection({ loginInputRef }: HeroSectionProps) {
               <b>N</b> 네이버
             </button>
           </div>
-          <button className="btn-ipass" {...demoProps("인천 i-바다패스 연동은 준비 중이에요 🌊")}>
-            <span className="ip-badge">인천시민</span>인천 i-바다패스 연동하기<span className="ip-arrow">→</span>
-          </button>
+          <a
+            className="btn-ipass"
+            href="https://island.theksa.co.kr/page/main"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span className="ip-badge">인천시민</span>인천 i 바다패스로 예매하기<span className="ip-arrow">→</span>
+          </a>
           <div className="quick-grid">
             <span className="q" {...demoProps("추천 섬 페이지는 준비 중이에요 🏝️")}>
               <i>📍</i>추천 섬

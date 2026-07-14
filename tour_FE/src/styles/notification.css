@@ -23,8 +23,9 @@
 }
 
 .noti-bell-btn:hover {
-  background: #F1F5F9;
-  border-color: var(--line);
+  background: rgba(45, 46, 107, 0.06);
+  border-color: var(--navy);
+  color: var(--navy);
 }
 
 .noti-bell-btn.is-open {

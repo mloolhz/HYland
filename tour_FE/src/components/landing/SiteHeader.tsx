@@ -74,8 +74,18 @@ export function SiteHeader() {
             href="https://isum.incheon.go.kr"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="인천섬포털 바로가기"
           >
-            인천 섬포털 <span>↗</span>
+            <img
+              className="btn-portal-logo"
+              src="/incheon-island-portal-logo.png"
+              alt="인천섬포털"
+              width={160}
+              height={32}
+            />
+            <span className="btn-portal-arrow" aria-hidden="true">
+              ↗
+            </span>
           </a>
           <a
             className="icon-btn"

@@ -45,12 +45,12 @@
 /* route nav active indicator */
 .nav-links a.nav-route-active,
 .nav-links a.nav-route-active:hover {
-  color: var(--cm-brand);
+  color: var(--navy);
 }
 .nav-links a.nav-route-active::after {
   transform: scaleX(1);
   height: 2px;
-  background: var(--cm-brand);
+  background: var(--navy);
 }
 
 /* ── Page shell ── */
