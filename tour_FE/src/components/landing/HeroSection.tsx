@@ -14,11 +14,7 @@ const CATEGORIES = [
   ["⋯", "더보기"],
 ] as const;
 
-type HeroSectionProps = {
-  loginInputRef: React.RefObject<HTMLInputElement | null>;
-};
-
-export function HeroSection({ loginInputRef }: HeroSectionProps) {
+export function HeroSection() {
   const [activeSlide, setActiveSlide] = useState(0);
   const [showScrollHint, setShowScrollHint] = useState(true);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -63,7 +59,7 @@ export function HeroSection({ loginInputRef }: HeroSectionProps) {
 
       <div className="hero-inner">
         <div className="hero-copy reveal">
-          <span className="eyebrow">바다, 산, 섬을 넘나드는 새로운 탐험!</span>
+          <span className="eyebrow">바다, 산, 섬을 넘나드는 새로운 여정</span>
           <h1 className="hero-title">
             인천의 섬에서
             <br />
@@ -74,7 +70,7 @@ export function HeroSection({ loginInputRef }: HeroSectionProps) {
           <p className="hero-sub">
             해양 레저부터 러닝, 사이클, 하이킹까지 —
             <br />
-            168개 인천 섬의 다양한 레저스포츠를 한눈에 만나보세요.
+            인천의 섬에서 다양한 레저스포츠를 만나보세요.
           </p>
           <div className="hero-cta">
             <a className="btn btn-navy" href="#map">
@@ -94,73 +90,30 @@ export function HeroSection({ loginInputRef }: HeroSectionProps) {
           </div>
         </div>
 
-        <aside className="pass-card reveal" aria-label="바다패스 로그인">
-          <div className="pc-head">
-            <h3>나의 바다패스</h3>
-          </div>
-          <div className="pc-body">
-            <img className="passport" src="/passport.png" alt="바다패스 여권" width={118} height={158} />
-            <div className="pc-form">
-              <div className="field">
-                <span className="field-icon" aria-hidden="true">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                    <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="2" />
-                    <path
-                      d="M5 20c0-3.314 3.134-6 7-6s7 2.686 7 6"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                </span>
-                <input
-                  ref={loginInputRef}
-                  type="text"
-                  id="login-id"
-                  placeholder="아이디"
-                  autoComplete="username"
-                />
-              </div>
-              <div className="field">
-                <span className="field-icon" aria-hidden="true">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                    <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" strokeWidth="2" />
-                    <path
-                      d="M8 11V8a4 4 0 1 1 8 0v3"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                </span>
-                <input type="password" placeholder="비밀번호" autoComplete="current-password" />
-              </div>
-              <div className="keep-row">
-                <label>
-                  <input type="checkbox" defaultChecked /> 로그인 상태 유지
-                </label>
-              </div>
-              <Link to="/login" className="btn-login">
-                로그인
+        <div className="pass-card-wrap">
+          <aside className="pass-card" aria-label="나의 바다패스">
+            <div className="pc-head">
+              <h3>나의 바다패스</h3>
+              <Link to="/login" className="pc-login-link">
+                로그인하기
               </Link>
-              <div className="find-links">
-                <Link to="/find-account">아이디·비밀번호 찾기</Link>
-                <em>·</em>
-                <Link to="/signup">
-                  <b style={{ color: "var(--blue)" }}>회원가입</b>
-                </Link>
-              </div>
             </div>
-          </div>
-          <div className="divider">간편 로그인</div>
-          <div className="sns-row">
-            <button className="btn-kakao" {...demoProps("카카오 로그인은 추후 연동 예정이에요 💬")}>
-              💬 카카오
-            </button>
-            <button className="btn-naver" {...demoProps("네이버 로그인은 추후 연동 예정이에요 🟢")}>
-              <b>N</b> 네이버
-            </button>
-          </div>
+            <div className="quick-grid">
+              <span className="q" {...demoProps("추천 섬 페이지는 준비 중이에요")}>
+                <i>📍</i>추천 섬
+              </span>
+              <span className="q" {...demoProps("나에게 맞는 섬BTI를 찾아보세요!")}>
+                <i>🏝️</i>섬BTI
+              </span>
+              <span className="q" {...demoProps("레저 예약은 아래 섹션에서 미리 만나보세요")}>
+                <i>📅</i>레저 예약
+              </span>
+              <span className="q" {...demoProps("안전 정보 페이지는 준비 중이에요")}>
+                <i>🛟</i>안전 정보
+              </span>
+            </div>
+            <p className="pc-foot">로그인하면 방문 기록 · 미션 · 배지가 여권에 자동 저장돼요</p>
+          </aside>
           <a
             className="btn-ipass"
             href="https://island.theksa.co.kr/page/main"
@@ -169,22 +122,7 @@ export function HeroSection({ loginInputRef }: HeroSectionProps) {
           >
             <span className="ip-badge">인천시민</span>인천 i 바다패스로 예매하기<span className="ip-arrow">→</span>
           </a>
-          <div className="quick-grid">
-            <span className="q" {...demoProps("추천 섬 페이지는 준비 중이에요 🏝️")}>
-              <i>📍</i>추천 섬
-            </span>
-            <span className="q" {...demoProps("나에게 맞는 섬BTI를 찾아보세요! 🏝️")}>
-              <i>🏝️</i>섬BTI
-            </span>
-            <span className="q" {...demoProps("레저 예약은 아래 섹션에서 미리 만나보세요 📅")}>
-              <i>📅</i>레저 예약
-            </span>
-            <span className="q" {...demoProps("안전 정보 페이지는 준비 중이에요 🛟")}>
-              <i>🛟</i>안전 정보
-            </span>
-          </div>
-          <p className="pc-foot">로그인하면 방문 기록 · 미션 · 배지가 여권에 자동 저장돼요</p>
-        </aside>
+        </div>
       </div>
 
       <div className={`hero-scroll-hint${showScrollHint ? "" : " is-hidden"}`}>

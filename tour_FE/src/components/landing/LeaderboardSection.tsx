@@ -6,20 +6,18 @@ import {
   LEADERBOARD,
   type LeaderboardPeriod,
 } from "@/lib/landing-data";
-import { demoProps, useToast } from "./ToastProvider";
+import { demoProps } from "./ToastProvider";
 
 type LeaderboardSectionProps = {
-  onScrollToLogin: () => void;
+  onGoToLogin: () => void;
 };
 
-export function LeaderboardSection({ onScrollToLogin }: LeaderboardSectionProps) {
+export function LeaderboardSection({ onGoToLogin }: LeaderboardSectionProps) {
   const [period, setPeriod] = useState<LeaderboardPeriod>("week");
-  const { showToast } = useToast();
   const data = LEADERBOARD[period];
 
   const handleLogin = () => {
-    onScrollToLogin();
-    showToast("🛂 바다패스에 로그인하면 내 순위를 볼 수 있어요!");
+    onGoToLogin();
   };
 
   return (

@@ -1,5 +1,6 @@
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { AISection } from "./AISection";
 import { BookingSection } from "./BookingSection";
 import { CommunitySection } from "./CommunitySection";
@@ -15,17 +16,12 @@ import { ToastProvider, useToast } from "./ToastProvider";
 import { NotificationProvider } from "@/store/notifications";
 
 function LandingPageContent() {
-  const loginInputRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
   const { showToast } = useToast();
 
-  const scrollToLogin = useCallback(
-    (e?: React.MouseEvent) => {
-      e?.preventDefault();
-      document.getElementById("home")?.scrollIntoView({ behavior: "smooth" });
-      setTimeout(() => loginInputRef.current?.focus({ preventScroll: true }), 650);
-    },
-    [],
-  );
+  const goToLogin = useCallback(() => {
+    navigate("/login");
+  }, [navigate]);
 
   useEffect(() => {
     const onClick = (event: MouseEvent) => {
@@ -95,12 +91,12 @@ function LandingPageContent() {
   return (
     <>
       <SiteHeader />
-      <HeroSection loginInputRef={loginInputRef} />
+      <HeroSection />
       <MapSection />
       <AISection />
       <BookingSection />
       <MissionSection />
-      <LeaderboardSection onScrollToLogin={scrollToLogin} />
+      <LeaderboardSection onGoToLogin={goToLogin} />
       <CommunitySection />
       <RelatedSitesBand />
       <SiteFooter />

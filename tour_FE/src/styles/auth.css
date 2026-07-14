@@ -1,7 +1,7 @@
 /* ── Auth pages ── */
 .auth-layout {
-  --auth-navy: #2C2D5D;
-  --auth-navy-hover: #23244a;
+  --auth-navy: #2D2E6B;
+  --auth-navy-hover: #454682;
   position: relative;
   min-height: 100vh;
   background: #f5f7fa;
@@ -14,13 +14,16 @@
 .auth-layout-inner {
   width: 100%;
   max-width: 420px;
+  display: flex;
+  flex-direction: column;
 }
 
 .auth-home-link {
+  align-self: flex-start;
+  margin-bottom: 20px;
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  margin-bottom: 20px;
   font-size: 14px;
   font-weight: 600;
   color: var(--auth-navy);
@@ -39,7 +42,7 @@
 
 .auth-brand {
   text-align: center;
-  margin-bottom: 26px;
+  margin-bottom: 14px;
 }
 
 .auth-logo {
@@ -73,7 +76,7 @@
   font-size: 22px;
   font-weight: 500;
   color: #1a2433;
-  margin-bottom: 6px;
+  margin: 0;
 }
 
 .auth-subtitle {
@@ -120,6 +123,79 @@
   gap: 14px;
 }
 
+.auth-form-login {
+  gap: 12px;
+}
+
+.auth-form-login .auth-submit {
+  margin-top: 2px;
+}
+
+.auth-find-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -2px;
+}
+
+.auth-text-btn {
+  font-size: 14px;
+  font-weight: 500;
+  color: #9aa4b2;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.auth-text-btn:hover {
+  color: #5f6b7c;
+  text-decoration: underline;
+}
+
+.auth-signup-cta {
+  margin: 4px 0 0;
+  text-align: left;
+  font-size: 14px;
+  color: #9aa4b2;
+}
+
+.auth-signup-cta .auth-signup-link {
+  font-weight: 600;
+  margin-left: 8px;
+}
+
+.auth-form-main {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.auth-form-fields {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.auth-form-login .auth-form-main .auth-error {
+  display: none;
+}
+
+.auth-form-errors {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: -6px;
+}
+
+.auth-form-login .auth-form-errors {
+  margin-top: -8px;
+  margin-bottom: -2px;
+}
+
+.auth-form-errors .auth-error {
+  margin: 0;
+}
+
 .auth-field {
   display: flex;
   flex-direction: column;
@@ -142,8 +218,8 @@
 }
 
 .auth-input-wrap:focus-within {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+  border-color: var(--auth-navy);
+  box-shadow: 0 0 0 3px rgba(45, 46, 107, 0.12);
 }
 
 .auth-input-wrap.has-error {
@@ -161,6 +237,10 @@
   font-size: 17px;
   display: inline-flex;
   flex: none;
+}
+
+.auth-form-login .auth-input {
+  padding: 10px 15px;
 }
 
 .auth-input {
@@ -293,6 +373,17 @@
   cursor: not-allowed;
 }
 
+.auth-submit.auth-submit-inline {
+  width: 72px;
+  flex: none;
+  align-self: stretch;
+  margin-top: 0;
+  padding: 12px 8px;
+  min-height: unset;
+  font-size: 14px;
+  line-height: 1.25;
+}
+
 .auth-spinner {
   width: 18px;
   height: 18px;
@@ -334,10 +425,11 @@
   flex: 1;
   border: 0.5px solid #e2e8f0;
   border-radius: 6px;
-  padding: 11px 8px;
+  padding: 10px 8px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   background: #fff;
   cursor: pointer;
@@ -348,14 +440,15 @@
 }
 
 .auth-social-icon {
-  width: 26px;
-  height: 26px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 800;
+  flex: none;
 }
 
 .auth-social-naver {
@@ -465,7 +558,7 @@
 }
 
 .auth-footer-link a {
-  color: #2563eb;
+  color: var(--auth-navy);
   font-weight: 500;
 }
 
@@ -676,16 +769,26 @@
   color: #9aa4b2;
 }
 
+.auth-login-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: -4px 0 2px;
+}
+
 .auth-remember-only {
-  margin: 2px 0 0;
+  margin: 0;
+  flex: none;
 }
 
 .auth-find-links {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin: 2px 0 4px;
+  justify-content: flex-end;
+  gap: 8px;
+  margin: 0 0 0 auto;
+  flex-wrap: wrap;
 }
 
 .auth-find-links a {
@@ -696,6 +799,23 @@
 
 .auth-find-links a:hover {
   color: #5f6b7c;
+}
+
+.auth-signup-link {
+  color: var(--auth-navy) !important;
+  font-weight: 600;
+}
+
+.auth-signup-link:hover {
+  color: var(--auth-navy-hover) !important;
+  text-decoration: underline;
+}
+
+.auth-find-sep {
+  color: #cbd5e1;
+  font-size: 14px;
+  line-height: 1;
+  flex: none;
 }
 
 .auth-find-divider {
@@ -1053,7 +1173,7 @@
 .auth-back-link {
   align-self: flex-start;
   font-size: 14px;
-  color: #2563eb;
+  color: var(--auth-navy);
   background: none;
   border: 0;
   padding: 0;
