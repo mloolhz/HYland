@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type RefObject } from "react";
 import { Link } from "react-router-dom";
-import { demoProps } from "./ToastProvider";
+import { demoProps, useToast } from "./ToastProvider";
 
 const SLIDE_COUNT = 5;
 const CATEGORIES = [
@@ -14,10 +14,32 @@ const CATEGORIES = [
   ["⋯", "더보기"],
 ] as const;
 
-export function HeroSection() {
+type HeroSectionProps = {
+  agentInputRef?: RefObject<HTMLTextAreaElement | null>;
+  agentActive?: boolean;
+  onAgentActiveChange?: (active: boolean) => void;
+};
+
+export function HeroSection({
+  agentInputRef,
+  agentActive = false,
+  onAgentActiveChange,
+}: HeroSectionProps) {
+  const { showToast } = useToast();
   const [activeSlide, setActiveSlide] = useState(0);
   const [showScrollHint, setShowScrollHint] = useState(true);
+  const [agentQuery, setAgentQuery] = useState("");
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const handleAgentSubmit = () => {
+    const query = agentQuery.trim();
+    if (!query) {
+      showToast("질문을 입력해 주세요");
+      return;
+    }
+    showToast("AI 어시스턴트 서비스는 아직 개발중이에요.");
+    setAgentQuery("");
+  };
 
   const startHero = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
@@ -58,7 +80,7 @@ export function HeroSection() {
       </div>
 
       <div className="hero-inner">
-        <div className="hero-copy reveal">
+        <div className="hero-copy">
           <span className="eyebrow">바다, 산, 섬을 넘나드는 새로운 여정</span>
           <h1 className="hero-title">
             인천의 섬에서
@@ -91,6 +113,49 @@ export function HeroSection() {
         </div>
 
         <div className="pass-card-wrap">
+          <div className="pc-agent" id="ai-agent" role="search">
+            <div className={`pc-agent-panel${agentActive ? " is-active" : ""}`}>
+              <div className="pc-agent-head">
+                <span className="pc-agent-title">ISLAND QUEST AI 추천 서비스</span>
+              </div>
+              <div className="pc-agent-field">
+                <textarea
+                  ref={agentInputRef}
+                  className="pc-agent-input"
+                  value={agentQuery}
+                  onChange={(event) => setAgentQuery(event.target.value)}
+                  onFocus={() => onAgentActiveChange?.(true)}
+                  onBlur={() => onAgentActiveChange?.(false)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" && !event.shiftKey) {
+                      event.preventDefault();
+                      handleAgentSubmit();
+                    }
+                  }}
+                  placeholder="자유롭게 질문해주세요."
+                  rows={2}
+                  aria-label="AI에게 질문하기"
+                />
+                <button
+                  type="button"
+                  className="pc-agent-send"
+                  onClick={handleAgentSubmit}
+                  aria-label="질문 보내기"
+                  disabled={!agentQuery.trim()}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path
+                      d="M12 19V5M12 5l-6 6M12 5l6 6"
+                      stroke="currentColor"
+                      strokeWidth="2.25"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
           <aside className="pass-card" aria-label="나의 바다패스">
             <div className="pc-head">
               <h3>나의 바다패스</h3>

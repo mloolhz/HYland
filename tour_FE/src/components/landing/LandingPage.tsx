@@ -1,5 +1,5 @@
 
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AISection } from "./AISection";
 import { BookingSection } from "./BookingSection";
@@ -18,10 +18,20 @@ import { NotificationProvider } from "@/store/notifications";
 function LandingPageContent() {
   const navigate = useNavigate();
   const { showToast } = useToast();
+  const agentInputRef = useRef<HTMLTextAreaElement>(null);
+  const [agentActive, setAgentActive] = useState(false);
 
   const goToLogin = useCallback(() => {
     navigate("/login");
   }, [navigate]);
+
+  const activateAgentInput = useCallback(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    setAgentActive(true);
+    window.setTimeout(() => {
+      agentInputRef.current?.focus({ preventScroll: true });
+    }, 480);
+  }, []);
 
   useEffect(() => {
     const onClick = (event: MouseEvent) => {
@@ -91,9 +101,13 @@ function LandingPageContent() {
   return (
     <>
       <SiteHeader />
-      <HeroSection />
+      <HeroSection
+        agentInputRef={agentInputRef}
+        agentActive={agentActive}
+        onAgentActiveChange={setAgentActive}
+      />
       <MapSection />
-      <AISection />
+      <AISection onRequestCustomRecommendation={activateAgentInput} />
       <BookingSection />
       <MissionSection />
       <LeaderboardSection onGoToLogin={goToLogin} />

@@ -30,16 +30,17 @@ const AI_COURSES = [
   },
 ] as const;
 
-export function AISection() {
+type AISectionProps = {
+  onRequestCustomRecommendation?: () => void;
+};
+
+export function AISection({ onRequestCustomRecommendation }: AISectionProps) {
   return (
     <section className="sec" id="ai" style={{ paddingTop: 20 }}>
       <div className="container">
         <div className="sec-head reveal">
           <span className="sec-ico">🤖</span>
           <h2>AI 추천</h2>
-          <a className="more" href="#" {...demoProps("AI 추천 전체 보기는 준비 중이에요 🤖")}>
-            더보기 →
-          </a>
         </div>
         <p className="sec-sub reveal">
           당신에게 딱 맞는 레저스포츠와 섬을 추천해드려요! 관심사와 체력 레벨을 알려주면 코스를 골라드립니다.
@@ -59,7 +60,12 @@ export function AISection() {
           ))}
         </div>
         <div className="center reveal">
-          <button className="btn btn-outline" {...demoProps("맞춤 추천 설문은 준비 중이에요 ✨")} style={{ minWidth: 260 }}>
+          <button
+            type="button"
+            className="btn btn-outline"
+            style={{ minWidth: 260 }}
+            onClick={onRequestCustomRecommendation}
+          >
             ✨ 맞춤 추천 받기
           </button>
         </div>
