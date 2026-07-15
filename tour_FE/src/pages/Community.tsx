@@ -8,7 +8,6 @@ import { PostList } from "@/components/community/PostList";
 import { PopularIslands } from "@/components/community/PopularIslands";
 import { ProfileCard } from "@/components/community/ProfileCard";
 import { SelectedIslands } from "@/components/community/SelectedIslands";
-import { WritePostFab } from "@/components/community/WritePostFab";
 import { CONTAINER } from "@/constants/layout";
 import {
   filterPosts,
@@ -183,13 +182,9 @@ export function Community() {
 
   return (
     <main className="cm-page">
-      <div className="cm-header-band">
-        <div className={CONTAINER}>
-          <CommunityHeader />
-        </div>
-      </div>
-
       <div className={CONTAINER}>
+        <CommunityHeader />
+
         <FilterBar
           active={category}
           view={view}
@@ -246,8 +241,6 @@ export function Community() {
           onImageNavigate={(imageIndex) => setLightbox((prev) => (prev ? { ...prev, imageIndex } : prev))}
         />
       )}
-
-      <WritePostFab />
     </main>
   );
 }

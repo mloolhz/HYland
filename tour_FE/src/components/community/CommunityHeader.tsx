@@ -3,7 +3,6 @@ import { demoProps } from "@/components/landing/ToastProvider";
 export function CommunityHeader() {
   return (
     <header className="cm-header">
-      <div className="cm-header-bg" aria-hidden="true" />
       <div className="cm-header-inner">
         <div className="cm-header-copy">
           <span className="cm-header-eyebrow">COMMUNITY</span>
