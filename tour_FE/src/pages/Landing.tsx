@@ -18,10 +18,22 @@ export function Landing() {
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          entry.target.classList.toggle("in", entry.isIntersecting);
+          const el = entry.target;
+          if (entry.isIntersecting) {
+            // Enter slightly after the top rises into view (avoids 1px flash at the fold).
+            if (entry.boundingClientRect.top < window.innerHeight - 100) {
+              el.classList.add("in");
+            }
+            return;
+          }
+          // Leave only when fully outside the viewport — not at the -10% rootMargin line.
+          const r = entry.boundingClientRect;
+          if (r.top >= window.innerHeight || r.bottom <= 0) {
+            el.classList.remove("in");
+          }
         });
       },
-      { threshold: 0.15, rootMargin: "0px 0px -10% 0px" },
+      { threshold: 0, rootMargin: "0px" },
     );
 
     document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
