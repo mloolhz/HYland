@@ -20,13 +20,14 @@ export function Landing() {
         entries.forEach((entry) => {
           const el = entry.target;
           if (entry.isIntersecting) {
-            // Enter slightly after the top rises into view (avoids 1px flash at the fold).
-            if (entry.boundingClientRect.top < window.innerHeight - 100) {
-              el.classList.add("in");
-            }
+            // Enter as soon as any pixel intersects. Do NOT gate on top < vh-100:
+            // with threshold:0 that callback fires once at the fold (top≈vh) and never
+            // again while still intersecting — sections stayed opacity:0 forever.
+            // Snap jumps also skip intermediate callbacks, so enter must succeed on first hit.
+            el.classList.add("in");
             return;
           }
-          // Leave only when fully outside the viewport — not at the -10% rootMargin line.
+          // Exit only when fully outside the real viewport.
           const r = entry.boundingClientRect;
           if (r.top >= window.innerHeight || r.bottom <= 0) {
             el.classList.remove("in");
