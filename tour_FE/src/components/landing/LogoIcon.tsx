@@ -5,8 +5,8 @@ export function LogoIcon({ size = 38 }: { size?: number }) {
       <rect x="16.5" y="10" width="7" height="16" rx="1.4" fill="#E14B4B" />
       <rect x="16.5" y="14" width="7" height="3.2" fill="#fff" />
       <rect x="16.5" y="20.4" width="7" height="3.2" fill="#fff" />
-      <rect x="14.5" y="26" width="11" height="3" rx="1.2" fill="#0E2B52" />
-      <polygon points="20,4.5 24,10 16,10" fill="#0E2B52" />
+      <rect x="14.5" y="26" width="11" height="3" rx="1.2" fill="#2D2E6B" />
+      <polygon points="20,4.5 24,10 16,10" fill="#2D2E6B" />
       <path
         d="M8 32 q4 -3 8 0 t8 0 t8 0"
         stroke="#0F5FCC"

@@ -8,6 +8,7 @@ import { PostList } from "@/components/community/PostList";
 import { PopularIslands } from "@/components/community/PopularIslands";
 import { ProfileCard } from "@/components/community/ProfileCard";
 import { SelectedIslands } from "@/components/community/SelectedIslands";
+import { WritePostFab } from "@/components/community/WritePostFab";
 import { CONTAINER } from "@/constants/layout";
 import {
   filterPosts,
@@ -245,6 +246,8 @@ export function Community() {
           onImageNavigate={(imageIndex) => setLightbox((prev) => (prev ? { ...prev, imageIndex } : prev))}
         />
       )}
+
+      <WritePostFab />
     </main>
   );
 }

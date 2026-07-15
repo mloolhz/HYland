@@ -5,7 +5,7 @@ import {
   LEADERBOARD,
   type LeaderboardPeriod,
 } from "@/lib/landing-data";
-import { demoProps, useToast } from "./ToastProvider";
+import { demoProps } from "./ToastProvider";
 
 const RESET_NOTICE: Record<LeaderboardPeriod, string | null> = {
   week: "매주 월요일 00:00 초기화",
@@ -14,18 +14,16 @@ const RESET_NOTICE: Record<LeaderboardPeriod, string | null> = {
 };
 
 type LeaderboardSectionProps = {
-  onScrollToLogin: () => void;
+  onGoToLogin: () => void;
 };
 
-export function LeaderboardSection({ onScrollToLogin }: LeaderboardSectionProps) {
+export function LeaderboardSection({ onGoToLogin }: LeaderboardSectionProps) {
   const [period, setPeriod] = useState<LeaderboardPeriod>("week");
-  const { showToast } = useToast();
   const data = LEADERBOARD[period];
   const resetNotice = RESET_NOTICE[period];
 
   const handleLogin = () => {
-    onScrollToLogin();
-    showToast("🛂 바다패스에 로그인하면 내 순위를 볼 수 있어요!");
+    onGoToLogin();
   };
 
   return (
@@ -76,7 +74,7 @@ export function LeaderboardSection({ onScrollToLogin }: LeaderboardSectionProps)
                     <span className="pd-rank">#{rank}</span>
                     <div
                       className="pd-ava"
-                      style={{ background: `linear-gradient(150deg, ${avaColor(name)}, #0E2B52)` }}
+                      style={{ background: `linear-gradient(150deg, ${avaColor(name)}, #2D2E6B)` }}
                     >
                       {name[0]}
                     </div>

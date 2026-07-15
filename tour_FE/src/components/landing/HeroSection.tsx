@@ -1,6 +1,7 @@
+import { useCallback, useEffect, useRef, useState, type RefObject } from "react";
 import { Link } from "react-router-dom";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { demoProps } from "./ToastProvider";
+import { getFixedHeaderHeight, scrollToSection, syncHeaderHeightCssVar } from "@/utils/layout";
+import { demoProps, useToast } from "./ToastProvider";
 
 const SLIDE_COUNT = 5;
 const CATEGORIES = [
@@ -15,34 +16,34 @@ const CATEGORIES = [
 ] as const;
 
 type HeroSectionProps = {
-  loginInputRef: React.RefObject<HTMLInputElement | null>;
+  agentInputRef?: RefObject<HTMLTextAreaElement | null>;
+  agentActive?: boolean;
+  onAgentActiveChange?: (active: boolean) => void;
 };
 
-/** Sticky/fixed header height — util bar + main nav live inside #siteHead. */
-function getStickyHeaderH() {
-  const head = document.getElementById("siteHead");
-  if (head) {
-    const pos = getComputedStyle(head).position;
-    if (pos === "fixed" || pos === "sticky") return head.offsetHeight;
-  }
-  return 0;
-}
-
-export function HeroSection({ loginInputRef }: HeroSectionProps) {
+export function HeroSection({
+  agentInputRef,
+  agentActive = false,
+  onAgentActiveChange,
+}: HeroSectionProps) {
+  const { showToast } = useToast();
   const [activeSlide, setActiveSlide] = useState(0);
   const [showScrollHint, setShowScrollHint] = useState(true);
+  const [agentQuery, setAgentQuery] = useState("");
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const goSlide = useCallback((index: number) => {
-    setActiveSlide((index + SLIDE_COUNT) % SLIDE_COUNT);
-  }, []);
-
   const scrollToMap = () => {
-    const map = document.getElementById("map");
-    if (!map) return;
-    const headerH = getStickyHeaderH();
-    const top = Math.max(0, map.getBoundingClientRect().top + window.scrollY - headerH);
-    window.scrollTo({ top, behavior: "smooth" });
+    scrollToSection("map");
+  };
+
+  const handleAgentSubmit = () => {
+    const query = agentQuery.trim();
+    if (!query) {
+      showToast("질문을 입력해 주세요");
+      return;
+    }
+    showToast("AI 어시스턴트 서비스는 아직 개발중이에요.");
+    setAgentQuery("");
   };
 
   const startHero = useCallback(() => {
@@ -70,49 +71,65 @@ export function HeroSection({ loginInputRef }: HeroSectionProps) {
   }, []);
 
   useEffect(() => {
+    syncHeaderHeightCssVar();
+    window.addEventListener("resize", syncHeaderHeightCssVar);
+    return () => window.removeEventListener("resize", syncHeaderHeightCssVar);
+  }, []);
+
+  /* One-wheel jump hero ↔ map; destinations from live layout (no cached heroH / offsets). */
+  useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     let locked = false;
-    let unlockTimer: ReturnType<typeof setTimeout> | undefined;
+    let unlockTimer: ReturnType<typeof window.setTimeout> | undefined;
 
     const unlock = () => {
       locked = false;
-      if (unlockTimer !== undefined) clearTimeout(unlockTimer);
+      if (unlockTimer !== undefined) window.clearTimeout(unlockTimer);
       unlockTimer = undefined;
     };
 
-    // scrollIntoView + CSS scroll-padding drifts when --head-h ≠ real sticky height.
-    // Measure #siteHead each time and scrollTo an exact Y.
-    const scrollToId = (id: string) => {
-      const el = document.getElementById(id);
-      if (!el) return;
+    const jumpTo = (id: string) => {
       locked = true;
-      const headerH = getStickyHeaderH();
-      const top = Math.max(0, el.getBoundingClientRect().top + window.scrollY - headerH);
-      window.scrollTo({ top, behavior: "smooth" });
+      scrollToSection(id);
 
-      // Prefer scrollend when the browser fires it; 1200ms timeout is the safety net.
-      window.addEventListener("scrollend", unlock, { once: true });
-      unlockTimer = setTimeout(unlock, 1200);
+      const supportsScrollEnd = "onscrollend" in window;
+      if (supportsScrollEnd) {
+        window.addEventListener("scrollend", unlock, { once: true });
+        unlockTimer = window.setTimeout(unlock, 1200);
+      } else {
+        let lastY = window.scrollY;
+        const check = () => {
+          if (Math.abs(window.scrollY - lastY) < 1) {
+            unlock();
+            return;
+          }
+          lastY = window.scrollY;
+          unlockTimer = window.setTimeout(check, 100);
+        };
+        unlockTimer = window.setTimeout(check, 150);
+      }
     };
 
     const onWheel = (e: WheelEvent) => {
       if (locked) return;
+
       const map = document.getElementById("map");
       if (!map) return;
 
       const y = window.scrollY;
-      const headerH = getStickyHeaderH();
-      const mapSnapY = Math.max(0, map.offsetTop - headerH);
+      const headerH = getFixedHeaderHeight();
+      const mapSnapY = map.getBoundingClientRect().top + window.scrollY - headerH;
 
-      if (e.deltaY > 0 && y <= 80) {
+      if (e.deltaY > 0 && y <= 60) {
         e.preventDefault();
-        scrollToId("map");
+        jumpTo("map");
         return;
       }
+
       if (e.deltaY < 0 && y >= mapSnapY - 40 && y <= mapSnapY + 160) {
         e.preventDefault();
-        scrollToId("home");
+        jumpTo("hero");
       }
     };
 
@@ -120,14 +137,14 @@ export function HeroSection({ loginInputRef }: HeroSectionProps) {
     return () => {
       window.removeEventListener("wheel", onWheel);
       window.removeEventListener("scrollend", unlock);
-      if (unlockTimer !== undefined) clearTimeout(unlockTimer);
+      if (unlockTimer !== undefined) window.clearTimeout(unlockTimer);
     };
   }, []);
 
   return (
     <section
       className="hero"
-      id="home"
+      id="hero"
       onMouseEnter={() => timerRef.current && clearInterval(timerRef.current)}
       onMouseLeave={startHero}
     >
@@ -139,8 +156,8 @@ export function HeroSection({ loginInputRef }: HeroSectionProps) {
       </div>
 
       <div className="hero-inner">
-        <div className="hero-copy reveal">
-          <span className="eyebrow">바다, 산, 섬을 넘나드는 새로운 탐험!</span>
+        <div className="hero-copy">
+          <span className="eyebrow">바다, 산, 섬을 넘나드는 새로운 여정</span>
           <h1 className="hero-title">
             인천의 섬에서
             <br />
@@ -151,7 +168,7 @@ export function HeroSection({ loginInputRef }: HeroSectionProps) {
           <p className="hero-sub">
             해양 레저부터 러닝, 사이클, 하이킹까지 —
             <br />
-            168개 인천 섬의 다양한 레저스포츠를 한눈에 만나보세요.
+            인천의 섬에서 다양한 레저스포츠를 만나보세요.
           </p>
           <div className="hero-cta">
             <a className="btn btn-navy" href="#map">
@@ -161,79 +178,6 @@ export function HeroSection({ loginInputRef }: HeroSectionProps) {
               레저 예약 보기
             </a>
           </div>
-        </div>
-
-        <aside className="pass-card reveal" aria-label="바다패스 로그인">
-          <div className="pc-head">
-            <h3>나의 바다패스</h3>
-            <span className="pill">LOGIN</span>
-          </div>
-          <div className="pc-body">
-            <img className="passport" src="/passport.png" alt="바다패스 여권" width={118} height={158} />
-            <div className="pc-form">
-              <div className="field">
-                <span>👤</span>
-                <input
-                  ref={loginInputRef}
-                  type="text"
-                  id="login-id"
-                  placeholder="아이디 또는 이메일"
-                  autoComplete="username"
-                />
-              </div>
-              <div className="field">
-                <span>🔒</span>
-                <input type="password" placeholder="비밀번호" autoComplete="current-password" />
-              </div>
-              <div className="keep-row">
-                <label>
-                  <input type="checkbox" defaultChecked /> 로그인 상태 유지
-                </label>
-              </div>
-              <button className="btn-login" {...demoProps("🛂 데모 페이지입니다. 로그인 기능은 추후 연동 예정이에요!")}>
-                로그인
-              </button>
-              <div className="find-links">
-                <Link to="/find-account">아이디 찾기</Link>
-                <span className="find-divider" aria-hidden="true" />
-                <Link to="/find-account?tab=password">비밀번호 찾기</Link>
-                <span className="find-divider" aria-hidden="true" />
-                <Link to="/signup">
-                  <b style={{ color: "var(--blue)" }}>회원가입</b>
-                </Link>
-              </div>
-            </div>
-          </div>
-          <div className="divider">간편 로그인</div>
-          <div className="sns-row">
-            <button className="btn-kakao" {...demoProps("카카오 로그인은 추후 연동 예정이에요 💬")}>
-              💬 카카오
-            </button>
-            <button className="btn-naver" {...demoProps("네이버 로그인은 추후 연동 예정이에요 🟢")}>
-              <b>N</b> 네이버
-            </button>
-          </div>
-          <button className="btn-ipass" {...demoProps("인천 i-바다패스 연동은 준비 중이에요 🌊")}>
-            <span className="ip-badge">인천시민</span>인천 i-바다패스 연동하기<span className="ip-arrow">→</span>
-          </button>
-          <div className="quick-grid">
-            <span className="q" {...demoProps("추천 섬 페이지는 준비 중이에요 🏝️")}>
-              <i>📍</i>추천 섬
-            </span>
-            <span className="q" {...demoProps("나에게 맞는 섬BTI를 찾아보세요! 🏝️")}>
-              <i>🏝️</i>섬BTI
-            </span>
-            <span className="q" {...demoProps("레저 예약은 아래 섹션에서 미리 만나보세요 📅")}>
-              <i>📅</i>레저 예약
-            </span>
-            <span className="q" {...demoProps("안전 정보 페이지는 준비 중이에요 🛟")}>
-              <i>🛟</i>안전 정보
-            </span>
-          </div>
-          <p className="pc-foot">로그인하면 방문 기록 · 미션 · 배지가 여권에 자동 저장돼요</p>
-        </aside>
-
-        <div className="hero-foot">
           <div className="cats" aria-label="레저 카테고리">
             {CATEGORIES.map(([icon, label]) => (
               <span className="cat" key={label}>
@@ -242,19 +186,83 @@ export function HeroSection({ loginInputRef }: HeroSectionProps) {
               </span>
             ))}
           </div>
-          <div className="hero-dots" aria-label="배경 사진 전환">
-            {Array.from({ length: SLIDE_COUNT }, (_, i) => (
-              <button
-                key={i}
-                className={`hdot${activeSlide === i ? " on" : ""}`}
-                aria-label={`사진 ${i + 1}`}
-                onClick={() => {
-                  goSlide(i);
-                  startHero();
-                }}
-              />
-            ))}
+        </div>
+
+        <div className="pass-card-wrap">
+          <div className="pc-agent" id="ai-agent" role="search">
+            <div className={`pc-agent-panel${agentActive ? " is-active" : ""}`}>
+              <div className="pc-agent-head">
+                <span className="pc-agent-title">ISLAND QUEST AI 추천 서비스</span>
+              </div>
+              <div className="pc-agent-field">
+                <textarea
+                  ref={agentInputRef}
+                  className="pc-agent-input"
+                  value={agentQuery}
+                  onChange={(event) => setAgentQuery(event.target.value)}
+                  onFocus={() => onAgentActiveChange?.(true)}
+                  onBlur={() => onAgentActiveChange?.(false)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" && !event.shiftKey) {
+                      event.preventDefault();
+                      handleAgentSubmit();
+                    }
+                  }}
+                  placeholder="자유롭게 질문해주세요."
+                  rows={2}
+                  aria-label="AI에게 질문하기"
+                />
+                <button
+                  type="button"
+                  className="pc-agent-send"
+                  onClick={handleAgentSubmit}
+                  aria-label="질문 보내기"
+                  disabled={!agentQuery.trim()}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path
+                      d="M12 19V5M12 5l-6 6M12 5l6 6"
+                      stroke="currentColor"
+                      strokeWidth="2.25"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
           </div>
+          <aside className="pass-card" aria-label="나의 바다패스">
+            <div className="pc-head">
+              <h3>나의 바다패스</h3>
+              <Link to="/login" className="pc-login-link">
+                로그인하기
+              </Link>
+            </div>
+            <div className="quick-grid">
+              <span className="q" {...demoProps("추천 섬 페이지는 준비 중이에요")}>
+                <i>📍</i>추천 섬
+              </span>
+              <span className="q" {...demoProps("나에게 맞는 섬BTI를 찾아보세요!")}>
+                <i>🏝️</i>섬BTI
+              </span>
+              <span className="q" {...demoProps("레저 예약은 아래 섹션에서 미리 만나보세요")}>
+                <i>📅</i>레저 예약
+              </span>
+              <span className="q" {...demoProps("안전 정보 페이지는 준비 중이에요")}>
+                <i>🛟</i>안전 정보
+              </span>
+            </div>
+            <p className="pc-foot">로그인하면 방문 기록 · 미션 · 배지가 여권에 자동 저장돼요</p>
+          </aside>
+          <a
+            className="btn-ipass"
+            href="https://island.theksa.co.kr/page/main"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span className="ip-badge">인천시민</span>인천 i 바다패스로 예매하기<span className="ip-arrow">→</span>
+          </a>
         </div>
       </div>
 

@@ -5,11 +5,13 @@ export function AuthLayout() {
 
   return (
     <div className="auth-layout">
-      <Link to="/" className="auth-home-link">
-        ← 홈으로
-      </Link>
-      <div key={pathname} className="animate-page-enter">
-        <Outlet />
+      <div className="auth-layout-inner">
+        <Link to="/" className="auth-home-link">
+          ← 홈으로
+        </Link>
+        <div key={pathname} className="animate-page-enter">
+          <Outlet />
+        </div>
       </div>
     </div>
   );

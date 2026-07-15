@@ -1,46 +1,65 @@
 
 import { useEffect, useRef } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { NotificationBell } from "@/components/notification/NotificationBell";
+import { syncHeaderHeightCssVar } from "@/utils/layout";
 import { LogoIcon } from "./LogoIcon";
 import { demoProps } from "./ToastProvider";
 
-type SiteHeaderProps = {
-  onScrollToLogin: () => void;
-};
+function ProfileIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="2" />
+      <path
+        d="M5 20c0-3.314 3.134-6 7-6s7 2.686 7 6"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
 
-export function SiteHeader({ onScrollToLogin }: SiteHeaderProps) {
+export function SiteHeader() {
   const headRef = useRef<HTMLElement>(null);
+  const location = useLocation();
+  const onLanding = location.pathname === "/";
+  const onCommunity = location.pathname.startsWith("/community");
 
   useEffect(() => {
+    syncHeaderHeightCssVar();
+    window.addEventListener("resize", syncHeaderHeightCssVar);
+
     const onScroll = () => {
-      headRef.current?.classList.toggle("scrolled", window.scrollY > 8);
+      if (window.scrollY < 0) window.scrollTo(0, 0);
+      const scrolled = window.scrollY > 0 || !onLanding;
+      headRef.current?.classList.toggle("scrolled", scrolled);
     };
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    return () => {
+      window.removeEventListener("resize", syncHeaderHeightCssVar);
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, [onLanding]);
 
   return (
-    <header className="site-head" id="siteHead" ref={headRef}>
-      <div className="util-bar">
-        <div className="container util-inner">
-          <span className="util-note">인천 섬 레저스포츠 통합 플랫폼 · ISLAND QUEST</span>
-          <nav className="util-links" aria-label="유틸리티 메뉴">
-            <a href="#home" onClick={onScrollToLogin}>
-              로그인
-            </a>
-            <a href="#home" {...demoProps("회원가입은 준비 중이에요")}>
-              회원가입
-            </a>
-            <a href="https://www.incheon.go.kr" target="_blank" rel="noopener noreferrer">
-              인천광역시
-            </a>
-            <a href="https://isum.incheon.go.kr" target="_blank" rel="noopener noreferrer">
-              인천섬포털
-            </a>
-          </nav>
-        </div>
-      </div>
+    <header className="site-head" id="siteHead" data-fixed-top ref={headRef}>
       <div className="container nav-inner">
-        <a className="logo" href="#home" aria-label="ISLAND QUEST 홈">
+        <a
+          className="logo"
+          href="/"
+          aria-label="ISLAND QUEST 홈"
+          onClick={(e) => {
+            e.preventDefault();
+            const { pathname, search, hash } = window.location;
+            if (pathname === "/" && !search && !hash) {
+              window.location.reload();
+            } else {
+              window.location.href = "/";
+            }
+          }}
+        >
           <LogoIcon />
           <span className="logo-txt">
             <b>ISLAND QUEST</b>
@@ -48,13 +67,13 @@ export function SiteHeader({ onScrollToLogin }: SiteHeaderProps) {
           </span>
         </a>
         <nav className="nav-links" aria-label="주요 메뉴">
-          <a href="#home">홈</a>
-          <a href="#map">섬 탐험</a>
-          <a href="#booking">레저 스포츠</a>
-          <a href="#mission">미션 &amp; 인증</a>
-          <a href="#leaderboard">리더보드</a>
-          <a href="#community">커뮤니티</a>
-          <a href="#guide">이용 가이드</a>
+          <a href={onLanding ? "#map" : "/#map"}>섬 탐험</a>
+          <a href={onLanding ? "#booking" : "/#booking"}>레저 스포츠</a>
+          <a href={onLanding ? "#mission" : "/#mission"}>미션 &amp; 인증</a>
+          <a href={onLanding ? "#leaderboard" : "/#leaderboard"}>리더보드</a>
+          <Link to="/community" className={onCommunity ? "nav-route-active" : undefined}>
+            커뮤니티
+          </Link>
         </nav>
         <div className="head-actions">
           <a
@@ -62,12 +81,29 @@ export function SiteHeader({ onScrollToLogin }: SiteHeaderProps) {
             href="https://isum.incheon.go.kr"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="인천섬포털 바로가기"
           >
-            인천섬포털 바로가기 <span>↗</span>
+            <img
+              className="btn-portal-logo"
+              src="/incheon-island-portal-logo.png"
+              alt="인천섬포털"
+              width={160}
+              height={32}
+            />
+            <span className="btn-portal-arrow" aria-hidden="true">
+              ↗
+            </span>
           </a>
-          <button className="icon-btn" {...demoProps("알림은 로그인 후 확인할 수 있어요 🔔")} aria-label="알림">
-            🔔
-          </button>
+          <a
+            className="icon-btn"
+            href="#mypage"
+            {...demoProps("마이페이지는 준비 중이에요 👤")}
+            aria-label="마이페이지"
+            title="마이페이지"
+          >
+            <ProfileIcon />
+          </a>
+          <NotificationBell />
         </div>
       </div>
     </header>

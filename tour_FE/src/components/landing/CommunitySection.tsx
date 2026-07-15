@@ -70,11 +70,10 @@ export function CommunitySection() {
     <section className="sec" id="community">
       <div className="container com-wrap">
         <div className="com-info reveal rv-l">
-          <span className="eyebrow">COMMUNITY LIVE</span>
-          <h2>커뮤니티 라이브 후기</h2>
+          <span className="eyebrow">COMMUNITY</span>
+          <h2>ISLAND QUEST 커뮤니티</h2>
           <p>
-            다른 탐험가들의 생생한 후기가 실시간으로 올라오고 있어요. 지금 이 순간에도 누군가는 인천의 섬을
-            달리는 중!
+            다른 탐험가들의 생생한 후기가 올라오는 곳이에요.
           </p>
           <div className="com-stats">
             <div className="cs">
@@ -101,22 +100,13 @@ export function CommunitySection() {
         </div>
         <div className="live-card reveal rv-r" id="liveCard">
           <div className="live-head">
-            <span className="live-badge">
-              <span className="live-dot" />
-              LIVE
-            </span>
-            <b>실시간 탐험 후기</b>
-            <small>새 후기가 계속 올라와요</small>
+            <b>주요 탐험 후기</b>
           </div>
           <ul className="feed" aria-live="polite">
             {items.map(({ id, review }) => (
               <ReviewItem key={id} review={review} />
             ))}
           </ul>
-          <div className="live-input">
-            <div className="fake">로그인 후 후기를 남길 수 있어요</div>
-            <button {...demoProps("후기 작성은 로그인 후 이용할 수 있어요 ✍️")}>작성</button>
-          </div>
         </div>
       </div>
     </section>

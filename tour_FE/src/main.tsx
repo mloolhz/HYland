@@ -1,26 +1,26 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { LandingPage } from "@/components/landing/LandingPage";
 import { AuthLayout } from "@/layouts/AuthLayout";
-import { RootLayout } from "@/layouts/RootLayout";
+import { CommunityLayout } from "@/layouts/CommunityLayout";
 import { Community } from "@/pages/Community";
+import { FindAccount } from "@/pages/FindAccount";
 import { Login } from "@/pages/Login";
 import { MyActivity } from "@/pages/MyActivity";
-import { PostDetail } from "@/pages/PostDetail";
-import { FindAccount } from "@/pages/FindAccount";
-import { Signup } from "@/pages/Signup";
-import { Landing } from "@/pages/Landing";
 import { Notifications } from "@/pages/Notifications";
+import { PostDetail } from "@/pages/PostDetail";
+import { Signup } from "@/pages/Signup";
 import "./index.css";
-import "./styles/community.css";
 import "./styles/auth.css";
+import "./styles/community.css";
 import "./styles/notification.css";
 
 const router = createBrowserRouter([
+  { path: "/", element: <LandingPage /> },
   {
-    element: <RootLayout />,
+    element: <CommunityLayout />,
     children: [
-      { path: "/", element: <Landing /> },
       { path: "community", element: <Community /> },
       { path: "community/me", element: <MyActivity /> },
       { path: "community/:id", element: <PostDetail /> },

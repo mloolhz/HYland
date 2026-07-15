@@ -134,6 +134,57 @@
   background: #1d4ed8;
 }
 
+/* ── Floating write button ── */
+@keyframes cm-write-fab-float {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-7px);
+  }
+}
+
+.cm-write-fab {
+  position: fixed;
+  left: 50%;
+  bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  z-index: 90;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 9999px;
+  background: var(--navy);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 8px 28px rgba(45, 46, 107, 0.32);
+  animation: cm-write-fab-float 2.8s ease-in-out infinite;
+  transition: background 0.15s, box-shadow 0.15s, bottom 0.2s ease;
+}
+
+.cm-write-fab:hover {
+  background: var(--navy2);
+  box-shadow: 0 10px 32px rgba(45, 46, 107, 0.38);
+}
+
+.cm-write-fab:active {
+  animation-play-state: paused;
+  box-shadow: 0 4px 18px rgba(45, 46, 107, 0.28);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cm-write-fab {
+    animation: none;
+  }
+}
+
 /* ── Filter bar ── */
 .cm-filter-bar {
   display: flex;
