@@ -48,7 +48,13 @@ function RootLayoutContent() {
     <>
       <Navbar />
       <ScrollToTop />
-      <Outlet context={{ loginInputRef, scrollToLogin }} />
+      {location.pathname === "/" ? (
+        <Outlet context={{ loginInputRef, scrollToLogin }} />
+      ) : (
+        <div key={location.pathname} className="animate-page-enter">
+          <Outlet context={{ loginInputRef, scrollToLogin }} />
+        </div>
+      )}
       <SiteFooter />
     </>
   );

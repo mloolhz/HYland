@@ -44,9 +44,9 @@ export function AISection() {
         <p className="sec-sub reveal">
           당신에게 딱 맞는 레저스포츠와 섬을 추천해드려요! 관심사와 체력 레벨을 알려주면 코스를 골라드립니다.
         </p>
-        <div className="ai-grid">
+        <div className="ai-grid reveal">
           {AI_COURSES.map((course) => (
-            <article className="ai-card reveal" key={course.title} {...demoProps(course.demo)}>
+            <article className="ai-card" key={course.title} {...demoProps(course.demo)}>
               <div className={`thumb ${course.thumb}`}>
                 <span className={`lv ${course.level}`}>{course.levelLabel}</span>
               </div>

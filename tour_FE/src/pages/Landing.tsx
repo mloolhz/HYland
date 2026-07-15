@@ -18,31 +18,13 @@ export function Landing() {
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("in");
-            io.unobserve(entry.target);
-          }
+          entry.target.classList.toggle("in", entry.isIntersecting);
         });
       },
-      { threshold: 0.12 },
+      { threshold: 0.15, rootMargin: "0px 0px -10% 0px" },
     );
 
     document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
-
-    const stagger = (selector: string, step = 90) => {
-      document.querySelectorAll(selector).forEach((el, i) => {
-        el.classList.add("reveal");
-        (el as HTMLElement).style.transitionDelay = `${i * step}ms`;
-        io.observe(el);
-      });
-    };
-
-    stagger(".ai-grid .ai-card", 120);
-    stagger(".book-card .row", 70);
-    stagger(".badge-grid .badge", 70);
-    stagger(".stats .stat", 90);
-    stagger(".cats .cat", 55);
-
     return () => io.disconnect();
   }, []);
 

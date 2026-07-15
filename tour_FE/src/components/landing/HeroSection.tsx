@@ -20,11 +20,16 @@ type HeroSectionProps = {
 
 export function HeroSection({ loginInputRef }: HeroSectionProps) {
   const [activeSlide, setActiveSlide] = useState(0);
+  const [showScrollHint, setShowScrollHint] = useState(true);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const goSlide = useCallback((index: number) => {
     setActiveSlide((index + SLIDE_COUNT) % SLIDE_COUNT);
   }, []);
+
+  const scrollToMap = () => {
+    document.getElementById("map")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   const startHero = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
@@ -42,6 +47,58 @@ export function HeroSection({ loginInputRef }: HeroSectionProps) {
       if (timerRef.current) clearInterval(timerRef.current);
     };
   }, [startHero]);
+
+  useEffect(() => {
+    const onScroll = () => setShowScrollHint(window.scrollY < 120);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let locked = false;
+    let unlockTimer: ReturnType<typeof setTimeout> | undefined;
+
+    const unlock = () => {
+      locked = false;
+      if (unlockTimer !== undefined) clearTimeout(unlockTimer);
+      unlockTimer = undefined;
+    };
+
+    const scrollToId = (id: string) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      locked = true;
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+
+      // Prefer scrollend when the browser fires it; 1200ms timeout is the safety net.
+      window.addEventListener("scrollend", unlock, { once: true });
+      unlockTimer = setTimeout(unlock, 1200);
+    };
+
+    const onWheel = (e: WheelEvent) => {
+      if (locked) return;
+      const heroH = document.getElementById("home")?.offsetHeight ?? window.innerHeight;
+      const y = window.scrollY;
+
+      if (e.deltaY > 0 && y <= 60) {
+        scrollToId("map");
+        return;
+      }
+      if (e.deltaY < 0 && y >= heroH - 100 && y <= heroH + 120) {
+        scrollToId("home");
+      }
+    };
+
+    window.addEventListener("wheel", onWheel, { passive: true });
+    return () => {
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("scrollend", unlock);
+      if (unlockTimer !== undefined) clearTimeout(unlockTimer);
+    };
+  }, []);
 
   return (
     <section
@@ -176,6 +233,26 @@ export function HeroSection({ loginInputRef }: HeroSectionProps) {
           </div>
         </div>
       </div>
+
+      <button
+        type="button"
+        className={`hero-scroll-hint${showScrollHint ? "" : " is-hidden"}`}
+        onClick={scrollToMap}
+        aria-label="섬 지도 섹션으로 이동"
+      >
+        <span className="hero-scroll-label">스크롤하여 더 알아보기</span>
+        <span className="hero-scroll-chevron" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M7 10l5 5 5-5M7 14l5 5 5-5"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </span>
+      </button>
     </section>
   );
 }

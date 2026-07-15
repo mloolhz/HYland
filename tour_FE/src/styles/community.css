@@ -308,7 +308,7 @@
   border-bottom: 0.5px solid #f1f5f9;
   color: inherit;
   text-decoration: none;
-  transition: background 120ms;
+  transition: background-color 120ms ease-out;
 }
 
 .cm-post-row:last-child,
@@ -317,7 +317,7 @@
 }
 
 a.cm-post-row:hover {
-  background: var(--cm-surface);
+  background: #f8fafc;
   cursor: pointer;
 }
 
@@ -1498,6 +1498,7 @@ a.cm-post-row:hover {
 }
 
 .cm-activity-tabs {
+  position: relative;
   display: flex;
   background: #fff;
   border: 0.5px solid var(--cm-line);
@@ -1515,12 +1516,25 @@ a.cm-post-row:hover {
   border: 0;
   border-bottom: 2px solid transparent;
   cursor: pointer;
+  position: relative;
+  z-index: 1;
 }
 
 .cm-activity-tab.is-active {
   color: #1a2433;
   font-weight: 500;
-  border-bottom-color: #2563eb;
+  border-bottom-color: transparent;
+}
+
+.cm-tab-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: #2563eb;
+  pointer-events: none;
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+              width 220ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .cm-activity-tab-count {
@@ -1868,6 +1882,7 @@ a.cm-post-row:hover {
   align-items: center;
   justify-content: center;
   padding: 16px;
+  animation: overlay-in 180ms ease-out;
 }
 
 .cm-lightbox {
@@ -1881,6 +1896,7 @@ a.cm-post-row:hover {
   border-radius: 8px;
   overflow: hidden;
   outline: none;
+  animation: modal-in 200ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .cm-lightbox-indicator {

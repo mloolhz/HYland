@@ -213,7 +213,12 @@ export function Community() {
 
         <div className="cm-layout">
           <section className="cm-feed" aria-label="커뮤니티 피드">
-            {feedContent}
+            <div
+              key={`${view}-${category}-${sort}-${[...islands].join(",")}-${query}-${safePage}`}
+              className="cm-results-fade"
+            >
+              {feedContent}
+            </div>
           </section>
 
           <aside className="cm-sidebar">

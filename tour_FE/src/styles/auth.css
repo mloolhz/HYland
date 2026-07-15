@@ -79,6 +79,7 @@
 }
 
 .auth-tabs {
+  position: relative;
   display: flex;
   margin-bottom: 22px;
 }
@@ -96,12 +97,26 @@
   border-left: 0;
   border-right: 0;
   cursor: pointer;
+  position: relative;
+  z-index: 1;
 }
 
 .auth-tab.is-active {
   color: #1a2433;
   font-weight: 500;
-  border-bottom: 2px solid #1a3a6b;
+  border-bottom-color: transparent;
+}
+
+.auth-tab-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: #1a3a6b;
+  pointer-events: none;
+  z-index: 2;
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+              width 220ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .auth-form {
@@ -575,6 +590,7 @@
   align-items: center;
   justify-content: center;
   padding: 20px;
+  animation: overlay-in 180ms ease-out;
 }
 
 .auth-modal {
@@ -586,6 +602,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  animation: modal-in 200ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .auth-modal-head {

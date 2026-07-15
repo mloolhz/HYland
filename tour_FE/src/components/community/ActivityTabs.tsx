@@ -1,3 +1,5 @@
+import { useTabIndicator } from "@/hooks/useTabIndicator";
+
 export type ActivityTab = "posts" | "comments" | "liked";
 
 type ActivityTabsProps = {
@@ -13,14 +15,17 @@ const TABS: { key: ActivityTab; label: string }[] = [
 ];
 
 export function ActivityTabs({ active, counts, onChange }: ActivityTabsProps) {
+  const { listRef, setTabRef, ind } = useTabIndicator(active);
+
   return (
-    <div className="cm-activity-tabs" role="tablist" aria-label="내 활동 탭">
+    <div className="cm-activity-tabs" role="tablist" aria-label="내 활동 탭" ref={listRef}>
       {TABS.map((tab) => {
         const count = counts[tab.key];
         const selected = active === tab.key;
         return (
           <button
             key={tab.key}
+            ref={setTabRef(tab.key)}
             type="button"
             role="tab"
             aria-selected={selected}
@@ -31,6 +36,14 @@ export function ActivityTabs({ active, counts, onChange }: ActivityTabsProps) {
           </button>
         );
       })}
+      <span
+        className="cm-tab-indicator"
+        aria-hidden="true"
+        style={{
+          width: ind.width,
+          transform: `translateX(${ind.left}px)`,
+        }}
+      />
     </div>
   );
 }

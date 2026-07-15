@@ -14,6 +14,7 @@ import {
   isPasswordFullyValid,
 } from "@/constants/validation";
 import { usePhoneVerification } from "@/hooks/usePhoneVerification";
+import { useTabIndicator } from "@/hooks/useTabIndicator";
 import {
   findAccountByCredentials,
   findAccountsByNameAndPhone,
@@ -31,6 +32,7 @@ function parseTab(value: string | null): Tab {
 export function FindAccount() {
   const [searchParams, setSearchParams] = useSearchParams();
   const tab = parseTab(searchParams.get("tab"));
+  const { listRef, setTabRef, ind } = useTabIndicator(tab);
   const phoneVerify = usePhoneVerification();
   const resetPhone = phoneVerify.reset;
 
@@ -146,11 +148,12 @@ export function FindAccount() {
       <AuthBrand title="계정 찾기" subtitle="가입할 때 등록한 전화번호로 확인해요" />
 
       <div className="auth-card">
-        <div className="auth-tabs" role="tablist" aria-label="계정 찾기 메뉴">
+        <div className="auth-tabs" role="tablist" aria-label="계정 찾기 메뉴" ref={listRef}>
           <button
             type="button"
             role="tab"
             aria-selected={tab === "id"}
+            ref={setTabRef("id")}
             className={`auth-tab${tab === "id" ? " is-active" : ""}`}
             onClick={() => setTab("id")}
           >
@@ -160,11 +163,20 @@ export function FindAccount() {
             type="button"
             role="tab"
             aria-selected={tab === "password"}
+            ref={setTabRef("password")}
             className={`auth-tab${tab === "password" ? " is-active" : ""}`}
             onClick={() => setTab("password")}
           >
             비밀번호 찾기
           </button>
+          <span
+            className="auth-tab-indicator"
+            aria-hidden="true"
+            style={{
+              width: ind.width,
+              transform: `translateX(${ind.left}px)`,
+            }}
+          />
         </div>
 
         <StepIndicator step={step} step2Label={step2Label} />

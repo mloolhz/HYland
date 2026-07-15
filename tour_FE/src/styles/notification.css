@@ -52,17 +52,17 @@
   width: 360px;
   z-index: 120;
   transform-origin: top right;
-  animation: notiDropIn 160ms ease-out;
+  animation: dropdown-in 160ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@keyframes notiDropIn {
+@keyframes dropdown-in {
   from {
     opacity: 0;
-    transform: translateY(-4px);
+    transform: translateY(-6px) scale(0.97);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -201,7 +201,7 @@
   cursor: pointer;
   border-bottom: 0.5px solid #F1F5F9;
   outline: none;
-  transition: background 0.12s;
+  transition: background-color 120ms ease-out, transform 100ms ease-out;
 }
 
 .noti-item:last-child {
@@ -210,15 +210,22 @@
 
 .noti-item.is-unread {
   background: #F5FAFF;
+  transition: background-color 300ms ease-out;
 }
 
 .noti-item.is-read {
-  background: #fff;
+  background: #FFFFFF;
+  transition: background-color 300ms ease-out;
 }
 
 .noti-item:hover,
 .noti-item:focus-visible {
-  background: #EEF4FB;
+  background: #F1F5F9;
+}
+
+.noti-item:active {
+  background: #E2E8F0;
+  transform: scale(0.995);
 }
 
 .noti-item-dot {
@@ -229,6 +236,11 @@
   height: 5px;
   border-radius: 50%;
   background: #1D9E75;
+  transition: opacity 300ms ease-out;
+}
+
+.noti-item.is-read .noti-item-dot {
+  opacity: 0;
 }
 
 .noti-item-icon {

@@ -75,7 +75,7 @@ export function NotificationItem({
         }
       }}
     >
-      {unread && <span className="noti-item-dot" aria-hidden="true" />}
+      <span className="noti-item-dot" aria-hidden="true" />
       <span
         className="noti-item-icon"
         style={{ background: style.bg, color: style.color }}
