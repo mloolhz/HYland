@@ -18,6 +18,16 @@ type HeroSectionProps = {
   loginInputRef: React.RefObject<HTMLInputElement | null>;
 };
 
+/** Sticky/fixed header height — util bar + main nav live inside #siteHead. */
+function getStickyHeaderH() {
+  const head = document.getElementById("siteHead");
+  if (head) {
+    const pos = getComputedStyle(head).position;
+    if (pos === "fixed" || pos === "sticky") return head.offsetHeight;
+  }
+  return 0;
+}
+
 export function HeroSection({ loginInputRef }: HeroSectionProps) {
   const [activeSlide, setActiveSlide] = useState(0);
   const [showScrollHint, setShowScrollHint] = useState(true);
@@ -28,7 +38,11 @@ export function HeroSection({ loginInputRef }: HeroSectionProps) {
   }, []);
 
   const scrollToMap = () => {
-    document.getElementById("map")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    const map = document.getElementById("map");
+    if (!map) return;
+    const headerH = getStickyHeaderH();
+    const top = Math.max(0, map.getBoundingClientRect().top + window.scrollY - headerH);
+    window.scrollTo({ top, behavior: "smooth" });
   };
 
   const startHero = useCallback(() => {
@@ -67,11 +81,15 @@ export function HeroSection({ loginInputRef }: HeroSectionProps) {
       unlockTimer = undefined;
     };
 
+    // scrollIntoView + CSS scroll-padding drifts when --head-h ≠ real sticky height.
+    // Measure #siteHead each time and scrollTo an exact Y.
     const scrollToId = (id: string) => {
       const el = document.getElementById(id);
       if (!el) return;
       locked = true;
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      const headerH = getStickyHeaderH();
+      const top = Math.max(0, el.getBoundingClientRect().top + window.scrollY - headerH);
+      window.scrollTo({ top, behavior: "smooth" });
 
       // Prefer scrollend when the browser fires it; 1200ms timeout is the safety net.
       window.addEventListener("scrollend", unlock, { once: true });
@@ -80,19 +98,25 @@ export function HeroSection({ loginInputRef }: HeroSectionProps) {
 
     const onWheel = (e: WheelEvent) => {
       if (locked) return;
-      const heroH = document.getElementById("home")?.offsetHeight ?? window.innerHeight;
-      const y = window.scrollY;
+      const map = document.getElementById("map");
+      if (!map) return;
 
-      if (e.deltaY > 0 && y <= 60) {
+      const y = window.scrollY;
+      const headerH = getStickyHeaderH();
+      const mapSnapY = Math.max(0, map.offsetTop - headerH);
+
+      if (e.deltaY > 0 && y <= 80) {
+        e.preventDefault();
         scrollToId("map");
         return;
       }
-      if (e.deltaY < 0 && y >= heroH - 100 && y <= heroH + 120) {
+      if (e.deltaY < 0 && y >= mapSnapY - 40 && y <= mapSnapY + 160) {
+        e.preventDefault();
         scrollToId("home");
       }
     };
 
-    window.addEventListener("wheel", onWheel, { passive: true });
+    window.addEventListener("wheel", onWheel, { passive: false });
     return () => {
       window.removeEventListener("wheel", onWheel);
       window.removeEventListener("scrollend", unlock);

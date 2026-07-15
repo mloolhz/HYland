@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import {
   avaColor,
@@ -8,6 +7,12 @@ import {
 } from "@/lib/landing-data";
 import { demoProps, useToast } from "./ToastProvider";
 
+const RESET_NOTICE: Record<LeaderboardPeriod, string | null> = {
+  week: "매주 월요일 00:00 초기화",
+  month: "매월 1일 00:00 초기화",
+  all: null,
+};
+
 type LeaderboardSectionProps = {
   onScrollToLogin: () => void;
 };
@@ -16,6 +21,7 @@ export function LeaderboardSection({ onScrollToLogin }: LeaderboardSectionProps)
   const [period, setPeriod] = useState<LeaderboardPeriod>("week");
   const { showToast } = useToast();
   const data = LEADERBOARD[period];
+  const resetNotice = RESET_NOTICE[period];
 
   const handleLogin = () => {
     onScrollToLogin();
@@ -39,7 +45,8 @@ export function LeaderboardSection({ onScrollToLogin }: LeaderboardSectionProps)
           <div className="lb-top">
             <div className="lb-bar">
               <div className="lb-title">
-                LEADERBOARD <small>매주 월요일 00:00 초기화</small>
+                LEADERBOARD
+                {resetNotice && <small>{resetNotice}</small>}
               </div>
               <div className="lb-tabs" role="tablist">
                 {(["week", "month", "all"] as const).map((key) => (

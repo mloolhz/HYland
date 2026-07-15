@@ -20,6 +20,16 @@ export function Navbar() {
   const onLanding = location.pathname === "/";
 
   useEffect(() => {
+    const syncHeadHeight = () => {
+      const h = headRef.current?.offsetHeight;
+      if (h) document.documentElement.style.setProperty("--head-h", `${h}px`);
+    };
+    syncHeadHeight();
+    window.addEventListener("resize", syncHeadHeight);
+    return () => window.removeEventListener("resize", syncHeadHeight);
+  }, []);
+
+  useEffect(() => {
     const onScroll = () => {
       headRef.current?.classList.toggle("scrolled", window.scrollY > 8);
     };

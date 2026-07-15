@@ -8,7 +8,6 @@ import { LeaderboardSection } from "@/components/landing/LeaderboardSection";
 import { MapSection } from "@/components/landing/MapSection";
 import { MissionSection } from "@/components/landing/MissionSection";
 import { PortalBand } from "@/components/landing/PortalBand";
-import { StatsStrip } from "@/components/landing/StatsStrip";
 import type { LandingOutletContext } from "@/layouts/RootLayout";
 
 export function Landing() {
@@ -75,7 +74,6 @@ export function Landing() {
   return (
     <>
       <HeroSection loginInputRef={loginInputRef} />
-      <StatsStrip />
       <MapSection />
       <AISection />
       <BookingSection />
