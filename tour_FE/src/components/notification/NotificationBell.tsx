@@ -1,4 +1,5 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { NotificationDropdown } from "./NotificationDropdown";
 import { navigateToLink } from "@/lib/navigation";
@@ -18,15 +19,56 @@ function isScrollbarClick(el: HTMLElement, e: PointerEvent) {
   return false;
 }
 
-export function NotificationBell() {
+export function NotificationBell({
+  placement = "header",
+  onDrawerAction,
+}: {
+  placement?: "header" | "drawer";
+  onDrawerAction?: () => void;
+}) {
   const { items, unreadCount, markAsRead, markAllAsRead } = useNotifications();
   const [open, setOpen] = useState(false);
+  const [drawerDropdownStyle, setDrawerDropdownStyle] = useState<React.CSSProperties>({});
   const wrapRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const liveId = useId();
+
+  const closeDropdown = useCallback(() => {
+    setOpen(false);
+  }, []);
+
+  const updateDrawerDropdownPosition = useCallback(() => {
+    const button = buttonRef.current;
+    if (!button) return;
+
+    const rect = button.getBoundingClientRect();
+    const width = Math.min(360, window.innerWidth - 24);
+    let right = Math.max(12, window.innerWidth - rect.right);
+
+    if (window.innerWidth - right - width < 12) {
+      right = Math.max(12, window.innerWidth - width - 12);
+    }
+
+    setDrawerDropdownStyle({
+      position: "fixed",
+      right,
+      bottom: window.innerHeight - rect.top + 8,
+      width,
+      maxHeight: Math.max(240, rect.top - 20),
+      zIndex: 160,
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!open || placement !== "drawer") return;
+
+    updateDrawerDropdownPosition();
+    window.addEventListener("resize", updateDrawerDropdownPosition);
+    return () => window.removeEventListener("resize", updateDrawerDropdownPosition);
+  }, [open, placement, updateDrawerDropdownPosition]);
 
   useEffect(() => {
     if (!open) return;
@@ -37,12 +79,14 @@ export function NotificationBell() {
       if (list && isScrollbarClick(list, e)) return;
       if (dropdownRef.current?.contains(target)) return;
       if (buttonRef.current?.contains(target)) return;
-      setOpen(false);
+      if (wrapRef.current?.contains(target)) return;
+      closeDropdown();
     };
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        setOpen(false);
+        e.stopPropagation();
+        closeDropdown();
         buttonRef.current?.focus();
         return;
       }
@@ -62,36 +106,62 @@ export function NotificationBell() {
     const onScroll = (e: Event) => {
       const t = e.target;
       if (t instanceof Node && dropdownRef.current?.contains(t)) return;
-      setOpen(false);
+      if (placement === "drawer" && t instanceof Element && t.closest(".nav-drawer")) return;
+      closeDropdown();
     };
 
     document.addEventListener("pointerdown", onPointerDown);
-    document.addEventListener("keydown", onKey);
+    document.addEventListener("keydown", onKey, true);
     window.addEventListener("scroll", onScroll, { passive: true, capture: true });
 
-    requestAnimationFrame(() => {
-      const first = listRef.current?.querySelector<HTMLElement>('[role="menuitem"]');
-      first?.focus();
-    });
+    if (placement === "header") {
+      requestAnimationFrame(() => {
+        const first = listRef.current?.querySelector<HTMLElement>('[role="menuitem"]');
+        first?.focus();
+      });
+    }
 
     return () => {
       document.removeEventListener("pointerdown", onPointerDown);
-      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("keydown", onKey, true);
       window.removeEventListener("scroll", onScroll, true);
     };
-  }, [open]);
+  }, [open, placement, closeDropdown]);
 
   const onItemClick = (n: Notification) => {
     markAsRead(n.id);
-    setOpen(false);
+    closeDropdown();
+    onDrawerAction?.();
     if (n.link) navigateToLink(navigate, n.link);
+  };
+
+  const handleClose = () => {
+    closeDropdown();
+    onDrawerAction?.();
   };
 
   const ariaLabel =
     unreadCount > 0 ? `알림, 읽지 않은 알림 ${unreadCount}개` : "알림";
 
+  const dropdown = open ? (
+    <NotificationDropdown
+      items={items}
+      unreadCount={unreadCount}
+      onItemClick={onItemClick}
+      onMarkAllRead={markAllAsRead}
+      onClose={handleClose}
+      listRef={listRef}
+      dropdownRef={dropdownRef}
+      className={placement === "drawer" ? "noti-dropdown--drawer" : undefined}
+      style={placement === "drawer" ? drawerDropdownStyle : undefined}
+    />
+  ) : null;
+
   return (
-    <div className="noti-bell-wrap" ref={wrapRef}>
+    <div
+      className={`noti-bell-wrap${placement === "drawer" ? " noti-bell-wrap--drawer" : ""}`}
+      ref={wrapRef}
+    >
       <button
         ref={buttonRef}
         type="button"
@@ -112,17 +182,9 @@ export function NotificationBell() {
 
       <span id={liveId} className="sr-only" aria-live="polite" />
 
-      {open && (
-        <NotificationDropdown
-          items={items}
-          unreadCount={unreadCount}
-          onItemClick={onItemClick}
-          onMarkAllRead={markAllAsRead}
-          onClose={() => setOpen(false)}
-          listRef={listRef}
-          dropdownRef={dropdownRef}
-        />
-      )}
+      {placement === "drawer" && dropdown
+        ? createPortal(dropdown, document.body)
+        : dropdown}
     </div>
   );
 }
