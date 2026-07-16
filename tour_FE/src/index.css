@@ -409,8 +409,8 @@ input{font:inherit}
 /* ---------- footer ---------- */
 footer{background:var(--sea-dark);color:#B6C4D8;margin-top:92px}
 .related-sites-sec + footer{margin-top:0}
-.foot-main{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;padding:40px 0;flex-wrap:wrap}
-.foot-info{display:flex;flex-direction:column;gap:8px;font-size:12.5px;color:#7E90A8}
+.foot-main{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;padding:28px 0;flex-wrap:wrap}
+.foot-info{display:flex;flex-direction:column;gap:5px;font-size:12.5px;color:#7E90A8}
 .foot-links{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
 .foot-links a{font-size:13.5px;color:#9DAEC5;transition:.15s}
 .foot-links a:hover{color:#fff}

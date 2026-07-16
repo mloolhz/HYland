@@ -1,7 +1,7 @@
 /* ── Community design tokens ── */
 :root {
-  --cm-navy: #1a3a6b;
-  --cm-navy-deep: #0c447c;
+  --cm-navy: var(--navy);
+  --cm-navy-deep: var(--navy2);
   --cm-brand: #2563eb;
   --cm-ink: #1a2433;
   --cm-body: #4a5567;
@@ -83,7 +83,7 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 60% 80% at 85% 20%, rgba(15, 95, 204, 0.28) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 85% 20%, rgba(45, 46, 107, 0.28) 0%, transparent 60%),
     radial-gradient(ellipse 40% 60% at 10% 80%, rgba(46, 158, 104, 0.15) 0%, transparent 55%);
   pointer-events: none;
 }
@@ -124,6 +124,8 @@
 
 .cm-header-cta {
   flex: none;
+  display: inline-flex;
+  align-items: center;
   background: #fff;
   color: var(--cm-navy);
   font-size: 14px;
@@ -132,6 +134,7 @@
   border-radius: 9999px;
   border: 1px solid rgba(255, 255, 255, 0.55);
   cursor: pointer;
+  text-decoration: none;
   transition: background 0.15s, border-color 0.15s, backdrop-filter 0.15s;
 }
 
@@ -1070,6 +1073,126 @@ a.cm-post-row:hover {
   color: var(--cm-brand);
 }
 
+/* ── Write post ── */
+.cm-write-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 0 40px;
+}
+
+.cm-write-title {
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--cm-ink);
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.cm-write-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cm-write-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.cm-write-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cm-write-label {
+  font-size: var(--ts-label);
+  font-weight: 600;
+  color: var(--cm-ink);
+}
+
+.cm-write-optional {
+  font-weight: 400;
+  color: var(--cm-faint);
+}
+
+.cm-write-input,
+.cm-write-textarea {
+  width: 100%;
+  font-size: var(--ts-body);
+  color: var(--cm-ink);
+  font-family: inherit;
+  padding: 10px 14px;
+  border: 1px solid var(--cm-line);
+  border-radius: 8px;
+  background: #fff;
+  transition: border-color 0.15s;
+}
+
+.cm-write-input:focus,
+.cm-write-textarea:focus {
+  outline: none;
+  border-color: var(--cm-brand);
+}
+
+.cm-write-textarea {
+  resize: vertical;
+  line-height: var(--ts-lh-body);
+}
+
+.cm-write-error {
+  font-size: var(--ts-body);
+  color: #c0392b;
+}
+
+.cm-write-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.cm-write-cancel {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 20px;
+  font-size: var(--ts-label);
+  font-weight: 600;
+  color: var(--cm-muted);
+  text-decoration: none;
+  border-radius: 9999px;
+  border: 1px solid var(--cm-line);
+}
+
+.cm-write-cancel:hover {
+  background: var(--cm-surface);
+}
+
+.cm-write-submit {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 24px;
+  font-size: var(--ts-label);
+  font-weight: 700;
+  color: #fff;
+  background: var(--cm-navy);
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.cm-write-submit:hover {
+  background: var(--navy2);
+}
+
+@media (max-width: 640px) {
+  .cm-write-row {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ── Comment thread (bubble) ── */
 .cm-thread {
   display: grid;
@@ -1482,7 +1605,7 @@ a.cm-post-row:hover {
   display: block;
   margin-top: 11px;
   padding-top: 11px;
-  border-top: 0.5px solid #0c447c;
+  border-top: 0.5px solid var(--navy2);
   font-size: 13px;
   color: #85b7eb;
   text-decoration: none;
@@ -1494,7 +1617,7 @@ a.cm-post-row:hover {
 
 /* ── My Activity ── */
 .cm-activity-header {
-  background: #1a3a6b;
+  background: var(--navy);
   border-radius: 8px 8px 0 0;
   padding: 22px 24px;
   color: #fff;
@@ -1550,7 +1673,7 @@ a.cm-post-row:hover {
 .cm-activity-write {
   font-size: 14px;
   font-weight: 700;
-  color: #1a3a6b;
+  color: var(--navy);
   background: #fff;
   border: 0;
   border-radius: 6px;

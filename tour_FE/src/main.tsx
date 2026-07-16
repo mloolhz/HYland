@@ -14,6 +14,7 @@ import { Notifications } from "@/pages/Notifications";
 import { PostDetail } from "@/pages/PostDetail";
 import { Signup } from "@/pages/Signup";
 import { IslandExplorer } from "@/pages/IslandExplorer";
+import { WritePost } from "@/pages/WritePost";
 import "./index.css";
 import "./styles/auth.css";
 import "./styles/community.css";
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
     children: [
       { path: "islands", element: <IslandExplorer /> },
       { path: "community", element: <Community /> },
+      { path: "community/write", element: <WritePost /> },
       { path: "community/me", element: <MyActivity /> },
       { path: "community/:id", element: <PostDetail /> },
       { path: "notifications", element: <Notifications /> },
