@@ -112,6 +112,15 @@ export function SiteHeader() {
     setHeaderScrolled(scrollY > 0 || !onLanding);
   }, [onLanding]);
 
+  const restoreScrollPosition = useCallback((scrollY: number) => {
+    const html = document.documentElement;
+    const previousScrollBehavior = html.style.scrollBehavior;
+    html.style.scrollBehavior = "auto";
+    window.scrollTo(0, scrollY);
+    html.style.scrollBehavior = previousScrollBehavior;
+    scrollSnapshotRef.current = scrollY;
+  }, []);
+
   useEffect(() => {
     const onScroll = () => {
       if (window.scrollY < 0) window.scrollTo(0, 0);
@@ -207,11 +216,10 @@ export function SiteHeader() {
       window.removeEventListener("wheel", preventBackgroundScroll);
       window.removeEventListener("touchmove", preventBackgroundScroll);
       window.removeEventListener("keydown", onKeyDown);
-      window.scrollTo(0, scrollY);
-      scrollSnapshotRef.current = scrollY;
+      restoreScrollPosition(scrollY);
       syncHeaderScrollState();
     };
-  }, [menuOpen, closeMenu, syncHeaderScrollState]);
+  }, [menuOpen, closeMenu, syncHeaderScrollState, restoreScrollPosition]);
 
   return (
     <>
