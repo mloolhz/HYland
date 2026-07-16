@@ -1,11 +1,11 @@
 import { useLayoutEffect, useRef, useState } from "react";
-import { demoProps } from "@/components/landing/ToastProvider";
+import { Link } from "react-router-dom";
 
 const DEFAULT_BOTTOM = 28;
 const FOOTER_GAP = 12;
 
 export function WritePostFab() {
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const buttonRef = useRef<HTMLAnchorElement>(null);
   const [bottomOffset, setBottomOffset] = useState<number | null>(null);
 
   useLayoutEffect(() => {
@@ -43,9 +43,9 @@ export function WritePostFab() {
   }, []);
 
   return (
-    <button
+    <Link
       ref={buttonRef}
-      type="button"
+      to="/community/write"
       className="cm-write-fab"
       aria-label="글 작성하기"
       style={
@@ -53,9 +53,8 @@ export function WritePostFab() {
           ? { bottom: `calc(${bottomOffset}px + env(safe-area-inset-bottom, 0px))` }
           : undefined
       }
-      {...demoProps("글 작성은 로그인 후 이용할 수 있어요 ✍️")}
     >
       글 작성하기
-    </button>
+    </Link>
   );
 }

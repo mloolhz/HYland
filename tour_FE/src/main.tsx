@@ -11,6 +11,7 @@ import { MyActivity } from "@/pages/MyActivity";
 import { Notifications } from "@/pages/Notifications";
 import { PostDetail } from "@/pages/PostDetail";
 import { Signup } from "@/pages/Signup";
+import { WritePost } from "@/pages/WritePost";
 import "./index.css";
 import "./styles/auth.css";
 import "./styles/community.css";
@@ -22,6 +23,7 @@ const router = createBrowserRouter([
     element: <CommunityLayout />,
     children: [
       { path: "community", element: <Community /> },
+      { path: "community/write", element: <WritePost /> },
       { path: "community/me", element: <MyActivity /> },
       { path: "community/:id", element: <PostDetail /> },
       { path: "notifications", element: <Notifications /> },

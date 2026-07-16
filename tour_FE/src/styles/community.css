@@ -1070,6 +1070,125 @@ a.cm-post-row:hover {
   color: var(--cm-brand);
 }
 
+/* ── Write post ── */
+.cm-write-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding-bottom: 40px;
+}
+
+.cm-write-title {
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--cm-ink);
+  margin-bottom: 24px;
+}
+
+.cm-write-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cm-write-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.cm-write-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cm-write-label {
+  font-size: var(--ts-label);
+  font-weight: 600;
+  color: var(--cm-ink);
+}
+
+.cm-write-optional {
+  font-weight: 400;
+  color: var(--cm-faint);
+}
+
+.cm-write-input,
+.cm-write-textarea {
+  width: 100%;
+  font-size: var(--ts-body);
+  color: var(--cm-ink);
+  font-family: inherit;
+  padding: 10px 14px;
+  border: 1px solid var(--cm-line);
+  border-radius: 8px;
+  background: #fff;
+  transition: border-color 0.15s;
+}
+
+.cm-write-input:focus,
+.cm-write-textarea:focus {
+  outline: none;
+  border-color: var(--cm-brand);
+}
+
+.cm-write-textarea {
+  resize: vertical;
+  line-height: var(--ts-lh-body);
+}
+
+.cm-write-error {
+  font-size: var(--ts-body);
+  color: #c0392b;
+}
+
+.cm-write-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.cm-write-cancel {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 20px;
+  font-size: var(--ts-label);
+  font-weight: 600;
+  color: var(--cm-muted);
+  text-decoration: none;
+  border-radius: 9999px;
+  border: 1px solid var(--cm-line);
+}
+
+.cm-write-cancel:hover {
+  background: var(--cm-surface);
+}
+
+.cm-write-submit {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 24px;
+  font-size: var(--ts-label);
+  font-weight: 700;
+  color: #fff;
+  background: var(--cm-navy);
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.cm-write-submit:hover {
+  background: var(--navy2);
+}
+
+@media (max-width: 640px) {
+  .cm-write-row {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ── Comment thread (bubble) ── */
 .cm-thread {
   display: grid;
