@@ -6,10 +6,6 @@
   padding-bottom: 40px;
 }
 
-.isl-page + footer {
-  margin-top: 0;
-}
-
 .isl-header-band {
   background: linear-gradient(135deg, var(--hero-bg) 0%, #163d72 55%, var(--navy) 100%);
   margin-bottom: 20px;
@@ -272,8 +268,7 @@
 
 /* ── Detail panel ── */
 .isl-detail {
-  position: sticky;
-  top: calc(var(--head-h) + 20px);
+  position: relative;
   background: #fff;
   border-radius: 16px;
   border: 1px solid var(--line);

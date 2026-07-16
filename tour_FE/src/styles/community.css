@@ -55,7 +55,7 @@
 
 /* ── Page shell ── */
 .cm-page {
-  background: #fff;
+  background: var(--alt);
   min-height: calc(100vh - var(--cm-nav-h));
   padding-top: var(--cm-nav-h);
   padding-bottom: 64px;
@@ -204,7 +204,7 @@
   gap: 12px;
   flex-wrap: wrap;
   padding: 12px 0;
-  background: #fff;
+  background: var(--alt);
   border-bottom: 0.5px solid var(--cm-line);
   position: sticky;
   top: var(--cm-nav-h);
@@ -214,16 +214,18 @@
 .cm-filter-controls {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   flex: none;
 }
 
 .cm-segment {
   display: flex;
-  background: var(--cm-line-soft);
+  background: var(--alt);
+  border: 1px solid var(--cm-line);
   border-radius: 20px;
   padding: 2px;
-  gap: 2px;
+  gap: 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
 }
 
 .cm-segment-btn {
@@ -237,10 +239,14 @@
   font-weight: 600;
   color: var(--cm-muted);
   border: 0;
-  border-radius: 20px;
-  background: transparent;
+  border-radius: 18px;
+  background: #fff;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+.cm-segment-btn + .cm-segment-btn {
+  box-shadow: inset 1px 0 0 var(--cm-line);
 }
 
 .cm-segment-btn svg {
@@ -251,6 +257,7 @@
 .cm-segment-btn.is-active {
   background: var(--cm-navy);
   color: #fff;
+  box-shadow: none;
 }
 
 .cm-segment-btn:not(.is-active):hover {
@@ -278,7 +285,7 @@
   border-radius: 20px;
   border: 0.5px solid var(--cm-line);
   color: var(--cm-muted);
-  background: #fff;
+  background: var(--alt);
   cursor: pointer;
   transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
@@ -300,6 +307,10 @@
   gap: 12px;
   padding-top: 12px;
   align-items: start;
+}
+
+.cm-layout--single {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .cm-feed {
@@ -781,7 +792,7 @@ a.cm-post-row:hover {
   font-size: var(--ts-label);
   font-weight: 600;
   color: var(--cm-muted);
-  margin-bottom: 16px;
+  margin-bottom: 32px;
   text-decoration: none;
 }
 
@@ -789,11 +800,22 @@ a.cm-post-row:hover {
   color: var(--cm-brand);
 }
 
+.cm-detail-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
 .cm-detail-tags {
   display: flex;
   flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 6px;
-  margin-bottom: 12px;
+  margin-bottom: 0;
+  flex-shrink: 0;
 }
 
 .cm-detail-title {
@@ -809,7 +831,8 @@ a.cm-post-row:hover {
   align-items: center;
   flex-wrap: wrap;
   gap: 6px;
-  margin-bottom: 16px;
+  margin-bottom: 0;
+  min-width: 0;
 }
 
 .cm-detail-divider {

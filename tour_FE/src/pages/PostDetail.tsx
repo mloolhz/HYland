@@ -3,8 +3,6 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import { CommentThread } from "@/components/community/CommentThread";
 import { Lightbox } from "@/components/community/Lightbox";
 import { PostRow } from "@/components/community/PostRow";
-import { PopularIslands } from "@/components/community/PopularIslands";
-import { ProfileCard } from "@/components/community/ProfileCard";
 import { ISLAND_BTI, getIslandColors } from "@/constants/island";
 import { CONTAINER } from "@/constants/layout";
 import { countComments } from "@/lib/posts";
@@ -61,7 +59,7 @@ export function PostDetail() {
   return (
     <main className="cm-page">
       <div className={CONTAINER}>
-        <div className="cm-layout">
+        <div className="cm-layout cm-layout--single">
           <article className="cm-detail">
             <Link
               to={`/community${backSearch}`}
@@ -71,25 +69,27 @@ export function PostDetail() {
               ← 목록으로
             </Link>
 
-            <div className="cm-detail-tags">
-              <span className="cm-tag-island" style={{ background: region.bg, color: region.text }}>
-                {post.island}
-              </span>
-              <span className="cm-tag-activity">{post.activity}</span>
-              {post.badge && <span className="cm-badge-rare">{post.badge}</span>}
-            </div>
-
             <h1 className="cm-detail-title">{post.title}</h1>
 
-            <div className="cm-detail-author">
-              <span className="cm-post-ava" style={{ background: btiColors.bg, color: btiColors.text }}>
-                {post.author.nickname[0]}
-              </span>
-              <span className="cm-post-nick">{post.author.nickname}</span>
-              <span className="cm-chip" style={{ background: btiColors.bg, color: btiColors.text }}>
-                {post.author.bti}
-              </span>
-              <span className="cm-post-time">· {formatRelativeTime(post.createdAt)}</span>
+            <div className="cm-detail-meta">
+              <div className="cm-detail-author">
+                <span className="cm-post-ava" style={{ background: btiColors.bg, color: btiColors.text }}>
+                  {post.author.nickname[0]}
+                </span>
+                <span className="cm-post-nick">{post.author.nickname}</span>
+                <span className="cm-chip" style={{ background: btiColors.bg, color: btiColors.text }}>
+                  {post.author.bti}
+                </span>
+                <span className="cm-post-time">· {formatRelativeTime(post.createdAt)}</span>
+              </div>
+
+              <div className="cm-detail-tags">
+                <span className="cm-tag-island" style={{ background: region.bg, color: region.text }}>
+                  {post.island}
+                </span>
+                <span className="cm-tag-activity">{post.activity}</span>
+                {post.badge && <span className="cm-badge-rare">{post.badge}</span>}
+              </div>
             </div>
 
             <hr className="cm-detail-divider" />
@@ -142,13 +142,6 @@ export function PostDetail() {
               </section>
             )}
           </article>
-
-          <aside className="cm-sidebar">
-            <div className="cm-sidebar-sticky">
-              <ProfileCard />
-              <PopularIslands />
-            </div>
-          </aside>
         </div>
       </div>
 

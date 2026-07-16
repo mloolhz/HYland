@@ -9,7 +9,7 @@ import { LeaderboardSection } from "./LeaderboardSection";
 import { MapSection } from "./MapSection";
 import { MissionSection } from "./MissionSection";
 import { RelatedSitesBand } from "./RelatedSitesBand";
-import { ScrollToTopButton } from "./ScrollToTopButton";
+import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { SiteFooter } from "./SiteFooter";
 import { SiteHeader } from "./SiteHeader";
 import { ToastProvider } from "./ToastProvider";

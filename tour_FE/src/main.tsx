@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { RouterError } from "@/components/RouterError";
 import { LandingPage } from "@/components/landing/LandingPage";
 import { AuthLayout } from "@/layouts/AuthLayout";
@@ -14,11 +14,13 @@ import { Notifications } from "@/pages/Notifications";
 import { PostDetail } from "@/pages/PostDetail";
 import { Signup } from "@/pages/Signup";
 import { IslandExplorer } from "@/pages/IslandExplorer";
+import { MyPage } from "@/pages/MyPage";
 import { WritePost } from "@/pages/WritePost";
 import "./index.css";
 import "./styles/auth.css";
 import "./styles/community.css";
 import "./styles/island.css";
+import "./styles/mypage.css";
 import "./styles/notification.css";
 
 const router = createBrowserRouter([
@@ -33,6 +35,7 @@ const router = createBrowserRouter([
       { path: "community/me", element: <MyActivity /> },
       { path: "community/:id", element: <PostDetail /> },
       { path: "notifications", element: <Notifications /> },
+      { path: "mypage", element: <MyPage /> },
     ],
   },
   {
@@ -44,7 +47,6 @@ const router = createBrowserRouter([
       { path: "find-account", element: <FindAccount /> },
     ],
   },
-  { path: "mypage", element: <Navigate to="/community/me" replace /> },
   { path: "*", element: <NotFound /> },
 ]);
 

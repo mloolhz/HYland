@@ -1,21 +1,7 @@
 
 import { useEffect, useRef } from "react";
 import { demoProps } from "./ToastProvider";
-
-const BADGES = [
-  { state: "earned", icon: "⚓", title: "첫 탐험", desc: "첫 섬 방문 완료" },
-  { state: "earned", icon: "🏝️", title: "5개 섬 탐험", desc: "섬 5곳 방문 완료" },
-  { state: "doing", icon: "🏅", lock: "⏳", title: "레저 마스터", desc: "레저 5종 체험 · 3/5" },
-  { state: "doing", icon: "🦀", lock: "⏳", title: "갯벌 지킴이", desc: "갯벌 체험 · 1/3" },
-  { state: "locked", icon: "🧭", lock: "🔒", title: "섬 완주자", desc: "전 코스 완주 시 획득" },
-  { state: "locked", icon: "⛵", lock: "🔒", title: "서해 개척자", desc: "서해 5도 방문 시 획득" },
-] as const;
-
-const PROGRESS = [
-  { label: "수집 카드", value: "12 / 48", width: 25, gold: false },
-  { label: "퍼즐 완성도", value: "36%", width: 36, gold: true },
-  { label: "이번 주 미션", value: "2 / 3", width: 66, gold: false },
-] as const;
+import { MISSION_BADGES, MISSION_PROGRESS } from "@/mocks/missions";
 
 function ProgressBar({ width, gold }: { width: number; gold?: boolean }) {
   const fillRef = useRef<HTMLDivElement>(null);
@@ -59,7 +45,7 @@ export function MissionSection() {
         <div className="mis-wrap">
           <div className="badge-card reveal">
             <div className="badge-grid">
-              {BADGES.map((badge) => (
+              {MISSION_BADGES.map((badge) => (
                 <div className={`badge ${badge.state}`} key={badge.title}>
                   <span className="b-ic">
                     <i>{badge.icon}</i>
@@ -73,7 +59,7 @@ export function MissionSection() {
           </div>
           <div className="prog-card reveal">
             <h3>📊 나의 진행 현황</h3>
-            {PROGRESS.map((row) => (
+            {MISSION_PROGRESS.map((row) => (
               <div className="bar-row" key={row.label}>
                 <div className="bl">
                   <span>{row.label}</span>

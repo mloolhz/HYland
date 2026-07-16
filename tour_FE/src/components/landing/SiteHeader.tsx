@@ -1,9 +1,7 @@
-
 import { useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { NotificationBell } from "@/components/notification/NotificationBell";
 import { LogoIcon } from "./LogoIcon";
-import { useToast } from "./ToastProvider";
 
 function ProfileIcon() {
   return (
@@ -21,7 +19,6 @@ function ProfileIcon() {
 
 export function SiteHeader() {
   const headRef = useRef<HTMLElement>(null);
-  const { showToast } = useToast();
   const location = useLocation();
   const onLanding = location.pathname === "/";
   const onCommunity = location.pathname.startsWith("/community");
@@ -91,15 +88,9 @@ export function SiteHeader() {
               ↗
             </span>
           </a>
-          <button
-            type="button"
-            className="icon-btn"
-            aria-label="마이페이지"
-            title="마이페이지"
-            onClick={() => showToast("마이페이지는 준비 중이에요 👤")}
-          >
+          <Link to="/mypage" className="icon-btn" aria-label="마이페이지" title="마이페이지">
             <ProfileIcon />
-          </button>
+          </Link>
           <NotificationBell />
         </div>
       </div>
