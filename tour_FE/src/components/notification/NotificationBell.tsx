@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { NotificationDropdown } from "./NotificationDropdown";
+import { navigateToLink } from "@/lib/navigation";
 import { useNotifications } from "@/store/notifications";
 import type { Notification } from "@/store/notifications";
 
@@ -83,7 +84,7 @@ export function NotificationBell() {
   const onItemClick = (n: Notification) => {
     markAsRead(n.id);
     setOpen(false);
-    if (n.link) navigate(n.link);
+    if (n.link) navigateToLink(navigate, n.link);
   };
 
   const ariaLabel =

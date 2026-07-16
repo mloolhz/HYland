@@ -183,11 +183,7 @@ export function Community() {
 
   return (
     <main className="cm-page">
-      <div className="cm-header-band">
-        <div className={CONTAINER}>
-          <CommunityHeader />
-        </div>
-      </div>
+      <CommunityHeader />
 
       <div className={CONTAINER}>
         <FilterBar

@@ -2,7 +2,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { avaColor, REVIEWS, type Review } from "@/lib/landing-data";
-import { demoProps } from "./ToastProvider";
 
 function ReviewItem({ review }: { review: Review }) {
   const ref = useRef<HTMLLIElement>(null);

@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { NotificationBell } from "@/components/notification/NotificationBell";
 import { LogoIcon } from "./LogoIcon";
-import { demoProps } from "./ToastProvider";
+import { useToast } from "./ToastProvider";
 
 function ProfileIcon() {
   return (
@@ -21,9 +21,11 @@ function ProfileIcon() {
 
 export function SiteHeader() {
   const headRef = useRef<HTMLElement>(null);
+  const { showToast } = useToast();
   const location = useLocation();
   const onLanding = location.pathname === "/";
   const onCommunity = location.pathname.startsWith("/community");
+  const onIslands = location.pathname.startsWith("/islands");
 
   useEffect(() => {
     const onScroll = () => {
@@ -60,7 +62,9 @@ export function SiteHeader() {
           </span>
         </a>
         <nav className="nav-links" aria-label="주요 메뉴">
-          <a href={onLanding ? "#map" : "/#map"}>섬 탐험</a>
+          <Link to="/islands" className={onIslands ? "nav-route-active" : undefined}>
+            섬 탐험
+          </Link>
           <a href={onLanding ? "#booking" : "/#booking"}>레저 스포츠</a>
           <a href={onLanding ? "#mission" : "/#mission"}>미션 &amp; 인증</a>
           <a href={onLanding ? "#leaderboard" : "/#leaderboard"}>리더보드</a>
@@ -87,15 +91,15 @@ export function SiteHeader() {
               ↗
             </span>
           </a>
-          <a
+          <button
+            type="button"
             className="icon-btn"
-            href="#mypage"
-            {...demoProps("마이페이지는 준비 중이에요 👤")}
             aria-label="마이페이지"
             title="마이페이지"
+            onClick={() => showToast("마이페이지는 준비 중이에요 👤")}
           >
             <ProfileIcon />
-          </a>
+          </button>
           <NotificationBell />
         </div>
       </div>

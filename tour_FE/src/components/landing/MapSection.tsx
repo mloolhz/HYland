@@ -1,5 +1,5 @@
+import { Link } from "react-router-dom";
 import IslandMap from "./IslandMap";
-import { demoProps } from "./ToastProvider";
 
 export function MapSection() {
   return (
@@ -22,9 +22,9 @@ export function MapSection() {
               미방문
             </span>
           </div>
-          <a className="btn btn-navy" href="#" {...demoProps("지도 탐험 상세 페이지는 준비 중이에요 🗺️")}>
+          <Link to="/islands" className="btn btn-navy">
             지도 탐험하기
-          </a>
+          </Link>
         </div>
         <div className="map-card reveal rv-r">
           <IslandMap />
