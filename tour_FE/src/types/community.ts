@@ -5,6 +5,7 @@ export interface Author {
   id: string;
   nickname: string;
   bti: IslandBti;
+  avatarUrl?: string;
 }
 
 export interface Comment {
