@@ -29,6 +29,12 @@ function ProgressBar({ width, gold }: { width: number; gold?: boolean }) {
   );
 }
 
+const PASSPORT_PROFILE = {
+  nickname: "바다탐험가",
+  region: "인천 중구",
+  seomBti: "감성 힐링러",
+};
+
 const PASSPORT_METRICS = [
   { value: "12", label: "방문 섬" },
   { value: "28", label: "완료 미션" },
@@ -47,7 +53,7 @@ export function MissionSection() {
           </a>
         </div>
         <p className="sec-sub reveal">
-          인천의 섬을 탐험하며 도장을 모아보세요! 방문 기록과 미션·배지가 나만의 바다패스 여권에 기록됩니다.
+          인천의 섬을 탐험하며 도장을 모아보세요! 방문 기록과 배지가 나만의 바다패스 여권에 기록됩니다.
         </p>
 
         <div className="pp-book reveal">
@@ -85,6 +91,26 @@ export function MissionSection() {
               </div>
             </div>
 
+            <div className="pp-profile">
+              <div className="pp-photo">
+                <img src="/profile-sample.png" alt="프로필 사진" />
+              </div>
+              <dl className="pp-fields">
+                <div className="pp-field">
+                  <dt>닉네임</dt>
+                  <dd>{PASSPORT_PROFILE.nickname}</dd>
+                </div>
+                <div className="pp-field">
+                  <dt>거주지</dt>
+                  <dd>{PASSPORT_PROFILE.region}</dd>
+                </div>
+                <div className="pp-field">
+                  <dt>섬BTI</dt>
+                  <dd>{PASSPORT_PROFILE.seomBti}</dd>
+                </div>
+              </dl>
+            </div>
+
             <div className="pp-level">
               <div className="pp-level-top">
                 <span className="pp-level-badge">Lv.3</span>
@@ -112,6 +138,18 @@ export function MissionSection() {
               ))}
             </div>
 
+            <div className="pp-progress-list">
+              {MISSION_PROGRESS.map((row) => (
+                <div className="bar-row" key={row.label}>
+                  <div className="bl">
+                    <span>{row.label}</span>
+                    <b>{row.value}</b>
+                  </div>
+                  <ProgressBar width={row.width} gold={row.gold} />
+                </div>
+              ))}
+            </div>
+
             <Link to="/login" className="btn btn-navy btn-block pp-view-btn">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <rect x="4" y="2" width="16" height="20" rx="2" stroke="currentColor" strokeWidth="1.8" />
@@ -122,7 +160,7 @@ export function MissionSection() {
             </Link>
           </div>
 
-          {/* 오른쪽 페이지 — 인증 스탬프 & 진행 현황 */}
+          {/* 오른쪽 페이지 — 인증 스탬프 */}
           <div className="pp-page pp-page--stamps">
             <div className="pp-page-head">
               <h3>인증 스탬프</h3>
@@ -141,25 +179,6 @@ export function MissionSection() {
                 </div>
               ))}
             </div>
-
-            <div className="pp-progress-list">
-              {MISSION_PROGRESS.map((row) => (
-                <div className="bar-row" key={row.label}>
-                  <div className="bl">
-                    <span>{row.label}</span>
-                    <b>{row.value}</b>
-                  </div>
-                  <ProgressBar width={row.width} gold={row.gold} />
-                </div>
-              ))}
-            </div>
-
-            <p className="prog-note">
-              💡 이번 주 남은 미션: <b>새로운 섬 1곳 방문하기</b> — 완료하면 배지 카드 1장이 지급돼요!
-            </p>
-            <button className="btn btn-navy btn-block" {...demoProps("미션 확인 페이지는 준비 중이에요 🛂")}>
-              미션 확인하기
-            </button>
           </div>
         </div>
       </div>
