@@ -347,6 +347,47 @@ html.site-menu-open{overflow:hidden;overscroll-behavior:none}
 .fill.gold{background:var(--gold)}
 .prog-note{font-size:12.5px;color:#4B5D75;background:var(--sky);border-left:3px solid var(--blue2);border-radius:0 6px 6px 0;padding:10px 13px;margin:6px 0 18px}
 
+/* ---------- i-바다패스 (open passport) ---------- */
+.pp-book{position:relative;display:grid;grid-template-columns:1fr 1fr;max-width:980px;margin:12px auto 0;padding:14px;border-radius:16px;background:linear-gradient(158deg,#1e4488 0%,#15366e 46%,#0c2854 100%);box-shadow:0 26px 60px rgba(15,35,80,.40),0 8px 20px rgba(15,35,80,.24),0 1px 0 rgba(255,255,255,.14) inset,0 -1px 0 rgba(0,0,0,.28) inset}
+.pp-book::before{content:"";position:absolute;inset:6px;border-radius:12px;border:1px solid rgba(229,198,135,.22);pointer-events:none;z-index:4}
+.pp-page{position:relative;padding:28px 28px 26px;min-height:392px;display:flex;flex-direction:column;background:radial-gradient(circle at 16% 10%,rgba(226,162,51,.07),transparent 42%),repeating-linear-gradient(135deg,rgba(45,46,107,.03) 0 2px,transparent 2px 7px),linear-gradient(180deg,#fbf7ee 0%,#f4edda 100%)}
+.pp-page--id{border-radius:10px 4px 4px 10px;box-shadow:inset -20px 0 30px -20px rgba(60,40,10,.30)}
+.pp-page--stamps{border-radius:4px 10px 10px 4px;box-shadow:inset 20px 0 30px -20px rgba(60,40,10,.30)}
+.pp-book__spine{position:absolute;top:14px;bottom:14px;left:50%;transform:translateX(-50%);width:30px;z-index:3;pointer-events:none;background:linear-gradient(90deg,rgba(60,40,10,0) 0%,rgba(60,40,10,.14) 40%,rgba(60,40,10,.30) 50%,rgba(60,40,10,.14) 60%,rgba(60,40,10,0) 100%)}
+.pp-id-head{display:flex;align-items:center;gap:13px;padding-bottom:15px;border-bottom:1.5px dashed rgba(45,46,107,.30);margin-bottom:18px}
+.pp-emblem{width:52px;height:52px;flex:none;color:var(--navy);filter:drop-shadow(0 1px 1px rgba(45,46,107,.2))}
+.pp-id-country{font-size:15.5px;font-weight:900;color:var(--navy);letter-spacing:-.01em;line-height:1.25}
+.pp-id-doc{font-size:11px;font-weight:800;letter-spacing:.08em;color:#9a7a33;text-transform:uppercase}
+.pp-level{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+.pp-level-top{display:flex;align-items:center;gap:8px}
+.pp-level-badge{display:inline-flex;align-items:center;justify-content:center;min-width:40px;padding:3px 9px;border-radius:6px;background:linear-gradient(160deg,var(--gold),var(--goldL));border:1px solid rgba(154,122,51,.4);font-size:12px;font-weight:900;color:#4a3405}
+.pp-level-top strong{font-size:15px;font-weight:800;color:var(--navy)}
+.pp-progress{height:8px;border-radius:999px;background:rgba(45,46,107,.14);overflow:hidden}
+.pp-progress-fill{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--gold) 0%,var(--goldL) 100%);transition:width .5s ease}
+.pp-exp{font-size:12px;font-weight:800;color:#9a7a33}
+.pp-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pp-metric{display:flex;flex-direction:column;align-items:center;gap:3px;padding:13px 6px;border-radius:10px;background:rgba(255,255,255,.6);border:1px solid rgba(45,46,107,.16)}
+.pp-metric b{font-size:20px;font-weight:900;color:var(--navy);line-height:1.05}
+.pp-metric span{font-size:11px;font-weight:700;color:var(--muted);white-space:nowrap}
+.pp-view-btn{margin-top:auto;gap:7px}
+.pp-page-head{display:flex;align-items:baseline;justify-content:space-between;padding-bottom:15px;border-bottom:1.5px dashed rgba(45,46,107,.30);margin-bottom:20px}
+.pp-page-head h3{font-size:16px;font-weight:900;color:var(--navy);letter-spacing:.02em}
+.pp-page-num{font-size:10.5px;font-weight:800;letter-spacing:.14em;color:#9a7a33}
+.pp-stamp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px 8px;margin-bottom:22px}
+.pp-stamp{display:flex;flex-direction:column;align-items:center;gap:7px;text-align:center}
+.pp-stamp-ic{position:relative;width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px}
+.pp-stamp-ic i{font-style:normal;position:relative;z-index:1}
+.pp-stamp.earned .pp-stamp-ic{color:var(--navy);border:2.5px solid rgba(45,46,107,.72);box-shadow:0 0 0 2px rgba(45,46,107,.16);transform:rotate(-8deg);background:radial-gradient(circle,rgba(45,46,107,.07),transparent 68%)}
+.pp-stamp.earned .pp-stamp-ic::after{content:"";position:absolute;inset:5px;border-radius:50%;border:1px dashed rgba(45,46,107,.5)}
+.pp-stamp.doing .pp-stamp-ic{color:#b7852a;border:2px dashed rgba(226,162,51,.8);transform:rotate(5deg)}
+.pp-stamp.locked .pp-stamp-ic{color:#aab4c2;border:2px dashed #c6d0dd;opacity:.65}
+.pp-stamp.locked .pp-stamp-ic i{filter:grayscale(1);opacity:.55}
+.pp-stamp-lock{position:absolute;right:-2px;bottom:-2px;width:22px;height:22px;border-radius:50%;background:#fbf7ee;border:1px solid rgba(45,46,107,.22);display:flex;align-items:center;justify-content:center;font-size:10px;z-index:2}
+.pp-stamp b{font-size:12.5px;font-weight:800;color:var(--navy)}
+.pp-stamp span{font-size:10.5px;color:var(--muted);line-height:1.3}
+.pp-progress-list{margin-top:auto}
+.pp-page--stamps .prog-note{margin-bottom:16px}
+
 /* ---------- leaderboard ---------- */
 .lb-card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-lg);overflow:hidden}
 .lb-top{background:linear-gradient(170deg,var(--sea-dark) 0%,var(--navy) 74%,var(--sea-light) 100%);padding:34px 34px 108px;position:relative;color:#fff}
@@ -472,6 +513,14 @@ footer{background:var(--sea-dark);color:#B6C4D8;margin-top:92px}
   .map-wrap,.com-wrap{grid-template-columns:1fr}
   .ai-grid{grid-template-columns:repeat(2,1fr)}
   .mis-wrap{grid-template-columns:1fr}
+}
+@media (max-width:720px){
+  .pp-book{grid-template-columns:1fr;max-width:440px}
+  .pp-book__spine{display:none}
+  .pp-page{min-height:0;padding:24px 22px}
+  .pp-page--id{border-radius:10px 10px 4px 4px;box-shadow:inset 0 -20px 30px -20px rgba(60,40,10,.28)}
+  .pp-page--stamps{border-radius:4px 4px 10px 10px;box-shadow:inset 0 20px 30px -20px rgba(60,40,10,.28)}
+  .pp-view-btn{margin-top:18px}
 }
 @media (max-width:860px){
   .nav-links{display:none}
