@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { formatRelativeTime } from "@/lib/time";
-import { ISLAND_BTI } from "@/constants/island";
+import { AuthorAvatar } from "@/components/community/AuthorAvatar";
+import { formatDetailDate } from "@/lib/time";
 import type { Comment } from "@/types/community";
 
 function DotsIcon() {
@@ -87,33 +87,19 @@ type CommentBubbleProps = {
 };
 
 export function CommentBubble({ comment, isReply, onReply, showReplyButton }: CommentBubbleProps) {
-  const btiColors = ISLAND_BTI[comment.author.bti];
-  const avaSize = isReply ? 30 : 32;
-
   return (
     <div id={`comment-${comment.id}`} className={`cm-comment-bubble${isReply ? " cm-comment-bubble-reply" : ""}`}>
       <div className="cm-comment-bubble-top">
         <div className="cm-comment-head">
-          <span
-            className="cm-comment-ava"
-            style={{
-              width: avaSize,
-              height: avaSize,
-              background: btiColors.bg,
-              color: btiColors.text,
-            }}
-          >
-            {comment.author.nickname[0]}
-          </span>
+          <AuthorAvatar
+            author={comment.author}
+            className={isReply ? "cm-comment-avatar cm-comment-avatar--reply" : "cm-comment-avatar"}
+          />
           <span className="cm-comment-nick">{comment.author.nickname}</span>
-          {comment.isAuthor ? (
-            <span className="cm-chip cm-chip-author">작성자</span>
-          ) : (
-            <span className="cm-chip" style={{ background: btiColors.bg, color: btiColors.text }}>
-              {comment.author.bti}
-            </span>
-          )}
-          <span className="cm-comment-time">{formatRelativeTime(comment.createdAt)}</span>
+          {comment.isAuthor && <span className="cm-chip cm-chip-author">작성자</span>}
+          <time className="cm-comment-time" dateTime={comment.createdAt}>
+            {formatDetailDate(comment.createdAt)}
+          </time>
         </div>
         <CommentMenu />
       </div>

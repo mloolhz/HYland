@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { NotificationEmpty } from "@/components/notification/NotificationEmpty";
 import { NotificationItem } from "@/components/notification/NotificationItem";
+import { navigateToLink } from "@/lib/navigation";
 import { CONTAINER } from "@/constants/layout";
 import { NOTI_FILTERS, type NotificationFilter } from "@/constants/notification";
 import { useNotifications, type Notification } from "@/store/notifications";
@@ -70,7 +71,7 @@ export function Notifications() {
 
   const onItemClick = (n: Notification) => {
     markAsRead(n.id);
-    if (n.link) navigate(n.link);
+    if (n.link) navigateToLink(navigate, n.link);
   };
 
   return (

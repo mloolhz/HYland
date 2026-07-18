@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { CommunityHeader } from "@/components/community/CommunityHeader";
 import { CURRENT_USER_ID } from "@/constants/auth";
 import { ISLAND_CATALOG } from "@/constants/island";
 import { CONTAINER } from "@/constants/layout";
@@ -57,13 +58,11 @@ export function WritePost() {
 
   return (
     <main className="cm-page">
+      <CommunityHeader />
+
       <div className={CONTAINER}>
         <div className="cm-write-page">
-          <Link to="/community" className="cm-detail-back">
-            ← 커뮤니티로 돌아가기
-          </Link>
-
-          <h1 className="cm-write-title">글쓰기</h1>
+          <h1 className="cm-write-title">글 작성하기</h1>
 
           <form className="cm-write-form" onSubmit={handleSubmit}>
             <div className="cm-write-field">
@@ -167,7 +166,7 @@ export function WritePost() {
 
             <div className="cm-write-actions">
               <Link to="/community" className="cm-write-cancel">
-                취소
+                뒤로
               </Link>
               <button type="submit" className="cm-write-submit">
                 등록하기

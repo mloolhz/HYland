@@ -88,7 +88,7 @@ export function Community() {
           }
           if (patch.q !== undefined) {
             if (!patch.q.trim()) next.delete("q");
-            else next.set("q", patch.q.trim());
+            else next.set("q", patch.q);
           }
           if (patch.resetPage) next.delete("page");
           if (patch.page !== undefined) {
@@ -134,8 +134,11 @@ export function Community() {
     updateQuery({ islands: new Set(), q: "", category: "all", resetPage: true });
   };
 
-  const emptyMessage =
-    islands.size > 0 ? "선택한 섬에 아직 글이 없어요" : "이 필터에 해당하는 글이 아직 없어요";
+  const emptyMessage = query.trim()
+    ? "검색 결과가 없습니다."
+    : islands.size > 0
+      ? "선택한 섬에 아직 글이 없어요"
+      : "이 필터에 해당하는 글이 아직 없어요";
 
   const currentPages = view === "gallery" ? galleryPages : listPages;
   const safePage = Math.min(page, currentPages);
@@ -177,17 +180,12 @@ export function Community() {
         onPageChange={(p) => updateQuery({ page: p })}
         onQueryChange={(q) => updateQuery({ q, resetPage: true })}
         emptyMessage={emptyMessage}
-        onClearFilters={islands.size > 0 || query ? clearFilters : undefined}
       />
     );
 
   return (
     <main className="cm-page">
-      <div className="cm-header-band">
-        <div className={CONTAINER}>
-          <CommunityHeader />
-        </div>
-      </div>
+      <CommunityHeader />
 
       <div className={CONTAINER}>
         <FilterBar

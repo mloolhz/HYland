@@ -11,6 +11,8 @@ interface NotificationDropdownProps {
   onClose: () => void;
   listRef?: React.RefObject<HTMLDivElement | null>;
   dropdownRef?: React.RefObject<HTMLDivElement | null>;
+  className?: string;
+  style?: React.CSSProperties;
 }
 
 export function NotificationDropdown({
@@ -21,10 +23,13 @@ export function NotificationDropdown({
   onClose,
   listRef,
   dropdownRef,
+  className,
+  style,
 }: NotificationDropdownProps) {
   return (
     <div
-      className="noti-dropdown"
+      className={["noti-dropdown", className].filter(Boolean).join(" ")}
+      style={style}
       role="menu"
       aria-label="알림 목록"
       ref={dropdownRef}

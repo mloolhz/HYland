@@ -3,6 +3,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -28,6 +29,17 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo(() => ({ showToast }), [showToast]);
+
+  useEffect(() => {
+    const onClick = (event: MouseEvent) => {
+      const target = (event.target as HTMLElement).closest("[data-demo]");
+      if (!target) return;
+      event.preventDefault();
+      showToast((target as HTMLElement).dataset.demo ?? "");
+    };
+    document.addEventListener("click", onClick);
+    return () => document.removeEventListener("click", onClick);
+  }, [showToast]);
 
   return (
     <ToastContext.Provider value={value}>

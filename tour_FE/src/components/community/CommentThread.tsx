@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { demoProps } from "@/components/landing/ToastProvider";
+import { Link, useLocation } from "react-router-dom";
 import { countComments } from "@/lib/posts";
+import { useAuthRedirect } from "@/hooks/useAuthRedirect";
 import type { Comment } from "@/types/community";
 import { CommentGroup } from "./CommentItem";
 
@@ -12,6 +13,9 @@ type CommentThreadProps = {
 function MainCommentInput({ isLoggedIn }: { isLoggedIn: boolean }) {
   const [focused, setFocused] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const location = useLocation();
+  const { buildLoginUrl } = useAuthRedirect();
+  const loginUrl = buildLoginUrl(`${location.pathname}${location.search}${location.hash}`);
 
   useEffect(() => {
     if (focused) inputRef.current?.focus();
@@ -19,13 +23,9 @@ function MainCommentInput({ isLoggedIn }: { isLoggedIn: boolean }) {
 
   if (!isLoggedIn) {
     return (
-      <button
-        type="button"
-        className="cm-thread-login"
-        {...demoProps("댓글 작성은 로그인 후 이용할 수 있어요 💬")}
-      >
+      <Link to={loginUrl} className="cm-thread-login">
         로그인하고 댓글 남기기
-      </button>
+      </Link>
     );
   }
 
