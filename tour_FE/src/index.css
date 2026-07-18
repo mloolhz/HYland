@@ -99,9 +99,8 @@ input{font:inherit}
 /* ---------- header ---------- */
 .site-head{position:fixed;top:0;left:0;right:0;z-index:100;font-family:var(--font-header);font-weight:500;background:transparent;border-bottom:1px solid transparent;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;transition:background .25s,box-shadow .25s,border-color .25s,backdrop-filter .25s,-webkit-backdrop-filter .25s}
 .site-head.scrolled{background:rgba(255,255,255,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom-color:var(--line);box-shadow:0 4px 18px rgba(45,46,107,.10)}
-.site-head:not(.scrolled) .logo-txt b{color:#fff}
-.site-head:not(.scrolled) .logo-txt span{color:rgba(255,255,255,.78)}
 .site-head:not(.scrolled) .nav-links a{color:rgba(255,255,255,.92)}
+.site-head:not(.scrolled) .logo-img{filter:brightness(0) invert(1);opacity:1}
 .site-head:not(.scrolled) .nav-links a::after{background:var(--navy)}
 .site-head:not(.scrolled) .nav-links a:hover{color:#fff}
 .site-head:not(.scrolled) .btn-portal{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.34);backdrop-filter:blur(4px)}
@@ -137,9 +136,9 @@ html.site-menu-open{overflow:hidden;overscroll-behavior:none}
 .nav-drawer-portal{width:100%;justify-content:center;padding:10px 14px}
 .nav-drawer-icons{display:flex;align-items:center;gap:10px;position:relative}
 .nav-inner{height:74px;display:flex;align-items:center;justify-content:space-between;gap:24px;padding-right:52px;container-type:inline-size}
-.logo{display:flex;align-items:center;gap:10px;flex:none}
-.logo-txt b{display:block;font-size:20px;font-weight:600;color:var(--navy);letter-spacing:-.01em;line-height:1.15}
-.logo-txt span{font-size:12px;color:var(--muted);font-weight:500}
+.logo{display:flex;align-items:center;flex:none}
+.logo-img{display:block;height:36px;width:auto;max-width:min(220px,42vw);object-fit:contain;transform:translateY(-3px);transition:filter .25s,transform .25s}
+.site-head.scrolled .logo-img{filter:none}
 .nav-links{display:flex;align-items:center;flex-wrap:nowrap;gap:2px;margin:0;flex:none;z-index:1}
 .nav-links a{position:relative;font-size:17px;font-weight:500;color:#33445F;padding:26px 14px;white-space:nowrap;flex-shrink:0;transition:color .15s}
 .nav-links a::after{content:"";position:absolute;left:14px;right:14px;bottom:0;height:3px;background:var(--navy);transform:scaleX(0);transition:transform .18s}

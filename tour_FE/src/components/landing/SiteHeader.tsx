@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { NotificationBell } from "@/components/notification/NotificationBell";
-import { LogoIcon } from "./LogoIcon";
+
+const SITE_LOGO_SRC = "/incheon-island-leisure-nuri-logo.png";
 
 function ProfileIcon() {
   return (
@@ -231,7 +232,7 @@ export function SiteHeader() {
           <a
             className="logo"
             href="/"
-            aria-label="ISLAND QUEST 홈"
+            aria-label="인천섬 레저누리 홈"
             onClick={(e) => {
               e.preventDefault();
               const { pathname, search, hash } = window.location;
@@ -242,11 +243,13 @@ export function SiteHeader() {
               }
             }}
           >
-            <LogoIcon />
-            <span className="logo-txt">
-              <b>ISLAND QUEST</b>
-              <span>인천 섬 레저 탐험대</span>
-            </span>
+            <img
+              className="logo-img"
+              src={SITE_LOGO_SRC}
+              alt="인천섬 레저누리"
+              width={220}
+              height={36}
+            />
           </a>
           <nav className="nav-links" aria-label="주요 메뉴">
             <NavLinkItems onLanding={onLanding} onIslands={onIslands} onCommunity={onCommunity} />
