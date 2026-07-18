@@ -205,6 +205,7 @@ export const ISLAND_MAP: Record<string, IslandInfo> = Object.fromEntries(
 );
 
 export function getIslandStats() {
+  // Deprecated: prefer getIslandVisitStats() from @/lib/user-profile
   const visited = ISLANDS.filter((i) => i.visited).length;
   return { visited, total: ISLANDS.length, percent: Math.round((visited / ISLANDS.length) * 100) };
 }

@@ -137,8 +137,8 @@ export function Community() {
   const emptyMessage = query.trim()
     ? "검색 결과가 없습니다."
     : islands.size > 0
-      ? "선택한 섬에 아직 글이 없어요"
-      : "이 필터에 해당하는 글이 아직 없어요";
+      ? "선택한 섬에 대한 글이 아직 없습니다."
+      : "이 필터에 해당하는 글이 아직 없습니다.";
 
   const currentPages = view === "gallery" ? galleryPages : listPages;
   const safePage = Math.min(page, currentPages);

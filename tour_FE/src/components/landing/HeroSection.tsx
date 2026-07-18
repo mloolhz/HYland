@@ -1,6 +1,12 @@
 import { useCallback, useEffect, useRef, useState, type RefObject } from "react";
 import { Link } from "react-router-dom";
+import { AuthorAvatar } from "@/components/community/AuthorAvatar";
+import { formatNumber } from "@/lib/landing-data";
+import { getCurrentUserProfile, getPassportExpPercent } from "@/lib/user-profile";
 import { demoProps, useToast } from "./ToastProvider";
+
+/** 패스포트 카드가 로그인 상태로 노출되는 동안 프로필 표시 */
+const SHOW_LANDING_PROFILE = true;
 
 const SLIDE_COUNT = 5;
 const CATEGORIES = [
@@ -26,6 +32,8 @@ export function HeroSection({
   onAgentActiveChange,
 }: HeroSectionProps) {
   const { showToast } = useToast();
+  const profile = getCurrentUserProfile();
+  const expPercent = getPassportExpPercent(profile);
   const [activeSlide, setActiveSlide] = useState(0);
   const [showScrollHint, setShowScrollHint] = useState(true);
   const [agentQuery, setAgentQuery] = useState("");
@@ -159,9 +167,16 @@ export function HeroSection({
           <aside className="pass-card" aria-label="나의 i-바다패스">
             <div className="pc-head">
               <h3>나의 i-바다패스</h3>
-              <Link to="/login" className="pc-login-link">
-                로그인하기
-              </Link>
+              {SHOW_LANDING_PROFILE ? (
+                <Link to="/mypage" className="pc-profile-link">
+                  <AuthorAvatar author={{ nickname: profile.nickname }} className="pc-profile-avatar" />
+                  <span>{profile.nickname}님</span>
+                </Link>
+              ) : (
+                <Link to="/login" className="pc-login-link">
+                  로그인하기
+                </Link>
+              )}
             </div>
 
             <div className="pc-passport-layout">
@@ -198,45 +213,58 @@ export function HeroSection({
               <div className="passport-info">
                 <div className="passport-level">
                   <div className="passport-level-top">
-                    <span className="passport-level-badge">Lv.3</span>
-                    <strong>탐험가</strong>
+                    <span className="passport-level-badge">Lv.{profile.level}</span>
+                    <strong>{profile.levelTitle}</strong>
                   </div>
                   <div
                     className="passport-progress"
                     role="progressbar"
-                    aria-valuenow={68}
+                    aria-valuenow={expPercent}
                     aria-valuemin={0}
                     aria-valuemax={100}
                     aria-label="경험치 진행률"
                   >
-                    <span className="passport-progress-fill" style={{ width: "68%" }} />
+                    <span className="passport-progress-fill" style={{ width: `${expPercent}%` }} />
                   </div>
-                  <p className="passport-exp">EXP 1,350 / 2,000</p>
+                  <p className="passport-exp">
+                    EXP {formatNumber(profile.expCurrent)} / {formatNumber(profile.expMax)}
+                  </p>
                 </div>
 
                 <div className="passport-metrics" aria-label="탐험 현황">
                   <div className="passport-metric">
-                    <b>12</b>
+                    <b>{profile.visitedIslandCount}</b>
                     <span>방문 섬</span>
                   </div>
                   <div className="passport-metric">
-                    <b>28</b>
+                    <b>{profile.completedMissions}</b>
                     <span>완료 미션</span>
                   </div>
                   <div className="passport-metric">
-                    <b>15</b>
+                    <b>{profile.earnedBadgeCount}</b>
                     <span>획득 배지</span>
                   </div>
                 </div>
 
-                <Link to="/login" className="btn-passport-view" {...demoProps("로그인 후 여권을 확인할 수 있어요")}>
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <rect x="4" y="2" width="16" height="20" rx="2" stroke="currentColor" strokeWidth="1.8" />
-                    <circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="1.8" />
-                    <path d="M8 17c.8-2 2.2-3 4-3s3.2 1 4 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                  </svg>
-                  여권 보기
-                </Link>
+                {SHOW_LANDING_PROFILE ? (
+                  <Link to="/mypage" className="btn-passport-view">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <rect x="4" y="2" width="16" height="20" rx="2" stroke="currentColor" strokeWidth="1.8" />
+                      <circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="1.8" />
+                      <path d="M8 17c.8-2 2.2-3 4-3s3.2 1 4 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                    </svg>
+                    여권 보기
+                  </Link>
+                ) : (
+                  <Link to="/login" className="btn-passport-view" {...demoProps("로그인 후 여권을 확인할 수 있어요")}>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <rect x="4" y="2" width="16" height="20" rx="2" stroke="currentColor" strokeWidth="1.8" />
+                      <circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="1.8" />
+                      <path d="M8 17c.8-2 2.2-3 4-3s3.2 1 4 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                    </svg>
+                    여권 보기
+                  </Link>
+                )}
               </div>
             </div>
 

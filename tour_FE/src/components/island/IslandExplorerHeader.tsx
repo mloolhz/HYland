@@ -1,8 +1,8 @@
-import { getIslandStats } from "@/lib/island-data";
+import { getIslandVisitStats } from "@/lib/user-profile";
 import { RollingNumber } from "./RollingNumber";
 
 export function IslandExplorerHeader() {
-  const { visited, total, percent } = getIslandStats();
+  const { visited, total, percent } = getIslandVisitStats();
 
   return (
     <div className="isl-header-band">

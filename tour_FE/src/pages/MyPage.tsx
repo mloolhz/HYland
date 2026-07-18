@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { RollingNumber } from "@/components/island/RollingNumber";
 import { MyPageHeader } from "@/components/mypage/MyPageHeader";
 import { MyPageIslandRecord } from "@/components/mypage/MyPageIslandRecord";
 import { ISLAND_BTI } from "@/constants/island";
@@ -7,6 +8,7 @@ import {
   getCurrentUserProfile,
   getIslandVisitStats,
   getLeaderboardRank,
+  getPassportExpPercent,
   getUnvisitedIslands,
   getVisitedIslands,
 } from "@/lib/user-profile";
@@ -78,7 +80,7 @@ export function MyPage() {
   const visitedIslands = getVisitedIslands();
   const unvisitedIslands = getUnvisitedIslands();
   const btiColors = ISLAND_BTI[profile.bti];
-  const expPercent = Math.round((profile.expCurrent / profile.expMax) * 100);
+  const expPercent = getPassportExpPercent(profile);
   const monthRank = getLeaderboardRank("month");
 
   return (
@@ -106,15 +108,21 @@ export function MyPage() {
               </div>
               <div className="mp-profile-stats" aria-label="탐험 요약">
                 <div className="mp-stat-chip mp-stat-chip--accent">
-                  <b>{islandStats.visited}</b>
+                  <span className="mp-stat-value" aria-label={`방문 섬 ${islandStats.visited}개`}>
+                    <RollingNumber value={islandStats.visited} delay={0} />
+                  </span>
                   <span>방문 섬</span>
                 </div>
                 <div className="mp-stat-chip">
-                  <b>{profile.completedMissions}</b>
+                  <span className="mp-stat-value" aria-label={`완료 미션 ${profile.completedMissions}개`}>
+                    <RollingNumber value={profile.completedMissions} delay={80} />
+                  </span>
                   <span>완료 미션</span>
                 </div>
                 <div className="mp-stat-chip">
-                  <b>{profile.earnedBadgeCount}</b>
+                  <span className="mp-stat-value" aria-label={`획득 배지 ${profile.earnedBadgeCount}개`}>
+                    <RollingNumber value={profile.earnedBadgeCount} delay={160} />
+                  </span>
                   <span>획득 배지</span>
                 </div>
               </div>
