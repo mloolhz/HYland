@@ -228,7 +228,7 @@ export function SiteHeader() {
         className={`site-head${headerScrolled ? " scrolled" : ""}${menuOpen ? " site-head--menu-open" : ""}`}
         id="siteHead"
       >
-        <div className="container nav-inner">
+        <div className="nav-inner">
           <a
             className="logo"
             href="/"
@@ -247,8 +247,8 @@ export function SiteHeader() {
               className="logo-img"
               src={SITE_LOGO_SRC}
               alt="인천섬 레저누리"
-              width={220}
-              height={36}
+              width={812}
+              height={175}
             />
           </a>
           <nav className="nav-links" aria-label="주요 메뉴">
@@ -261,13 +261,14 @@ export function SiteHeader() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="인천섬포털 바로가기"
+              data-tooltip="인천섬포털 바로가기"
             >
               <img
                 className="btn-portal-logo"
                 src="/incheon-island-portal-logo.png"
-                alt="인천섬포털"
-                width={160}
-                height={32}
+                alt=""
+                width={80}
+                height={24}
               />
               <span className="btn-portal-arrow" aria-hidden="true">
                 ↗
@@ -277,18 +278,18 @@ export function SiteHeader() {
               <ProfileIcon />
             </Link>
             <NotificationBell />
+            <button
+              type="button"
+              className="nav-menu-btn"
+              aria-label={menuOpen ? "메뉴 닫기" : "메뉴 열기"}
+              aria-expanded={menuOpen}
+              aria-controls="siteNavDrawer"
+              onClick={() => setMenuOpen((open) => !open)}
+            >
+              <MenuIcon open={menuOpen} />
+            </button>
           </div>
         </div>
-        <button
-          type="button"
-          className="nav-menu-btn"
-          aria-label={menuOpen ? "메뉴 닫기" : "메뉴 열기"}
-          aria-expanded={menuOpen}
-          aria-controls="siteNavDrawer"
-          onClick={() => setMenuOpen((open) => !open)}
-        >
-          <MenuIcon open={menuOpen} />
-        </button>
       </header>
 
       <div
@@ -332,13 +333,14 @@ export function SiteHeader() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="인천섬포털 바로가기"
+            data-tooltip="인천섬포털 바로가기"
           >
             <img
               className="btn-portal-logo"
               src="/incheon-island-portal-logo.png"
-              alt="인천섬포털"
-              width={160}
-              height={32}
+              alt=""
+              width={80}
+              height={24}
             />
             <span className="btn-portal-arrow" aria-hidden="true">
               ↗

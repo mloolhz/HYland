@@ -44,6 +44,7 @@ export function HeroSection({
   const [showScrollHint, setShowScrollHint] = useState(true);
   const [agentQuery, setAgentQuery] = useState("");
   const [agentPlaceholderIndex, setAgentPlaceholderIndex] = useState(0);
+  const [activeCategory, setActiveCategory] = useState<string>(CATEGORIES[0][1]);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const agentPlaceholderTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -145,10 +146,16 @@ export function HeroSection({
           </div>
           <div className="cats" aria-label="레저 카테고리">
             {CATEGORIES.map(([icon, label]) => (
-              <span className="cat" key={label}>
-                <i>{icon}</i>
-                {label}
-              </span>
+              <button
+                type="button"
+                key={label}
+                className={`cat${activeCategory === label ? " is-active" : ""}`}
+                aria-pressed={activeCategory === label}
+                onClick={() => setActiveCategory(label)}
+              >
+                <i aria-hidden="true">{icon}</i>
+                <span>{label}</span>
+              </button>
             ))}
           </div>
         </div>
@@ -347,7 +354,14 @@ export function HeroSection({
                 <i>📅</i>레저 예약
               </span>
               <span className="q" {...demoProps("안전 정보 페이지는 준비 중이에요")}>
-                <i>🛟</i>안전 정보
+                <i aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <circle cx="12" cy="12" r="8.5" stroke="currentColor" strokeWidth="1.8" />
+                    <circle cx="12" cy="12" r="3.5" stroke="currentColor" strokeWidth="1.8" />
+                    <path d="M12 4.5v2M12 17.5v2M4.5 12h2M17.5 12h2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                  </svg>
+                </i>
+                안전 정보
               </span>
             </div>
             <p className="pc-foot">로그인하면 방문 기록 · 미션 · 배지가 여권에 자동 저장돼요</p>
