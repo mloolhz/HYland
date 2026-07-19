@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { AuthorAvatar } from "@/components/community/AuthorAvatar";
+import { isCurrentUser } from "@/constants/auth";
 import { formatDetailDate } from "@/lib/time";
 import type { Comment } from "@/types/community";
 
@@ -13,9 +14,16 @@ function DotsIcon() {
   );
 }
 
-function CommentMenu() {
+function CommentMenu({
+  isOwner,
+  onDelete,
+}: {
+  isOwner: boolean;
+  onDelete?: () => void;
+}) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const menuItems = isOwner ? (["수정", "삭제"] as const) : (["신고"] as const);
 
   useEffect(() => {
     if (!open) return;
@@ -25,6 +33,13 @@ function CommentMenu() {
     document.addEventListener("click", close);
     return () => document.removeEventListener("click", close);
   }, [open]);
+
+  const handleSelect = (item: (typeof menuItems)[number]) => {
+    setOpen(false);
+    if (item === "삭제") {
+      if (window.confirm("이 댓글을 삭제할까요?")) onDelete?.();
+    }
+  };
 
   return (
     <div className="cm-comment-menu" ref={ref}>
@@ -39,8 +54,13 @@ function CommentMenu() {
       </button>
       {open && (
         <div className="cm-comment-dropdown" role="menu">
-          {(["수정", "삭제", "신고"] as const).map((item) => (
-            <button key={item} type="button" role="menuitem" onClick={() => setOpen(false)}>
+          {menuItems.map((item) => (
+            <button
+              key={item}
+              type="button"
+              role="menuitem"
+              onClick={() => handleSelect(item)}
+            >
               {item}
             </button>
           ))}
@@ -83,10 +103,19 @@ type CommentBubbleProps = {
   comment: Comment;
   isReply?: boolean;
   onReply?: () => void;
+  onDelete?: () => void;
   showReplyButton?: boolean;
 };
 
-export function CommentBubble({ comment, isReply, onReply, showReplyButton }: CommentBubbleProps) {
+export function CommentBubble({
+  comment,
+  isReply,
+  onReply,
+  onDelete,
+  showReplyButton,
+}: CommentBubbleProps) {
+  const isOwner = isCurrentUser(comment.author.id);
+
   return (
     <div id={`comment-${comment.id}`} className={`cm-comment-bubble${isReply ? " cm-comment-bubble-reply" : ""}`}>
       <div className="cm-comment-bubble-top">
@@ -101,7 +130,7 @@ export function CommentBubble({ comment, isReply, onReply, showReplyButton }: Co
             {formatDetailDate(comment.createdAt)}
           </time>
         </div>
-        <CommentMenu />
+        <CommentMenu isOwner={isOwner} onDelete={onDelete} />
       </div>
       <p className="cm-comment-body">{comment.content}</p>
       <div className="cm-comment-actions">
@@ -123,6 +152,7 @@ type CommentGroupProps = {
   replyingTo: string | null;
   onReply: (id: string) => void;
   onCancelReply: () => void;
+  onDeleteComment: (id: string) => void;
   isLoggedIn: boolean;
 };
 
@@ -131,6 +161,7 @@ export function CommentGroup({
   replyingTo,
   onReply,
   onCancelReply,
+  onDeleteComment,
   isLoggedIn,
 }: CommentGroupProps) {
   return (
@@ -139,6 +170,7 @@ export function CommentGroup({
         comment={comment}
         showReplyButton={isLoggedIn}
         onReply={() => onReply(comment.id)}
+        onDelete={() => onDeleteComment(comment.id)}
       />
       {replyingTo === comment.id && (
         <InlineReplyInput mention={comment.author.nickname} onCancel={onCancelReply} />
@@ -147,7 +179,11 @@ export function CommentGroup({
         <div className="cm-replies">
           {comment.replies.map((reply) => (
             <div key={reply.id} className="cm-comment-reply-wrap">
-              <CommentBubble comment={reply} isReply />
+              <CommentBubble
+                comment={reply}
+                isReply
+                onDelete={() => onDeleteComment(reply.id)}
+              />
             </div>
           ))}
         </div>

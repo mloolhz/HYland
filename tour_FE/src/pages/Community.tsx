@@ -5,11 +5,11 @@ import { FilterBar, type FilterValue, type ViewKey } from "@/components/communit
 import { GalleryGrid } from "@/components/community/GalleryGrid";
 import { Lightbox } from "@/components/community/Lightbox";
 import { PostList } from "@/components/community/PostList";
-import { PopularIslands } from "@/components/community/PopularIslands";
 import { ProfileCard } from "@/components/community/ProfileCard";
 import { SelectedIslands } from "@/components/community/SelectedIslands";
 import { WritePostFab } from "@/components/community/WritePostFab";
 import { CONTAINER } from "@/constants/layout";
+import { usePosts } from "@/lib/post-store";
 import {
   filterPosts,
   GALLERY_PAGE_SIZE,
@@ -21,7 +21,6 @@ import {
   type SortKey,
 } from "@/lib/posts";
 import { parseIslandsQuery, parsePageQuery, serializeIslandsQuery } from "@/lib/query";
-import { MOCK_POSTS } from "@/mocks/posts";
 
 function parseView(value: string | null): ViewKey {
   return value === "gallery" ? "gallery" : "list";
@@ -42,6 +41,7 @@ type LightboxState = {
 };
 
 export function Community() {
+  const posts = usePosts();
   const [searchParams, setSearchParams] = useSearchParams();
   const [lightbox, setLightbox] = useState<LightboxState | null>(null);
   const lightboxFocusRef = useRef<HTMLButtonElement | null>(null);
@@ -53,8 +53,8 @@ export function Community() {
   const query = searchParams.get("q") ?? "";
   const page = parsePageQuery(searchParams.get("page"));
 
-  const counts = useMemo(() => islandPostCounts(MOCK_POSTS), []);
-  const notices = useMemo(() => getNoticePosts(MOCK_POSTS), []);
+  const counts = useMemo(() => islandPostCounts(posts), [posts]);
+  const notices = useMemo(() => getNoticePosts(posts), [posts]);
 
   const updateQuery = useCallback(
     (patch: {
@@ -104,8 +104,8 @@ export function Community() {
   );
 
   const filtered = useMemo(
-    () => filterPosts(MOCK_POSTS, { category, islands, query }),
-    [category, islands, query],
+    () => filterPosts(posts, { category, islands, query }),
+    [posts, category, islands, query],
   );
   const sorted = useMemo(() => sortPosts(filtered, sort), [filtered, sort]);
   const galleryPosts = useMemo(
@@ -218,7 +218,6 @@ export function Community() {
           <aside className="cm-sidebar">
             <div className="cm-sidebar-sticky">
               <ProfileCard />
-              <PopularIslands />
             </div>
           </aside>
         </div>

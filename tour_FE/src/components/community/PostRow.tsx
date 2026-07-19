@@ -15,127 +15,158 @@ function PhotoIcon() {
   );
 }
 
-function DotsIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <circle cx="5" cy="12" r="1.5" />
-      <circle cx="12" cy="12" r="1.5" />
-      <circle cx="19" cy="12" r="1.5" />
-    </svg>
-  );
-}
-
 type PostRowProps = {
   post: Post;
   columns: ListColumns;
   compact?: boolean;
   fromSearch?: string;
-  onDelete?: () => void;
   onUnlike?: () => void;
 };
+
+const NOTICE_AUTHOR_LABEL = "관리자";
 
 export function PostRow({
   post,
   columns,
   compact,
   fromSearch,
-  onDelete,
   onUnlike,
 }: PostRowProps) {
   const location = useLocation();
   const linkSearch = fromSearch ?? location.search;
   const colors = getIslandColors(post.island);
   const replies = commentCount(post);
+  const showSummary = false;
   const summary = postSummary(post, 40);
   const hasImages = (post.images?.length ?? 0) > 0;
   const gridClass = `cm-post-row-grid cm-post-row-grid--${columns}`;
 
   if (post.isNotice) {
+    const noticeIsland = (
+      <span className="cm-list-island">
+        <span className="cm-list-chip cm-list-chip-notice">공지</span>
+      </span>
+    );
+    const noticeTitle = (
+      <div className="cm-list-title-col min-w-0">
+        <div className="cm-list-title-line cm-list-title-line--single">
+          <span className="cm-list-title cm-list-title-notice">{post.title}</span>
+        </div>
+        {columns === "community" && (
+          <p className="cm-list-meta-mobile truncate">
+            {NOTICE_AUTHOR_LABEL} · {formatListDate(post.createdAt)}
+          </p>
+        )}
+      </div>
+    );
+
+    const noticeAuthorCell = (
+      <span className="cm-list-author cm-list-hide-mobile truncate">{NOTICE_AUTHOR_LABEL}</span>
+    );
+    const noticeDateCell = (
+      <span className="cm-list-date cm-list-hide-mobile">{formatListDate(post.createdAt)}</span>
+    );
+    const noticeViewsCell = <span className="cm-list-views">{post.views}</span>;
+
+    if (columns === "liked") {
+      return (
+        <div className={`cm-post-row cm-post-row-notice ${gridClass}`}>
+          <span className="cm-list-unlike" />
+          {noticeIsland}
+          {noticeTitle}
+          {noticeAuthorCell}
+          {noticeDateCell}
+          {noticeViewsCell}
+        </div>
+      );
+    }
+
     return (
       <div className={`cm-post-row cm-post-row-notice ${gridClass}`}>
-        <span className="cm-list-island">
-          <span className="cm-list-chip cm-list-chip-notice">공지</span>
-        </span>
-        <div className="cm-list-title-col min-w-0">
-          <div className="cm-list-title-line cm-list-title-line--single">
-            <span className="cm-list-title cm-list-title-notice">{post.title}</span>
-          </div>
-        </div>
-        {columns !== "myPosts" && columns !== "liked" && (
+        {noticeIsland}
+        {noticeTitle}
+        {columns === "community" && (
           <>
-            <span className="cm-list-author cm-list-hide-mobile" />
-            <span className="cm-list-date cm-list-hide-mobile" />
+            {noticeAuthorCell}
+            {noticeDateCell}
+            {noticeViewsCell}
           </>
         )}
-        {columns === "myPosts" && <span className="cm-list-date cm-list-hide-mobile" />}
-        <span className="cm-list-likes" />
-        {columns === "myPosts" && <span className="cm-list-manage" />}
-        {columns === "liked" && <span className="cm-list-unlike" />}
+        {columns === "myPosts" && (
+          <>
+            {noticeDateCell}
+            {noticeViewsCell}
+          </>
+        )}
       </div>
     );
   }
 
-  const row = (
-    <>
-      <span className="cm-list-island">
-        <span className="cm-list-chip" style={{ background: colors.bg, color: colors.text }}>
-          {post.island}
-        </span>
-      </span>
-      <div className="cm-list-title-col min-w-0">
-        <div className="cm-list-title-line">
-          {post.isResolved && <span className="cm-list-resolved-text">답변완료</span>}
-          {hasImages && <PhotoIcon />}
-          <span className="cm-list-title truncate">{post.title}</span>
-          {replies > 0 && <span className="cm-list-comment-count">{replies}</span>}
-        </div>
-        <p className="cm-list-summary truncate">{summary}</p>
-        <p className="cm-list-meta-mobile truncate">
-          {post.author.nickname} · {formatListDate(post.createdAt)}
-        </p>
-      </div>
-      {columns === "community" && (
-        <span className="cm-list-author cm-list-hide-mobile truncate">{post.author.nickname}</span>
-      )}
-      {columns === "liked" && (
-        <span className="cm-list-author cm-list-hide-mobile truncate">{post.author.nickname}</span>
-      )}
-      <span className="cm-list-date cm-list-hide-mobile">{formatListDate(post.createdAt)}</span>
-      {columns !== "liked" && <span className="cm-list-likes">{post.likes}</span>}
-      {columns === "myPosts" && (
-        <span className="cm-list-manage">
-          <button
-            type="button"
-            className="cm-row-dots"
-            aria-label="글 관리"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              if (window.confirm("이 글을 삭제할까요? 댓글도 함께 사라집니다.")) onDelete?.();
-            }}
-          >
-            <DotsIcon />
-          </button>
-        </span>
-      )}
-      {columns === "liked" && (
-        <span className="cm-list-unlike">
-          <button
-            type="button"
-            className="cm-unlike-btn"
-            aria-label="좋아요 취소"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              onUnlike?.();
-            }}
-          >
-            ♥
-          </button>
-        </span>
-      )}
-    </>
+  const unlikeButton = columns === "liked" && (
+    <span className="cm-list-unlike">
+      <button
+        type="button"
+        className="cm-unlike-btn"
+        aria-label="좋아요 취소"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          onUnlike?.();
+        }}
+      >
+        ♥
+      </button>
+    </span>
   );
+
+  const islandCell = (
+    <span className="cm-list-island">
+      <span className="cm-list-chip" style={{ background: colors.bg, color: colors.text }}>
+        {post.island}
+      </span>
+    </span>
+  );
+
+  const titleCell = (
+    <div className="cm-list-title-col min-w-0">
+      <div
+        className={`cm-list-title-line${!showSummary ? " cm-list-title-line--single" : ""}`}
+      >
+        {post.isResolved && <span className="cm-list-resolved-text">답변완료</span>}
+        {hasImages && <PhotoIcon />}
+        <span className="cm-list-title truncate">{post.title}</span>
+        {replies > 0 && <span className="cm-list-comment-count">{replies}</span>}
+      </div>
+      {showSummary && <p className="cm-list-summary truncate">{summary}</p>}
+      <p className="cm-list-meta-mobile truncate">
+        {post.author.nickname} · {formatListDate(post.createdAt)}
+      </p>
+    </div>
+  );
+
+  const row =
+    columns === "liked" ? (
+      <>
+        {unlikeButton}
+        {islandCell}
+        {titleCell}
+        <span className="cm-list-author cm-list-hide-mobile truncate">{post.author.nickname}</span>
+        <span className="cm-list-date cm-list-hide-mobile">{formatListDate(post.createdAt)}</span>
+        <span className="cm-list-views">{post.views}</span>
+      </>
+    ) : (
+      <>
+        {islandCell}
+        {titleCell}
+        {columns === "community" && (
+          <span className="cm-list-author cm-list-hide-mobile truncate">{post.author.nickname}</span>
+        )}
+        <span className="cm-list-date cm-list-hide-mobile">{formatListDate(post.createdAt)}</span>
+        {(columns === "community" || columns === "myPosts") && (
+          <span className="cm-list-views">{post.views}</span>
+        )}
+      </>
+    );
 
   const className = `cm-post-row ${gridClass}${compact ? " cm-post-row-compact" : ""}`;
 

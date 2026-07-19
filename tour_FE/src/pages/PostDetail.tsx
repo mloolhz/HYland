@@ -5,20 +5,32 @@ import { CommentThread } from "@/components/community/CommentThread";
 import { Lightbox } from "@/components/community/Lightbox";
 import { CommentIcon, HeartIcon } from "@/components/community/PostActionIcons";
 import { PostRow } from "@/components/community/PostRow";
+import { isCurrentUser } from "@/constants/auth";
 import { getIslandColors } from "@/constants/island";
 import { CONTAINER } from "@/constants/layout";
-import { countComments, filterPosts, sortPosts } from "@/lib/posts";
+import { countComments, filterPosts, findComment, removeComment, sortPosts } from "@/lib/posts";
 import { parseIslandsQuery } from "@/lib/query";
 import { formatDetailDate } from "@/lib/time";
-import { getPostById, MOCK_POSTS } from "@/mocks/posts";
+import { getPostById, incrementPostViews, usePosts } from "@/lib/post-store";
 
 export function PostDetail() {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
+  const posts = usePosts();
   const post = id ? getPostById(id) : undefined;
+  const [comments, setComments] = useState(post?.comments ?? []);
   const [lightboxImageIndex, setLightboxImageIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const hash = location.hash;
+
+  useEffect(() => {
+    setComments(post?.comments ?? []);
+  }, [post]);
+
+  useEffect(() => {
+    if (!id) return;
+    incrementPostViews(id);
+  }, [id]);
 
   useEffect(() => {
     if (!hash) return;
@@ -47,8 +59,8 @@ export function PostDetail() {
         : "all";
     const islands = parseIslandsQuery(listParams.get("islands"));
     const query = listParams.get("q") ?? "";
-    return sortPosts(filterPosts(MOCK_POSTS, { category, islands, query }), sort);
-  }, [listParams]);
+    return sortPosts(filterPosts(posts, { category, islands, query }), sort);
+  }, [posts, listParams]);
 
   const { prevPost, nextPost } = useMemo(() => {
     if (!post) return { prevPost: undefined, nextPost: undefined };
@@ -62,10 +74,10 @@ export function PostDetail() {
 
   const related = useMemo(() => {
     if (!post) return [];
-    return MOCK_POSTS.filter(
+    return posts.filter(
       (p) => !p.isNotice && p.island === post.island && p.id !== post.id,
     ).slice(0, 3);
-  }, [post]);
+  }, [post, posts]);
 
   if (!post) {
     return (
@@ -84,6 +96,12 @@ export function PostDetail() {
 
   const region = getIslandColors(post.island);
   const images = post.images ?? [];
+
+  const handleDeleteComment = (commentId: string) => {
+    const target = findComment(comments, commentId);
+    if (!target || !isCurrentUser(target.author.id)) return;
+    setComments((prev) => removeComment(prev, commentId));
+  };
 
   return (
     <main className="cm-page">
@@ -187,7 +205,11 @@ export function PostDetail() {
 
               <hr className="cm-detail-divider" />
 
-              <CommentThread comments={post.comments} />
+              <CommentThread
+                comments={comments}
+                isLoggedIn
+                onDeleteComment={handleDeleteComment}
+              />
             </div>
 
             {related.length > 0 && (

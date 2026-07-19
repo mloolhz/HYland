@@ -9,6 +9,9 @@ import { Community } from "@/pages/Community";
 import { FindAccount } from "@/pages/FindAccount";
 import { Login } from "@/pages/Login";
 import { MyActivity } from "@/pages/MyActivity";
+import { MyCommentsPage } from "@/pages/MyCommentsPage";
+import { MyLikedPage } from "@/pages/MyLikedPage";
+import { MyPostsPage } from "@/pages/MyPostsPage";
 import { NotFound } from "@/pages/NotFound";
 import { Notifications } from "@/pages/Notifications";
 import { PostDetail } from "@/pages/PostDetail";
@@ -32,6 +35,9 @@ const router = createBrowserRouter([
       { path: "islands", element: <IslandExplorer /> },
       { path: "community", element: <Community /> },
       { path: "community/write", element: <WritePost /> },
+      { path: "community/my-posts", element: <MyPostsPage /> },
+      { path: "community/my-comments", element: <MyCommentsPage /> },
+      { path: "community/liked", element: <MyLikedPage /> },
       { path: "community/me", element: <MyActivity /> },
       { path: "community/:id", element: <PostDetail /> },
       { path: "notifications", element: <Notifications /> },

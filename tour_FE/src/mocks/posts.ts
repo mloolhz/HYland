@@ -10,9 +10,10 @@ export const MOCK_POSTS: Post[] = [
     island: "무의도",
     activity: "안내",
     isNotice: true,
-    author: { id: "admin", nickname: "운영팀", bti: "등대형" },
+    author: { id: "admin", nickname: "관리자", bti: "등대형" },
     createdAt: "2026-07-01T09:00:00",
     likes: 0,
+    views: 3428,
     comments: [],
   },
   {
@@ -26,6 +27,7 @@ export const MOCK_POSTS: Post[] = [
     author: { id: "u1", nickname: "이파도", bti: "파도형" },
     createdAt: "2026-07-10T11:30:00",
     likes: 42,
+    views: 312,
     comments: [
       {
         id: "c1",
@@ -70,6 +72,7 @@ export const MOCK_POSTS: Post[] = [
     author: { id: "u4", nickname: "박SUP", bti: "해류형" },
     createdAt: "2026-07-10T09:15:00",
     likes: 87,
+    views: 278,
     comments: [
       {
         id: "c3",
@@ -91,6 +94,7 @@ export const MOCK_POSTS: Post[] = [
     author: { id: "u6", nickname: "한낚시", bti: "갯벌형" },
     createdAt: "2026-07-09T18:40:00",
     likes: 12,
+    views: 367,
     comments: [
       {
         id: "c4",
@@ -112,6 +116,7 @@ export const MOCK_POSTS: Post[] = [
     author: { id: "u8", nickname: "서트레일", bti: "등대형" },
     createdAt: "2026-07-09T14:20:00",
     likes: 56,
+    views: 98,
     comments: [],
   },
   {
@@ -126,6 +131,7 @@ export const MOCK_POSTS: Post[] = [
     author: { id: "u9", nickname: "정러너", bti: "파도형" },
     createdAt: "2026-07-09T07:00:00",
     likes: 31,
+    views: 445,
     comments: [
       {
         id: "c5",
@@ -148,6 +154,7 @@ export const MOCK_POSTS: Post[] = [
     author: { id: "u11", nickname: "최라이더", bti: "해류형" },
     createdAt: "2026-07-08T16:30:00",
     likes: 8,
+    views: 167,
     comments: [
       {
         id: "c6",
@@ -169,6 +176,7 @@ export const MOCK_POSTS: Post[] = [
     author: { id: "u13", nickname: "윤캠핑", bti: "갯벌형" },
     createdAt: "2026-07-08T11:00:00",
     likes: 64,
+    views: 276,
     comments: [],
   },
   {
@@ -183,6 +191,7 @@ export const MOCK_POSTS: Post[] = [
     author: { id: "u14", nickname: "강가족", bti: "갯벌형" },
     createdAt: "2026-07-07T15:45:00",
     likes: 28,
+    views: 132,
     comments: [
       {
         id: "c7",
@@ -204,6 +213,7 @@ export const MOCK_POSTS: Post[] = [
     author: { id: "u16", nickname: "오바이크", bti: "파도형" },
     createdAt: "2026-07-07T10:20:00",
     likes: 19,
+    views: 96,
     comments: [],
   },
   {
@@ -216,6 +226,7 @@ export const MOCK_POSTS: Post[] = [
     author: { id: "u17", nickname: "조탐험", bti: "해류형" },
     createdAt: "2026-07-06T20:00:00",
     likes: 5,
+    views: 40,
     comments: [],
   },
   {
@@ -234,6 +245,7 @@ export const MOCK_POSTS: Post[] = [
     author: { id: "u18", nickname: "임패들", bti: "파도형" },
     createdAt: "2026-07-06T14:00:00",
     likes: 73,
+    views: 312,
     comments: [
       {
         id: "c8",
@@ -265,6 +277,7 @@ export const MOCK_POSTS: Post[] = [
     author: { id: "u20", nickname: "드라이버K", bti: "등대형" },
     createdAt: "2026-07-05T17:30:00",
     likes: 15,
+    views: 80,
     comments: [],
   },
 ];

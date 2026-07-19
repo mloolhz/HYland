@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { AuthorAvatar } from "@/components/community/AuthorAvatar";
+import { getCurrentUserProfile } from "@/lib/user-profile";
 import { countComments } from "@/lib/posts";
 import { useAuthRedirect } from "@/hooks/useAuthRedirect";
 import type { Comment } from "@/types/community";
@@ -8,14 +10,18 @@ import { CommentGroup } from "./CommentItem";
 type CommentThreadProps = {
   comments: Comment[];
   isLoggedIn?: boolean;
+  onDeleteComment?: (id: string) => void;
 };
 
 function MainCommentInput({ isLoggedIn }: { isLoggedIn: boolean }) {
   const [focused, setFocused] = useState(false);
+  const [draft, setDraft] = useState("");
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const location = useLocation();
   const { buildLoginUrl } = useAuthRedirect();
   const loginUrl = buildLoginUrl(`${location.pathname}${location.search}${location.hash}`);
+  const profile = getCurrentUserProfile();
+  const canSubmit = draft.trim().length > 0;
 
   useEffect(() => {
     if (focused) inputRef.current?.focus();
@@ -31,33 +37,48 @@ function MainCommentInput({ isLoggedIn }: { isLoggedIn: boolean }) {
 
   return (
     <div className={`cm-thread-input${focused ? " is-focused" : ""}`}>
-      <span className="cm-thread-input-ava">나</span>
-      {!focused ? (
-        <button type="button" className="cm-thread-fake" onClick={() => setFocused(true)}>
-          댓글을 남겨보세요
-        </button>
-      ) : (
-        <>
+      <AuthorAvatar
+        author={{ nickname: profile.nickname }}
+        className="cm-comment-avatar cm-thread-input-avatar"
+      />
+      <div className="cm-thread-input-field">
+        {!focused ? (
+          <button type="button" className="cm-thread-fake" onClick={() => setFocused(true)}>
+            댓글을 남겨보세요
+          </button>
+        ) : (
           <textarea
             ref={inputRef}
-            rows={3}
+            rows={1}
             placeholder="댓글을 남겨보세요"
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
             onBlur={(e) => {
-              if (!e.relatedTarget?.closest(".cm-thread-input")) setFocused(false);
+              if (!e.relatedTarget?.closest(".cm-thread-input")) {
+                if (!draft.trim()) setFocused(false);
+              }
             }}
           />
-          <button type="button" className="cm-thread-submit">
-            등록
-          </button>
-        </>
-      )}
+        )}
+      </div>
+      <button type="button" className="cm-thread-submit" disabled={!canSubmit}>
+        등록
+      </button>
     </div>
   );
 }
 
-export function CommentThread({ comments, isLoggedIn = false }: CommentThreadProps) {
+export function CommentThread({
+  comments,
+  isLoggedIn = false,
+  onDeleteComment,
+}: CommentThreadProps) {
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const total = countComments(comments);
+
+  const handleDeleteComment = (id: string) => {
+    onDeleteComment?.(id);
+  };
 
   return (
     <section className="cm-detail-comments" aria-label="댓글">
@@ -73,6 +94,7 @@ export function CommentThread({ comments, isLoggedIn = false }: CommentThreadPro
               replyingTo={replyingTo}
               onReply={setReplyingTo}
               onCancelReply={() => setReplyingTo(null)}
+              onDeleteComment={handleDeleteComment}
               isLoggedIn={isLoggedIn}
             />
           ))}

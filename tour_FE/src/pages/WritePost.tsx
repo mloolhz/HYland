@@ -4,7 +4,7 @@ import { CommunityHeader } from "@/components/community/CommunityHeader";
 import { CURRENT_USER_ID } from "@/constants/auth";
 import { ISLAND_CATALOG } from "@/constants/island";
 import { CONTAINER } from "@/constants/layout";
-import { MOCK_POSTS } from "@/mocks/posts";
+import { addPost, usePosts } from "@/lib/post-store";
 import type { Post, PostType } from "@/types/community";
 
 const TYPE_OPTIONS: { value: PostType; label: string }[] = [
@@ -13,14 +13,13 @@ const TYPE_OPTIONS: { value: PostType; label: string }[] = [
   { value: "question", label: "질문" },
 ];
 
-function getCurrentAuthor() {
-  const existing = MOCK_POSTS.find((p) => p.author.id === CURRENT_USER_ID);
-  return existing?.author ?? { id: CURRENT_USER_ID, nickname: "이파도", bti: "파도형" as const };
-}
-
 export function WritePost() {
   const navigate = useNavigate();
-  const author = useMemo(getCurrentAuthor, []);
+  const posts = usePosts();
+  const author = useMemo(() => {
+    const existing = posts.find((p) => p.author.id === CURRENT_USER_ID);
+    return existing?.author ?? { id: CURRENT_USER_ID, nickname: "이파도", bti: "파도형" as const };
+  }, [posts]);
 
   const [type, setType] = useState<PostType>("review");
   const [title, setTitle] = useState("");
@@ -49,10 +48,11 @@ export function WritePost() {
       author,
       createdAt: new Date().toISOString(),
       likes: 0,
+      views: 0,
       comments: [],
     };
 
-    MOCK_POSTS.unshift(newPost);
+    addPost(newPost);
     navigate(`/community/${newPost.id}`);
   };
 

@@ -11,6 +11,7 @@ export type UserProfile = UserPassportStats & {
   id: string;
   nickname: string;
   bti: IslandBti;
+  joinedAt: string;
   stamps: { current: number; total: number };
 };
 
@@ -49,6 +50,7 @@ export function getCurrentUserProfile(): UserProfile {
     id: CURRENT_USER_ID,
     nickname: author?.nickname ?? "이파도",
     bti: author?.bti ?? "파도형",
+    joinedAt: "2024-06-15",
     ...passport,
     stamps: { current: passport.stampCount, total: passport.stampTotal },
   };

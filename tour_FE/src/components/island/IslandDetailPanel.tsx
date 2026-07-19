@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import type { IslandInfo } from "@/lib/island-data";
+import { serializeIslandsQuery } from "@/lib/query";
 
 const COURSE_ICONS = ["⛵", "🏃", "🥾", "🎣", "🏕️", "📸"];
 
@@ -92,7 +93,10 @@ export function IslandDetailPanel({ island, isOpen, onClose }: IslandDetailPanel
             <a className="btn btn-navy" href="/#booking">
               {island.bookingLabel ?? "자세히 보기"}
             </a>
-            <Link className="btn btn-white" to="/community">
+            <Link
+              className="btn btn-white"
+              to={`/community?islands=${serializeIslandsQuery(new Set([island.name]))}`}
+            >
               탐험 후기 보기
             </Link>
           </div>

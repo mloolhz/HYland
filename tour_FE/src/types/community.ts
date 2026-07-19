@@ -38,6 +38,7 @@ export interface Post {
   author: Author;
   createdAt: string;
   likes: number;
+  views: number;
   comments: Comment[];
 }
 

@@ -9,7 +9,7 @@ type ActivityTabsProps = {
 const TABS: { key: ActivityTab; label: string }[] = [
   { key: "posts", label: "작성한 글" },
   { key: "comments", label: "작성한 댓글" },
-  { key: "liked", label: "좋아요한 글" },
+  { key: "liked", label: "내가 누른 좋아요" },
 ];
 
 export function ActivityTabs({ active, counts, onChange }: ActivityTabsProps) {

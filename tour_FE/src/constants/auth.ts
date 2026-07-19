@@ -6,6 +6,10 @@ export const SAVED_USERNAME_KEY = "island-quest-saved-username";
 export const MOCK_TAKEN_IDS = ["admin", "test", "island"];
 export const MOCK_TAKEN_NICKNAMES = ["바다탐험가", "섬돌이"];
 
+export function isCurrentUser(authorId: string): boolean {
+  return authorId === CURRENT_USER_ID;
+}
+
 export function isDemoLoggedIn(): boolean {
   return sessionStorage.getItem(DEMO_LOGGED_IN_KEY) === "1";
 }

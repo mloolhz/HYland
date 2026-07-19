@@ -16,31 +16,30 @@ type PostListProps = {
   emptyMessage?: string;
   showFooter?: boolean;
   showSearch?: boolean;
-  onDeletePost?: (id: string) => void;
   onUnlikePost?: (id: string) => void;
 };
 
 const HEADERS: Record<ListColumns, { key: string; label: string; className?: string }[]> = {
   community: [
-    { key: "island", label: "섬" },
+    { key: "island", label: "섬", className: "cm-list-col-center" },
     { key: "title", label: "제목" },
     { key: "author", label: "글쓴이", className: "cm-list-hide-mobile cm-list-col-center" },
     { key: "date", label: "작성일", className: "cm-list-hide-mobile cm-list-col-center" },
-    { key: "likes", label: "좋아요", className: "cm-list-col-center" },
+    { key: "views", label: "조회수", className: "cm-list-col-center" },
   ],
   myPosts: [
-    { key: "island", label: "섬" },
+    { key: "island", label: "섬", className: "cm-list-col-center" },
     { key: "title", label: "제목" },
     { key: "date", label: "작성일", className: "cm-list-hide-mobile cm-list-col-center" },
-    { key: "likes", label: "좋아요", className: "cm-list-col-right" },
-    { key: "manage", label: "관리", className: "cm-list-col-center" },
+    { key: "views", label: "조회수", className: "cm-list-col-center" },
   ],
   liked: [
-    { key: "island", label: "섬" },
+    { key: "unlike", label: "", className: "cm-list-col-center" },
+    { key: "island", label: "섬", className: "cm-list-col-center" },
     { key: "title", label: "제목" },
     { key: "author", label: "글쓴이", className: "cm-list-hide-mobile" },
     { key: "date", label: "작성일", className: "cm-list-hide-mobile cm-list-col-center" },
-    { key: "unlike", label: "", className: "cm-list-col-center" },
+    { key: "views", label: "조회수", className: "cm-list-col-center" },
   ],
 };
 
@@ -116,7 +115,6 @@ export function PostList({
   emptyMessage = "첫 번째 탐험 기록을 남겨보세요",
   showFooter = true,
   showSearch = true,
-  onDeletePost,
   onUnlikePost,
 }: PostListProps) {
   const pages = useMemo(() => {
@@ -151,7 +149,6 @@ export function PostList({
             key={post.id}
             post={post}
             columns={columns}
-            onDelete={() => onDeletePost?.(post.id)}
             onUnlike={() => onUnlikePost?.(post.id)}
           />
         ))
