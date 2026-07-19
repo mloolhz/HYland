@@ -251,10 +251,13 @@ html.site-menu-open{overflow:hidden;overscroll-behavior:none}
 .pass-card{width:100%;background:#fff;border-radius:14px;border:1px solid rgba(255,255,255,.65);box-shadow:0 12px 36px rgba(4,14,30,.24);padding:20px;position:relative;z-index:1}
 .pc-passport-layout{display:flex;align-items:stretch;gap:14px}
 .passport-cover{flex:none;position:relative;width:108px;aspect-ratio:2/3;perspective:720px}
-.passport-cover--link{display:block;text-decoration:none;color:inherit;border-radius:12px;cursor:pointer}
+.passport-cover--link{display:block;text-decoration:none;color:inherit;border-radius:12px;cursor:pointer;outline:none}
 .passport-cover--link:focus-visible{outline:3px solid var(--blue2);outline-offset:3px;border-radius:12px}
-.passport-cover__book{position:relative;width:100%;height:100%;transform-style:preserve-3d;transform:rotateY(-7deg) rotateX(4deg);transition:transform .35s cubic-bezier(.22,.7,.3,1)}
+.passport-cover__book{position:relative;width:100%;height:100%;transform-style:preserve-3d;transform:rotateY(-7deg) rotateX(4deg);transition:transform .22s cubic-bezier(.22,.7,.3,1)}
 .passport-cover--link:hover .passport-cover__book{transform:rotateY(-5deg) rotateX(3deg) translateY(-4px)}
+.passport-cover--link:active .passport-cover__book{transform:rotateY(-5deg) rotateX(3deg) translateY(-2px) scale(0.98);transition-duration:.12s}
+.passport-cover--link:hover .passport-cover__face{box-shadow:0 1px 0 rgba(255,255,255,.14) inset,0 -1px 0 rgba(0,0,0,.22) inset,1px 0 0 rgba(255,255,255,.06) inset,-1px 0 0 rgba(0,0,0,.14) inset,0 18px 36px rgba(15,35,80,.36),0 8px 16px rgba(15,35,80,.24),0 3px 6px rgba(15,35,80,.16)}
+.passport-cover--link:hover .passport-cover__shadow{background:radial-gradient(ellipse at center,rgba(15,35,80,.44) 0%,rgba(15,35,80,.18) 45%,transparent 72%);filter:blur(6px)}
 .passport-cover__shadow{position:absolute;left:8%;right:4%;bottom:-10px;height:14px;border-radius:50%;background:radial-gradient(ellipse at center,rgba(15,35,80,.34) 0%,rgba(15,35,80,.12) 45%,transparent 72%);filter:blur(5px);transform:rotateX(78deg) scaleY(.55);z-index:0;pointer-events:none}
 .passport-cover__thickness{position:absolute;inset:0;border-radius:12px;background:linear-gradient(145deg,#0a2248 0%,#061a38 55%,#041228 100%);transform:translate(3.5px,4.5px);box-shadow:2px 4px 8px rgba(4,14,30,.28);z-index:0}
 .passport-cover__thickness::before{content:"";position:absolute;top:8px;right:-3px;bottom:8px;width:3px;border-radius:0 2px 2px 0;background:linear-gradient(180deg,#12305c 0%,#081e3e 50%,#0c2850 100%);box-shadow:1px 0 2px rgba(0,0,0,.22)}
