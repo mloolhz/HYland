@@ -115,9 +115,26 @@ export function HeroSection({
         <div className="hero-shade" />
       </div>
 
+      <div
+        className={`scroll-indicator${showScrollHint ? "" : " is-hidden"}`}
+        aria-hidden={!showScrollHint}
+      >
+        <span className="scroll-indicator__label">스크롤하여 더 알아보기</span>
+        <a href="#map" className="scroll-indicator__chevron" aria-label="아래로 스크롤하여 더 알아보기">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M7 10l5 5 5-5M7 14l5 5 5-5"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </a>
+      </div>
+
       <div className="hero-inner">
         <div className="hero-copy">
-          <span className="eyebrow">바다, 산, 섬을 넘나드는 새로운 여정</span>
           <h1 className="hero-title">
             인천의 섬에서
             <br />
@@ -160,7 +177,7 @@ export function HeroSection({
           </div>
         </div>
 
-        <div className="pass-card-wrap">
+        <div className="hero-side">
           <div className="pc-agent" id="ai-agent" role="search">
             <div className={`pc-agent-panel${agentActive ? " is-active" : ""}`}>
               <div className="pc-agent-head">
@@ -375,21 +392,6 @@ export function HeroSection({
             <span className="ip-badge">인천시민</span>인천 i 바다패스로 예매하기<span className="ip-arrow">→</span>
           </a>
         </div>
-      </div>
-
-      <div className={`hero-scroll-hint${showScrollHint ? "" : " is-hidden"}`}>
-        <span className="hero-scroll-label">스크롤하여 더 알아보기</span>
-        <a href="#map" className="hero-scroll-chevron" aria-label="아래로 스크롤하여 더 알아보기">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path
-              d="M7 10l5 5 5-5M7 14l5 5 5-5"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </a>
       </div>
     </section>
   );
