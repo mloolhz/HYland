@@ -481,6 +481,11 @@ a.cm-post-row:hover {
   min-width: 0;
 }
 
+.cm-feed .cm-list-title {
+  font-size: 15px;
+  line-height: 1.45;
+}
+
 .cm-list-resolved-text {
   font-size: var(--ts-meta);
   color: #3b6d11;
