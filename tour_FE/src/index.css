@@ -168,12 +168,23 @@ html.site-menu-open{overflow:hidden;overscroll-behavior:none}
   linear-gradient(180deg,rgba(8,26,52,.14) 0%,rgba(8,26,52,0) 30%,rgba(8,26,52,.34) 100%)}
 .hero-inner{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1fr) 396px;align-items:center;column-gap:64px;min-height:100svh;padding:var(--head-h) clamp(44px,6.5vw,96px) clamp(24px,3.4vw,56px);box-sizing:border-box}
 .hero-copy{max-width:700px;grid-column:1;align-self:center}
-.hero-copy .eyebrow{margin-bottom:16px;color:#CFE2FF;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.34);border-radius:6px;padding:7px 13px;letter-spacing:.06em;backdrop-filter:blur(3px)}
-.hero-title{font-size:clamp(34px,4.3vw,50px);font-weight:900;letter-spacing:-.03em;line-height:1.26;color:#fff;text-shadow:0 2px 16px rgba(4,14,30,.55)}
+.hero-copy .eyebrow{margin-bottom:20px;color:#CFE2FF;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.34);border-radius:6px;padding:7px 13px;letter-spacing:.06em;backdrop-filter:blur(3px)}
+.hero-title{font-size:clamp(34px,4.3vw,50px);font-weight:900;letter-spacing:-.03em;line-height:1.38;color:#fff;text-shadow:0 2px 16px rgba(4,14,30,.55)}
 .hero-title .hl{color:#8FC1FF}
-.hero-sub{margin-top:16px;font-size:16.5px;color:#DCE7F6;max-width:470px;text-shadow:0 1px 10px rgba(4,14,30,.6)}
-.hero-cta{display:flex;gap:12px;margin-top:26px}
-.cats{display:flex;gap:clamp(14px,2.4vw,38px);flex-wrap:wrap;margin-top:26px}
+.hero-action-group{display:inline-grid;grid-template-columns:max-content;margin-top:24px;max-width:100%}
+.hero-sub{margin:0;display:contents;font-size:16.5px;line-height:1.7;color:#DCE7F6;text-shadow:0 1px 10px rgba(4,14,30,.6)}
+.hero-sub-line{display:block;grid-column:1;grid-row:1;width:max-content;max-width:100%;line-height:1.7}
+.hero-sub-line--anchor{grid-row:2;margin-top:8px}
+.hero-cta{grid-column:1;grid-row:3;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:34px;width:100%;min-width:0;box-sizing:border-box}
+.hero-cta .btn{width:100%;min-height:50px;justify-content:center;white-space:nowrap;padding:14px 18px;border-radius:10px;font-size:15px;font-weight:800;letter-spacing:-.01em;border:1px solid transparent;transition:transform .22s cubic-bezier(.22,.7,.3,1),box-shadow .22s ease,background .22s ease,border-color .22s ease,color .22s ease}
+.hero-cta .btn-hero-primary{background:linear-gradient(135deg,#2480f5 0%,var(--blue) 48%,#0a4da8 100%);color:#fff;box-shadow:0 4px 20px rgba(15,95,204,.42),inset 0 1px 0 rgba(255,255,255,.20)}
+.hero-cta .btn-hero-primary:hover{background:linear-gradient(135deg,#3d91ff 0%,#1874e8 48%,#0c58b8 100%);box-shadow:0 10px 32px rgba(15,95,204,.52),inset 0 1px 0 rgba(255,255,255,.26);transform:translateY(-2px)}
+.hero-cta .btn-hero-secondary{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.52);color:#fff;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 2px 14px rgba(4,14,30,.20)}
+.hero-cta .btn-hero-secondary:hover{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.88);color:#fff;box-shadow:0 8px 24px rgba(4,14,30,.30);transform:translateY(-2px)}
+.hero-cta .btn:active{transform:translateY(0) scale(.985)}
+.btn-hero-arrow{display:inline-flex;margin-left:2px;font-size:16px;line-height:1;transition:transform .22s cubic-bezier(.22,.7,.3,1)}
+.hero-cta .btn-hero-primary:hover .btn-hero-arrow{transform:translateX(4px)}
+.cats{display:flex;gap:clamp(14px,2.4vw,38px);flex-wrap:wrap;margin-top:32px}
 .cat{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:#E6EEF9;text-shadow:0 1px 6px rgba(4,14,30,.5)}
 .cat i{font-style:normal;width:52px;height:52px;border-radius:12px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.32);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;font-size:22px;transition:.18s}
 .cat:hover i{background:rgba(255,255,255,.30);border-color:rgba(255,255,255,.6)}
@@ -193,24 +204,30 @@ html.site-menu-open{overflow:hidden;overscroll-behavior:none}
 /* ---------- pass card (login) ---------- */
 .pass-card-wrap{grid-column:2;grid-row:1;align-self:center;justify-self:end;width:100%;max-width:396px;display:flex;flex-direction:column;gap:14px;position:relative}
 .pc-agent{position:relative;width:100%}
-.pc-agent-panel{background:rgba(255,255,255,.13);backdrop-filter:blur(5px);border:1px solid rgba(255,255,255,.32);border-radius:14px;box-shadow:0 4px 14px rgba(4,14,30,.14);padding:14px;transition:border-color .15s,box-shadow .15s,background .15s}
+.pc-agent-panel{display:flex;flex-direction:column;justify-content:center;background:rgba(255,255,255,.13);backdrop-filter:blur(5px);border:1px solid rgba(255,255,255,.32);border-radius:12px;box-shadow:0 4px 14px rgba(4,14,30,.14);padding:17px 12px;transition:border-color .15s,box-shadow .15s,background .15s}
 .pc-agent-panel:focus-within{background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.55);box-shadow:0 4px 14px rgba(4,14,30,.18),0 0 0 3px rgba(255,255,255,.12)}
 .pc-agent-panel.is-active{background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.55);box-shadow:0 4px 14px rgba(4,14,30,.18),0 0 0 3px rgba(255,255,255,.12)}
 .pc-agent-panel.is-active .pc-agent-field,.pc-agent-panel:focus-within .pc-agent-field{border-color:rgba(45,46,107,.4);box-shadow:0 0 0 3px rgba(45,46,107,.1)}
-.pc-agent-head{display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.pc-agent-head{display:flex;align-items:center;justify-content:center;margin-bottom:14px;flex:none}
 .pc-agent-badge{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:6px;background:var(--sky);border:1px solid var(--sky2);font-size:12px}
-.pc-agent-title{width:100%;font-size:16.5px;font-weight:800;color:#E6EEF9;text-align:center;text-shadow:0 1px 6px rgba(4,14,30,.5)}
-.pc-agent-field{position:relative;padding:10px 40px 10px 12px;background:#fff;border:1px solid #CBD5E1;border-radius:10px;transition:border-color .15s,box-shadow .15s}
-.pc-agent-input{width:100%;border:0;background:transparent;resize:none;font-size:14px;line-height:1.55;color:#1a2433;min-height:42px;outline:none;font-family:inherit}
-.pc-agent-input::placeholder{color:#94A3B8}
-.pc-agent-send{position:absolute;right:8px;bottom:8px;width:30px;height:30px;border:0;border-radius:9px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s,opacity .15s,transform .15s}
-.pc-agent-send:hover:not(:disabled){background:var(--navy2);transform:translateY(-1px)}
+.pc-agent-title{width:100%;font-size:15px;font-weight:800;line-height:1.25;color:#E6EEF9;text-align:center;text-shadow:0 1px 6px rgba(4,14,30,.5)}
+.pc-agent-field{position:relative;display:flex;align-items:center;height:36px;padding:0 30px 0 10px;background:#fff;border:1px solid #CBD5E1;border-radius:9px;box-sizing:border-box;flex:none;transition:border-color .15s,box-shadow .15s,height .15s ease}
+.pc-agent-panel.is-active .pc-agent-field,.pc-agent-panel:focus-within .pc-agent-field{height:auto;min-height:36px;padding-top:7px;padding-bottom:7px;align-items:flex-start}
+.pc-agent-input{width:100%;border:0;background:transparent;resize:none;font-size:13px;line-height:20px;color:#1a2433;height:20px;min-height:20px;max-height:20px;padding:0;margin:0;outline:none;font-family:inherit;overflow:hidden;white-space:nowrap;vertical-align:middle}
+.pc-agent-panel.is-active .pc-agent-input,.pc-agent-panel:focus-within .pc-agent-input{height:auto;min-height:20px;max-height:64px;line-height:1.45;white-space:pre-wrap;overflow-y:auto}
+.pc-agent-input::placeholder{color:#94A3B8;transition:color .2s ease}
+.pc-agent-input:focus::placeholder{color:#B8C4D4}
+.pc-agent-send{position:absolute;right:5px;top:50%;transform:translateY(-50%);flex:none;width:24px;height:24px;border:0;border-radius:8px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s,opacity .15s,transform .15s}
+.pc-agent-send svg{width:14px;height:14px;display:block}
+.pc-agent-send:hover:not(:disabled){background:var(--navy2);transform:translateY(calc(-50% - 1px))}
 .pc-agent-send:disabled{opacity:.38;cursor:not-allowed}
-.pass-card{width:100%;background:#fff;border-radius:14px;border:1px solid rgba(255,255,255,.6);box-shadow:0 18px 48px rgba(4,14,30,.38);padding:22px 22px 18px;position:relative;z-index:1}
-.pc-passport-layout{display:flex;align-items:stretch;gap:16px}
+.pass-card{width:100%;background:#fff;border-radius:14px;border:1px solid rgba(255,255,255,.6);box-shadow:0 18px 48px rgba(4,14,30,.38);padding:20px;position:relative;z-index:1}
+.pc-passport-layout{display:flex;align-items:stretch;gap:14px}
 .passport-cover{flex:none;position:relative;width:108px;aspect-ratio:2/3;perspective:720px}
+.passport-cover--link{display:block;text-decoration:none;color:inherit;border-radius:12px;cursor:pointer}
+.passport-cover--link:focus-visible{outline:3px solid var(--blue2);outline-offset:3px;border-radius:12px}
 .passport-cover__book{position:relative;width:100%;height:100%;transform-style:preserve-3d;transform:rotateY(-7deg) rotateX(4deg);transition:transform .35s cubic-bezier(.22,.7,.3,1)}
-.passport-cover:hover .passport-cover__book{transform:rotateY(-5deg) rotateX(3deg) translateY(-3px)}
+.passport-cover--link:hover .passport-cover__book{transform:rotateY(-5deg) rotateX(3deg) translateY(-4px)}
 .passport-cover__shadow{position:absolute;left:8%;right:4%;bottom:-10px;height:14px;border-radius:50%;background:radial-gradient(ellipse at center,rgba(15,35,80,.34) 0%,rgba(15,35,80,.12) 45%,transparent 72%);filter:blur(5px);transform:rotateX(78deg) scaleY(.55);z-index:0;pointer-events:none}
 .passport-cover__thickness{position:absolute;inset:0;border-radius:12px;background:linear-gradient(145deg,#0a2248 0%,#061a38 55%,#041228 100%);transform:translate(3.5px,4.5px);box-shadow:2px 4px 8px rgba(4,14,30,.28);z-index:0}
 .passport-cover__thickness::before{content:"";position:absolute;top:8px;right:-3px;bottom:8px;width:3px;border-radius:0 2px 2px 0;background:linear-gradient(180deg,#12305c 0%,#081e3e 50%,#0c2850 100%);box-shadow:1px 0 2px rgba(0,0,0,.22)}
@@ -236,9 +253,9 @@ html.site-menu-open{overflow:hidden;overscroll-behavior:none}
 .passport-metric{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border-radius:8px;background:var(--alt);border:1px solid var(--line)}
 .passport-metric b{font-size:17px;font-weight:800;color:var(--navy);line-height:1.1}
 .passport-metric span{font-size:10.5px;font-weight:700;color:var(--muted);white-space:nowrap}
-.btn-passport-view{margin-top:auto;display:inline-flex;align-items:center;justify-content:center;gap:6px;align-self:flex-start;padding:8px 14px;border-radius:8px;background:var(--navy);color:#fff;font-size:12.5px;font-weight:800;text-decoration:none;transition:background .15s,transform .15s}
-.btn-passport-view:hover{background:var(--navy2);transform:translateY(-1px)}
-.pc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.btn-passport-view{margin-top:auto;display:inline-flex;align-items:center;justify-content:center;gap:6px;width:100%;align-self:stretch;padding:9px 14px;border-radius:8px;background:var(--navy);color:#fff;font-size:12.5px;font-weight:800;text-decoration:none;transition:background .15s,transform .15s,box-shadow .15s}
+.btn-passport-view:hover{background:var(--navy2);transform:translateY(-1px);box-shadow:0 4px 12px rgba(45,46,107,.22)}
+.pc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .pc-head h3{font-size:16.5px;font-weight:800;color:var(--navy);display:flex;align-items:center;gap:8px}
 .pc-login-link{flex:none;font-size:13px;font-weight:700;color:var(--blue);text-decoration:none;transition:color .15s}
 .pc-login-link:hover{color:var(--blue-d);text-decoration:underline}
@@ -270,17 +287,19 @@ html.site-menu-open{overflow:hidden;overscroll-behavior:none}
 .sns-row button:hover{filter:brightness(.96)}
 .btn-kakao{background:#FEE500;color:#3A1D1D}
 .btn-naver{background:#03C75A;color:#fff}
-.pass-card-wrap .btn-ipass{position:relative;z-index:2;width:fit-content;max-width:88%;align-self:center;margin-inline:auto;margin-top:0;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--blue2);background:var(--sky);color:var(--blue-d);border-radius:999px;padding:10px 18px;font-size:13.5px;font-weight:800;transition:.15s;text-decoration:none;box-shadow:0 4px 14px rgba(45,46,107,.12)}
+.pass-card-wrap .btn-ipass{position:relative;z-index:2;width:100%;max-width:100%;align-self:stretch;margin-inline:0;margin-top:0;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--blue2);background:var(--sky);color:var(--blue-d);border-radius:999px;padding:12px 18px;font-size:13.5px;font-weight:800;transition:background .15s,border-color .15s,box-shadow .15s,transform .15s;text-decoration:none;box-shadow:0 4px 14px rgba(45,46,107,.14);cursor:pointer}
+.pass-card-wrap .btn-ipass:hover{background:var(--sky2);border-color:var(--blue);box-shadow:0 8px 22px rgba(15,95,204,.24);transform:translateY(-1px)}
 .btn-ipass{width:fit-content;max-width:88%;align-self:center;margin-inline:auto;margin-top:0;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--blue2);background:var(--sky);color:var(--blue-d);border-radius:999px;padding:10px 18px;font-size:13.5px;font-weight:800;transition:.15s;text-decoration:none}
 .btn-ipass:hover{background:var(--sky2);border-color:var(--blue)}
 .ip-badge{font-size:10.5px;font-weight:800;color:#fff;background:var(--blue);border-radius:4px;padding:2px 7px}
-.ip-arrow{font-weight:700;opacity:.7}
-.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
-.q{display:flex;flex-direction:column;align-items:center;gap:7px;font-size:12px;font-weight:700;color:#33445F;padding:9px 4px;border-radius:8px;transition:.15s;cursor:pointer}
-.q i{font-style:normal;width:42px;height:42px;border-radius:8px;background:var(--sky);border:1px solid var(--sky2);display:flex;align-items:center;justify-content:center;font-size:20px;transition:.15s}
+.ip-arrow{font-weight:700;opacity:.7;transition:transform .15s ease,opacity .15s ease}
+.pass-card-wrap .btn-ipass:hover .ip-arrow{transform:translateX(3px);opacity:1}
+.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
+.q{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:13.5px;font-weight:700;color:#33445F;padding:10px 4px;border-radius:8px;transition:.15s;cursor:pointer}
+.q i{font-style:normal;width:47px;height:47px;border-radius:9px;background:var(--sky);border:1px solid var(--sky2);display:flex;align-items:center;justify-content:center;font-size:23px;transition:.15s}
 .q:hover{color:var(--blue)}
 .q:hover i{border-color:var(--blue2);background:#fff}
-.pc-foot{margin-top:13px;text-align:center;font-size:11.5px;color:#8A99AD}
+.pc-foot{margin-top:14px;text-align:center;font-size:11.5px;color:#8A99AD}
 
 /* ---------- map section ---------- */
 .map-wrap{display:grid;grid-template-columns:.82fr 1.18fr;gap:44px;align-items:center}
@@ -490,8 +509,9 @@ footer{background:var(--sea-dark);color:#B6C4D8;margin-top:92px}
   html{scroll-behavior:auto}
   .hero-scroll-chevron{animation:none}
   .related-sites-track{animation:none}
-  .passport-cover__book{transform:none}
-  .passport-cover:hover .passport-cover__book{transform:none}
+  .hero-cta .btn-hero-primary:hover,
+  .hero-cta .btn-hero-secondary:hover{transform:none}
+  .hero-cta .btn-hero-primary:hover .btn-hero-arrow{transform:none}
 }
 @media (max-width:1024px){
   .hero-inner{grid-template-columns:1fr;min-height:100svh;padding-bottom:clamp(24px,3.4vw,56px)}
@@ -543,7 +563,7 @@ footer{background:var(--sea-dark);color:#B6C4D8;margin-top:92px}
   .related-sites-head h3{font-size:22px}
   .related-site{font-size:18px}
   .foot-main{flex-direction:column;align-items:flex-start}
-  .hero-cta{flex-direction:column}
+  .hero-cta{grid-template-columns:1fr}
   .btn-portal{padding:7px 10px}
   .btn-portal-logo{height:22px;max-width:124px}
   .scroll-top-btn{right:32px;bottom:18px;width:44px;height:44px}

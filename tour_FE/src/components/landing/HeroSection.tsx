@@ -20,6 +20,12 @@ const CATEGORIES = [
   ["⋯", "더보기"],
 ] as const;
 
+const AGENT_PLACEHOLDERS = [
+  "초보자가 가기 좋은 섬 추천해줘",
+  "당일치기 가능한 섬 추천",
+  "카약 타기 좋은 곳 알려줘",
+] as const;
+
 type HeroSectionProps = {
   agentInputRef?: RefObject<HTMLTextAreaElement | null>;
   agentActive?: boolean;
@@ -37,7 +43,9 @@ export function HeroSection({
   const [activeSlide, setActiveSlide] = useState(0);
   const [showScrollHint, setShowScrollHint] = useState(true);
   const [agentQuery, setAgentQuery] = useState("");
+  const [agentPlaceholderIndex, setAgentPlaceholderIndex] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const agentPlaceholderTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const handleAgentSubmit = () => {
     const query = agentQuery.trim();
@@ -73,6 +81,25 @@ export function HeroSection({
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    if (agentPlaceholderTimerRef.current) clearInterval(agentPlaceholderTimerRef.current);
+
+    if (agentQuery.trim() || agentActive) return;
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion) return;
+
+    agentPlaceholderTimerRef.current = setInterval(() => {
+      setAgentPlaceholderIndex((prev) => (prev + 1) % AGENT_PLACEHOLDERS.length);
+    }, 4000);
+
+    return () => {
+      if (agentPlaceholderTimerRef.current) clearInterval(agentPlaceholderTimerRef.current);
+    };
+  }, [agentQuery, agentActive]);
+
+  const agentPlaceholder = AGENT_PLACEHOLDERS[agentPlaceholderIndex];
+
   return (
     <section
       className="hero"
@@ -97,18 +124,24 @@ export function HeroSection({
             <br />
             시작하세요
           </h1>
-          <p className="hero-sub">
-            해양 레저부터 러닝, 사이클, 하이킹까지 —
-            <br />
-            인천의 섬에서 다양한 레저스포츠를 만나보세요.
-          </p>
-          <div className="hero-cta">
-            <a className="btn btn-navy" href="#map">
-              탐험 시작하기 →
-            </a>
-            <a className="btn btn-white" href="#booking">
-              레저 예약 보기
-            </a>
+          <div className="hero-action-group">
+            <p className="hero-sub">
+              <span className="hero-sub-line">해양 레저부터 러닝, 사이클, 하이킹까지 —</span>
+              <span className="hero-sub-line hero-sub-line--anchor">
+                인천의 섬에서 다양한 레저스포츠를 만나보세요.
+              </span>
+            </p>
+            <div className="hero-cta">
+              <a className="btn btn-hero-primary" href="#map">
+                탐험 시작하기
+                <span className="btn-hero-arrow" aria-hidden="true">
+                  →
+                </span>
+              </a>
+              <a className="btn btn-hero-secondary" href="#booking">
+                레저 예약 보기
+              </a>
+            </div>
           </div>
           <div className="cats" aria-label="레저 카테고리">
             {CATEGORIES.map(([icon, label]) => (
@@ -140,8 +173,8 @@ export function HeroSection({
                       handleAgentSubmit();
                     }
                   }}
-                  placeholder="자유롭게 질문해주세요."
-                  rows={2}
+                  placeholder={agentPlaceholder}
+                  rows={1}
                   aria-label="AI에게 질문하기"
                 />
                 <button
@@ -151,7 +184,7 @@ export function HeroSection({
                   aria-label="질문 보내기"
                   disabled={!agentQuery.trim()}
                 >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <path
                       d="M12 19V5M12 5l-6 6M12 5l6 6"
                       stroke="currentColor"
@@ -180,35 +213,70 @@ export function HeroSection({
             </div>
 
             <div className="pc-passport-layout">
-              {/* i-바다 패스 card */}
-              <div className="passport-cover" aria-hidden="true">
-                <div className="passport-cover__book">
-                  <span className="passport-cover__shadow" />
-                  <span className="passport-cover__thickness" />
-                  <span className="passport-cover__spine" />
-                  <span className="passport-cover__pages" />
-                  <div className="passport-cover__face">
-                    <span className="passport-cover__sheen" />
-                    <p className="passport-cover__title">i-바다패스</p>
-                    <svg className="passport-cover__emblem" viewBox="0 0 80 80" fill="none" aria-hidden="true">
-                      <circle cx="40" cy="40" r="31" stroke="currentColor" strokeWidth="1.2" opacity="0.85" />
-                      <circle cx="40" cy="40" r="24" stroke="currentColor" strokeWidth="0.8" strokeDasharray="2.5 3.8" opacity="0.65" />
-                      <path d="M40 13 L43.2 19.5 L36.8 19.5 Z" fill="currentColor" />
-                      <path d="M40 67 L43.2 60.5 L36.8 60.5 Z" fill="currentColor" />
-                      <path d="M13 40 L19.5 36.8 L19.5 43.2 Z" fill="currentColor" />
-                      <path d="M67 40 L60.5 36.8 L60.5 43.2 Z" fill="currentColor" />
-                      <circle cx="40" cy="27" r="4.5" stroke="currentColor" strokeWidth="2" />
-                      <path d="M40 31.5 V50" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
-                      <path d="M29 42 H51" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
-                      <path
-                        d="M40 50 C32 50 25.5 55 23 62 C29.5 58.5 34.5 58 40 58 C45.5 58 50.5 58.5 57 62 C54.5 55 48 50 40 50 Z"
-                        fill="currentColor"
-                      />
-                    </svg>
-                    <p className="passport-cover__footer">INCHEON</p>
+              {SHOW_LANDING_PROFILE ? (
+                <Link to="/mypage" className="passport-cover passport-cover--link" aria-label="여권 보기 - 마이페이지로 이동">
+                  <div className="passport-cover__book">
+                    <span className="passport-cover__shadow" />
+                    <span className="passport-cover__thickness" />
+                    <span className="passport-cover__spine" />
+                    <span className="passport-cover__pages" />
+                    <div className="passport-cover__face">
+                      <span className="passport-cover__sheen" />
+                      <p className="passport-cover__title">i-바다패스</p>
+                      <svg className="passport-cover__emblem" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+                        <circle cx="40" cy="40" r="31" stroke="currentColor" strokeWidth="1.2" opacity="0.85" />
+                        <circle cx="40" cy="40" r="24" stroke="currentColor" strokeWidth="0.8" strokeDasharray="2.5 3.8" opacity="0.65" />
+                        <path d="M40 13 L43.2 19.5 L36.8 19.5 Z" fill="currentColor" />
+                        <path d="M40 67 L43.2 60.5 L36.8 60.5 Z" fill="currentColor" />
+                        <path d="M13 40 L19.5 36.8 L19.5 43.2 Z" fill="currentColor" />
+                        <path d="M67 40 L60.5 36.8 L60.5 43.2 Z" fill="currentColor" />
+                        <circle cx="40" cy="27" r="4.5" stroke="currentColor" strokeWidth="2" />
+                        <path d="M40 31.5 V50" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
+                        <path d="M29 42 H51" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
+                        <path
+                          d="M40 50 C32 50 25.5 55 23 62 C29.5 58.5 34.5 58 40 58 C45.5 58 50.5 58.5 57 62 C54.5 55 48 50 40 50 Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                      <p className="passport-cover__footer">INCHEON</p>
+                    </div>
                   </div>
-                </div>
-              </div>
+                </Link>
+              ) : (
+                <Link
+                  to="/login"
+                  className="passport-cover passport-cover--link"
+                  aria-label="로그인 후 여권 보기"
+                  {...demoProps("로그인 후 여권을 확인할 수 있어요")}
+                >
+                  <div className="passport-cover__book">
+                    <span className="passport-cover__shadow" />
+                    <span className="passport-cover__thickness" />
+                    <span className="passport-cover__spine" />
+                    <span className="passport-cover__pages" />
+                    <div className="passport-cover__face">
+                      <span className="passport-cover__sheen" />
+                      <p className="passport-cover__title">i-바다패스</p>
+                      <svg className="passport-cover__emblem" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+                        <circle cx="40" cy="40" r="31" stroke="currentColor" strokeWidth="1.2" opacity="0.85" />
+                        <circle cx="40" cy="40" r="24" stroke="currentColor" strokeWidth="0.8" strokeDasharray="2.5 3.8" opacity="0.65" />
+                        <path d="M40 13 L43.2 19.5 L36.8 19.5 Z" fill="currentColor" />
+                        <path d="M40 67 L43.2 60.5 L36.8 60.5 Z" fill="currentColor" />
+                        <path d="M13 40 L19.5 36.8 L19.5 43.2 Z" fill="currentColor" />
+                        <path d="M67 40 L60.5 36.8 L60.5 43.2 Z" fill="currentColor" />
+                        <circle cx="40" cy="27" r="4.5" stroke="currentColor" strokeWidth="2" />
+                        <path d="M40 31.5 V50" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
+                        <path d="M29 42 H51" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
+                        <path
+                          d="M40 50 C32 50 25.5 55 23 62 C29.5 58.5 34.5 58 40 58 C45.5 58 50.5 58.5 57 62 C54.5 55 48 50 40 50 Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                      <p className="passport-cover__footer">INCHEON</p>
+                    </div>
+                  </div>
+                </Link>
+              )}
 
               <div className="passport-info">
                 <div className="passport-level">
