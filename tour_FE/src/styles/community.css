@@ -1652,7 +1652,7 @@ a.cm-post-row:hover {
   font-weight: 600;
   color: var(--cm-navy);
   padding: 15px 18px;
-  border: 0.5px solid var(--cm-line);
+  border: 0.5px solid #94a3b8;
   border-radius: 10px;
   background: #fff;
   cursor: pointer;
@@ -1676,7 +1676,7 @@ a.cm-post-row:hover {
   width: 100%;
   min-height: 56px;
   background: #fff;
-  border: 0.5px solid var(--cm-line);
+  border: 0.5px solid #94a3b8;
   border-radius: 10px;
   padding: 12px 14px;
   margin-top: 4px;
@@ -1748,9 +1748,11 @@ a.cm-post-row:hover {
 
 /* ── Sidebar: Profile ── */
 .cm-profile-card {
-  background: var(--cm-navy);
+  background: #fff;
+  border: 0.5px solid var(--cm-line);
   border-radius: 8px;
   padding: 14px;
+  box-shadow: 0 1px 4px rgba(26, 36, 51, 0.05);
 }
 
 .cm-profile-head {
@@ -1769,9 +1771,9 @@ a.cm-post-row:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  color: #fff;
+  background: rgba(45, 46, 107, 0.08);
+  border: 1px solid rgba(45, 46, 107, 0.14);
+  color: var(--navy);
 }
 
 .cm-profile-meta {
@@ -1788,7 +1790,7 @@ a.cm-post-row:hover {
   display: block;
   font-size: 14px;
   font-weight: 600;
-  color: #fff;
+  color: var(--navy);
   line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
@@ -1799,7 +1801,7 @@ a.cm-post-row:hover {
   display: block;
   font-size: 11px;
   font-weight: 400;
-  color: #85b7eb;
+  color: var(--navy2);
   line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
@@ -1825,7 +1827,7 @@ a.cm-post-row:hover {
   margin: 0;
   font-size: 12px;
   font-weight: 400;
-  color: #85b7eb;
+  color: var(--navy2);
   min-width: 0;
 }
 
@@ -1833,7 +1835,7 @@ a.cm-post-row:hover {
   margin: 0;
   font-size: 12px;
   font-weight: 600;
-  color: #fff;
+  color: var(--navy);
   flex: none;
 }
 
@@ -1853,20 +1855,20 @@ a.cm-post-row:hover {
 }
 
 .cm-profile-stat-link span:first-child {
-  color: #85b7eb;
+  color: var(--navy2);
   font-weight: 400;
   min-width: 0;
   text-align: left;
 }
 
 .cm-profile-stat-link span:last-child {
-  color: #fff;
+  color: var(--navy);
   font-weight: 600;
   flex: none;
 }
 
 .cm-profile-stat-link:hover span:first-child {
-  color: #fff;
+  color: var(--navy);
   text-decoration: underline;
 }
 
@@ -1875,8 +1877,8 @@ a.cm-post-row:hover {
   width: 100%;
   padding: 10px 12px;
   border-radius: 6px;
-  background: #fff;
-  color: var(--cm-navy);
+  background: var(--navy);
+  color: #fff;
   font-size: 13px;
   font-weight: 700;
   text-align: center;
@@ -1885,7 +1887,7 @@ a.cm-post-row:hover {
 }
 
 .cm-profile-write-btn:hover {
-  background: #f0f4ff;
+  background: var(--navy2);
 }
 
 .cm-subpage-head {
