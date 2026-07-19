@@ -1,4 +1,4 @@
-# HYland · ISLAND QUEST (Frontend)
+# HYland · 인천섬 레저누리 (Frontend)
 
 인천 섬 레저스포츠 활성화 가이드 플랫폼 — FE
 

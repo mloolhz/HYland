@@ -26,11 +26,11 @@ export function AuthBrand({
 }) {
   return (
     <div className="auth-brand">
-      <Link to="/" className="auth-logo" aria-label="ISLAND QUEST 홈">
+      <Link to="/" className="auth-logo" aria-label="인천섬 레저누리 홈">
         <span className="auth-logo-icon" aria-hidden="true">
           <i className="ti ti-anchor" />
         </span>
-        <span className="auth-logo-text">ISLAND QUEST</span>
+        <span className="auth-logo-text">인천섬 레저누리</span>
       </Link>
       <h1 className="auth-title">{title}</h1>
       {subtitle && <p className="auth-subtitle">{subtitle}</p>}

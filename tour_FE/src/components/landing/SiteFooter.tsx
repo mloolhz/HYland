@@ -6,7 +6,7 @@ export function SiteFooter() {
       <div className="container">
         <div className="foot-main">
           <div className="foot-info">
-            <span>© 2026 ISLAND QUEST · 인천 섬 레저 탐험대</span>
+            <span>© 2026 인천섬 레저누리</span>
             <span>문의: contact@islandquest.kr</span>
             <span>제작: HYland 팀</span>
           </div>

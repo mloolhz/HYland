@@ -70,7 +70,7 @@ export function CommunitySection() {
       <div className="container com-wrap">
         <div className="com-info reveal rv-l">
           <span className="eyebrow">COMMUNITY</span>
-          <h2>ISLAND QUEST 커뮤니티</h2>
+          <h2>인천섬 레저누리 커뮤니티</h2>
           <p>
             다른 탐험가들의 생생한 후기가 올라오는 곳이에요.
           </p>

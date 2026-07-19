@@ -124,7 +124,7 @@ export function HeroSection({
           <div className="pc-agent" id="ai-agent" role="search">
             <div className={`pc-agent-panel${agentActive ? " is-active" : ""}`}>
               <div className="pc-agent-head">
-                <span className="pc-agent-title">ISLAND QUEST AI 추천 서비스</span>
+                <span className="pc-agent-title">인천섬 레저누리 AI 추천 서비스</span>
               </div>
               <div className="pc-agent-field">
                 <textarea
