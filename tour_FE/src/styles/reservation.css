@@ -10,37 +10,77 @@
   --rv-ok: #16a34a;
   --rv-warn: #dc2626;
   --rv-surface: #f8fafc;
-  max-width: 1080px;
-  margin: 0 auto;
-  padding: 24px 20px 80px;
+  background: #fff;
+  min-height: calc(100vh - var(--head-h, 74px));
+  padding-top: var(--head-h, 74px);
+  padding-bottom: 80px;
   color: var(--rv-body);
   font-size: 14px;
   line-height: 1.5;
 }
 
+/* 상단 배너 — 풀블리드 (스포츠 탭과 동일, cover 크롭 없음) */
 .rv-banner {
   position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0e2b52;
   overflow: hidden;
-  border: 1.5px solid var(--rv-navy);
-  background:
-    linear-gradient(120deg, rgba(26, 58, 107, 0.88), rgba(37, 99, 235, 0.55)),
-    url("/_Pngtree_progressive_leisure_jet_boat_aquatics_16900908.jpg") center / cover;
   color: #fff;
-  padding: 36px 28px;
-  margin-bottom: 20px;
+}
+
+.rv-banner-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.rv-banner-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    rgba(26, 58, 107, 0.72),
+    rgba(37, 99, 235, 0.28)
+  );
+  pointer-events: none;
+}
+
+.rv-banner-copy {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 28px;
+  pointer-events: none;
 }
 
 .rv-banner h1 {
   margin: 0;
-  font-size: 28px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-family: "IncheonMICEOTF", var(--font-header, Pretendard), sans-serif;
+  font-size: 26px;
+  font-weight: 500;
+  letter-spacing: 6px;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
 }
 
 .rv-banner p {
-  margin: 8px 0 0;
+  margin: 10px 0 0;
   font-size: 14px;
-  opacity: 0.92;
+  opacity: 0.95;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
+}
+
+.rv-body {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 24px 20px 0;
 }
 
 .rv-filter-line {
@@ -182,8 +222,8 @@
 
 .rv-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
 }
 
 .rv-card {
@@ -197,6 +237,7 @@
   padding: 0;
   overflow: hidden;
   transition: border-color 0.15s ease;
+  min-width: 0;
 }
 
 .rv-card:hover {
@@ -205,7 +246,8 @@
 
 .rv-card-photo {
   position: relative;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 16 / 9;
+  max-height: 110px;
   background: var(--rv-surface);
   display: flex;
   align-items: center;
@@ -220,70 +262,76 @@
 }
 
 .rv-card-photo-fallback {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--rv-faint);
 }
 
 .rv-card-badge {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 8px;
+  left: 8px;
   font-size: 12px;
   font-weight: 700;
-  padding: 4px 8px;
+  padding: 3px 7px;
   background: rgba(26, 58, 107, 0.9);
   color: #fff;
 }
 
 .rv-card-body {
-  padding: 12px 14px 14px;
+  padding: 10px 12px 12px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
   flex: 1;
+  min-width: 0;
 }
 
 .rv-card-island {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--rv-muted);
 }
 
 .rv-card-title {
   margin: 0;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--rv-navy);
   letter-spacing: -0.01em;
+  line-height: 1.35;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .rv-card-meta {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--rv-muted);
 }
 
 .rv-card-footer {
   margin-top: auto;
-  padding-top: 8px;
+  padding-top: 6px;
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
-  gap: 8px;
+  gap: 6px;
+  flex-wrap: wrap;
 }
 
 .rv-card-price {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--rv-navy);
 }
 
 .rv-card-cta {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--rv-blue);
+  white-space: nowrap;
 }
 
 .rv-empty {
@@ -837,13 +885,36 @@
   margin-top: 18px;
 }
 
+@media (max-width: 900px) {
+  .rv-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 640px) {
   .rv-page {
-    padding: 16px 14px 64px;
+    padding-bottom: 64px;
+  }
+
+  .rv-body {
+    padding: 16px 14px 0;
+  }
+
+  .rv-banner-copy {
+    padding: 0 16px;
+  }
+
+  .rv-banner h1 {
+    font-size: 22px;
+    letter-spacing: 4px;
   }
 
   .rv-grid {
     grid-template-columns: 1fr;
+  }
+
+  .rv-card-photo {
+    max-height: none;
   }
 
   .rv-product-head {
