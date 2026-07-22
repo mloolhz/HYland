@@ -1101,7 +1101,7 @@
 .mp-rsv-modal-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 80;
+  z-index: 2000;
   background: rgba(15, 23, 42, 0.45);
   display: flex;
   align-items: center;
@@ -1111,6 +1111,8 @@
 
 .mp-rsv-modal {
   width: min(440px, 100%);
+  max-height: min(90vh, 640px);
+  overflow-y: auto;
   background: #fff;
   border: 1.5px solid #1a3a6b;
   padding: 18px 18px 16px;

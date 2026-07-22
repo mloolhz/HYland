@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import {
   calcCancelFee,
@@ -330,89 +331,98 @@ export function MyPageReservations() {
         </ul>
       )}
 
-      {cancelTarget && cancelFeePreview && (
-        <div
-          className="mp-rsv-modal-backdrop"
-          role="presentation"
-          onClick={closeCancel}
-        >
+      {cancelTarget &&
+        cancelFeePreview &&
+        createPortal(
           <div
-            className="mp-rsv-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="mp-rsv-cancel-title"
-            onClick={(e) => e.stopPropagation()}
+            className="mp-rsv-modal-backdrop"
+            role="presentation"
+            onClick={closeCancel}
           >
-            <div className="mp-rsv-modal-head">
-              <h3 id="mp-rsv-cancel-title">예약 취소</h3>
-              <button
-                type="button"
-                className="mp-rsv-modal-close"
-                aria-label="닫기"
-                onClick={closeCancel}
-              >
-                ×
-              </button>
-            </div>
-
-            <p className="mp-rsv-modal-product">{cancelTarget.productName}</p>
-            <p className="mp-rsv-modal-sub">
-              {formatDateTimeLabel(cancelTarget.date, cancelTarget.time)}
-              {" · "}
-              {formatPersonSummary(cancelTarget, productsById[cancelTarget.productId]) || "—"}
-            </p>
-
-            <div className="mp-rsv-fee-box">
-              <div className="mp-rsv-fee-row">
-                <span>결제금액</span>
-                <b>{cancelTarget.totalPrice.toLocaleString()}원</b>
+            <div
+              className="mp-rsv-modal"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="mp-rsv-cancel-title"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="mp-rsv-modal-head">
+                <h3 id="mp-rsv-cancel-title">예약 취소</h3>
+                <button
+                  type="button"
+                  className="mp-rsv-modal-close"
+                  aria-label="닫기"
+                  onClick={closeCancel}
+                >
+                  ×
+                </button>
               </div>
-              <div className="mp-rsv-fee-row">
-                <span>
-                  취소 수수료
-                  {cancelFeePreview.cancelable
-                    ? ` (${Math.round(cancelFeePreview.feeRate * 100)}%)`
-                    : ""}
-                </span>
-                <b>
-                  {cancelFeePreview.cancelable
-                    ? `${cancelFeePreview.feeAmount.toLocaleString()}원`
-                    : "—"}
-                </b>
+
+              <p className="mp-rsv-modal-product">{cancelTarget.productName}</p>
+              <p className="mp-rsv-modal-sub">
+                {formatDateTimeLabel(cancelTarget.date, cancelTarget.time)}
+                {" · "}
+                {formatPersonSummary(cancelTarget, productsById[cancelTarget.productId]) ||
+                  "—"}
+              </p>
+
+              <div className="mp-rsv-fee-box">
+                <div className="mp-rsv-fee-row">
+                  <span>결제금액</span>
+                  <b>{cancelTarget.totalPrice.toLocaleString()}원</b>
+                </div>
+                <div className="mp-rsv-fee-row">
+                  <span>
+                    취소 수수료
+                    {cancelFeePreview.cancelable
+                      ? ` (${Math.round(cancelFeePreview.feeRate * 100)}%)`
+                      : ""}
+                  </span>
+                  <b>
+                    {cancelFeePreview.cancelable
+                      ? `${cancelFeePreview.feeAmount.toLocaleString()}원`
+                      : "—"}
+                  </b>
+                </div>
+                <div className="mp-rsv-fee-row mp-rsv-fee-row--total">
+                  <span>환불 예정 금액</span>
+                  <b>
+                    {cancelFeePreview.cancelable
+                      ? `${cancelFeePreview.refundAmount.toLocaleString()}원`
+                      : "취소 불가"}
+                  </b>
+                </div>
               </div>
-              <div className="mp-rsv-fee-row mp-rsv-fee-row--total">
-                <span>환불 예정 금액</span>
-                <b>
-                  {cancelFeePreview.cancelable
-                    ? `${cancelFeePreview.refundAmount.toLocaleString()}원`
-                    : "취소 불가"}
-                </b>
+
+              <p className="mp-rsv-modal-warn">
+                이용일 3일 전부터 취소 수수료가 부과됩니다. 취소 후에는 되돌릴 수 없습니다.
+              </p>
+
+              {cancelError && <p className="mp-rsv-modal-error">{cancelError}</p>}
+
+              <div className="mp-rsv-modal-actions">
+                <button
+                  type="button"
+                  className="mp-rsv-btn"
+                  onClick={closeCancel}
+                  disabled={cancelling}
+                >
+                  돌아가기
+                </button>
+                <button
+                  type="button"
+                  className="mp-rsv-btn mp-rsv-btn--danger"
+                  disabled={!cancelFeePreview.cancelable || cancelling}
+                  onClick={() => void confirmCancel()}
+                >
+                  {cancelling ? "취소 중…" : "취소하기"}
+                </button>
               </div>
+              <p className="mp-rsv-demo-note">실제 취소·환불은 이루어지지 않는 데모입니다</p>
             </div>
-
-            <p className="mp-rsv-modal-warn">
-              이용일 3일 전부터 취소 수수료가 부과됩니다. 취소 후에는 되돌릴 수 없습니다.
-            </p>
-
-            {cancelError && <p className="mp-rsv-modal-error">{cancelError}</p>}
-
-            <div className="mp-rsv-modal-actions">
-              <button type="button" className="mp-rsv-btn" onClick={closeCancel} disabled={cancelling}>
-                돌아가기
-              </button>
-              <button
-                type="button"
-                className="mp-rsv-btn mp-rsv-btn--danger"
-                disabled={!cancelFeePreview.cancelable || cancelling}
-                onClick={() => void confirmCancel()}
-              >
-                {cancelling ? "취소 중…" : "취소하기"}
-              </button>
-            </div>
-            <p className="mp-rsv-demo-note">실제 취소·환불은 이루어지지 않는 데모입니다</p>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body,
+        )}
     </>
   );
 }
