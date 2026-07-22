@@ -1,12 +1,26 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { IslandDetailPanel } from "@/components/island/IslandDetailPanel";
 import { IslandExplorerHeader } from "@/components/island/IslandExplorerHeader";
 import { IslandExplorerMap } from "@/components/island/IslandExplorerMap";
 import { ISLAND_MAP } from "@/lib/island-data";
 
+type IslandsLocationState = {
+  islandId?: string;
+};
+
 export function IslandExplorer() {
+  const location = useLocation();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selectedIsland = selectedId ? ISLAND_MAP[selectedId] ?? null : null;
+
+  useEffect(() => {
+    const state = location.state as IslandsLocationState | null;
+    const islandId = state?.islandId;
+    if (islandId && ISLAND_MAP[islandId]) {
+      setSelectedId(islandId);
+    }
+  }, [location.state]);
 
   const handleSelect = useCallback((id: string) => {
     setSelectedId(id);
