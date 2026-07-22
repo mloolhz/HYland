@@ -12,6 +12,7 @@ import {
   resolveSportIslandAccent,
   resolveSportIslandRegion,
 } from "@/lib/sports-region";
+import { SPORT_DEFAULT_PRODUCT } from "@/api/reservation";
 
 const HERO_IMAGE = "/_Pngtree_progressive_leisure_jet_boat_aquatics_16900908.jpg";
 
@@ -194,11 +195,23 @@ export function Sports() {
                 예약
               </h3>
               {selected.pay ? (
-                /* TODO: 예약 UI */
                 <div className="sp-booking-box">
-                  <strong>예약 기능 준비 중</strong>
+                  <strong>이 종목은 사전 예약이 가능합니다.</strong>
                   {" · "}
-                  강습·시설 이용은 각 섬 상세 페이지에서 예약할 수 있습니다.
+                  <button
+                    type="button"
+                    className="sp-booking-cta"
+                    onClick={() => {
+                      const productId = SPORT_DEFAULT_PRODUCT[selected.id];
+                      if (productId) {
+                        navigate(`/reservation/${productId}`);
+                      } else {
+                        navigate("/reservation");
+                      }
+                    }}
+                  >
+                    예약하기
+                  </button>
                 </div>
               ) : (
                 <div className="sp-booking-box sp-booking-box--free">

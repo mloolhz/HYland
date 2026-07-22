@@ -50,10 +50,19 @@ type NavLinkItemProps = {
   onLanding: boolean;
   onIslands: boolean;
   onSports: boolean;
+  onReservation: boolean;
   onCommunity: boolean;
 };
 
-function NavLinkItems({ onNavigate, className, onLanding, onIslands, onSports, onCommunity }: NavLinkItemProps) {
+function NavLinkItems({
+  onNavigate,
+  className,
+  onLanding,
+  onIslands,
+  onSports,
+  onReservation,
+  onCommunity,
+}: NavLinkItemProps) {
   const linkClass = (active: boolean) =>
     [className, active ? "nav-route-active" : undefined].filter(Boolean).join(" ");
 
@@ -72,6 +81,13 @@ function NavLinkItems({ onNavigate, className, onLanding, onIslands, onSports, o
         onClick={onNavigate}
       >
         레저 스포츠
+      </Link>
+      <Link
+        to="/reservation"
+        className={linkClass(onReservation)}
+        onClick={onNavigate}
+      >
+        레저 예약
       </Link>
       <a
         href={onLanding ? "#mission" : "/#mission"}
@@ -107,6 +123,7 @@ export function SiteHeader() {
   const onCommunity = location.pathname.startsWith("/community");
   const onIslands = location.pathname.startsWith("/islands");
   const onSports = location.pathname.startsWith("/sports");
+  const onReservation = location.pathname.startsWith("/reservation");
 
   const closeMenu = useCallback(() => setMenuOpen(false), []);
 
@@ -254,7 +271,7 @@ export function SiteHeader() {
             />
           </a>
           <nav className="nav-links" aria-label="주요 메뉴">
-            <NavLinkItems onLanding={onLanding} onIslands={onIslands} onSports={onSports} onCommunity={onCommunity} />
+            <NavLinkItems onLanding={onLanding} onIslands={onIslands} onSports={onSports} onReservation={onReservation} onCommunity={onCommunity} />
           </nav>
           <div className="head-actions">
             <a
@@ -324,6 +341,7 @@ export function SiteHeader() {
             onLanding={onLanding}
             onIslands={onIslands}
             onSports={onSports}
+            onReservation={onReservation}
             onCommunity={onCommunity}
           />
         </nav>

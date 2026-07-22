@@ -20,6 +20,10 @@ import { IslandExplorer } from "@/pages/IslandExplorer";
 import { MyPage } from "@/pages/MyPage";
 import { Sports } from "@/pages/Sports";
 import { WritePost } from "@/pages/WritePost";
+import { ReservationList } from "@/pages/ReservationList";
+import { ReservationDetail } from "@/pages/ReservationDetail";
+import { ReservationCheckout } from "@/pages/ReservationCheckout";
+import { ReservationComplete } from "@/pages/ReservationComplete";
 import "./index.css";
 import "./styles/auth.css";
 import "./styles/community.css";
@@ -27,6 +31,7 @@ import "./styles/island.css";
 import "./styles/mypage.css";
 import "./styles/notification.css";
 import "./styles/sports.css";
+import "./styles/reservation.css";
 
 const router = createBrowserRouter([
   { path: "/", element: <LandingPage />, errorElement: <RouterError /> },
@@ -36,6 +41,10 @@ const router = createBrowserRouter([
     children: [
       { path: "islands", element: <IslandExplorer /> },
       { path: "sports", element: <Sports /> },
+      { path: "reservation", element: <ReservationList /> },
+      { path: "reservation/complete/:reservationId", element: <ReservationComplete /> },
+      { path: "reservation/:productId/checkout", element: <ReservationCheckout /> },
+      { path: "reservation/:productId", element: <ReservationDetail /> },
       { path: "community", element: <Community /> },
       { path: "community/write", element: <WritePost /> },
       { path: "community/my-posts", element: <MyPostsPage /> },
