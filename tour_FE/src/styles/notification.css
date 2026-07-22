@@ -56,6 +56,34 @@
   animation: notiDropIn 160ms ease-out;
 }
 
+.noti-dropdown--drawer {
+  position: fixed;
+  top: auto;
+  transform-origin: bottom right;
+  animation: notiDropUp 160ms ease-out;
+}
+
+.noti-dropdown--drawer .noti-dropdown-tail {
+  top: auto;
+  bottom: -6px;
+  transform: rotate(225deg);
+}
+
+.noti-dropdown--drawer .noti-dropdown-panel {
+  max-height: min(520px, calc(100vh - 120px));
+}
+
+@keyframes notiDropUp {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes notiDropIn {
   from {
     opacity: 0;

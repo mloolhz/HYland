@@ -1,3 +1,14 @@
+function dateParts(iso: string) {
+  const d = new Date(iso);
+  return {
+    yyyy: d.getFullYear(),
+    mm: String(d.getMonth() + 1).padStart(2, "0"),
+    dd: String(d.getDate()).padStart(2, "0"),
+    hh: String(d.getHours()).padStart(2, "0"),
+    min: String(d.getMinutes()).padStart(2, "0"),
+  };
+}
+
 export function formatRelativeTime(iso: string): string {
   const diff = Date.now() - new Date(iso).getTime();
   const minutes = Math.floor(diff / 60_000);
@@ -11,15 +22,20 @@ export function formatRelativeTime(iso: string): string {
 }
 
 export function formatShortDate(iso: string): string {
-  const d = new Date(iso);
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const dd = String(d.getDate()).padStart(2, "0");
+  const { mm, dd } = dateParts(iso);
   return `${mm}-${dd}`;
 }
 
+export function formatCalendarDate(iso: string): string {
+  const { yyyy, mm, dd } = dateParts(iso);
+  return `${yyyy}.${mm}.${dd}`;
+}
+
+export function formatDetailDate(iso: string): string {
+  const { yyyy, mm, dd, hh, min } = dateParts(iso);
+  return `${yyyy}.${mm}.${dd} ${hh}:${min}`;
+}
+
 export function formatListDate(iso: string): string {
-  const diff = Date.now() - new Date(iso).getTime();
-  const days = Math.floor(diff / 86_400_000);
-  if (days < 7) return formatRelativeTime(iso);
-  return formatShortDate(iso);
+  return formatCalendarDate(iso);
 }

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { getIslandColors } from "@/constants/island";
-import { formatRelativeTime } from "@/lib/time";
+import { formatListDate } from "@/lib/time";
 import type { MyComment } from "@/types/community";
 
 function ArrowIcon() {
@@ -11,22 +11,11 @@ function ArrowIcon() {
   );
 }
 
-function DotsIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <circle cx="5" cy="12" r="1.5" />
-      <circle cx="12" cy="12" r="1.5" />
-      <circle cx="19" cy="12" r="1.5" />
-    </svg>
-  );
-}
-
 type MyCommentCardProps = {
   comment: MyComment;
-  onDelete?: () => void;
 };
 
-export function MyCommentCard({ comment, onDelete }: MyCommentCardProps) {
+export function MyCommentCard({ comment }: MyCommentCardProps) {
   const colors = getIslandColors(comment.post.island);
 
   return (
@@ -47,19 +36,9 @@ export function MyCommentCard({ comment, onDelete }: MyCommentCardProps) {
       <div className="cm-my-comment-body">
         <p className="cm-my-comment-text">{comment.content}</p>
         <div className="cm-my-comment-meta">
-          <span>{formatRelativeTime(comment.createdAt)}</span>
-          <span>· ♡ {comment.likes}</span>
+          <span>{formatListDate(comment.createdAt)}</span>
+          <span className="cm-my-comment-likes">· ♥ {comment.likes}</span>
         </div>
-        <button
-          type="button"
-          className="cm-my-comment-menu"
-          aria-label="댓글 관리"
-          onClick={() => {
-            if (window.confirm("이 댓글을 삭제할까요?")) onDelete?.();
-          }}
-        >
-          <DotsIcon />
-        </button>
       </div>
     </article>
   );

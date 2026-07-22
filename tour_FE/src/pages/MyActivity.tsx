@@ -13,8 +13,8 @@ import { useAuthRedirect } from "@/hooks/useAuthRedirect";
 import { CONTAINER } from "@/constants/layout";
 import { paginate, totalPages } from "@/lib/posts";
 import { parsePageQuery } from "@/lib/query";
+import { usePosts } from "@/lib/post-store";
 import { getLikedPosts, getMyComments, getMyPosts } from "@/mocks/myActivity";
-import { MOCK_POSTS } from "@/mocks/posts";
 
 function parseTab(value: string | null): ActivityTab {
   if (value === "comments" || value === "liked") return value;
@@ -29,14 +29,15 @@ export function MyActivity() {
   const tab = parseTab(searchParams.get("tab"));
   const page = parsePageQuery(searchParams.get("page"));
 
-  const [myPosts, setMyPosts] = useState(() => getMyPosts());
-  const [myComments, setMyComments] = useState(() => getMyComments());
-  const [likedIds, setLikedIds] = useState(() => getLikedPosts().map((p) => p.id));
+  const posts = usePosts();
+  const myPosts = getMyPosts(posts);
+  const [myComments] = useState(() => getMyComments(posts));
+  const [likedIds, setLikedIds] = useState(() => getLikedPosts(posts).map((p) => p.id));
   const [undo, setUndo] = useState<{ postId: string } | null>(null);
 
   const likedPosts = useMemo(
-    () => MOCK_POSTS.filter((p) => likedIds.includes(p.id)),
-    [likedIds],
+    () => posts.filter((p) => likedIds.includes(p.id)),
+    [posts, likedIds],
   );
 
   const counts = useMemo(
@@ -99,7 +100,7 @@ export function MyActivity() {
     );
   }
 
-  const author = myPosts[0]?.author ?? MOCK_POSTS.find((p) => p.author.id === "u1")!.author;
+  const author = myPosts[0]?.author ?? posts.find((p) => p.author.id === "u1")!.author;
   const btiColors = ISLAND_BTI[author.bti];
 
   const pagedPosts = paginate(myPosts, page);
@@ -169,7 +170,6 @@ export function MyActivity() {
                     onPageChange={setPage}
                     showFooter={pages > 1}
                     showSearch={false}
-                    onDeletePost={(id) => setMyPosts((prev) => prev.filter((p) => p.id !== id))}
                   />
                 )}
               </>
@@ -181,11 +181,7 @@ export function MyActivity() {
                   <EmptyState title="아직 남긴 댓글이 없어요" ctaLabel="커뮤니티 둘러보기" onCta={() => navigate("/community")} />
                 ) : (
                   pagedComments.map((c) => (
-                    <MyCommentCard
-                      key={c.id}
-                      comment={c}
-                      onDelete={() => setMyComments((prev) => prev.filter((x) => x.id !== c.id))}
-                    />
+                    <MyCommentCard key={c.id} comment={c} />
                   ))
                 )}
               </div>

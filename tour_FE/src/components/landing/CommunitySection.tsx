@@ -2,7 +2,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { avaColor, REVIEWS, type Review } from "@/lib/landing-data";
-import { demoProps } from "./ToastProvider";
 
 function ReviewItem({ review }: { review: Review }) {
   const ref = useRef<HTMLLIElement>(null);
@@ -71,7 +70,7 @@ export function CommunitySection() {
       <div className="container com-wrap">
         <div className="com-info reveal rv-l">
           <span className="eyebrow">COMMUNITY</span>
-          <h2>ISLAND QUEST 커뮤니티</h2>
+          <h2>인천섬 레저누리 커뮤니티</h2>
           <p>
             다른 탐험가들의 생생한 후기가 올라오는 곳이에요.
           </p>
@@ -90,9 +89,9 @@ export function CommunitySection() {
             </div>
           </div>
           <div className="com-btns">
-            <button className="btn btn-gold" {...demoProps("후기 작성은 로그인 후 이용할 수 있어요 ✍️")}>
+            <Link to="/community/write" className="btn btn-gold">
               후기 남기기
-            </button>
+            </Link>
             <Link className="btn btn-outline" to="/community">
               전체 후기 보기
             </Link>

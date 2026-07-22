@@ -4,11 +4,13 @@ import { CommunityHeader } from "@/components/community/CommunityHeader";
 import { FilterBar, type FilterValue, type ViewKey } from "@/components/community/FilterBar";
 import { GalleryGrid } from "@/components/community/GalleryGrid";
 import { Lightbox } from "@/components/community/Lightbox";
-import { PostList } from "@/components/community/PostList";
 import { PopularIslands } from "@/components/community/PopularIslands";
+import { PostList } from "@/components/community/PostList";
 import { ProfileCard } from "@/components/community/ProfileCard";
 import { SelectedIslands } from "@/components/community/SelectedIslands";
+import { WritePostFab } from "@/components/community/WritePostFab";
 import { CONTAINER } from "@/constants/layout";
+import { usePosts } from "@/lib/post-store";
 import {
   filterPosts,
   GALLERY_PAGE_SIZE,
@@ -20,7 +22,6 @@ import {
   type SortKey,
 } from "@/lib/posts";
 import { parseIslandsQuery, parsePageQuery, serializeIslandsQuery } from "@/lib/query";
-import { MOCK_POSTS } from "@/mocks/posts";
 
 function parseView(value: string | null): ViewKey {
   return value === "gallery" ? "gallery" : "list";
@@ -41,6 +42,7 @@ type LightboxState = {
 };
 
 export function Community() {
+  const posts = usePosts();
   const [searchParams, setSearchParams] = useSearchParams();
   const [lightbox, setLightbox] = useState<LightboxState | null>(null);
   const lightboxFocusRef = useRef<HTMLButtonElement | null>(null);
@@ -52,8 +54,8 @@ export function Community() {
   const query = searchParams.get("q") ?? "";
   const page = parsePageQuery(searchParams.get("page"));
 
-  const counts = useMemo(() => islandPostCounts(MOCK_POSTS), []);
-  const notices = useMemo(() => getNoticePosts(MOCK_POSTS), []);
+  const counts = useMemo(() => islandPostCounts(posts), [posts]);
+  const notices = useMemo(() => getNoticePosts(posts), [posts]);
 
   const updateQuery = useCallback(
     (patch: {
@@ -87,7 +89,7 @@ export function Community() {
           }
           if (patch.q !== undefined) {
             if (!patch.q.trim()) next.delete("q");
-            else next.set("q", patch.q.trim());
+            else next.set("q", patch.q);
           }
           if (patch.resetPage) next.delete("page");
           if (patch.page !== undefined) {
@@ -103,8 +105,8 @@ export function Community() {
   );
 
   const filtered = useMemo(
-    () => filterPosts(MOCK_POSTS, { category, islands, query }),
-    [category, islands, query],
+    () => filterPosts(posts, { category, islands, query }),
+    [posts, category, islands, query],
   );
   const sorted = useMemo(() => sortPosts(filtered, sort), [filtered, sort]);
   const galleryPosts = useMemo(
@@ -133,8 +135,11 @@ export function Community() {
     updateQuery({ islands: new Set(), q: "", category: "all", resetPage: true });
   };
 
-  const emptyMessage =
-    islands.size > 0 ? "선택한 섬에 아직 글이 없어요" : "이 필터에 해당하는 글이 아직 없어요";
+  const emptyMessage = query.trim()
+    ? "검색 결과가 없습니다."
+    : islands.size > 0
+      ? "선택한 섬에 대한 글이 아직 없습니다."
+      : "이 필터에 해당하는 글이 아직 없습니다.";
 
   const currentPages = view === "gallery" ? galleryPages : listPages;
   const safePage = Math.min(page, currentPages);
@@ -176,15 +181,14 @@ export function Community() {
         onPageChange={(p) => updateQuery({ page: p })}
         onQueryChange={(q) => updateQuery({ q, resetPage: true })}
         emptyMessage={emptyMessage}
-        onClearFilters={islands.size > 0 || query ? clearFilters : undefined}
       />
     );
 
   return (
     <main className="cm-page">
-      <div className={CONTAINER}>
-        <CommunityHeader />
+      <CommunityHeader />
 
+      <div className={CONTAINER}>
         <FilterBar
           active={category}
           view={view}
@@ -241,6 +245,8 @@ export function Community() {
           onImageNavigate={(imageIndex) => setLightbox((prev) => (prev ? { ...prev, imageIndex } : prev))}
         />
       )}
+
+      <WritePostFab />
     </main>
   );
 }

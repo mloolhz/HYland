@@ -9,15 +9,14 @@ import { LeaderboardSection } from "./LeaderboardSection";
 import { MapSection } from "./MapSection";
 import { MissionSection } from "./MissionSection";
 import { RelatedSitesBand } from "./RelatedSitesBand";
-import { ScrollToTopButton } from "./ScrollToTopButton";
+import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { SiteFooter } from "./SiteFooter";
 import { SiteHeader } from "./SiteHeader";
-import { ToastProvider, useToast } from "./ToastProvider";
+import { ToastProvider } from "./ToastProvider";
 import { NotificationProvider } from "@/store/notifications";
 
 function LandingPageContent() {
   const navigate = useNavigate();
-  const { showToast } = useToast();
   const agentInputRef = useRef<HTMLTextAreaElement>(null);
   const [agentActive, setAgentActive] = useState(false);
 
@@ -32,17 +31,6 @@ function LandingPageContent() {
       agentInputRef.current?.focus({ preventScroll: true });
     }, 480);
   }, []);
-
-  useEffect(() => {
-    const onClick = (event: MouseEvent) => {
-      const target = (event.target as HTMLElement).closest("[data-demo]");
-      if (!target) return;
-      event.preventDefault();
-      showToast((target as HTMLElement).dataset.demo ?? "");
-    };
-    document.addEventListener("click", onClick);
-    return () => document.removeEventListener("click", onClick);
-  }, [showToast]);
 
   useEffect(() => {
     const io = new IntersectionObserver(

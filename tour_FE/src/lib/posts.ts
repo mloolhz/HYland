@@ -75,3 +75,24 @@ export function islandPostCounts(posts: Post[]): Record<string, number> {
   }
   return counts;
 }
+
+export function findComment(comments: Comment[], id: string): Comment | undefined {
+  for (const comment of comments) {
+    if (comment.id === id) return comment;
+    if (comment.replies?.length) {
+      const nested = findComment(comment.replies, id);
+      if (nested) return nested;
+    }
+  }
+  return undefined;
+}
+
+export function removeComment(comments: Comment[], id: string): Comment[] {
+  return comments
+    .filter((comment) => comment.id !== id)
+    .map((comment) =>
+      comment.replies?.length
+        ? { ...comment, replies: removeComment(comment.replies, id) }
+        : comment,
+    );
+}

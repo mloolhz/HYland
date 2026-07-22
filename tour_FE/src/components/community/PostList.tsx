@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Post } from "@/types/community";
 import { PostRow } from "./PostRow";
 
@@ -14,36 +14,94 @@ type PostListProps = {
   onPageChange?: (page: number) => void;
   onQueryChange?: (query: string) => void;
   emptyMessage?: string;
-  onClearFilters?: () => void;
   showFooter?: boolean;
   showSearch?: boolean;
-  onDeletePost?: (id: string) => void;
   onUnlikePost?: (id: string) => void;
 };
 
 const HEADERS: Record<ListColumns, { key: string; label: string; className?: string }[]> = {
   community: [
-    { key: "island", label: "섬" },
+    { key: "island", label: "섬", className: "cm-list-col-center" },
     { key: "title", label: "제목" },
-    { key: "author", label: "글쓴이", className: "cm-list-hide-mobile" },
+    { key: "author", label: "글쓴이", className: "cm-list-hide-mobile cm-list-col-center" },
     { key: "date", label: "작성일", className: "cm-list-hide-mobile cm-list-col-center" },
-    { key: "likes", label: "좋아요", className: "cm-list-col-right" },
+    { key: "views", label: "조회수", className: "cm-list-col-center" },
   ],
   myPosts: [
-    { key: "island", label: "섬" },
+    { key: "island", label: "섬", className: "cm-list-col-center" },
     { key: "title", label: "제목" },
     { key: "date", label: "작성일", className: "cm-list-hide-mobile cm-list-col-center" },
-    { key: "likes", label: "좋아요", className: "cm-list-col-right" },
-    { key: "manage", label: "관리", className: "cm-list-col-center" },
+    { key: "views", label: "조회수", className: "cm-list-col-center" },
   ],
   liked: [
-    { key: "island", label: "섬" },
+    { key: "unlike", label: "", className: "cm-list-col-center" },
+    { key: "island", label: "섬", className: "cm-list-col-center" },
     { key: "title", label: "제목" },
     { key: "author", label: "글쓴이", className: "cm-list-hide-mobile" },
     { key: "date", label: "작성일", className: "cm-list-hide-mobile cm-list-col-center" },
-    { key: "unlike", label: "", className: "cm-list-col-center" },
+    { key: "views", label: "조회수", className: "cm-list-col-center" },
   ],
 };
+
+function ListSearchInput({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (query: string) => void;
+}) {
+  const [draft, setDraft] = useState(value);
+  const composingRef = useRef(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (!composingRef.current) {
+      setDraft(value);
+    }
+  }, [value]);
+
+  const scheduleChange = useCallback(
+    (next: string) => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      debounceRef.current = setTimeout(() => onChange(next), 200);
+    },
+    [onChange],
+  );
+
+  useEffect(
+    () => () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    },
+    [],
+  );
+
+  return (
+    <label className="cm-list-search">
+      <span className="sr-only">검색</span>
+      <input
+        type="search"
+        value={draft}
+        onChange={(e) => {
+          const next = e.target.value;
+          setDraft(next);
+          if (!composingRef.current) {
+            scheduleChange(next);
+          }
+        }}
+        onCompositionStart={() => {
+          composingRef.current = true;
+        }}
+        onCompositionEnd={(e) => {
+          composingRef.current = false;
+          const next = e.currentTarget.value;
+          setDraft(next);
+          scheduleChange(next);
+        }}
+        placeholder="제목, 섬 이름 등으로 검색"
+      />
+    </label>
+  );
+}
 
 export function PostList({
   columns = "community",
@@ -55,10 +113,8 @@ export function PostList({
   onPageChange,
   onQueryChange,
   emptyMessage = "첫 번째 탐험 기록을 남겨보세요",
-  onClearFilters,
   showFooter = true,
   showSearch = true,
-  onDeletePost,
   onUnlikePost,
 }: PostListProps) {
   const pages = useMemo(() => {
@@ -86,11 +142,6 @@ export function PostList({
       {posts.length === 0 ? (
         <div className="cm-post-list-empty">
           <p>{emptyMessage}</p>
-          {onClearFilters && (
-            <button type="button" className="cm-empty-cta cm-empty-cta-inline" onClick={onClearFilters}>
-              필터 초기화
-            </button>
-          )}
         </div>
       ) : (
         posts.map((post) => (
@@ -98,7 +149,6 @@ export function PostList({
             key={post.id}
             post={post}
             columns={columns}
-            onDelete={() => onDeletePost?.(post.id)}
             onUnlike={() => onUnlikePost?.(post.id)}
           />
         ))
@@ -120,15 +170,7 @@ export function PostList({
             ))}
           </nav>
           {showSearch && onQueryChange && (
-            <label className="cm-list-search">
-              <span className="sr-only">검색</span>
-              <input
-                type="search"
-                value={query}
-                onChange={(e) => onQueryChange(e.target.value)}
-                placeholder="제목, 섬 이름으로 검색"
-              />
-            </label>
+            <ListSearchInput value={query} onChange={onQueryChange} />
           )}
         </div>
       )}

@@ -5,6 +5,7 @@ export interface Author {
   id: string;
   nickname: string;
   bti: IslandBti;
+  avatarUrl?: string;
 }
 
 export interface Comment {
@@ -37,6 +38,7 @@ export interface Post {
   author: Author;
   createdAt: string;
   likes: number;
+  views: number;
   comments: Comment[];
 }
 
