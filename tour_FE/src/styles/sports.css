@@ -9,19 +9,21 @@
   color: #4a5567;
 }
 
-/* ① Hero */
+/* ① Hero — full image, no crop (3504×805) */
 .sp-hero {
   position: relative;
   width: 100%;
-  height: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #0e2b52;
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
   overflow: hidden;
+}
+
+.sp-hero-img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .sp-hero-overlay {
@@ -32,7 +34,7 @@
 }
 
 .sp-hero-title {
-  position: relative;
+  position: absolute;
   z-index: 1;
   margin: 0;
   font-family: "IncheonMICEOTF", var(--font-header, Pretendard), sans-serif;
@@ -56,13 +58,13 @@
 .sp-tab {
   flex: 1;
   margin: 0;
-  padding: 16px 8px;
+  padding: 18px 8px;
   border: 0;
   border-bottom: 2px solid transparent;
   border-radius: 0;
   background: transparent;
   color: #8a94a3;
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 500;
   cursor: pointer;
   transition: color 0.15s ease, border-color 0.15s ease;
@@ -90,7 +92,7 @@
 
 .sp-cat-title {
   margin: 0;
-  font-size: 26px;
+  font-size: 30px;
   font-weight: 500;
   color: #1a3a6b;
   line-height: 1.3;
@@ -105,8 +107,8 @@
 .sp-sport-grid {
   display: flex;
   flex-wrap: wrap;
-  border-top: 1px solid #e2e8f0;
-  border-left: 1px solid #e2e8f0;
+  border-top: 1px solid #94a3b8;
+  border-left: 1px solid #94a3b8;
 }
 
 .sp-sport-btn {
@@ -115,8 +117,8 @@
   margin: 0;
   padding: 18px 10px;
   border: 0;
-  border-right: 1px solid #e2e8f0;
-  border-bottom: 1px solid #e2e8f0;
+  border-right: 1px solid #94a3b8;
+  border-bottom: 1px solid #94a3b8;
   border-radius: 0;
   background: #fff;
   color: #4a5567;
@@ -125,6 +127,11 @@
   text-align: center;
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease;
+}
+
+.sp-sport-btn:nth-child(4n),
+.sp-sport-btn:last-child {
+  border-right: none;
 }
 
 .sp-sport-btn:hover {
@@ -147,32 +154,48 @@
 /* ⑤ Detail: photo | info */
 .sp-detail {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.2fr 0.8fr;
   gap: 28px;
   margin-top: 28px;
   align-items: start;
 }
 
-.sp-photo {
-  display: block;
+/* Photo frame — large slot; images keep own aspect (no forced crop) */
+.sp-photo-frame {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  height: 260px;
+  min-height: 420px;
+  padding: 0;
   border: 1px solid #cbd5e1;
   border-radius: 0;
-  object-fit: cover;
   background: #dce6f0;
+  overflow: hidden;
 }
 
-.sp-photo--placeholder {
+.sp-photo-img {
+  display: block;
+  max-width: 100%;
+  max-height: 560px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.sp-photo-placeholder {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 12px;
+  width: 100%;
+  min-height: 420px;
+  padding: 24px;
   color: #64748b;
-  font-size: 13px;
+  font-size: 14px;
   text-align: center;
-  padding: 16px;
 }
 
 .sp-detail-info {
@@ -362,10 +385,6 @@
 
 /* Responsive */
 @media (max-width: 640px) {
-  .sp-hero {
-    height: 120px;
-  }
-
   .sp-hero-title {
     font-size: 22px;
     letter-spacing: 4px;
@@ -373,7 +392,7 @@
 
   .sp-tab {
     padding: 14px 4px;
-    font-size: 13px;
+    font-size: 15px;
   }
 
   .sp-cat-title-wrap {
@@ -381,7 +400,7 @@
   }
 
   .sp-cat-title {
-    font-size: 22px;
+    font-size: 24px;
   }
 
   .sp-sport-btn {
@@ -389,13 +408,30 @@
     padding: 16px 8px;
   }
 
+  .sp-sport-btn:nth-child(4n) {
+    border-right: 1px solid #94a3b8;
+  }
+
+  .sp-sport-btn:nth-child(2n),
+  .sp-sport-btn:last-child {
+    border-right: none;
+  }
+
   .sp-detail {
     grid-template-columns: 1fr;
     gap: 18px;
   }
 
-  .sp-photo {
-    height: 200px;
+  .sp-photo-frame {
+    min-height: 280px;
+  }
+
+  .sp-photo-img {
+    max-height: 360px;
+  }
+
+  .sp-photo-placeholder {
+    min-height: 280px;
   }
 
   .sp-detail-name {
