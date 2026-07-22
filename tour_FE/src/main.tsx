@@ -18,6 +18,7 @@ import { PostDetail } from "@/pages/PostDetail";
 import { Signup } from "@/pages/Signup";
 import { IslandExplorer } from "@/pages/IslandExplorer";
 import { MyPage } from "@/pages/MyPage";
+import { Sports } from "@/pages/Sports";
 import { WritePost } from "@/pages/WritePost";
 import "./index.css";
 import "./styles/auth.css";
@@ -25,6 +26,7 @@ import "./styles/community.css";
 import "./styles/island.css";
 import "./styles/mypage.css";
 import "./styles/notification.css";
+import "./styles/sports.css";
 
 const router = createBrowserRouter([
   { path: "/", element: <LandingPage />, errorElement: <RouterError /> },
@@ -33,6 +35,7 @@ const router = createBrowserRouter([
     errorElement: <RouterError />,
     children: [
       { path: "islands", element: <IslandExplorer /> },
+      { path: "sports", element: <Sports /> },
       { path: "community", element: <Community /> },
       { path: "community/write", element: <WritePost /> },
       { path: "community/my-posts", element: <MyPostsPage /> },

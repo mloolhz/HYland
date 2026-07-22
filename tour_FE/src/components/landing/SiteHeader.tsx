@@ -49,10 +49,11 @@ type NavLinkItemProps = {
   className?: string;
   onLanding: boolean;
   onIslands: boolean;
+  onSports: boolean;
   onCommunity: boolean;
 };
 
-function NavLinkItems({ onNavigate, className, onLanding, onIslands, onCommunity }: NavLinkItemProps) {
+function NavLinkItems({ onNavigate, className, onLanding, onIslands, onSports, onCommunity }: NavLinkItemProps) {
   const linkClass = (active: boolean) =>
     [className, active ? "nav-route-active" : undefined].filter(Boolean).join(" ");
 
@@ -65,13 +66,13 @@ function NavLinkItems({ onNavigate, className, onLanding, onIslands, onCommunity
       >
         섬 탐험
       </Link>
-      <a
-        href={onLanding ? "#booking" : "/#booking"}
-        className={className}
+      <Link
+        to="/sports"
+        className={linkClass(onSports)}
         onClick={onNavigate}
       >
         레저 스포츠
-      </a>
+      </Link>
       <a
         href={onLanding ? "#mission" : "/#mission"}
         className={className}
@@ -105,6 +106,7 @@ export function SiteHeader() {
   const onLanding = location.pathname === "/";
   const onCommunity = location.pathname.startsWith("/community");
   const onIslands = location.pathname.startsWith("/islands");
+  const onSports = location.pathname.startsWith("/sports");
 
   const closeMenu = useCallback(() => setMenuOpen(false), []);
 
@@ -252,7 +254,7 @@ export function SiteHeader() {
             />
           </a>
           <nav className="nav-links" aria-label="주요 메뉴">
-            <NavLinkItems onLanding={onLanding} onIslands={onIslands} onCommunity={onCommunity} />
+            <NavLinkItems onLanding={onLanding} onIslands={onIslands} onSports={onSports} onCommunity={onCommunity} />
           </nav>
           <div className="head-actions">
             <a
@@ -321,6 +323,7 @@ export function SiteHeader() {
             onNavigate={closeMenu}
             onLanding={onLanding}
             onIslands={onIslands}
+            onSports={onSports}
             onCommunity={onCommunity}
           />
         </nav>
