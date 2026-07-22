@@ -125,10 +125,12 @@ export function ReservationCheckout() {
   if (!draft || draft.productId !== productId) {
     return (
       <main className="rv-page">
-        <p className="rv-error">예약 정보가 없습니다. 날짜·인원부터 다시 선택해 주세요.</p>
-        <p style={{ textAlign: "center" }}>
-          <Link to={`/reservation/${productId}`}>예약 상세로 돌아가기</Link>
-        </p>
+        <div className="rv-body">
+          <p className="rv-error">예약 정보가 없습니다. 날짜·인원부터 다시 선택해 주세요.</p>
+          <p style={{ textAlign: "center" }}>
+            <Link to={`/reservation/${productId}`}>예약 상세로 돌아가기</Link>
+          </p>
+        </div>
       </main>
     );
   }
@@ -136,7 +138,9 @@ export function ReservationCheckout() {
   if (loading) {
     return (
       <main className="rv-page">
-        <p className="rv-loading">불러오는 중…</p>
+        <div className="rv-body">
+          <p className="rv-loading">불러오는 중…</p>
+        </div>
       </main>
     );
   }
@@ -144,13 +148,16 @@ export function ReservationCheckout() {
   if (!product) {
     return (
       <main className="rv-page">
-        <p className="rv-error">{error ?? "상품을 찾을 수 없습니다."}</p>
+        <div className="rv-body">
+          <p className="rv-error">{error ?? "상품을 찾을 수 없습니다."}</p>
+        </div>
       </main>
     );
   }
 
   return (
     <main className="rv-page">
+      <div className="rv-body">
       <ReservationStepBar current="checkout" />
 
       <div className="rv-split">
@@ -270,8 +277,8 @@ export function ReservationCheckout() {
               {product.photo ? (
                 <img src={product.photo} alt="" />
               ) : (
-                <span className="rv-card-photo-fallback" style={{ fontSize: 10 }}>
-                  IQ
+                <span className="rv-card-photo-fallback" style={{ fontSize: 12 }}>
+                  준비중
                 </span>
               )}
             </div>
@@ -327,6 +334,7 @@ export function ReservationCheckout() {
           </button>
           <p className="rv-demo-note">실제 결제는 이루어지지 않는 데모입니다</p>
         </aside>
+      </div>
       </div>
     </main>
   );

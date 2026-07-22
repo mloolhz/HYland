@@ -100,10 +100,21 @@ export function ReservationList() {
   return (
     <main className="rv-page">
       <section className="rv-banner" aria-label="레저 예약">
-        <h1>레저 예약</h1>
-        <p>원하는 섬과 종목을 고르고 날짜·인원을 예약하세요.</p>
+        <img
+          className="rv-banner-img"
+          src="/_Pngtree_progressive_leisure_jet_boat_aquatics_16900908.jpg"
+          alt=""
+          width={3504}
+          height={805}
+        />
+        <div className="rv-banner-overlay" aria-hidden="true" />
+        <div className="rv-banner-copy">
+          <h1>레저 예약</h1>
+          <p>원하는 섬과 종목을 고르고 날짜·인원을 예약하세요.</p>
+        </div>
       </section>
 
+      <div className="rv-body">
       <div className="rv-filter-line" ref={filterRef}>
         <div className="rv-chips" role="tablist" aria-label="카테고리">
           {CATEGORIES.map((c) => (
@@ -224,7 +235,7 @@ export function ReservationList() {
                     {product.photo ? (
                       <img src={product.photo} alt="" />
                     ) : (
-                      <span className="rv-card-photo-fallback">ISLAND QUEST</span>
+                      <span className="rv-card-photo-fallback">준비중</span>
                     )}
                     <span className="rv-card-badge">{CATEGORY_LABEL[product.category]}</span>
                   </div>
@@ -254,6 +265,7 @@ export function ReservationList() {
           )}
         </>
       )}
+      </div>
     </main>
   );
 }

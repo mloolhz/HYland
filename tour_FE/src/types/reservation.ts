@@ -52,8 +52,11 @@ export type Reservation = CreateReservationPayload & {
   islandName: string;
   totalPrice: number;
   payMethod: PayMethod;
-  status: 'paid';
+  status: 'paid' | 'cancelled';
   createdAt: string;
+  cancelledAt?: string;
+  refundAmount?: number;
+  cancelFee?: number;
 };
 
 export type ReservationDraft = {

@@ -52,15 +52,12 @@ function SportPhoto({ sport }: { sport: Sport }) {
 
 export function Sports() {
   const navigate = useNavigate();
-  const [category, setCategory] = useState<CategoryKey | null>(null);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [category, setCategory] = useState<CategoryKey>("water");
+  const [selectedId, setSelectedId] = useState<string>(SPORTS_DATA.water[0].id);
 
-  const categoryLabel = category
-    ? (SPORTS_CATEGORIES.find((c) => c.key === category)?.label ?? "")
-    : "";
-  const sports = category ? SPORTS_DATA[category] : [];
+  const categoryLabel = SPORTS_CATEGORIES.find((c) => c.key === category)?.label ?? "";
+  const sports = SPORTS_DATA[category];
   const selected = useMemo(() => {
-    if (!category) return null;
     const list = SPORTS_DATA[category];
     return list.find((s) => s.id === selectedId) ?? list[0] ?? null;
   }, [category, selectedId]);
@@ -114,11 +111,7 @@ export function Sports() {
         })}
       </div>
 
-      {category === null && (
-        <p className="sp-empty-hint">카테고리를 선택하면 종목을 확인할 수 있습니다.</p>
-      )}
-
-      {category && selected && (
+      {selected && (
         <>
           <div className="sp-cat-title-wrap">
             <h2 className="sp-cat-title">{categoryLabel}</h2>

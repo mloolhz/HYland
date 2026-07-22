@@ -158,7 +158,9 @@ export function ReservationDetail() {
   if (loading) {
     return (
       <main className="rv-page">
-        <p className="rv-loading">상품을 불러오는 중…</p>
+        <div className="rv-body">
+          <p className="rv-loading">상품을 불러오는 중…</p>
+        </div>
       </main>
     );
   }
@@ -166,7 +168,9 @@ export function ReservationDetail() {
   if (error || !product) {
     return (
       <main className="rv-page">
-        <p className="rv-error">{error ?? "상품을 찾을 수 없습니다."}</p>
+        <div className="rv-body">
+          <p className="rv-error">{error ?? "상품을 찾을 수 없습니다."}</p>
+        </div>
       </main>
     );
   }
@@ -175,12 +179,13 @@ export function ReservationDetail() {
 
   return (
     <main className="rv-page">
+      <div className="rv-body">
       <header className="rv-product-head">
         <div className="rv-product-photo">
           {product.photo ? (
             <img src={product.photo} alt="" />
           ) : (
-            <span className="rv-card-photo-fallback">ISLAND QUEST</span>
+            <span className="rv-card-photo-fallback">준비중</span>
           )}
         </div>
         <div>
@@ -346,6 +351,7 @@ export function ReservationDetail() {
           </button>
           <p className="rv-demo-note">실제 결제는 이루어지지 않는 데모입니다</p>
         </aside>
+      </div>
       </div>
     </main>
   );

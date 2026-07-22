@@ -84,15 +84,6 @@
   outline-offset: -2px;
 }
 
-.sp-empty-hint {
-  margin: 0;
-  padding: 3rem 1rem;
-  text-align: center;
-  font-size: 14px;
-  color: #8a94a3;
-  line-height: 1.5;
-}
-
 /* ③ Center category title — no blue square */
 .sp-cat-title-wrap {
   padding: 2.5rem 24px 2rem;

@@ -5,7 +5,9 @@ import {
   MOCK_PRODUCTS,
   RESERVATION_ISLAND_FILTER,
   SPORT_DEFAULT_PRODUCT,
-} from '@/api/reservation/mockData';import type {
+} from '@/api/reservation/mockData';
+import { calcCancelFee } from '@/api/reservation/cancelRules';
+import type {
   CreateReservationPayload,
   PayMethod,
   Product,
@@ -14,6 +16,8 @@ import {
 } from '@/types/reservation';
 
 export { getMinPrice, RESERVATION_ISLAND_FILTER, SPORT_DEFAULT_PRODUCT, islandFilterColorName };
+export { CANCEL_FEE_RULES, calcCancelFee, getDaysUntilUseDate } from '@/api/reservation/cancelRules';
+export type { CancelFeeResult } from '@/api/reservation/cancelRules';
 
 const STORAGE_KEY = 'hyland-reservations';
 const SLOT_TIMES = ['09:00', '11:00', '14:00', '16:00'] as const;
@@ -32,6 +36,9 @@ type StoredReservation = CreateReservationPayload & {
   createdAt: string;
   payMethod?: PayMethod;
   status?: Reservation['status'];
+  cancelledAt?: string;
+  refundAmount?: number;
+  cancelFee?: number;
 };
 
 function readStoredReservations(): StoredReservation[] {
@@ -49,8 +56,9 @@ function writeStoredReservations(reservations: StoredReservation[]): void {
   sessionStorage.setItem(STORAGE_KEY, JSON.stringify(reservations));
 }
 
-function toPaidReservation(stored: StoredReservation): Reservation | null {
-  if (stored.status !== 'paid' || !stored.payMethod) return null;
+function toListedReservation(stored: StoredReservation): Reservation | null {
+  if (!stored.payMethod) return null;
+  if (stored.status !== 'paid' && stored.status !== 'cancelled') return null;
   return stored as Reservation;
 }
 
@@ -174,12 +182,46 @@ export async function payReservation(
   return delay(updated);
 }
 
+export async function cancelReservation(reservationId: string): Promise<Reservation> {
+  const stored = readStoredReservations();
+  const index = stored.findIndex((r) => r.reservationId === reservationId);
+  if (index === -1) {
+    throw new Error(`예약을 찾을 수 없습니다: ${reservationId}`);
+  }
+
+  const current = stored[index];
+  if (current.status === 'cancelled') {
+    throw new Error('이미 취소된 예약입니다.');
+  }
+  if (current.status !== 'paid' || !current.payMethod) {
+    throw new Error('결제 완료된 예약만 취소할 수 있습니다.');
+  }
+
+  const fee = calcCancelFee(current.date, current.totalPrice);
+  if (!fee.cancelable) {
+    throw new Error(fee.reason);
+  }
+
+  const updated: Reservation = {
+    ...current,
+    payMethod: current.payMethod,
+    status: 'cancelled',
+    cancelledAt: new Date().toISOString(),
+    cancelFee: fee.feeAmount,
+    refundAmount: fee.refundAmount,
+  };
+  stored[index] = updated;
+  writeStoredReservations(stored);
+
+  return delay(updated);
+}
+
 export async function getMyReservations(): Promise<Reservation[]> {
   const stored = readStoredReservations();
-  const paid = stored
-    .map(toPaidReservation)
+  const list = stored
+    .map(toListedReservation)
     .filter((r): r is Reservation => r !== null);
-  return delay([...paid].reverse());
+  return delay([...list].reverse());
 }
 
 export async function getReservation(id: string): Promise<Reservation> {
@@ -188,9 +230,9 @@ export async function getReservation(id: string): Promise<Reservation> {
   if (!reservation) {
     throw new Error(`예약을 찾을 수 없습니다: ${id}`);
   }
-  const paid = toPaidReservation(reservation);
-  if (!paid) {
-    throw new Error(`결제가 완료되지 않은 예약입니다: ${id}`);
+  const listed = toListedReservation(reservation);
+  if (!listed) {
+    throw new Error(`확인할 수 없는 예약입니다: ${id}`);
   }
-  return delay(paid);
+  return delay(listed);
 }

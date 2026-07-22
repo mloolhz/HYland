@@ -54,7 +54,9 @@ export function ReservationComplete() {
   if (loading) {
     return (
       <main className="rv-page">
-        <p className="rv-loading">예약 정보를 불러오는 중…</p>
+        <div className="rv-body">
+          <p className="rv-loading">예약 정보를 불러오는 중…</p>
+        </div>
       </main>
     );
   }
@@ -62,10 +64,12 @@ export function ReservationComplete() {
   if (error || !reservation) {
     return (
       <main className="rv-page">
-        <p className="rv-error">{error ?? "예약을 찾을 수 없습니다."}</p>
-        <p style={{ textAlign: "center" }}>
-          <Link to="/reservation">예약 목록으로</Link>
-        </p>
+        <div className="rv-body">
+          <p className="rv-error">{error ?? "예약을 찾을 수 없습니다."}</p>
+          <p style={{ textAlign: "center" }}>
+            <Link to="/reservation">예약 목록으로</Link>
+          </p>
+        </div>
       </main>
     );
   }
@@ -82,14 +86,23 @@ export function ReservationComplete() {
 
   return (
     <main className="rv-page">
+      <div className="rv-body">
       <ReservationStepBar current="complete" />
 
       <div className="rv-complete-hero">
         <div className="rv-complete-check" aria-hidden>
-          ✓
+          {reservation.status === "cancelled" ? "!" : "✓"}
         </div>
-        <h1>예약이 완료되었습니다</h1>
-        <p>예약 내역은 마이페이지에서 확인할 수 있습니다.</p>
+        <h1>
+          {reservation.status === "cancelled"
+            ? "취소된 예약입니다"
+            : "예약이 완료되었습니다"}
+        </h1>
+        <p>
+          {reservation.status === "cancelled"
+            ? "취소·환불 내역은 마이페이지 예약 내역에서 확인할 수 있습니다."
+            : "예약 내역은 마이페이지에서 확인할 수 있습니다."}
+        </p>
       </div>
 
       <div className="rv-id-box">예약번호 {reservation.reservationId}</div>
@@ -156,7 +169,7 @@ export function ReservationComplete() {
         <Link to="/reservation" className="rv-btn rv-btn--ghost" style={{ textAlign: "center", textDecoration: "none", display: "block", boxSizing: "border-box" }}>
           다른 레저 둘러보기
         </Link>
-        {/* TODO: 마이페이지 예약 내역 라우트 연결 */}
+        {/* TODO: 마이페이지 예약 내역 라우트 연결 — /mypage 예약 내역 탭 */}
         <Link
           to="/mypage"
           className="rv-btn"
@@ -164,6 +177,7 @@ export function ReservationComplete() {
         >
           예약 내역 확인
         </Link>
+      </div>
       </div>
     </main>
   );

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { RollingNumber } from "@/components/island/RollingNumber";
 import { MyPageHeader } from "@/components/mypage/MyPageHeader";
 import { MyPageIslandRecord } from "@/components/mypage/MyPageIslandRecord";
+import { MyPageReservations } from "@/components/mypage/MyPageReservations";
 import { ISLAND_BTI } from "@/constants/island";
 import { CONTAINER } from "@/constants/layout";
 import {
@@ -30,6 +31,7 @@ const DASHBOARD_TABS = [
   { id: "islands", label: "섬 탐험 기록" },
   { id: "mission", label: "미션 & 인증" },
   { id: "rank", label: "리더보드" },
+  { id: "reservation", label: "예약 내역" },
 ] as const;
 
 type DashboardTab = (typeof DASHBOARD_TABS)[number]["id"];
@@ -266,6 +268,16 @@ export function MyPage() {
                   );
                 })}
               </div>
+            </section>
+
+            <section
+              className={tabPanelClass("reservation", activeTab, leavingTab)}
+              role="tabpanel"
+              id="mp-panel-reservation"
+              aria-labelledby="mp-tab-reservation"
+              aria-hidden={activeTab !== "reservation" && leavingTab !== "reservation"}
+            >
+              <MyPageReservations />
             </section>
           </div>
         </div>

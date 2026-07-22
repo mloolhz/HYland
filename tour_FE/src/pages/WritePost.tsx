@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { CommunityHeader } from "@/components/community/CommunityHeader";
 import { CURRENT_USER_ID } from "@/constants/auth";
 import { ISLAND_CATALOG } from "@/constants/island";
@@ -13,18 +13,26 @@ const TYPE_OPTIONS: { value: PostType; label: string }[] = [
   { value: "question", label: "질문" },
 ];
 
+type WritePrefill = {
+  type?: PostType;
+  island?: string;
+  activity?: string;
+};
+
 export function WritePost() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const prefill = (location.state as WritePrefill | null) ?? null;
   const posts = usePosts();
   const author = useMemo(() => {
     const existing = posts.find((p) => p.author.id === CURRENT_USER_ID);
     return existing?.author ?? { id: CURRENT_USER_ID, nickname: "이파도", bti: "파도형" as const };
   }, [posts]);
 
-  const [type, setType] = useState<PostType>("review");
+  const [type, setType] = useState<PostType>(prefill?.type ?? "review");
   const [title, setTitle] = useState("");
-  const [island, setIsland] = useState("");
-  const [activity, setActivity] = useState("");
+  const [island, setIsland] = useState(prefill?.island ?? "");
+  const [activity, setActivity] = useState(prefill?.activity ?? "");
   const [content, setContent] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [error, setError] = useState("");
