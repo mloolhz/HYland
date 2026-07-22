@@ -48,9 +48,16 @@
 .auth-logo {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
   text-decoration: none;
   margin-bottom: 14px;
+}
+
+.auth-logo-img {
+  display: block;
+  height: 34px;
+  width: auto;
+  max-width: min(180px, 70vw);
+  object-fit: contain;
 }
 
 .auth-logo-icon {

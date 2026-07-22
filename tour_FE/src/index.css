@@ -66,13 +66,8 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 input{font:inherit}
 .container{max-width:1180px;margin:0 auto;padding:0 24px}
 .sec{padding:84px 0;overflow-x:clip}
-#ai{background:#EFF4FA}
-#mission{background:linear-gradient(180deg,var(--sea-dark) 0%,var(--navy) 100%)}
-#mission .sec-head{border-bottom-color:rgba(255,255,255,.75)}
-#mission .sec-head h2{color:#fff}
-#mission .sec-head .more{color:#A9C0E4}
-#mission .sec-head .more:hover{color:#fff}
-#mission .sec-sub{color:#B9CCE8}
+#ai,
+#mission,
 #community{background:#EFF4FA}
 .sec-head{display:flex;align-items:flex-end;gap:12px;margin-bottom:10px;padding-bottom:14px;border-bottom:2px solid var(--navy)}
 .sec-ico{display:none}

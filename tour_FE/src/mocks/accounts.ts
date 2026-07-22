@@ -20,6 +20,11 @@ export function formatJoinDate(iso: string): string {
   return `${y}. ${Number(m)}. ${Number(d)}. 가입`;
 }
 
+export function formatJoinDateYmd(iso: string): string {
+  const [y, m, d] = iso.split("-");
+  return `${y}.${m}.${d}`;
+}
+
 export function findAccountsByNameAndPhone(name: string, phone: string): MockAccount[] {
   const digits = phone.replace(/\D/g, "");
   return MOCK_ACCOUNTS.filter((a) => a.name === name.trim() && a.phone === digits);

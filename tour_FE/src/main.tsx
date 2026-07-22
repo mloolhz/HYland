@@ -18,12 +18,15 @@ import { PostDetail } from "@/pages/PostDetail";
 import { Signup } from "@/pages/Signup";
 import { IslandExplorer } from "@/pages/IslandExplorer";
 import { MyPage } from "@/pages/MyPage";
+import { MyPageSettings } from "@/pages/MyPageSettings";
+import { MyPageProfileEdit } from "@/pages/MyPageProfileEdit";
 import { WritePost } from "@/pages/WritePost";
 import "./index.css";
 import "./styles/auth.css";
 import "./styles/community.css";
 import "./styles/island.css";
 import "./styles/mypage.css";
+import "./styles/passport-book.css";
 import "./styles/notification.css";
 
 const router = createBrowserRouter([
@@ -42,6 +45,8 @@ const router = createBrowserRouter([
       { path: "community/:id", element: <PostDetail /> },
       { path: "notifications", element: <Notifications /> },
       { path: "mypage", element: <MyPage /> },
+      { path: "mypage/settings", element: <MyPageSettings /> },
+      { path: "mypage/settings/profile", element: <MyPageProfileEdit /> },
     ],
   },
   {

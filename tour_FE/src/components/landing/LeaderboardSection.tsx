@@ -21,7 +21,7 @@ export function LeaderboardSection({ onGoToLogin }: LeaderboardSectionProps) {
   };
 
   return (
-    <section className="sec" id="leaderboard" style={{ paddingTop: 20 }}>
+    <section className="sec" id="leaderboard">
       <div className="container">
         <div className="sec-head reveal">
           <span className="sec-ico">🏆</span>

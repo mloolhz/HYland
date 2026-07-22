@@ -30,7 +30,7 @@ function ProgressBar({ width, gold }: { width: number; gold?: boolean }) {
 
 export function MissionSection() {
   return (
-    <section className="sec" id="mission" style={{ paddingTop: 20 }}>
+    <section className="sec" id="mission">
       <div className="container">
         <div className="sec-head reveal">
           <span className="sec-ico">⭐</span>
