@@ -52,7 +52,7 @@
   max-width: 1180px;
   margin: 0 auto;
   padding: 0 24px;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #94a3b8;
 }
 
 .sp-tab {
@@ -84,6 +84,15 @@
   outline-offset: -2px;
 }
 
+.sp-empty-hint {
+  margin: 0;
+  padding: 3rem 1rem;
+  text-align: center;
+  font-size: 14px;
+  color: #8a94a3;
+  line-height: 1.5;
+}
+
 /* ③ Center category title — no blue square */
 .sp-cat-title-wrap {
   padding: 2.5rem 24px 2rem;
@@ -103,22 +112,18 @@
   padding-bottom: 8px;
 }
 
-/* ④ Sport grid — no spacers, left-aligned flex wrap */
+/* ④ Sport grid — cell borders only (no empty trailing column line) */
 .sp-sport-grid {
   display: flex;
   flex-wrap: wrap;
-  border-top: 1px solid #94a3b8;
-  border-left: 1px solid #94a3b8;
 }
 
 .sp-sport-btn {
   box-sizing: border-box;
   width: 25%;
-  margin: 0;
+  margin: 0 -1px -1px 0;
   padding: 18px 10px;
-  border: 0;
-  border-right: 1px solid #94a3b8;
-  border-bottom: 1px solid #94a3b8;
+  border: 1px solid #94a3b8;
   border-radius: 0;
   background: #fff;
   color: #4a5567;
@@ -129,26 +134,23 @@
   transition: background 0.15s ease, color 0.15s ease;
 }
 
-.sp-sport-btn:nth-child(4n),
-.sp-sport-btn:last-child {
-  border-right: none;
-}
-
 .sp-sport-btn:hover {
   background: #f7f9fc;
   color: #1a3a6b;
+  z-index: 1;
 }
 
 .sp-sport-btn.is-active {
   background: #2563eb;
   color: #fff;
   font-weight: 500;
+  z-index: 1;
 }
 
 .sp-sport-btn:focus-visible {
   outline: 2px solid #2563eb;
   outline-offset: -2px;
-  z-index: 1;
+  z-index: 2;
 }
 
 /* ⑤ Detail: photo | info */
@@ -406,15 +408,6 @@
   .sp-sport-btn {
     width: 50%;
     padding: 16px 8px;
-  }
-
-  .sp-sport-btn:nth-child(4n) {
-    border-right: 1px solid #94a3b8;
-  }
-
-  .sp-sport-btn:nth-child(2n),
-  .sp-sport-btn:last-child {
-    border-right: none;
   }
 
   .sp-detail {

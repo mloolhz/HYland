@@ -37,7 +37,7 @@ export const SPORTS_DATA: Record<CategoryKey, Sport[]> = {
       id: "kayak",
       name: "카약",
       pay: true,
-      photo: "",
+      photo: "/카약.png",
       diff: "입문",
       price: "2만원대~",
       season: "5~10월",

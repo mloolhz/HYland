@@ -113,6 +113,10 @@ export function Sports() {
         })}
       </div>
 
+      {category === null && (
+        <p className="sp-empty-hint">카테고리를 선택하면 종목을 확인할 수 있습니다.</p>
+      )}
+
       {category && selected && (
         <>
           <div className="sp-cat-title-wrap">
