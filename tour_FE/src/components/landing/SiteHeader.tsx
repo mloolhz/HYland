@@ -1,8 +1,27 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { NotificationBell } from "@/components/notification/NotificationBell";
 
 const SITE_LOGO_SRC = "/incheon-island-leisure-nuri-logo.png";
+
+const LEISURE_SUBCATEGORIES = [
+  "해상 레저",
+  "수중 레저",
+  "육상 레저",
+  "체험·힐링",
+  "기타 레저",
+] as const;
+
+type NavSubItem = { label: string; href: string };
+
+type NavItem = {
+  id: string;
+  label: string;
+  href: string;
+  isRoute?: boolean;
+  active?: boolean;
+  subItems: NavSubItem[];
+};
 
 function ProfileIcon() {
   return (
@@ -44,56 +63,254 @@ function MenuIcon({ open }: { open: boolean }) {
   );
 }
 
-type NavLinkItemProps = {
-  onNavigate?: () => void;
-  className?: string;
-  onLanding: boolean;
-  onIslands: boolean;
-  onCommunity: boolean;
+function buildNavItems(onLanding: boolean, onIslands: boolean, onCommunity: boolean): NavItem[] {
+  const hash = (id: string) => (onLanding ? `#${id}` : `/#${id}`);
+
+  return [
+    {
+      id: "islands",
+      label: "섬 탐험",
+      href: "/islands",
+      isRoute: true,
+      active: onIslands,
+      subItems: [
+        { label: "섬 지도 탐험", href: "/islands" },
+        { label: "권역별 섬", href: "/islands" },
+        { label: "방문 기록", href: "/islands" },
+      ],
+    },
+    {
+      id: "booking",
+      label: "레저 스포츠",
+      href: hash("booking"),
+      subItems: LEISURE_SUBCATEGORIES.map((label) => ({
+        label,
+        href: hash("booking"),
+      })),
+    },
+    {
+      id: "mission",
+      label: "미션 & 인증",
+      href: hash("mission"),
+      subItems: [
+        { label: "뱃지 수집", href: hash("mission") },
+        { label: "패스포트", href: hash("mission") },
+        { label: "미션 현황", href: hash("mission") },
+      ],
+    },
+    {
+      id: "leaderboard",
+      label: "리더보드",
+      href: hash("leaderboard"),
+      subItems: [
+        { label: "주간 랭킹", href: hash("leaderboard") },
+        { label: "월간 랭킹", href: hash("leaderboard") },
+        { label: "전체 랭킹", href: hash("leaderboard") },
+      ],
+    },
+    {
+      id: "community",
+      label: "커뮤니티",
+      href: "/community",
+      isRoute: true,
+      active: onCommunity,
+      subItems: [
+        { label: "탐험 후기", href: "/community" },
+        { label: "팁 & 노하우", href: "/community" },
+        { label: "공지", href: "/community" },
+      ],
+    },
+  ];
+}
+
+type NavHoverHandlers = {
+  openMegaMenu: () => void;
+  handleEnter: (id: string) => void;
+  clearCloseTimer: () => void;
+  scheduleClose: () => void;
 };
 
-function NavLinkItems({ onNavigate, className, onLanding, onIslands, onCommunity }: NavLinkItemProps) {
-  const linkClass = (active: boolean) =>
-    [className, active ? "nav-route-active" : undefined].filter(Boolean).join(" ");
+function useNavHoverTimer(
+  onHoverNav: (id: string | null) => void,
+  onMegaMenuChange: (open: boolean) => void,
+): NavHoverHandlers {
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearCloseTimer = useCallback(() => {
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+  }, []);
+
+  const scheduleClose = useCallback(() => {
+    clearCloseTimer();
+    closeTimerRef.current = setTimeout(() => {
+      onHoverNav(null);
+      onMegaMenuChange(false);
+    }, 200);
+  }, [clearCloseTimer, onHoverNav, onMegaMenuChange]);
+
+  const openMegaMenu = useCallback(() => {
+    clearCloseTimer();
+    onMegaMenuChange(true);
+  }, [clearCloseTimer, onMegaMenuChange]);
+
+  const handleEnter = useCallback(
+    (id: string) => {
+      clearCloseTimer();
+      onMegaMenuChange(true);
+      onHoverNav(id);
+    },
+    [clearCloseTimer, onHoverNav, onMegaMenuChange],
+  );
+
+  useEffect(() => () => clearCloseTimer(), [clearCloseTimer]);
+
+  return { openMegaMenu, handleEnter, clearCloseTimer, scheduleClose };
+}
+
+type DesktopNavProps = {
+  items: NavItem[];
+  isOpen: boolean;
+  hoveredNavId: string | null;
+  onOpen: () => void;
+  onEnter: (id: string) => void;
+  onLeave: () => void;
+  onNavigate: () => void;
+};
+
+function DesktopNav({
+  items,
+  isOpen,
+  hoveredNavId,
+  onOpen,
+  onEnter,
+  onLeave,
+  onNavigate,
+}: DesktopNavProps) {
+  return (
+    <div
+      className={`nav-links-wrap${isOpen ? " is-open" : ""}`}
+      onMouseEnter={onOpen}
+      onMouseLeave={onLeave}
+    >
+      <nav className="nav-links" aria-label="주요 메뉴">
+        {items.map((item) => {
+          const linkClass = [
+            "nav-link",
+            item.active ? "nav-route-active" : undefined,
+            hoveredNavId === item.id ? "is-hovered" : undefined,
+          ]
+            .filter(Boolean)
+            .join(" ");
+
+          const triggerProps = {
+            className: linkClass,
+            onMouseEnter: () => onEnter(item.id),
+            onFocus: () => onEnter(item.id),
+          };
+
+          return (
+            <div key={item.id} className="nav-item" onMouseEnter={() => onEnter(item.id)}>
+              {item.isRoute ? (
+                <Link to={item.href} {...triggerProps}>
+                  {item.label}
+                </Link>
+              ) : (
+                <a href={item.href} {...triggerProps}>
+                  {item.label}
+                </a>
+              )}
+              <div className="nav-dropdown-col" aria-hidden={!isOpen}>
+                {item.subItems.map((sub) => (
+                  <a
+                    key={sub.label}
+                    href={sub.href}
+                    className="nav-dropdown-link"
+                    onClick={onNavigate}
+                    tabIndex={isOpen ? 0 : -1}
+                  >
+                    {sub.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </nav>
+    </div>
+  );
+}
+
+type DrawerNavProps = {
+  items: NavItem[];
+  onNavigate?: () => void;
+};
+
+function DrawerNav({ items, onNavigate }: DrawerNavProps) {
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   return (
-    <>
-      <Link
-        to="/islands"
-        className={linkClass(onIslands)}
-        onClick={onNavigate}
-      >
-        섬 탐험
-      </Link>
-      <a
-        href={onLanding ? "#booking" : "/#booking"}
-        className={className}
-        onClick={onNavigate}
-      >
-        레저 스포츠
-      </a>
-      <a
-        href={onLanding ? "#mission" : "/#mission"}
-        className={className}
-        onClick={onNavigate}
-      >
-        미션 &amp; 인증
-      </a>
-      <a
-        href={onLanding ? "#leaderboard" : "/#leaderboard"}
-        className={className}
-        onClick={onNavigate}
-      >
-        리더보드
-      </a>
-      <Link
-        to="/community"
-        className={linkClass(onCommunity)}
-        onClick={onNavigate}
-      >
-        커뮤니티
-      </Link>
-    </>
+    <nav className="nav-drawer-nav" aria-label="주요 메뉴">
+      {items.map((item) => {
+        const expanded = expandedId === item.id;
+        const linkClass = [
+          "nav-drawer-link",
+          item.active ? "nav-route-active" : undefined,
+          expanded ? "is-expanded" : undefined,
+        ]
+          .filter(Boolean)
+          .join(" ");
+
+        const mainLink = item.isRoute ? (
+          <Link to={item.href} className={linkClass} onClick={onNavigate}>
+            {item.label}
+          </Link>
+        ) : (
+          <a href={item.href} className={linkClass} onClick={onNavigate}>
+            {item.label}
+          </a>
+        );
+
+        return (
+          <div key={item.id} className="nav-drawer-group">
+            <div className="nav-drawer-row">
+              {mainLink}
+              <button
+                type="button"
+                className="nav-drawer-toggle"
+                aria-expanded={expanded}
+                aria-label={`${item.label} 하위 메뉴 ${expanded ? "접기" : "펼치기"}`}
+                onClick={() => setExpandedId(expanded ? null : item.id)}
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path
+                    d="M4 6l4 4 4-4"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div className={`nav-drawer-sub${expanded ? " is-open" : ""}`}>
+              {item.subItems.map((sub) => (
+                <a
+                  key={sub.label}
+                  href={sub.href}
+                  className="nav-drawer-sublink"
+                  onClick={onNavigate}
+                >
+                  {sub.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </nav>
   );
 }
 
@@ -102,9 +319,24 @@ export function SiteHeader() {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [headerScrolled, setHeaderScrolled] = useState(false);
+  const [hoveredNavId, setHoveredNavId] = useState<string | null>(null);
+  const [navMegaOpen, setNavMegaOpen] = useState(false);
   const onLanding = location.pathname === "/";
   const onCommunity = location.pathname.startsWith("/community");
   const onIslands = location.pathname.startsWith("/islands");
+  const navItems = useMemo(
+    () => buildNavItems(onLanding, onIslands, onCommunity),
+    [onLanding, onIslands, onCommunity],
+  );
+  const headerSolid = headerScrolled || navMegaOpen;
+  const closeNavMega = useCallback(() => {
+    setHoveredNavId(null);
+    setNavMegaOpen(false);
+  }, []);
+  const { openMegaMenu, handleEnter, scheduleClose } = useNavHoverTimer(
+    setHoveredNavId,
+    setNavMegaOpen,
+  );
 
   const closeMenu = useCallback(() => setMenuOpen(false), []);
 
@@ -139,6 +371,8 @@ export function SiteHeader() {
 
   useEffect(() => {
     closeMenu();
+    setHoveredNavId(null);
+    setNavMegaOpen(false);
   }, [location.pathname, location.hash, closeMenu]);
 
   useEffect(() => {
@@ -225,7 +459,14 @@ export function SiteHeader() {
   return (
     <>
       <header
-        className={`site-head${headerScrolled ? " scrolled" : ""}${menuOpen ? " site-head--menu-open" : ""}`}
+        className={[
+          "site-head",
+          headerSolid ? "scrolled" : "",
+          navMegaOpen ? "site-head--nav-open" : "",
+          menuOpen ? "site-head--menu-open" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
         id="siteHead"
       >
         <div className="container nav-inner">
@@ -251,9 +492,15 @@ export function SiteHeader() {
               height={36}
             />
           </a>
-          <nav className="nav-links" aria-label="주요 메뉴">
-            <NavLinkItems onLanding={onLanding} onIslands={onIslands} onCommunity={onCommunity} />
-          </nav>
+          <DesktopNav
+            items={navItems}
+            isOpen={navMegaOpen}
+            hoveredNavId={hoveredNavId}
+            onOpen={openMegaMenu}
+            onEnter={handleEnter}
+            onLeave={scheduleClose}
+            onNavigate={closeNavMega}
+          />
           <div className="head-actions">
             <a
               className="btn-portal"
@@ -315,15 +562,7 @@ export function SiteHeader() {
           </button>
         </div>
 
-        <nav className="nav-drawer-nav" aria-label="주요 메뉴">
-          <NavLinkItems
-            className="nav-drawer-link"
-            onNavigate={closeMenu}
-            onLanding={onLanding}
-            onIslands={onIslands}
-            onCommunity={onCommunity}
-          />
-        </nav>
+        <DrawerNav items={navItems} onNavigate={closeMenu} />
 
         <div className="nav-drawer-actions">
           <a
