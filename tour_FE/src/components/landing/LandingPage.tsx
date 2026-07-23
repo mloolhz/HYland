@@ -57,7 +57,7 @@ function LandingPageContent() {
 
     stagger(".ai-grid .ai-card", 120);
     stagger(".book-card .row", 70);
-    stagger(".badge-grid .badge", 70);
+    stagger(".pp-stamp-grid .pp-stamp", 70);
     stagger(".cats .cat", 55);
 
     return () => io.disconnect();

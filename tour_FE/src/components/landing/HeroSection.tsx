@@ -205,13 +205,34 @@ export function HeroSection({
 
             <div className="pc-passport-layout">
               {/* i-바다 패스 card */}
-              <div className="passport-cover" aria-hidden="true">
+              <button
+                type="button"
+                className="passport-cover"
+                aria-label="i-바다패스 여권 열어보기"
+                onClick={() => showToast("바다패스 페이지는 아직 준비 중이에요 🛂")}
+              >
                 <div className="passport-cover__book">
                   <span className="passport-cover__shadow" />
                   <span className="passport-cover__thickness" />
                   <span className="passport-cover__spine" />
                   <span className="passport-cover__pages" />
-                  <div className="passport-cover__face">
+                  <div className="passport-cover__inside" aria-hidden="true">
+                    <svg className="passport-cover__inside-emblem" viewBox="0 0 80 80" fill="none">
+                      <circle cx="40" cy="40" r="30" stroke="currentColor" strokeWidth="1.6" opacity="0.8" />
+                      <circle cx="40" cy="27" r="4.5" stroke="currentColor" strokeWidth="2.2" />
+                      <path d="M40 31.5 V50" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" />
+                      <path d="M29 42 H51" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" />
+                      <path
+                        d="M40 50 C32 50 25.5 55 23 62 C29.5 58.5 34.5 58 40 58 C45.5 58 50.5 58.5 57 62 C54.5 55 48 50 40 50 Z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                    <span className="passport-cover__inside-label">탐험 기록</span>
+                    <span className="passport-cover__inside-hint">여권 열어보기 →</span>
+                  </div>
+                  <div className="passport-cover__cover">
+                    <span className="passport-cover__cover-back" aria-hidden="true" />
+                    <div className="passport-cover__face">
                     <span className="passport-cover__sheen" />
                     <p className="passport-cover__title">i-바다패스</p>
                     <svg className="passport-cover__emblem" viewBox="0 0 80 80" fill="none" aria-hidden="true">
@@ -230,9 +251,10 @@ export function HeroSection({
                       />
                     </svg>
                     <p className="passport-cover__footer">INCHEON</p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </button>
 
               <div className="passport-info">
                 <div className="passport-level">
@@ -270,25 +292,6 @@ export function HeroSection({
                   </div>
                 </div>
 
-                {SHOW_LANDING_PROFILE ? (
-                  <Link to="/mypage" className="btn-passport-view">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <rect x="4" y="2" width="16" height="20" rx="2" stroke="currentColor" strokeWidth="1.8" />
-                      <circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="1.8" />
-                      <path d="M8 17c.8-2 2.2-3 4-3s3.2 1 4 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                    </svg>
-                    여권 보기
-                  </Link>
-                ) : (
-                  <Link to="/login" className="btn-passport-view" {...demoProps("로그인 후 여권을 확인할 수 있어요")}>
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <rect x="4" y="2" width="16" height="20" rx="2" stroke="currentColor" strokeWidth="1.8" />
-                      <circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="1.8" />
-                      <path d="M8 17c.8-2 2.2-3 4-3s3.2 1 4 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                    </svg>
-                    여권 보기
-                  </Link>
-                )}
               </div>
             </div>
 
