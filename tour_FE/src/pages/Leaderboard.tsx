@@ -1,34 +1,44 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { avaColor, CATEGORY_LEADERBOARD, formatNumber } from "@/lib/landing-data";
+import { getCategoryLeaderboardRank, getCurrentUserProfile } from "@/lib/user-profile";
 import { MISSION_CATEGORIES, type MissionCategory } from "@/mocks/missions";
 
-type LeaderboardSectionProps = {
-  onGoToLogin: () => void;
-};
-
-export function LeaderboardSection({ onGoToLogin }: LeaderboardSectionProps) {
+export function Leaderboard() {
   const [category, setCategory] = useState<MissionCategory>("탐험");
   const data = CATEGORY_LEADERBOARD[category];
-
-  const handleLogin = () => {
-    onGoToLogin();
-  };
+  const me = getCurrentUserProfile();
+  const myRank = getCategoryLeaderboardRank(category);
 
   return (
-    <section className="sec" id="leaderboard">
+    <main className="lbp-page">
       <div className="container">
-        <div className="sec-head reveal">
-          <span className="sec-ico">🏆</span>
-          <h2>탐험가 리더보드</h2>
-          <Link className="more" to="/leaderboard">
-            더보기 →
-          </Link>
-        </div>
-        <p className="sec-sub reveal">
-          미션을 완료하면 카테고리별 포인트가 쌓여요. 부문별 최고의 탐험가는 누구일까요?
-        </p>
-        <div className="lb-card reveal rv-z">
+        <header className="lbp-head">
+          <span className="lbp-head__eyebrow">LEADERBOARD</span>
+          <h1 className="lbp-head__title">탐험가 리더보드</h1>
+          <p className="lbp-head__sub">
+            미션을 완료하면 카테고리별 포인트가 쌓여요. 부문별 최고의 탐험가는 누구일까요?
+          </p>
+        </header>
+
+        {/* 내 순위 카드 */}
+        <section className="lbp-me" aria-label="내 순위">
+          <div className="lbp-me__ava" style={{ background: avaColor(me.nickname) }}>
+            {me.nickname[0]}
+          </div>
+          <div className="lbp-me__info">
+            <span className="lbp-me__label">내 순위 · {category}</span>
+            <b className="lbp-me__name">{me.nickname}</b>
+          </div>
+          <div className="lbp-me__figures">
+            <div className="lbp-me__rank">
+              <strong>{myRank.rank}</strong>
+              <span>위</span>
+            </div>
+            <div className="lbp-me__pts">{formatNumber(myRank.points)} P</div>
+          </div>
+        </section>
+
+        <div className="lb-card">
           <div className="lb-top">
             <div className="lb-bar">
               <div className="lb-title">
@@ -38,6 +48,8 @@ export function LeaderboardSection({ onGoToLogin }: LeaderboardSectionProps) {
                 {MISSION_CATEGORIES.map((c) => (
                   <button
                     key={c}
+                    role="tab"
+                    aria-selected={category === c}
                     className={category === c ? "on" : ""}
                     onClick={() => setCategory(c)}
                   >
@@ -46,12 +58,12 @@ export function LeaderboardSection({ onGoToLogin }: LeaderboardSectionProps) {
                 ))}
               </div>
             </div>
+
             <div className="podium">
               {[2, 1, 3].map((rank) => {
                 const [name, pts] = data[rank - 1];
-                const pdClass = `pd pd-${rank}`;
                 return (
-                  <div className={pdClass} key={rank}>
+                  <div className={`pd pd-${rank}`} key={rank}>
                     {rank === 1 && (
                       <>
                         <span className="laurel l">🌿</span>
@@ -65,7 +77,9 @@ export function LeaderboardSection({ onGoToLogin }: LeaderboardSectionProps) {
                     >
                       {name[0]}
                     </div>
-                    <span className="medal">{rank === 1 ? "🏆" : rank === 2 ? "🥈" : "🥉"}</span>
+                    <span className="medal">
+                      {rank === 1 ? "🏆" : rank === 2 ? "🥈" : "🥉"}
+                    </span>
                     <span className="pd-name">{name}</span>
                     <span className="pd-pts">{formatNumber(pts)} P</span>
                   </div>
@@ -73,6 +87,7 @@ export function LeaderboardSection({ onGoToLogin }: LeaderboardSectionProps) {
               })}
             </div>
           </div>
+
           <ul className="lb-list">
             {data.slice(3).map(([name, pts], i) => (
               <li key={name}>
@@ -85,14 +100,8 @@ export function LeaderboardSection({ onGoToLogin }: LeaderboardSectionProps) {
               </li>
             ))}
           </ul>
-          <div className="lb-cta">
-            <span>🧭 내 순위가 궁금하다면?</span>
-            <button className="btn btn-gold" onClick={handleLogin}>
-              로그인하고 확인하기
-            </button>
-          </div>
         </div>
       </div>
-    </section>
+    </main>
   );
 }

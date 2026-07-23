@@ -50,9 +50,19 @@ type NavLinkItemProps = {
   onLanding: boolean;
   onIslands: boolean;
   onCommunity: boolean;
+  onMissions: boolean;
+  onLeaderboard: boolean;
 };
 
-function NavLinkItems({ onNavigate, className, onLanding, onIslands, onCommunity }: NavLinkItemProps) {
+function NavLinkItems({
+  onNavigate,
+  className,
+  onLanding,
+  onIslands,
+  onCommunity,
+  onMissions,
+  onLeaderboard,
+}: NavLinkItemProps) {
   const linkClass = (active: boolean) =>
     [className, active ? "nav-route-active" : undefined].filter(Boolean).join(" ");
 
@@ -72,20 +82,20 @@ function NavLinkItems({ onNavigate, className, onLanding, onIslands, onCommunity
       >
         레저 스포츠
       </a>
-      <a
-        href={onLanding ? "#mission" : "/#mission"}
-        className={className}
+      <Link
+        to="/missions"
+        className={linkClass(onMissions)}
         onClick={onNavigate}
       >
         미션 &amp; 인증
-      </a>
-      <a
-        href={onLanding ? "#leaderboard" : "/#leaderboard"}
-        className={className}
+      </Link>
+      <Link
+        to="/leaderboard"
+        className={linkClass(onLeaderboard)}
         onClick={onNavigate}
       >
         리더보드
-      </a>
+      </Link>
       <Link
         to="/community"
         className={linkClass(onCommunity)}
@@ -105,6 +115,8 @@ export function SiteHeader() {
   const onLanding = location.pathname === "/";
   const onCommunity = location.pathname.startsWith("/community");
   const onIslands = location.pathname.startsWith("/islands");
+  const onMissions = location.pathname.startsWith("/missions");
+  const onLeaderboard = location.pathname.startsWith("/leaderboard");
 
   const closeMenu = useCallback(() => setMenuOpen(false), []);
 
@@ -252,7 +264,13 @@ export function SiteHeader() {
             />
           </a>
           <nav className="nav-links" aria-label="주요 메뉴">
-            <NavLinkItems onLanding={onLanding} onIslands={onIslands} onCommunity={onCommunity} />
+            <NavLinkItems
+              onLanding={onLanding}
+              onIslands={onIslands}
+              onCommunity={onCommunity}
+              onMissions={onMissions}
+              onLeaderboard={onLeaderboard}
+            />
           </nav>
           <div className="head-actions">
             <a
@@ -322,6 +340,8 @@ export function SiteHeader() {
             onLanding={onLanding}
             onIslands={onIslands}
             onCommunity={onCommunity}
+            onMissions={onMissions}
+            onLeaderboard={onLeaderboard}
           />
         </nav>
 

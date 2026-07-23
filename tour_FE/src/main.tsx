@@ -17,6 +17,8 @@ import { Notifications } from "@/pages/Notifications";
 import { PostDetail } from "@/pages/PostDetail";
 import { Signup } from "@/pages/Signup";
 import { IslandExplorer } from "@/pages/IslandExplorer";
+import { Missions } from "@/pages/Missions";
+import { Leaderboard } from "@/pages/Leaderboard";
 import { MyPage } from "@/pages/MyPage";
 import { MyPageSettings } from "@/pages/MyPageSettings";
 import { MyPageProfileEdit } from "@/pages/MyPageProfileEdit";
@@ -28,6 +30,8 @@ import "./styles/island.css";
 import "./styles/mypage.css";
 import "./styles/passport-book.css";
 import "./styles/notification.css";
+import "./styles/missions.css";
+import "./styles/leaderboard.css";
 
 const router = createBrowserRouter([
   { path: "/", element: <LandingPage />, errorElement: <RouterError /> },
@@ -36,6 +40,8 @@ const router = createBrowserRouter([
     errorElement: <RouterError />,
     children: [
       { path: "islands", element: <IslandExplorer /> },
+      { path: "missions", element: <Missions /> },
+      { path: "leaderboard", element: <Leaderboard /> },
       { path: "community", element: <Community /> },
       { path: "community/write", element: <WritePost /> },
       { path: "community/my-posts", element: <MyPostsPage /> },

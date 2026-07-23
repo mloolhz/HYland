@@ -1,32 +1,20 @@
+import { Link } from "react-router-dom";
+import { MissionSummary } from "./MissionSummary";
+import { MISSION_QUESTS, missionQuestState, type MissionQuest } from "@/mocks/missions";
 
-import { useEffect, useRef } from "react";
-import { demoProps } from "./ToastProvider";
-import { MISSION_BADGES, MISSION_PROGRESS } from "@/mocks/missions";
-
-function ProgressBar({ width, gold }: { width: number; gold?: boolean }) {
-  const fillRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = fillRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (!entries[0]?.isIntersecting) return;
-        el.style.width = `${width}%`;
-        observer.disconnect();
-      },
-      { threshold: 0.6 },
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [width]);
-
-  return (
-    <div className="track">
-      <div ref={fillRef} className={`fill${gold ? " gold" : ""}`} data-w={width} />
-    </div>
-  );
+/** 미션 페이지와 동일한 퀘스트 데이터를 배지 카드 형태로 표시 */
+function badgeDesc(quest: MissionQuest): string {
+  const state = missionQuestState(quest);
+  if (state === "earned") return `${quest.target}${quest.unit} 달성 완료`;
+  if (state === "doing") return `진행 중 · ${quest.current}/${quest.target}${quest.unit}`;
+  return `${quest.target}${quest.unit} 달성 시 획득`;
 }
+
+const STATE_LOCK: Record<ReturnType<typeof missionQuestState>, string | null> = {
+  earned: null,
+  doing: "⏳",
+  locked: "🔒",
+};
 
 export function MissionSection() {
   return (
@@ -35,9 +23,9 @@ export function MissionSection() {
         <div className="sec-head reveal">
           <span className="sec-ico">⭐</span>
           <h2>미션 &amp; 인증</h2>
-          <a className="more" href="#" {...demoProps("미션 전체 보기는 준비 중이에요 ⭐")}>
+          <Link className="more" to="/missions">
             더보기 →
-          </a>
+          </Link>
         </div>
         <p className="sec-sub reveal">
           미션을 완료하고 배지와 카드를 모아보세요! 모은 배지는 바다패스 여권에 기록됩니다.
@@ -45,35 +33,24 @@ export function MissionSection() {
         <div className="mis-wrap">
           <div className="badge-card reveal">
             <div className="badge-grid">
-              {MISSION_BADGES.map((badge) => (
-                <div className={`badge ${badge.state}`} key={badge.title}>
-                  <span className="b-ic">
-                    <i>{badge.icon}</i>
-                    {"lock" in badge && badge.lock && <span className="lock">{badge.lock}</span>}
-                  </span>
-                  <b>{badge.title}</b>
-                  <span>{badge.desc}</span>
-                </div>
-              ))}
+              {MISSION_QUESTS.map((quest) => {
+                const state = missionQuestState(quest);
+                const lock = STATE_LOCK[state];
+                return (
+                  <div className={`badge ${state}`} key={quest.id}>
+                    <span className="b-ic">
+                      <i>{quest.icon}</i>
+                      {lock && <span className="lock">{lock}</span>}
+                    </span>
+                    <b>{quest.title}</b>
+                    <span>{badgeDesc(quest)}</span>
+                  </div>
+                );
+              })}
             </div>
           </div>
-          <div className="prog-card reveal">
-            <h3>📊 나의 진행 현황</h3>
-            {MISSION_PROGRESS.map((row) => (
-              <div className="bar-row" key={row.label}>
-                <div className="bl">
-                  <span>{row.label}</span>
-                  <b>{row.value}</b>
-                </div>
-                <ProgressBar width={row.width} gold={row.gold} />
-              </div>
-            ))}
-            <p className="prog-note">
-              💡 이번 주 남은 미션: <b>새로운 섬 1곳 방문하기</b> — 완료하면 배지 카드 1장이 지급돼요!
-            </p>
-            <button className="btn btn-navy btn-block" {...demoProps("미션 확인 페이지는 준비 중이에요 ⭐")}>
-              미션 확인하기
-            </button>
+          <div className="reveal mis-summary-col">
+            <MissionSummary />
           </div>
         </div>
       </div>
