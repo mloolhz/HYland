@@ -1,0 +1,472 @@
+/* ── 미션 & 인증 페이지 ── */
+.ms-page {
+  position: relative;
+  isolation: isolate;
+  min-height: calc(100vh - var(--head-h));
+  padding-top: calc(var(--head-h) + 32px);
+  padding-bottom: 72px;
+  overflow: hidden;
+  background: var(--alt);
+}
+
+.ms-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--ph2) center / cover no-repeat;
+  filter: blur(20px) saturate(1.05) brightness(1.1);
+  transform: scale(1.1);
+  opacity: 0.4;
+  z-index: -2;
+}
+
+.ms-page::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    170deg,
+    rgba(247, 249, 252, 0.82) 0%,
+    rgba(247, 249, 252, 0.9) 55%,
+    rgba(247, 249, 252, 0.96) 100%
+  );
+  z-index: -1;
+}
+
+/* ── Header ── */
+.ms-head {
+  margin-bottom: 24px;
+}
+
+.ms-head__eyebrow {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: var(--blue);
+  margin-bottom: 8px;
+}
+
+.ms-head__title {
+  font-size: 30px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: var(--navy);
+  line-height: 1.2;
+}
+
+.ms-head__sub {
+  margin-top: 8px;
+  font-size: 14.5px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ── Summary card + ring gauge ── */
+.ms-summary {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: var(--shadow-lg);
+  padding: 24px 28px;
+  margin-bottom: 32px;
+}
+
+/* 랜딩 미션 섹션: 미션 페이지와 같은 8개 퀘스트 배지 → 4열 2행 배치 */
+.mis-wrap .badge-grid {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px 10px;
+}
+
+@media (max-width: 640px) {
+  .mis-wrap .badge-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 랜딩 미션 섹션: 요약 카드를 배지 카드 높이에 맞추고, 전체 달성률 게이지를 가운데 배치 */
+.mis-summary-col {
+  display: flex;
+}
+
+.mis-summary-col .ms-summary {
+  flex: 1;
+  margin-bottom: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+.mis-summary-col .ms-summary__stats {
+  flex: none;
+  width: 100%;
+}
+
+.ms-ring {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  flex-shrink: 0;
+}
+
+.ms-ring svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.ms-ring__track {
+  fill: none;
+  stroke: var(--sky2);
+  stroke-width: 12;
+}
+
+.ms-ring__fill {
+  fill: none;
+  stroke: var(--blue);
+  stroke-width: 12;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1.2s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+.ms-ring__label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.ms-ring__percent {
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--navy);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.ms-ring__count {
+  display: inline-block;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+}
+
+.ms-ring__count .mp-count-up__suffix {
+  font-size: 0.68em;
+  font-weight: 800;
+  margin-left: 1px;
+}
+
+.ms-ring__caption {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.ms-summary__stats {
+  display: flex;
+  gap: 14px;
+  flex: 1;
+  min-width: 240px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ms-summary__stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  border-radius: 14px;
+  padding: 18px 10px 16px;
+  border: 1px solid rgba(15, 95, 204, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  background: linear-gradient(180deg, #fff 0%, var(--sky) 100%);
+}
+
+.ms-summary__stat--earned {
+  border-color: rgba(226, 162, 51, 0.28);
+  background: linear-gradient(180deg, #fffdf7 0%, #fff6e8 100%);
+}
+
+.ms-summary__stat--doing {
+  border-color: rgba(15, 95, 204, 0.18);
+  background: linear-gradient(180deg, #fff 0%, #eef4fb 100%);
+}
+
+.ms-summary__stat--total {
+  border-color: rgba(45, 46, 107, 0.12);
+  background: linear-gradient(180deg, #fff 0%, #f3f5fa 100%);
+}
+
+.ms-summary__num {
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.ms-summary__stat--earned .ms-summary__num {
+  color: #9a6410;
+}
+
+.ms-summary__stat--doing .ms-summary__num {
+  color: var(--blue);
+}
+
+.ms-summary__stat--total .ms-summary__num {
+  color: var(--navy);
+}
+
+.ms-summary__count {
+  display: inline-block;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+}
+
+.ms-summary__label {
+  font-size: 12.5px;
+  color: var(--muted);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* ── Category groups ── */
+.ms-group {
+  margin-bottom: 28px;
+}
+
+.ms-group__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.ms-group__badge {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--navy);
+  padding-bottom: 3px;
+  border-bottom: 2px solid var(--gold);
+}
+
+.ms-group__title small {
+  font-size: 12.5px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+/* ── Quest grid + cards ── */
+.ms-quest-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.ms-quest {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 20px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ms-quest:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.ms-quest--earned {
+  border-color: rgba(226, 162, 51, 0.5);
+  background: linear-gradient(180deg, #fffdf7, #fff);
+}
+
+.ms-quest--locked {
+  opacity: 0.72;
+}
+
+.ms-quest__top {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.ms-quest__icon {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  background: var(--sky);
+}
+
+.ms-quest--earned .ms-quest__icon {
+  background: conic-gradient(var(--gold), var(--goldL), #c98a1f, var(--gold));
+}
+
+.ms-quest--locked .ms-quest__icon {
+  filter: grayscale(0.7);
+  opacity: 0.7;
+}
+
+.ms-quest__heading {
+  flex: 1;
+  min-width: 0;
+}
+
+.ms-quest__title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.ms-quest__title {
+  font-size: 15.5px;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.ms-quest__state {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 99px;
+}
+
+.ms-quest__state--earned {
+  color: #8a5a10;
+  background: rgba(242, 200, 109, 0.35);
+}
+
+.ms-quest__state--doing {
+  color: var(--blue);
+  background: rgba(63, 130, 224, 0.14);
+}
+
+.ms-quest__state--locked {
+  color: var(--muted);
+  background: var(--sky2);
+}
+
+.ms-quest__desc {
+  margin-top: 5px;
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* ── Gauge ── */
+.ms-quest__gauge-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 7px;
+}
+
+.ms-quest__count {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.ms-quest__count i {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.ms-quest__percent {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--blue);
+}
+
+.ms-gauge-track {
+  height: 10px;
+  border-radius: 99px;
+  background: var(--sky2);
+  overflow: hidden;
+}
+
+.ms-gauge-fill {
+  display: block;
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--blue2), var(--blue));
+  transition-property: width;
+  transition-timing-function: cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+.ms-gauge-fill--gold {
+  background: linear-gradient(90deg, var(--goldL), var(--gold));
+}
+
+/* ── Foot ── */
+.ms-quest__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--line);
+}
+
+.ms-quest__reward {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.ms-quest__reward-done {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #8a5a10;
+}
+
+.ms-quest__reward-left {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+@media (max-width: 640px) {
+  .ms-quest-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ms-summary {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .ms-head__title {
+    font-size: 25px;
+  }
+}

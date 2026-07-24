@@ -4,14 +4,6 @@ import { NotificationBell } from "@/components/notification/NotificationBell";
 
 const SITE_LOGO_SRC = "/incheon-island-leisure-nuri-logo.png";
 
-const LEISURE_SUBCATEGORIES = [
-  "해상 레저",
-  "수중 레저",
-  "육상 레저",
-  "체험·힐링",
-  "기타 레저",
-] as const;
-
 type NavSubItem = { label: string; href: string };
 
 type NavItem = {
@@ -63,9 +55,14 @@ function MenuIcon({ open }: { open: boolean }) {
   );
 }
 
-function buildNavItems(onLanding: boolean, onIslands: boolean, onCommunity: boolean): NavItem[] {
-  const hash = (id: string) => (onLanding ? `#${id}` : `/#${id}`);
-
+function buildNavItems(
+  onIslands: boolean,
+  onSports: boolean,
+  onReservation: boolean,
+  onMissions: boolean,
+  onLeaderboard: boolean,
+  onCommunity: boolean,
+): NavItem[] {
   return [
     {
       id: "islands",
@@ -73,40 +70,50 @@ function buildNavItems(onLanding: boolean, onIslands: boolean, onCommunity: bool
       href: "/islands",
       isRoute: true,
       active: onIslands,
+      subItems: [],
+    },
+    {
+      id: "sports",
+      label: "레저 스포츠",
+      href: "/sports",
+      isRoute: true,
+      active: onSports,
       subItems: [
-        { label: "섬 지도 탐험", href: "/islands" },
-        { label: "권역별 섬", href: "/islands" },
-        { label: "방문 기록", href: "/islands" },
+        { label: "수상레저", href: "/sports?category=water" },
+        { label: "육상레저", href: "/sports?category=land" },
+        { label: "체험", href: "/sports?category=exp" },
+        { label: "힐링", href: "/sports?category=heal" },
       ],
     },
     {
-      id: "booking",
-      label: "레저 스포츠",
-      href: hash("booking"),
-      subItems: LEISURE_SUBCATEGORIES.map((label) => ({
-        label,
-        href: hash("booking"),
-      })),
+      id: "reservation",
+      label: "레저 예약",
+      href: "/reservation",
+      isRoute: true,
+      active: onReservation,
+      subItems: [
+        { label: "전체 프로그램", href: "/reservation" },
+        { label: "수상레저", href: "/reservation?category=water" },
+        { label: "육상레저", href: "/reservation?category=land" },
+        { label: "체험", href: "/reservation?category=exp" },
+        { label: "힐링", href: "/reservation?category=heal" },
+      ],
     },
     {
       id: "mission",
       label: "미션 & 인증",
-      href: hash("mission"),
-      subItems: [
-        { label: "뱃지 수집", href: hash("mission") },
-        { label: "패스포트", href: hash("mission") },
-        { label: "미션 현황", href: hash("mission") },
-      ],
+      href: "/missions",
+      isRoute: true,
+      active: onMissions,
+      subItems: [],
     },
     {
       id: "leaderboard",
       label: "리더보드",
-      href: hash("leaderboard"),
-      subItems: [
-        { label: "주간 랭킹", href: hash("leaderboard") },
-        { label: "월간 랭킹", href: hash("leaderboard") },
-        { label: "전체 랭킹", href: hash("leaderboard") },
-      ],
+      href: "/leaderboard",
+      isRoute: true,
+      active: onLeaderboard,
+      subItems: [],
     },
     {
       id: "community",
@@ -114,11 +121,7 @@ function buildNavItems(onLanding: boolean, onIslands: boolean, onCommunity: bool
       href: "/community",
       isRoute: true,
       active: onCommunity,
-      subItems: [
-        { label: "탐험 후기", href: "/community" },
-        { label: "팁 & 노하우", href: "/community" },
-        { label: "공지", href: "/community" },
-      ],
+      subItems: [],
     },
   ];
 }
@@ -192,11 +195,11 @@ function DesktopNav({
   return (
     <div
       className={`nav-links-wrap${isOpen ? " is-open" : ""}`}
-      onMouseEnter={onOpen}
       onMouseLeave={onLeave}
     >
       <nav className="nav-links" aria-label="주요 메뉴">
         {items.map((item) => {
+          const hasSubItems = item.subItems.length > 0;
           const linkClass = [
             "nav-link",
             item.active ? "nav-route-active" : undefined,
@@ -205,14 +208,25 @@ function DesktopNav({
             .filter(Boolean)
             .join(" ");
 
+          const handleItemEnter = () => {
+            if (hasSubItems) {
+              onOpen();
+              onEnter(item.id);
+              return;
+            }
+            if (isOpen) {
+              onEnter(item.id);
+            }
+          };
+
           const triggerProps = {
             className: linkClass,
-            onMouseEnter: () => onEnter(item.id),
-            onFocus: () => onEnter(item.id),
+            onMouseEnter: handleItemEnter,
+            onFocus: handleItemEnter,
           };
 
           return (
-            <div key={item.id} className="nav-item" onMouseEnter={() => onEnter(item.id)}>
+            <div key={item.id} className="nav-item" onMouseEnter={handleItemEnter}>
               {item.isRoute ? (
                 <Link to={item.href} {...triggerProps}>
                   {item.label}
@@ -222,14 +236,14 @@ function DesktopNav({
                   {item.label}
                 </a>
               )}
-              <div className="nav-dropdown-col" aria-hidden={!isOpen}>
+              <div className="nav-dropdown-col" aria-hidden={!isOpen || !hasSubItems}>
                 {item.subItems.map((sub) => (
                   <a
                     key={sub.label}
                     href={sub.href}
                     className="nav-dropdown-link"
                     onClick={onNavigate}
-                    tabIndex={isOpen ? 0 : -1}
+                    tabIndex={isOpen && hasSubItems ? 0 : -1}
                   >
                     {sub.label}
                   </a>
@@ -254,6 +268,7 @@ function DrawerNav({ items, onNavigate }: DrawerNavProps) {
   return (
     <nav className="nav-drawer-nav" aria-label="주요 메뉴">
       {items.map((item) => {
+        const hasSubItems = item.subItems.length > 0;
         const expanded = expandedId === item.id;
         const linkClass = [
           "nav-drawer-link",
@@ -275,38 +290,42 @@ function DrawerNav({ items, onNavigate }: DrawerNavProps) {
 
         return (
           <div key={item.id} className="nav-drawer-group">
-            <div className="nav-drawer-row">
+            <div className={`nav-drawer-row${hasSubItems ? "" : " nav-drawer-row--solo"}`}>
               {mainLink}
-              <button
-                type="button"
-                className="nav-drawer-toggle"
-                aria-expanded={expanded}
-                aria-label={`${item.label} 하위 메뉴 ${expanded ? "접기" : "펼치기"}`}
-                onClick={() => setExpandedId(expanded ? null : item.id)}
-              >
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                  <path
-                    d="M4 6l4 4 4-4"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-            </div>
-            <div className={`nav-drawer-sub${expanded ? " is-open" : ""}`}>
-              {item.subItems.map((sub) => (
-                <a
-                  key={sub.label}
-                  href={sub.href}
-                  className="nav-drawer-sublink"
-                  onClick={onNavigate}
+              {hasSubItems && (
+                <button
+                  type="button"
+                  className="nav-drawer-toggle"
+                  aria-expanded={expanded}
+                  aria-label={`${item.label} 하위 메뉴 ${expanded ? "접기" : "펼치기"}`}
+                  onClick={() => setExpandedId(expanded ? null : item.id)}
                 >
-                  {sub.label}
-                </a>
-              ))}
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path
+                      d="M4 6l4 4 4-4"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+              )}
             </div>
+            {hasSubItems && (
+              <div className={`nav-drawer-sub${expanded ? " is-open" : ""}`}>
+                {item.subItems.map((sub) => (
+                  <a
+                    key={sub.label}
+                    href={sub.href}
+                    className="nav-drawer-sublink"
+                    onClick={onNavigate}
+                  >
+                    {sub.label}
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
         );
       })}
@@ -324,9 +343,21 @@ export function SiteHeader() {
   const onLanding = location.pathname === "/";
   const onCommunity = location.pathname.startsWith("/community");
   const onIslands = location.pathname.startsWith("/islands");
+  const onSports = location.pathname.startsWith("/sports");
+  const onReservation = location.pathname.startsWith("/reservation");
+  const onMissions = location.pathname.startsWith("/missions");
+  const onLeaderboard = location.pathname.startsWith("/leaderboard");
   const navItems = useMemo(
-    () => buildNavItems(onLanding, onIslands, onCommunity),
-    [onLanding, onIslands, onCommunity],
+    () =>
+      buildNavItems(
+        onIslands,
+        onSports,
+        onReservation,
+        onMissions,
+        onLeaderboard,
+        onCommunity,
+      ),
+    [onIslands, onSports, onReservation, onMissions, onLeaderboard, onCommunity],
   );
   const headerSolid = headerScrolled || navMegaOpen;
   const closeNavMega = useCallback(() => {
