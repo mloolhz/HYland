@@ -11,11 +11,11 @@ const SHOW_LANDING_PROFILE = true;
 
 const SLIDE_COUNT = 5;
 const CATEGORIES = [
-  ["⛵", "해상 레저"],
-  ["🤿", "수중 레저"],
-  ["🥾", "육상 레저"],
-  ["🎯", "체험·힐링"],
-  ["⋯", "기타 레저"],
+  { icon: "⛵", label: "해상 레저", to: "/sports?category=water" },
+  { icon: "🤿", label: "수중 레저", to: "/sports?category=water" },
+  { icon: "🥾", label: "육상 레저", to: "/sports?category=land" },
+  { icon: "🎯", label: "체험·힐링", to: "/sports?category=exp" },
+  { icon: "⋯", label: "기타 레저", to: "/sports" },
 ] as const;
 
 const AGENT_PLACEHOLDERS = [
@@ -203,19 +203,19 @@ export function HeroSection({
             인천의 섬에서 다양한 레저스포츠를 만나보세요.
           </p>
           <div className="hero-cta">
-            <a className="btn btn-navy" href="#map">
+            <Link className="btn btn-navy" to="/islands">
               탐험 시작하기 →
-            </a>
-            <a className="btn btn-white" href="#booking">
+            </Link>
+            <Link className="btn btn-white" to="/reservation">
               레저 예약 보기
-            </a>
+            </Link>
           </div>
           <div className="cats" aria-label="레저 카테고리">
-            {CATEGORIES.map(([icon, label]) => (
-              <span className="cat" key={label}>
+            {CATEGORIES.map(({ icon, label, to }) => (
+              <Link className="cat" key={label} to={to}>
                 <i>{icon}</i>
                 {label}
-              </span>
+              </Link>
             ))}
           </div>
         </div>
@@ -369,15 +369,15 @@ export function HeroSection({
             </div>
 
             <div className="quick-grid">
-              <span className="q" {...demoProps("추천 섬 페이지는 준비 중이에요")}>
+              <Link className="q" to="/islands">
                 <i>📍</i>추천 섬
-              </span>
+              </Link>
               <span className="q" {...demoProps("나에게 맞는 섬BTI를 찾아보세요!")}>
                 <i>🏝️</i>섬BTI
               </span>
-              <span className="q" {...demoProps("레저 예약은 아래 섹션에서 미리 만나보세요")}>
+              <Link className="q" to="/reservation">
                 <i>📅</i>레저 예약
-              </span>
+              </Link>
               <span className="q" {...demoProps("안전 정보 페이지는 준비 중이에요")}>
                 <i>🛟</i>안전 정보
               </span>

@@ -1,4 +1,4 @@
-import { demoProps } from "./ToastProvider";
+import { Link } from "react-router-dom";
 
 const BOOKINGS = [
   { icon: "🏄", cls: "t-sup", title: "SUP 체험", desc: "덕적도 · 서포리 해수욕장 · 강습 포함", price: "₩30,000" },
@@ -14,9 +14,9 @@ export function BookingSection() {
         <div className="sec-head reveal">
           <span className="sec-ico">📅</span>
           <h2>레저 스포츠 예약</h2>
-          <a className="more" href="#" {...demoProps("예약 전체 보기는 준비 중이에요 📅")}>
+          <Link className="more" to="/reservation">
             더보기 →
-          </a>
+          </Link>
         </div>
         <p className="sec-sub reveal">원하는 섬과 스포츠를 선택하고 간편하게 예약하세요.</p>
         <div className="book-card reveal">
@@ -28,15 +28,15 @@ export function BookingSection() {
                 <span>{item.desc}</span>
               </div>
               <div className="price">{item.price}</div>
-              <button className="go" {...demoProps("예약 기능은 준비 중이에요 📅")}>
+              <Link className="go" to="/reservation">
                 예약
-              </button>
+              </Link>
             </div>
           ))}
           <div className="book-foot">
-            <button className="btn btn-outline btn-block" {...demoProps("전체 예약 페이지는 준비 중이에요 📅")}>
+            <Link className="btn btn-outline btn-block" to="/reservation">
               전체 예약 보기
-            </button>
+            </Link>
           </div>
         </div>
       </div>
