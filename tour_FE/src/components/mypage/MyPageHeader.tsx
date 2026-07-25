@@ -1,7 +1,13 @@
+import { Link } from "react-router-dom";
+import { GearIcon } from "@/components/mypage/GearIcon";
 import { CONTAINER } from "@/constants/layout";
 import { getCurrentUserProfile } from "@/lib/user-profile";
 
-export function MyPageHeader() {
+type MyPageHeaderProps = {
+  showSettingsButton?: boolean;
+};
+
+export function MyPageHeader({ showSettingsButton = false }: MyPageHeaderProps) {
   const profile = getCurrentUserProfile();
 
   return (
@@ -9,13 +15,23 @@ export function MyPageHeader() {
       <header className="mp-header">
         <div className="mp-header-bg" aria-hidden="true" />
         <div className={`${CONTAINER} mp-header-inner`}>
-          <div className="mp-header-copy">
-            <span className="mp-header-eyebrow">MY PAGE</span>
+          <span className="mp-header-eyebrow">MY PAGE</span>
+          <div className="mp-header-title-row">
             <h1 className="mp-header-title">마이페이지</h1>
-            <p className="mp-header-desc">
-              {profile.nickname}님의 섬 탐험 기록, 미션 배지, 리더보드 순위를 한곳에서 확인하세요
-            </p>
+            {showSettingsButton && (
+              <Link
+                to="/mypage/settings"
+                className="mp-settings-btn"
+                aria-label="설정"
+                title="설정"
+              >
+                <GearIcon />
+              </Link>
+            )}
           </div>
+          <p className="mp-header-desc">
+            {profile.nickname}님의 미션 배지와 리더보드 순위를 한곳에서 확인하세요
+          </p>
         </div>
       </header>
     </div>

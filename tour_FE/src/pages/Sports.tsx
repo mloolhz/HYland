@@ -1,5 +1,5 @@
-import { useCallback, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+﻿import { useCallback, useEffect, useMemo, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   SPORTS_CATEGORIES,
   SPORTS_DATA,
@@ -13,6 +13,7 @@ import {
   resolveSportIslandRegion,
 } from "@/lib/sports-region";
 import { SPORT_DEFAULT_PRODUCT } from "@/api/reservation";
+import { CONTAINER } from "@/constants/layout";
 
 const HERO_IMAGE = "/_Pngtree_progressive_leisure_jet_boat_aquatics_16900908.jpg";
 
@@ -52,8 +53,23 @@ function SportPhoto({ sport }: { sport: Sport }) {
 
 export function Sports() {
   const navigate = useNavigate();
-  const [category, setCategory] = useState<CategoryKey>("water");
-  const [selectedId, setSelectedId] = useState<string>(SPORTS_DATA.water[0].id);
+  const [searchParams] = useSearchParams();
+  const initialCategory = searchParams.get("category");
+  const categoryFromUrl =
+    initialCategory && initialCategory in SPORTS_DATA
+      ? (initialCategory as CategoryKey)
+      : "water";
+  const [category, setCategory] = useState<CategoryKey>(categoryFromUrl);
+  const [selectedId, setSelectedId] = useState<string>(SPORTS_DATA[categoryFromUrl][0].id);
+
+  useEffect(() => {
+    const nextCategory =
+      initialCategory && initialCategory in SPORTS_DATA
+        ? (initialCategory as CategoryKey)
+        : "water";
+    setCategory(nextCategory);
+    setSelectedId(SPORTS_DATA[nextCategory][0].id);
+  }, [initialCategory]);
 
   const categoryLabel = SPORTS_CATEGORIES.find((c) => c.key === category)?.label ?? "";
   const sports = SPORTS_DATA[category];
@@ -81,17 +97,22 @@ export function Sports() {
 
   return (
     <main className="sp-page">
-      <section className="sp-hero" aria-label="레저스포츠">
-        <img
-          className="sp-hero-img"
-          src={HERO_IMAGE}
-          alt=""
-          width={3504}
-          height={805}
-        />
-        <div className="sp-hero-overlay" aria-hidden="true" />
-        <h1 className="sp-hero-title">레저스포츠</h1>
-      </section>
+      <div className="sp-hero-band">
+        <header className="sp-hero" aria-label="레저스포츠">
+          <img
+            className="sp-hero-img"
+            src={HERO_IMAGE}
+            alt=""
+            width={3504}
+            height={805}
+          />
+          <div className="sp-hero-overlay" aria-hidden="true" />
+          <div className={`${CONTAINER} sp-hero-inner`}>
+            <h1 className="sp-hero-title">레저스포츠</h1>
+            <p className="sp-hero-desc">인천의 섬에서 즐길 수 있는 레저 종목을 카테고리별로 만나보세요</p>
+          </div>
+        </header>
+      </div>
 
       <div className="sp-tabs" role="tablist" aria-label="레저 카테고리">
         {SPORTS_CATEGORIES.map((item) => {

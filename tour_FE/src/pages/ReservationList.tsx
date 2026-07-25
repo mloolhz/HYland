@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   getMinPrice,
   getProducts,
@@ -7,6 +7,7 @@ import {
   RESERVATION_ISLAND_FILTER,
 } from "@/api/reservation";
 import { getIslandColors } from "@/constants/island";
+import { CONTAINER } from "@/constants/layout";
 import type { CategoryKey, Product } from "@/types/reservation";
 
 const CATEGORIES: { key: CategoryKey | "all"; label: string }[] = [
@@ -35,14 +36,28 @@ const SORT_OPTIONS: { key: SortKey; label: string }[] = [
 
 export function ReservationList() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const categoryParam = searchParams.get("category");
+  const initialCategory =
+    categoryParam && categoryParam !== "all" && categoryParam in CATEGORY_LABEL
+      ? (categoryParam as CategoryKey)
+      : "all";
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [category, setCategory] = useState<CategoryKey | "all">("all");
+  const [category, setCategory] = useState<CategoryKey | "all">(initialCategory);
   const [islandId, setIslandId] = useState<string | null>(null);
   const [sort, setSort] = useState<SortKey>("pop");
   const [openMenu, setOpenMenu] = useState<OpenMenu>(null);
   const filterRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const nextCategory =
+      categoryParam && categoryParam !== "all" && categoryParam in CATEGORY_LABEL
+        ? (categoryParam as CategoryKey)
+        : "all";
+    setCategory(nextCategory);
+  }, [categoryParam]);
 
   useEffect(() => {
     let cancelled = false;
@@ -99,20 +114,23 @@ export function ReservationList() {
 
   return (
     <main className="rv-page">
-      <section className="rv-banner" aria-label="레저 예약">
-        <img
-          className="rv-banner-img"
-          src="/_Pngtree_progressive_leisure_jet_boat_aquatics_16900908.jpg"
-          alt=""
-          width={3504}
-          height={805}
-        />
-        <div className="rv-banner-overlay" aria-hidden="true" />
-        <div className="rv-banner-copy">
-          <h1>레저 예약</h1>
-          <p>원하는 섬과 종목을 고르고 날짜·인원을 예약하세요.</p>
-        </div>
-      </section>
+      <div className="rv-banner-band">
+        <section className="rv-banner" aria-label="레저 예약">
+          <img
+            className="rv-banner-img"
+            src="/_Pngtree_progressive_leisure_jet_boat_aquatics_16900908.jpg"
+            alt=""
+            width={3504}
+            height={805}
+          />
+          <div className="rv-banner-overlay" aria-hidden="true" />
+          <div className={`${CONTAINER} rv-banner-inner`}>
+            <span className="rv-banner-eyebrow">LEISURE RESERVATION</span>
+            <h1>레저 예약</h1>
+            <p>원하는 섬과 종목을 골라 레저스포츠를 예약하세요</p>
+          </div>
+        </section>
+      </div>
 
       <div className="rv-body">
       <div className="rv-filter-line" ref={filterRef}>

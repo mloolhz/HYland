@@ -36,7 +36,7 @@ type AISectionProps = {
 
 export function AISection({ onRequestCustomRecommendation }: AISectionProps) {
   return (
-    <section className="sec" id="ai" style={{ paddingTop: 20 }}>
+    <section className="sec" id="ai">
       <div className="container">
         <div className="sec-head reveal">
           <span className="sec-ico">🤖</span>

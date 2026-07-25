@@ -11,14 +11,17 @@ const SHOW_LANDING_PROFILE = true;
 
 const SLIDE_COUNT = 5;
 const CATEGORIES = [
-  ["⛵", "해양 레저"],
-  ["🏃", "러닝"],
-  ["🚴", "사이클"],
-  ["🥾", "하이킹"],
-  ["🎣", "낚시"],
-  ["🏕️", "캠핑"],
-  ["🏄", "패들보드"],
-  ["⋯", "더보기"],
+  ["⛵", "해상 레저"],
+  ["🤿", "수중 레저"],
+  ["🥾", "육상 레저"],
+  ["🎯", "체험·힐링"],
+  ["⋯", "기타 레저"],
+] as const;
+
+const AGENT_PLACEHOLDERS = [
+  "초보자가 가기 좋은 섬 추천해줘",
+  "당일치기 가능한 섬 추천",
+  "카약 타기 좋은 곳 알려줘",
 ] as const;
 
 type HeroSectionProps = {
@@ -38,7 +41,9 @@ export function HeroSection({
   const [activeSlide, setActiveSlide] = useState(0);
   const [showScrollHint, setShowScrollHint] = useState(true);
   const [agentQuery, setAgentQuery] = useState("");
+  const [agentPlaceholderIndex, setAgentPlaceholderIndex] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const agentPlaceholderTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const scrollToMap = () => {
     scrollToSection("map");
@@ -149,6 +154,25 @@ export function HeroSection({
     };
   }, []);
 
+  useEffect(() => {
+    if (agentPlaceholderTimerRef.current) clearInterval(agentPlaceholderTimerRef.current);
+
+    if (agentQuery.trim() || agentActive) return;
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion) return;
+
+    agentPlaceholderTimerRef.current = setInterval(() => {
+      setAgentPlaceholderIndex((prev) => (prev + 1) % AGENT_PLACEHOLDERS.length);
+    }, 4000);
+
+    return () => {
+      if (agentPlaceholderTimerRef.current) clearInterval(agentPlaceholderTimerRef.current);
+    };
+  }, [agentQuery, agentActive]);
+
+  const agentPlaceholder = AGENT_PLACEHOLDERS[agentPlaceholderIndex];
+
   return (
     <section
       className="hero"
@@ -174,7 +198,7 @@ export function HeroSection({
             시작하세요
           </h1>
           <p className="hero-sub">
-            해양 레저부터 러닝, 사이클, 하이킹까지 —
+            해상·수중·육상·체험 레저까지 —
             <br />
             인천의 섬에서 다양한 레저스포츠를 만나보세요.
           </p>
@@ -216,7 +240,7 @@ export function HeroSection({
                       handleAgentSubmit();
                     }
                   }}
-                  placeholder="자유롭게 질문해주세요."
+                  placeholder={agentPlaceholder}
                   rows={2}
                   aria-label="AI에게 질문하기"
                 />
