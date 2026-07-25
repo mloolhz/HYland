@@ -2,6 +2,19 @@ import type { UserProfile } from "@/lib/user-profile";
 
 export type PassportBadgeColor = "blue" | "green" | "purple" | "orange" | "mint" | "pink";
 
+export type PassportBadgeIcon =
+  | "compass"
+  | "hike"
+  | "camp"
+  | "cycle"
+  | "kayak"
+  | "wave"
+  | "fish"
+  | "lighthouse"
+  | "anchor"
+  | "sun"
+  | "cliff";
+
 export type PassportBadge = {
   id: number;
   name: string;
@@ -12,21 +25,32 @@ export type PassportBadge = {
   isUnlocked?: boolean;
   acquiredAt: string | null;
   color: PassportBadgeColor | null;
+  /** 잉크 도장 색상 (획득 시, 없으면 color 키에서 파생) */
+  inkColor?: string | null;
   rotate: number;
-  icon: "compass" | "hike" | "camp" | "cycle" | "kayak" | "wave" | "fish" | "lighthouse" | "anchor" | "sun";
+  icon: PassportBadgeIcon;
+};
+
+export const STAMP_INK_BY_COLOR: Record<PassportBadgeColor, string> = {
+  blue: "#2F6FE4",
+  green: "#2E9760",
+  purple: "#815CE8",
+  orange: "#E76524",
+  mint: "#188D92",
+  pink: "#D94D8C",
 };
 
 export const BADGES_PER_PAGE = 6;
 
 /** 획득·미획득 배지 샘플 — API 연동 전 임시 데이터 (총 18개, 3페이지) */
 export const PASSPORT_BADGES: PassportBadge[] = [
-  { id: 1, name: "백령도 탐험 완료", island: "백령도", activity: "탐험 완료", acquired: true, acquiredAt: "2025.05.10", color: "blue", rotate: -5, icon: "compass" },
-  { id: 2, name: "자월도 하이킹", island: "자월도", activity: "하이킹", acquired: true, acquiredAt: "2025.05.18", color: "green", rotate: 4, icon: "hike" },
-  { id: 3, name: "덕적도 캠핑", island: "덕적도", activity: "캠핑", acquired: true, acquiredAt: "2025.06.02", color: "purple", rotate: -3, icon: "camp" },
-  { id: 4, name: "영종도 사이클", island: "영종도", activity: "사이클", acquired: true, acquiredAt: "2025.06.14", color: "orange", rotate: 6, icon: "cycle" },
-  { id: 5, name: "무의도 해양 레저", island: "무의도", activity: "해양 레저", acquired: true, acquiredAt: "2025.06.22", color: "mint", rotate: -4, icon: "wave" },
-  { id: 6, name: "섬BTI 참여", island: "섬BTI", activity: "참여 완료", acquired: true, acquiredAt: "2025.07.01", color: "pink", rotate: 2, icon: "anchor" },
-  { id: 7, name: "소야도 카약", island: "소야도", activity: "카약", acquired: false, acquiredAt: null, color: null, rotate: -2, icon: "kayak" },
+  { id: 1, name: "백령도 탐험 완료", island: "백령도", activity: "탐험 완료", acquired: true, acquiredAt: "2025.05.10", color: "blue", inkColor: "#2F6FE4", rotate: -3, icon: "cliff" },
+  { id: 2, name: "자월도 하이킹", island: "자월도", activity: "하이킹", acquired: true, acquiredAt: "2025.05.18", color: "green", inkColor: "#2E9760", rotate: 2, icon: "hike" },
+  { id: 3, name: "덕적도 캠핑", island: "덕적도", activity: "캠핑", acquired: true, acquiredAt: "2025.06.02", color: "purple", inkColor: "#815CE8", rotate: -1.5, icon: "camp" },
+  { id: 4, name: "영종도 사이클", island: "영종도", activity: "사이클", acquired: false, acquiredAt: null, color: "orange", inkColor: "#E76524", rotate: 3, icon: "cycle" },
+  { id: 5, name: "무의도 해양 레저", island: "무의도", activity: "해양 레저", acquired: false, acquiredAt: null, color: "mint", inkColor: "#188D92", rotate: -2, icon: "kayak" },
+  { id: 6, name: "섬BTI 참여", island: "섬BTI", activity: "참여 완료", acquired: false, acquiredAt: null, color: "pink", inkColor: "#D94D8C", rotate: 1, icon: "compass" },
+  { id: 7, name: "소야도 카약", island: "소야도", activity: "카약", acquired: false, acquiredAt: null, color: null, inkColor: null, rotate: -2, icon: "kayak" },
   { id: 8, name: "승봉도 낚시", island: "승봉도", activity: "낚시", acquired: true, acquiredAt: "2025.07.08", color: "blue", rotate: 5, icon: "fish" },
   { id: 9, name: "연평도 등대", island: "연평도", activity: "등대 탐방", acquired: true, acquiredAt: "2025.07.15", color: "green", rotate: -6, icon: "lighthouse" },
   { id: 10, name: "인천항 크루즈", island: "인천항", activity: "크루즈", acquired: true, acquiredAt: "2025.07.20", color: "purple", rotate: 3, icon: "anchor" },
@@ -54,6 +78,12 @@ export const PASSPORT_BADGES: PassportBadge[] = [
 
 export function isBadgeAcquired(badge: PassportBadge): boolean {
   return badge.acquired || badge.isUnlocked === true;
+}
+
+export function getBadgeInkColor(badge: PassportBadge): string {
+  if (badge.inkColor) return badge.inkColor;
+  if (badge.color) return STAMP_INK_BY_COLOR[badge.color];
+  return "#8A9098";
 }
 
 export function chunkBadges(badges: PassportBadge[], size = BADGES_PER_PAGE): PassportBadge[][] {

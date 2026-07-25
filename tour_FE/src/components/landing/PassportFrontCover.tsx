@@ -1,10 +1,13 @@
-/** 모달 여권 앞표지 — 닫힌 상태에서 보이는 네이비·골드 표지 */
+/** 모달 여권 앞표지 — 실제 여권 구성을 참고한 네이비·골드 표지 */
 export function PassportFrontCover() {
   return (
     <div className="passport-front-cover">
       <div className="passport-front-cover__face passport-front-cover__face--front">
         <span className="passport-front-cover__sheen" aria-hidden="true" />
-        <p className="passport-front-cover__title">i-바다패스</p>
+        <div className="passport-front-cover__top">
+          <p className="passport-front-cover__country">REPUBLIC OF KOREA</p>
+          <p className="passport-front-cover__type">LEISURE PASSPORT</p>
+        </div>
         <svg className="passport-front-cover__emblem" viewBox="0 0 80 80" fill="none" aria-hidden="true">
           <circle cx="40" cy="40" r="31" stroke="currentColor" strokeWidth="1.2" opacity="0.85" />
           <circle cx="40" cy="40" r="24" stroke="currentColor" strokeWidth="0.8" strokeDasharray="2.5 3.8" opacity="0.65" />
@@ -20,7 +23,11 @@ export function PassportFrontCover() {
             fill="currentColor"
           />
         </svg>
-        <p className="passport-front-cover__footer">INCHEON</p>
+        <div className="passport-front-cover__bottom">
+          <p className="passport-front-cover__title">i-바다패스</p>
+          <p className="passport-front-cover__footer">INCHEON · ISLANDS</p>
+        </div>
+        <span className="passport-front-cover__chip" aria-hidden="true" />
       </div>
       <div className="passport-front-cover__face passport-front-cover__face--back" aria-hidden="true">
         <div className="passport-front-cover__inner-paper" />

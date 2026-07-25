@@ -12,7 +12,7 @@ import { PassportBadgeSpreadPage } from "./PassportBadgeSpreadPage";
 import { PassportProfilePage } from "./PassportProfilePage";
 import type { BookNavState, PassportBookSpread } from "./passport-book-spreads";
 
-const FLIP_MS = 400;
+const FLIP_MS = 580;
 
 export type PassportBookHandle = {
   goPrev: () => void;
@@ -169,7 +169,9 @@ export const PassportBook = forwardRef<PassportBookHandle, PassportBookProps>(fu
                   totalSpreads={totalSpreads}
                 />
               </div>
-              <div className="passport-book__page-turn-face passport-book__page-turn-face--back" aria-hidden="true" />
+              <div className="passport-book__page-turn-face passport-book__page-turn-face--back" aria-hidden="true">
+                <div className="passport-book__page-paper-back" />
+              </div>
             </div>
           </div>
         )}

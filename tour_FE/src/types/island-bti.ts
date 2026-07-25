@@ -60,3 +60,18 @@ export interface IslandBtiResultData {
   complementaryMatch: IslandBtiResultCode;
   cautionMatch: IslandBtiResultCode;
 }
+
+export interface CurrentIslandBtiResult {
+  code: IslandBtiResultCode;
+  scores: {
+    A: number;
+    B: number;
+    W: number;
+    L: number;
+    C: number;
+    I: number;
+    P: number;
+    F: number;
+  };
+  testedAt: string;
+}

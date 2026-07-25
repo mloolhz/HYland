@@ -7,13 +7,15 @@ import {
   type ReactNode,
 } from "react";
 import { DEFAULT_PROFILE_CHARACTER_ID } from "@/data/profile-characters";
-import type { IslandBtiResultCode } from "@/types/island-bti";
+import type { CurrentIslandBtiResult, IslandBtiResultCode } from "@/types/island-bti";
 
 type ProfileCharacterContextValue = {
   selectedCharacterId: string;
   setSelectedCharacterId: (id: string) => void;
+  currentIslandBtiResult: CurrentIslandBtiResult | null;
+  setCurrentIslandBtiResult: (result: CurrentIslandBtiResult | null) => void;
+  /** @deprecated currentIslandBtiResult.code 파생값 — 기존 컴포넌트 호환용 */
   islandBtiResultCode: IslandBtiResultCode | null;
-  setIslandBtiResultCode: (code: IslandBtiResultCode | null) => void;
   isProfileSelectModalOpen: boolean;
   setProfileSelectModalOpen: (open: boolean) => void;
 };
@@ -22,19 +24,23 @@ const ProfileCharacterContext = createContext<ProfileCharacterContextValue | nul
 
 export function ProfileCharacterProvider({ children }: { children: ReactNode }) {
   const [selectedCharacterId, setSelectedCharacterId] = useState(DEFAULT_PROFILE_CHARACTER_ID);
-  const [islandBtiResultCode, setIslandBtiResultCode] = useState<IslandBtiResultCode | null>(null);
+  const [currentIslandBtiResult, setCurrentIslandBtiResult] =
+    useState<CurrentIslandBtiResult | null>(null);
   const [isProfileSelectModalOpen, setProfileSelectModalOpen] = useState(false);
+
+  const islandBtiResultCode = currentIslandBtiResult?.code ?? null;
 
   const value = useMemo(
     () => ({
       selectedCharacterId,
       setSelectedCharacterId,
+      currentIslandBtiResult,
+      setCurrentIslandBtiResult,
       islandBtiResultCode,
-      setIslandBtiResultCode,
       isProfileSelectModalOpen,
       setProfileSelectModalOpen,
     }),
-    [selectedCharacterId, islandBtiResultCode, isProfileSelectModalOpen],
+    [selectedCharacterId, currentIslandBtiResult, islandBtiResultCode, isProfileSelectModalOpen],
   );
 
   return (
@@ -54,11 +60,11 @@ export function useOptionalProfileCharacter() {
   return useContext(ProfileCharacterContext);
 }
 
-export function useSetIslandBtiResultCode() {
+export function useSetCurrentIslandBtiResult() {
   const context = useContext(ProfileCharacterContext);
   return useCallback(
-    (code: IslandBtiResultCode | null) => {
-      context?.setIslandBtiResultCode(code);
+    (result: CurrentIslandBtiResult | null) => {
+      context?.setCurrentIslandBtiResult(result);
     },
     [context],
   );

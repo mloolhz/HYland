@@ -912,7 +912,6 @@
 }
 
 .mp-passport-book .passport-book__shell {
-  width: min(100%, 720px);
   margin-inline: auto;
 }
 

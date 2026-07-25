@@ -31,6 +31,7 @@ import { WritePost } from "@/pages/WritePost";
 import { IslandBtiIntro } from "@/pages/IslandBtiIntro";
 import { IslandBtiTest } from "@/pages/IslandBtiTest";
 import { IslandBtiResult } from "@/pages/IslandBtiResult";
+import { ProfileCharacterProvider } from "@/context/ProfileCharacterContext";
 import "./index.css";
 import "./styles/auth.css";
 import "./styles/community.css";
@@ -88,6 +89,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <ProfileCharacterProvider>
+      <RouterProvider router={router} />
+    </ProfileCharacterProvider>
   </StrictMode>,
 );

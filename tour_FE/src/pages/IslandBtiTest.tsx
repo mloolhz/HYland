@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { CONTAINER } from "@/constants/layout";
 import { ISLAND_BTI_QUESTIONS, ISLAND_BTI_QUESTION_COUNT } from "@/data/island-bti/questions";
 import { calculateIslandBtiResult } from "@/lib/island-bti";
-import { useSetIslandBtiResultCode } from "@/context/ProfileCharacterContext";
-import type { IslandBtiResultCode } from "@/types/island-bti";
+import { useSetCurrentIslandBtiResult } from "@/context/ProfileCharacterContext";
+import { isIslandBtiResultCode } from "@/data/island-bti/results";
 
 export function IslandBtiTest() {
   const navigate = useNavigate();
-  const setIslandBtiResultCode = useSetIslandBtiResultCode();
+  const setCurrentIslandBtiResult = useSetCurrentIslandBtiResult();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
 
@@ -36,7 +36,13 @@ export function IslandBtiTest() {
     if (isLastQuestion) {
       try {
         const resultData = calculateIslandBtiResult(answers, ISLAND_BTI_QUESTIONS);
-        setIslandBtiResultCode(resultData.result as IslandBtiResultCode);
+        if (isIslandBtiResultCode(resultData.result)) {
+          setCurrentIslandBtiResult({
+            code: resultData.result,
+            scores: resultData.scores,
+            testedAt: new Date().toISOString(),
+          });
+        }
         navigate("/island-bti/result", { state: resultData });
       } catch (error) {
         console.error("Island BTI result calculation failed:", error);

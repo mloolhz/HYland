@@ -8,7 +8,10 @@ export function PassportCoverVisual() {
       <span className="passport-cover__pages" aria-hidden="true" />
       <div className="passport-cover__face">
         <span className="passport-cover__sheen" aria-hidden="true" />
-        <p className="passport-cover__title">i-바다패스</p>
+        <div className="passport-cover__top">
+          <p className="passport-cover__country">REPUBLIC OF KOREA</p>
+          <p className="passport-cover__type">LEISURE PASSPORT</p>
+        </div>
         <svg className="passport-cover__emblem" viewBox="0 0 80 80" fill="none" aria-hidden="true">
           <circle cx="40" cy="40" r="31" stroke="currentColor" strokeWidth="1.2" opacity="0.85" />
           <circle cx="40" cy="40" r="24" stroke="currentColor" strokeWidth="0.8" strokeDasharray="2.5 3.8" opacity="0.65" />
@@ -24,7 +27,10 @@ export function PassportCoverVisual() {
             fill="currentColor"
           />
         </svg>
-        <p className="passport-cover__footer">INCHEON</p>
+        <div className="passport-cover__bottom">
+          <p className="passport-cover__title">i-바다패스</p>
+          <p className="passport-cover__footer">INCHEON</p>
+        </div>
       </div>
     </div>
   );
