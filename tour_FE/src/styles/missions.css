@@ -76,14 +76,35 @@
   margin-bottom: 32px;
 }
 
-/* 랜딩 미션 섹션: 미션 페이지와 같은 8개 퀘스트 배지 → 4열 2행 배치 */
-.mis-wrap .badge-grid {
+/* 랜딩 미션 섹션: 수집형 배지 프리뷰 4열 2행 */
+.mb-grid {
+  display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px 10px;
+  gap: 22px 12px;
+}
+
+.mb-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+}
+
+.mb-item__title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.mb-item__desc {
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.4;
 }
 
 @media (max-width: 640px) {
-  .mis-wrap .badge-grid {
+  .mb-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
@@ -190,28 +211,107 @@
 
 /* ── Category groups ── */
 .ms-group {
-  margin-bottom: 28px;
+  margin-bottom: 30px;
+}
+
+.ms-group__head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
 }
 
 .ms-group__title {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 14px;
-}
-
-.ms-group__badge {
-  font-size: 15px;
+  gap: 8px;
+  font-size: 17px;
   font-weight: 800;
   color: var(--navy);
-  padding-bottom: 3px;
-  border-bottom: 2px solid var(--gold);
+  flex-shrink: 0;
+}
+
+.ms-group__emoji {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  font-size: 16px;
+  background: color-mix(in srgb, var(--cat, var(--blue)) 15%, #fff);
 }
 
 .ms-group__title small {
   font-size: 12.5px;
   color: var(--muted);
-  font-weight: 600;
+  font-weight: 700;
+  margin-left: 2px;
+}
+
+.ms-group__progress {
+  flex: 1;
+  height: 7px;
+  border-radius: 99px;
+  background: var(--sky2);
+  overflow: hidden;
+}
+
+.ms-group__progress-fill {
+  display: block;
+  height: 100%;
+  border-radius: 99px;
+  background: var(--cat, var(--blue));
+  transition: width 0.8s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+/* ── 필터 칩 (전체 / 진행중 / 획득) ── */
+.ms-filter {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.ms-filter button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 16px;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  background: #fff;
+  color: var(--muted);
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ms-filter button:hover {
+  color: var(--navy);
+  border-color: var(--blue2);
+}
+
+.ms-filter button.on {
+  background: linear-gradient(150deg, var(--blue), var(--blue-d));
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(15, 95, 204, 0.24);
+}
+
+.ms-filter__count {
+  min-width: 20px;
+  padding: 1px 6px;
+  border-radius: 99px;
+  background: var(--sky2);
+  color: var(--muted);
+  font-size: 11.5px;
+  font-weight: 800;
+}
+
+.ms-filter button.on .ms-filter__count {
+  background: rgba(255, 255, 255, 0.24);
+  color: #fff;
 }
 
 /* ── Quest grid + cards ── */
@@ -239,7 +339,12 @@
 }
 
 .ms-quest--earned {
-  border-color: rgba(226, 162, 51, 0.5);
+  border-color: color-mix(in srgb, var(--cat, var(--blue)) 42%, var(--line));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--cat, var(--blue)) 6%, #fff), #fff);
+}
+
+.ms-quest--gold.ms-quest--earned {
+  border-color: rgba(226, 162, 51, 0.55);
   background: linear-gradient(180deg, #fffdf7, #fff);
 }
 
@@ -251,27 +356,6 @@
   display: flex;
   gap: 14px;
   align-items: flex-start;
-}
-
-.ms-quest__icon {
-  flex-shrink: 0;
-  width: 52px;
-  height: 52px;
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 26px;
-  background: var(--sky);
-}
-
-.ms-quest--earned .ms-quest__icon {
-  background: conic-gradient(var(--gold), var(--goldL), #c98a1f, var(--gold));
-}
-
-.ms-quest--locked .ms-quest__icon {
-  filter: grayscale(0.7);
-  opacity: 0.7;
 }
 
 .ms-quest__heading {
@@ -306,8 +390,8 @@
 }
 
 .ms-quest__state--doing {
-  color: var(--blue);
-  background: rgba(63, 130, 224, 0.14);
+  color: var(--cat, var(--blue));
+  background: color-mix(in srgb, var(--cat, var(--blue)) 13%, #fff);
 }
 
 .ms-quest__state--locked {
@@ -345,7 +429,7 @@
 .ms-quest__percent {
   font-size: 13px;
   font-weight: 800;
-  color: var(--blue);
+  color: var(--cat, var(--blue));
 }
 
 .ms-gauge-track {
@@ -359,7 +443,7 @@
   display: block;
   height: 100%;
   border-radius: 99px;
-  background: linear-gradient(90deg, var(--blue2), var(--blue));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--cat, var(--blue)) 65%, #fff), var(--cat, var(--blue)));
   transition-property: width;
   transition-timing-function: cubic-bezier(0.2, 0.7, 0.3, 1);
 }
@@ -408,5 +492,261 @@
 
   .ms-head__title {
     font-size: 25px;
+  }
+}
+
+/* ── 여권 스탬프형 수집 배지 (MissionBadge) ── */
+.mbadge {
+  /* 등급별 포일(메탈릭) 색상 — 기본: 카테고리(인천색) */
+  --foil: var(--cat, var(--blue));
+  --disc: color-mix(in srgb, var(--cat, var(--blue)) 8%, #fff);
+  --ink: var(--cat, var(--blue));
+  --accent: var(--cat, var(--blue));
+
+  position: relative;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.2s ease;
+}
+
+/* 희귀 = 실버 포일 */
+.mbadge--rare {
+  --foil: #97A3B2;
+  --disc: #fbfcfe;
+  --ink: #7A8797;
+  --accent: #97A3B2;
+}
+
+/* 전설 = 골드 포일 */
+.mbadge--legend {
+  --foil: #C99A2E;
+  --disc: #fffdf5;
+  --ink: #A9822B;
+  --accent: #CFA23A;
+}
+
+/* 미획득 = 회색(미압인) */
+.mbadge--locked {
+  --foil: #AEB8C4;
+  --disc: #f2f4f8;
+  --ink: #AEB8C4;
+  --accent: #AEB8C4;
+}
+
+.mbadge--earned.mbadge--common {
+  --disc: color-mix(in srgb, var(--cat) 15%, #fff);
+}
+
+/* 스탬프 SVG */
+.mbadge__stamp {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.mbadge__disc {
+  fill: var(--disc);
+}
+
+.mbadge__ring-out {
+  fill: none;
+  stroke: var(--foil);
+  stroke-width: 2.4;
+}
+
+.mbadge__ring-in {
+  fill: none;
+  stroke: var(--foil);
+  stroke-width: 1;
+}
+
+.mbadge__dots {
+  fill: none;
+  stroke: var(--foil);
+  stroke-width: 1;
+  stroke-dasharray: 1 3.4;
+  stroke-linecap: round;
+  opacity: 0.55;
+}
+
+.mbadge__track {
+  fill: none;
+  stroke: color-mix(in srgb, var(--cat) 16%, #fff);
+  stroke-width: 2.6;
+}
+
+.mbadge__arc {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+.mbadge__stars {
+  fill: var(--foil);
+  font-size: 7px;
+  letter-spacing: 0.5px;
+}
+
+.mbadge__divider {
+  stroke: var(--foil);
+  stroke-width: 1;
+  opacity: 0.45;
+}
+
+.mbadge__label {
+  fill: var(--ink);
+  font-size: 8.5px;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+}
+
+/* 미획득 링은 점선 처리 (아직 안 찍힌 스탬프) */
+.mbadge--locked .mbadge__ring-out {
+  stroke-dasharray: 4 4;
+  stroke-linecap: round;
+}
+
+/* 중앙 이모지 */
+.mbadge__emoji {
+  position: absolute;
+  top: 41%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.92em;
+  line-height: 1;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.14));
+}
+
+.mbadge--doing .mbadge__emoji {
+  opacity: 0.9;
+}
+
+.mbadge--locked .mbadge__emoji {
+  filter: grayscale(1);
+  opacity: 0.42;
+}
+
+/* 획득 인장(✓) / 미획득 자물쇠 */
+.mbadge__seal {
+  position: absolute;
+  top: 2%;
+  right: 2%;
+  width: 32%;
+  height: 32%;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 0.4em;
+  font-weight: 900;
+  color: #fff;
+  background: var(--foil);
+  box-shadow: 0 2px 6px rgba(45, 46, 107, 0.25);
+}
+
+.mbadge__lock {
+  position: absolute;
+  right: 2%;
+  bottom: 2%;
+  width: 34%;
+  height: 34%;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 0.4em;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+/* 전설 골드 글로우 */
+.mbadge--legend .mbadge__stamp {
+  filter: drop-shadow(0 2px 8px rgba(201, 154, 46, 0.4));
+}
+
+/* 호버 — 살짝 떠오르며 강조 (클릭 없음) */
+.mbadge--interactive {
+  cursor: help;
+}
+
+.mbadge--interactive:hover,
+.mbadge--interactive:focus-visible,
+.mb-item:hover .mbadge,
+.ms-quest:hover .mbadge {
+  transform: translateY(-4px) scale(1.06);
+  filter: drop-shadow(0 8px 16px rgba(45, 46, 107, 0.18));
+  outline: none;
+  z-index: 3;
+}
+
+/* 완성 임박(≥67%) — 수집 유도 은은한 펄스 */
+.mbadge--near .mbadge__stamp {
+  animation: mbadge-nudge 1.9s ease-in-out infinite;
+}
+
+@keyframes mbadge-nudge {
+  0%, 100% { filter: drop-shadow(0 0 0 transparent); }
+  50% { filter: drop-shadow(0 0 6px color-mix(in srgb, var(--accent) 55%, transparent)); }
+}
+
+/* ── 호버 툴팁 ── */
+.mbadge__tip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  min-width: 128px;
+  max-width: 190px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  background: var(--navy);
+  color: #fff;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.16s ease, transform 0.16s ease;
+  z-index: 10;
+}
+
+.mbadge__tip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--navy);
+}
+
+.mbadge--interactive:hover .mbadge__tip,
+.mbadge--interactive:focus-visible .mbadge__tip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.mbadge__tip-title {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.mbadge__tip-tier {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--goldL);
+}
+
+.mbadge__tip-status {
+  font-size: 11px;
+  color: #cdddf5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mbadge--near .mbadge__stamp {
+    animation: none;
   }
 }
