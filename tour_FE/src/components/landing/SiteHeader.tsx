@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { NotificationBell } from "@/components/notification/NotificationBell";
+import { ISLAND_REGION_SUB_ITEMS } from "@/lib/island-data";
 
 const SITE_LOGO_SRC = "/incheon-island-leisure-nuri-logo.png";
 
@@ -70,7 +71,7 @@ function buildNavItems(
       href: "/islands",
       isRoute: true,
       active: onIslands,
-      subItems: [],
+      subItems: ISLAND_REGION_SUB_ITEMS,
     },
     {
       id: "sports",
@@ -79,8 +80,8 @@ function buildNavItems(
       isRoute: true,
       active: onSports,
       subItems: [
-        { label: "수상레저", href: "/sports?category=water" },
-        { label: "육상레저", href: "/sports?category=land" },
+        { label: "해상 레저", href: "/sports?category=water" },
+        { label: "육상 레저", href: "/sports?category=land" },
         { label: "체험", href: "/sports?category=exp" },
         { label: "힐링", href: "/sports?category=heal" },
       ],

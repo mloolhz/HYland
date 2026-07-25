@@ -20,8 +20,8 @@ export type Sport = {
 export type CategoryKey = "water" | "land" | "exp" | "heal";
 
 export const SPORTS_CATEGORIES: { key: CategoryKey; label: string }[] = [
-  { key: "water", label: "수상레저" },
-  { key: "land", label: "육상레저" },
+  { key: "water", label: "해상 레저" },
+  { key: "land", label: "육상 레저" },
   { key: "exp", label: "체험" },
   { key: "heal", label: "힐링" },
 ];

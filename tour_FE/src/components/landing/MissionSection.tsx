@@ -25,7 +25,7 @@ export function MissionSection() {
           <span className="sec-ico">⭐</span>
           <h2>미션 &amp; 인증</h2>
           <Link className="more" to="/missions">
-            더보기 →
+            자세히 보기 →
           </Link>
         </div>
         <p className="sec-sub reveal">

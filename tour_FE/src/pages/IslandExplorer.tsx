@@ -1,20 +1,48 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { IslandDetailPanel } from "@/components/island/IslandDetailPanel";
 import { IslandExplorerHeader } from "@/components/island/IslandExplorerHeader";
 import { IslandExplorerMap } from "@/components/island/IslandExplorerMap";
-import { ISLAND_MAP } from "@/lib/island-data";
+import { ISLAND_MAP, ISLANDS } from "@/lib/island-data";
+
+function readIslandId(param: string | null): string | null {
+  if (!param || !ISLAND_MAP[param]) return null;
+  return param;
+}
+
+function readRegionIslandId(param: string | null): string | null {
+  if (!param) return null;
+  const region = decodeURIComponent(param);
+  const island = ISLANDS.find((item) => item.region === region);
+  return island?.id ?? null;
+}
 
 export function IslandExplorer() {
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const islandParam = searchParams.get("island");
+  const regionParam = searchParams.get("region");
+  const [selectedId, setSelectedId] = useState<string | null>(
+    () => readIslandId(islandParam) ?? readRegionIslandId(regionParam),
+  );
+
+  useEffect(() => {
+    setSelectedId(readIslandId(islandParam) ?? readRegionIslandId(regionParam));
+  }, [islandParam, regionParam]);
+
   const selectedIsland = selectedId ? ISLAND_MAP[selectedId] ?? null : null;
 
-  const handleSelect = useCallback((id: string) => {
-    setSelectedId(id);
-  }, []);
+  const handleSelect = useCallback(
+    (id: string) => {
+      setSelectedId(id);
+      setSearchParams({ island: id }, { replace: true });
+    },
+    [setSearchParams],
+  );
 
   const handleClose = useCallback(() => {
     setSelectedId(null);
-  }, []);
+    setSearchParams({}, { replace: true });
+  }, [setSearchParams]);
 
   return (
     <div className="isl-page">
