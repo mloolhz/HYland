@@ -1,22 +1,40 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { CONTAINER } from "@/constants/layout";
-
-const DUMMY_QUESTION = {
-  number: 1,
-  total: 4,
-  text: "주말에 섬에 간다면, 어떤 하루가 더 끌리나요?",
-  choices: [
-    "일찍 일어나 예약한 레저를 차례로 즐긴다",
-    "느긋하게 카페에서 바다를 보며 쉰다",
-    "친구들과 함께 바다·육상 액티비티를 번갈아 한다",
-    "그날 기분에 맞춰 즉흥적으로 움직인다",
-  ],
-};
+import { ISLAND_BTI_QUESTIONS, ISLAND_BTI_QUESTION_COUNT } from "@/data/island-bti/questions";
 
 export function IslandBtiTest() {
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const progress = (DUMMY_QUESTION.number / DUMMY_QUESTION.total) * 100;
+  const navigate = useNavigate();
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [answers, setAnswers] = useState<Record<number, number>>({});
+
+  const currentQuestion = ISLAND_BTI_QUESTIONS[currentQuestionIndex];
+  const selectedOptionIndex = answers[currentQuestion.id] ?? null;
+  const progress = ((currentQuestionIndex + 1) / ISLAND_BTI_QUESTION_COUNT) * 100;
+  const isFirstQuestion = currentQuestionIndex === 0;
+  const isLastQuestion = currentQuestionIndex === ISLAND_BTI_QUESTION_COUNT - 1;
+  const canGoNext = selectedOptionIndex !== null;
+
+  const handleSelectOption = (optionIndex: number) => {
+    setAnswers((prev) => ({
+      ...prev,
+      [currentQuestion.id]: optionIndex,
+    }));
+  };
+
+  const handlePrevious = () => {
+    if (isFirstQuestion) return;
+    setCurrentQuestionIndex((index) => index - 1);
+  };
+
+  const handleNext = () => {
+    if (!canGoNext) return;
+    if (isLastQuestion) {
+      navigate("/island-bti/result");
+      return;
+    }
+    setCurrentQuestionIndex((index) => index + 1);
+  };
 
   return (
     <main className="ibti-page">
@@ -31,45 +49,60 @@ export function IslandBtiTest() {
           <div className="ibti-progress" aria-label="검사 진행률">
             <div className="ibti-progress__head">
               <span>
-                문항 {DUMMY_QUESTION.number} / {DUMMY_QUESTION.total}
+                문항 {currentQuestionIndex + 1} / {ISLAND_BTI_QUESTION_COUNT}
               </span>
               <span>{Math.round(progress)}%</span>
             </div>
-            <div className="ibti-progress__track">
+            <div
+              className="ibti-progress__track"
+              role="progressbar"
+              aria-valuenow={Math.round(progress)}
+              aria-valuemin={0}
+              aria-valuemax={100}
+            >
               <span className="ibti-progress__fill" style={{ width: `${progress}%` }} />
             </div>
           </div>
 
           <h2 id="ibti-question-title" className="ibti-question">
-            {DUMMY_QUESTION.text}
+            {currentQuestion.question}
           </h2>
-          <p className="ibti-question-hint">STEP 1 UI 골격 — 더미 문항 1개</p>
 
           <div className="ibti-options" role="listbox" aria-label="답변 선택">
-            {DUMMY_QUESTION.choices.map((choice, index) => {
-              const selected = selectedIndex === index;
+            {currentQuestion.options.map((option, optionIndex) => {
+              const selected = selectedOptionIndex === optionIndex;
               return (
                 <button
-                  key={choice}
+                  key={`${currentQuestion.id}-${optionIndex}`}
                   type="button"
                   role="option"
                   aria-selected={selected}
                   className={`ibti-option${selected ? " is-selected" : ""}`}
-                  onClick={() => setSelectedIndex(index)}
+                  onClick={() => handleSelectOption(optionIndex)}
                 >
-                  {choice}
+                  {option.text}
                 </button>
               );
             })}
           </div>
 
           <div className="ibti-nav">
-            <Link to="/island-bti" className="btn btn-outline">
+            <button
+              type="button"
+              className="btn btn-outline"
+              onClick={handlePrevious}
+              disabled={isFirstQuestion}
+            >
               이전
-            </Link>
-            <Link to="/island-bti/result" className="btn btn-navy">
-              다음
-            </Link>
+            </button>
+            <button
+              type="button"
+              className="btn btn-navy"
+              onClick={handleNext}
+              disabled={!canGoNext}
+            >
+              {isLastQuestion ? "결과 보기" : "다음"}
+            </button>
           </div>
         </section>
       </div>

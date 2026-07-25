@@ -181,7 +181,7 @@
 }
 
 .ibti-question {
-  margin: 0 0 8px;
+  margin: 0 0 28px;
   font-size: 20px;
   font-weight: 800;
   letter-spacing: -0.02em;
@@ -231,6 +231,13 @@
   margin-top: 24px;
   padding-top: 20px;
   border-top: 1px solid var(--line);
+}
+
+.ibti-nav .btn:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .ibti-result-layout {
