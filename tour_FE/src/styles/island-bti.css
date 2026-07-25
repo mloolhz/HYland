@@ -1,0 +1,316 @@
+/* ── 섬BTI 페이지 ── */
+.ibti-page {
+  position: relative;
+  isolation: isolate;
+  min-height: calc(100vh - var(--head-h));
+  padding-top: calc(var(--head-h) + 32px);
+  padding-bottom: 72px;
+  overflow: hidden;
+  background: var(--alt);
+}
+
+.ibti-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--ph3) center / cover no-repeat;
+  filter: blur(20px) saturate(1.05) brightness(1.1);
+  transform: scale(1.1);
+  opacity: 0.38;
+  z-index: -2;
+}
+
+.ibti-page::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    170deg,
+    rgba(247, 249, 252, 0.84) 0%,
+    rgba(247, 249, 252, 0.92) 55%,
+    rgba(247, 249, 252, 0.97) 100%
+  );
+  z-index: -1;
+}
+
+.ibti-head {
+  margin-bottom: 28px;
+}
+
+.ibti-head__eyebrow {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: var(--blue);
+  margin-bottom: 8px;
+}
+
+.ibti-head__title {
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: var(--navy);
+  line-height: 1.2;
+}
+
+.ibti-head__sub {
+  margin-top: 10px;
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.65;
+  max-width: 560px;
+}
+
+.ibti-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: var(--shadow-lg);
+  padding: 28px 24px;
+}
+
+.ibti-intro-card {
+  max-width: 640px;
+  padding: 36px 32px;
+}
+
+.ibti-intro-list {
+  margin: 20px 0 28px;
+  padding-left: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ibti-intro-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14.5px;
+  color: var(--text);
+  line-height: 1.55;
+}
+
+.ibti-intro-list li::before {
+  content: "✓";
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--sky);
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+}
+
+.ibti-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: var(--sky);
+  color: var(--navy);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.ibti-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.ibti-actions--intro {
+  margin-top: 28px;
+}
+
+.ibti-start-btn {
+  min-width: 220px;
+  min-height: 54px;
+  padding: 16px 36px;
+  font-size: 17px;
+  font-weight: 800;
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(15, 95, 204, 0.28);
+}
+
+.ibti-start-btn:hover {
+  box-shadow: 0 8px 24px rgba(15, 95, 204, 0.34);
+  transform: translateY(-1px);
+}
+
+.ibti-start-btn:active {
+  transform: translateY(0);
+}
+
+.ibti-progress {
+  margin-bottom: 22px;
+}
+
+.ibti-progress__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.ibti-progress__track {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--sky2);
+  overflow: hidden;
+}
+
+.ibti-progress__fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--blue2), var(--blue));
+}
+
+.ibti-question {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--navy);
+  line-height: 1.45;
+}
+
+.ibti-question-hint {
+  margin: 0 0 22px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.ibti-options {
+  display: grid;
+  gap: 10px;
+}
+
+.ibti-option {
+  width: 100%;
+  text-align: left;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: #fff;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--text);
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+}
+
+.ibti-option:hover {
+  border-color: var(--blue2);
+  background: var(--sky);
+}
+
+.ibti-option.is-selected {
+  border-color: var(--blue);
+  background: var(--sky);
+  box-shadow: 0 0 0 1px rgba(15, 95, 204, 0.12);
+}
+
+.ibti-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.ibti-result-layout {
+  max-width: 720px;
+}
+
+.ibti-result-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  padding-bottom: 24px;
+  margin-bottom: 24px;
+  border-bottom: 1px dashed var(--line);
+}
+
+.ibti-result-code {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 88px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #2480f5 0%, var(--blue) 100%);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.ibti-result-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 2px dashed rgba(15, 95, 204, 0.35);
+  background: linear-gradient(180deg, var(--sky) 0%, #fff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.ibti-result-name {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--navy);
+  letter-spacing: -0.02em;
+}
+
+.ibti-result-desc {
+  margin: 0;
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.65;
+  max-width: 480px;
+}
+
+@media (max-width: 640px) {
+  .ibti-head__title {
+    font-size: 26px;
+  }
+
+  .ibti-intro-card {
+    padding: 28px 20px;
+  }
+
+  .ibti-nav {
+    flex-direction: column-reverse;
+  }
+
+  .ibti-nav .btn {
+    width: 100%;
+  }
+
+  .ibti-start-btn {
+    width: 100%;
+    min-width: 0;
+  }
+}

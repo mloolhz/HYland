@@ -322,9 +322,9 @@ export function HeroSection({
               <span className="q" {...demoProps("추천 섬 페이지는 준비 중이에요")}>
                 <i>📍</i>추천 섬
               </span>
-              <span className="q" {...demoProps("나에게 맞는 섬BTI를 찾아보세요!")}>
+              <Link to="/island-bti" className="q">
                 <i>🏝️</i>섬BTI
-              </span>
+              </Link>
               <span className="q" {...demoProps("레저 예약은 아래 섹션에서 미리 만나보세요")}>
                 <i>📅</i>레저 예약
               </span>

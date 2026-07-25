@@ -28,6 +28,9 @@ import { ReservationDetail } from "@/pages/ReservationDetail";
 import { ReservationCheckout } from "@/pages/ReservationCheckout";
 import { ReservationComplete } from "@/pages/ReservationComplete";
 import { WritePost } from "@/pages/WritePost";
+import { IslandBtiIntro } from "@/pages/IslandBtiIntro";
+import { IslandBtiTest } from "@/pages/IslandBtiTest";
+import { IslandBtiResult } from "@/pages/IslandBtiResult";
 import "./index.css";
 import "./styles/auth.css";
 import "./styles/community.css";
@@ -39,6 +42,7 @@ import "./styles/sports.css";
 import "./styles/reservation.css";
 import "./styles/missions.css";
 import "./styles/leaderboard.css";
+import "./styles/island-bti.css";
 
 const router = createBrowserRouter([
   { path: "/", element: <LandingPage />, errorElement: <RouterError /> },
@@ -47,6 +51,9 @@ const router = createBrowserRouter([
     errorElement: <RouterError />,
     children: [
       { path: "islands", element: <IslandExplorer /> },
+      { path: "island-bti", element: <IslandBtiIntro /> },
+      { path: "island-bti/test", element: <IslandBtiTest /> },
+      { path: "island-bti/result", element: <IslandBtiResult /> },
       { path: "missions", element: <Missions /> },
       { path: "leaderboard", element: <Leaderboard /> },
       { path: "sports", element: <Sports /> },
