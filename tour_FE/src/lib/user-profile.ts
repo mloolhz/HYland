@@ -1,7 +1,8 @@
 import { CURRENT_USER_ID } from "@/constants/auth";
 import type { IslandBti } from "@/constants/island";
 import { ISLANDS, type IslandInfo } from "@/lib/island-data";
-import { LEADERBOARD, type LeaderboardPeriod } from "@/lib/landing-data";
+import { CATEGORY_LEADERBOARD, LEADERBOARD, type LeaderboardPeriod } from "@/lib/landing-data";
+import type { MissionCategory } from "@/mocks/missions";
 import { DEMO_USER_PASSPORT, type UserPassportStats } from "@/mocks/userPassport";
 import { MOCK_POSTS } from "@/mocks/posts";
 
@@ -87,4 +88,20 @@ export function getLeaderboardRank(period: LeaderboardPeriod = "month") {
     periodLabel: PERIOD_LABEL[period],
     boardSize: board.length,
   };
+}
+
+/** 데모 사용자의 카테고리별 미션 포인트 — 공개 리더보드에는 미포함 */
+export const MY_CATEGORY_POINTS: Record<MissionCategory, number> = {
+  탐험: 1520,
+  레저: 980,
+  생태: 1780,
+  기타: 1610,
+};
+
+export function getCategoryLeaderboardRank(category: MissionCategory) {
+  const points = MY_CATEGORY_POINTS[category];
+  const board = CATEGORY_LEADERBOARD[category];
+  const rank = board.filter(([, score]) => score > points).length + 1;
+
+  return { rank, points, category, boardSize: board.length };
 }

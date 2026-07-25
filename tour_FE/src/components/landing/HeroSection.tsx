@@ -12,14 +12,11 @@ const SHOW_LANDING_PROFILE = true;
 
 const SLIDE_COUNT = 5;
 const CATEGORIES = [
-  ["⛵", "해양 레저"],
-  ["🏃", "러닝"],
-  ["🚴", "사이클"],
-  ["🥾", "하이킹"],
-  ["🎣", "낚시"],
-  ["🏕️", "캠핑"],
-  ["🏄", "패들보드"],
-  ["⋯", "더보기"],
+  ["⛵", "해상 레저"],
+  ["🤿", "수중 레저"],
+  ["🥾", "육상 레저"],
+  ["🎯", "체험·힐링"],
+  ["⋯", "기타 레저"],
 ] as const;
 
 const AGENT_PLACEHOLDERS = [
@@ -148,7 +145,7 @@ export function HeroSection({
           </h1>
           <div className="hero-action-group">
             <p className="hero-sub">
-              <span className="hero-sub-line">해양 레저부터 러닝, 사이클, 하이킹까지 —</span>
+              <span className="hero-sub-line">해상·수중·육상·체험 레저까지 —</span>
               <span className="hero-sub-line hero-sub-line--anchor">
                 인천의 섬에서 다양한 레저스포츠를 만나보세요.
               </span>
@@ -202,7 +199,7 @@ export function HeroSection({
                     }
                   }}
                   placeholder={agentPlaceholder}
-                  rows={1}
+                  rows={2}
                   aria-label="AI에게 질문하기"
                 />
                 <button

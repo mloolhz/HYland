@@ -9,7 +9,7 @@ const BOOKINGS = [
 
 export function BookingSection() {
   return (
-    <section className="sec" id="booking" style={{ paddingTop: 20 }}>
+    <section className="sec" id="booking">
       <div className="container">
         <div className="sec-head reveal">
           <span className="sec-ico">📅</span>
