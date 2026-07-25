@@ -9,33 +9,53 @@
   color: #4a5567;
 }
 
-/* ① Hero — full image, no crop (3504×805) */
+/* ① Hero — 고정 높이 + cover 이미지, 텍스트 오버레이 */
+.sp-hero-band {
+  width: 100%;
+}
+
 .sp-hero {
   position: relative;
   width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  height: 240px;
   background-color: #0e2b52;
   overflow: hidden;
 }
 
 .sp-hero-img {
-  display: block;
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .sp-hero-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  background: linear-gradient(
+    120deg,
+    rgba(15, 23, 42, 0.55) 0%,
+    rgba(26, 58, 107, 0.4) 50%,
+    rgba(0, 0, 0, 0.15) 100%
+  );
+  pointer-events: none;
+}
+
+.sp-hero-inner {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
   pointer-events: none;
 }
 
 .sp-hero-title {
-  position: absolute;
-  z-index: 1;
   margin: 0;
   font-family: "IncheonMICEOTF", var(--font-header, Pretendard), sans-serif;
   font-size: 26px;
@@ -43,6 +63,15 @@
   letter-spacing: 6px;
   color: #fff;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+
+.sp-hero-desc {
+  margin: 10px 0 0;
+  max-width: 520px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
 }
 
 /* ② Category tabs */
@@ -392,9 +421,17 @@
 
 /* Responsive */
 @media (max-width: 640px) {
+  .sp-hero {
+    height: 160px;
+  }
+
   .sp-hero-title {
     font-size: 22px;
     letter-spacing: 4px;
+  }
+
+  .sp-hero-desc {
+    font-size: 13px;
   }
 
   .sp-tab {

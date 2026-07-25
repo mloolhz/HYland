@@ -19,39 +19,68 @@
   line-height: 1.5;
 }
 
-/* 상단 배너 — 풀블리드 (스포츠 탭과 동일, cover 크롭 없음) */
+/* 상단 배너 — 고정 높이 + cover 이미지, 텍스트 오버레이 */
+.rv-banner-band {
+  width: 100%;
+}
+
 .rv-banner {
   position: relative;
   width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  height: 240px;
   background-color: #0e2b52;
   overflow: hidden;
   color: #fff;
 }
 
 .rv-banner-img {
-  display: block;
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .rv-banner-overlay {
   position: absolute;
   inset: 0;
+  z-index: 1;
   background: linear-gradient(
     120deg,
-    rgba(26, 58, 107, 0.72),
-    rgba(37, 99, 235, 0.28)
+    rgba(15, 23, 42, 0.55) 0%,
+    rgba(26, 58, 107, 0.45) 45%,
+    rgba(37, 99, 235, 0.2) 100%
   );
   pointer-events: none;
+}
+
+.rv-banner-inner {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  text-align: left;
+  pointer-events: none;
+}
+
+.rv-banner-eyebrow {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
 }
 
 .rv-banner-copy {
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -900,7 +929,12 @@
     padding: 16px 14px 0;
   }
 
-  .rv-banner-copy {
+  .rv-banner {
+    height: 160px;
+  }
+
+  .rv-banner-copy,
+  .rv-banner-inner {
     padding: 0 16px;
   }
 

@@ -189,17 +189,20 @@ export function Community() {
       <CommunityHeader />
 
       <div className={CONTAINER}>
-        <FilterBar
-          active={category}
-          view={view}
-          sort={sort}
-          selectedIslands={islands}
-          islandPostCounts={counts}
-          onFilterChange={(c) => updateQuery({ category: c, resetPage: true })}
-          onViewChange={(v) => updateQuery({ view: v, resetPage: true })}
-          onSortChange={(s) => updateQuery({ sort: s, resetPage: true })}
-          onIslandsApply={(next) => updateQuery({ islands: next, resetPage: true })}
-        />
+        <div className="cm-list-toolbar">
+          <FilterBar
+            active={category}
+            view={view}
+            sort={sort}
+            selectedIslands={islands}
+            islandPostCounts={counts}
+            onFilterChange={(c) => updateQuery({ category: c, resetPage: true })}
+            onViewChange={(v) => updateQuery({ view: v, resetPage: true })}
+            onSortChange={(s) => updateQuery({ sort: s, resetPage: true })}
+            onIslandsApply={(next) => updateQuery({ islands: next, resetPage: true })}
+          />
+          <WritePostFab />
+        </div>
 
         <SelectedIslands
           islands={islands}
@@ -245,8 +248,6 @@ export function Community() {
           onImageNavigate={(imageIndex) => setLightbox((prev) => (prev ? { ...prev, imageIndex } : prev))}
         />
       )}
-
-      <WritePostFab />
     </main>
   );
 }
