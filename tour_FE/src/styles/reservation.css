@@ -19,62 +19,82 @@
   line-height: 1.5;
 }
 
-/* 상단 배너 — 풀블리드 (스포츠 탭과 동일, cover 크롭 없음) */
+/* 상단 배너 — 마이페이지 소개란과 동일한 박스 높이 */
+.rv-banner-band {
+  margin-bottom: 20px;
+}
+
 .rv-banner {
   position: relative;
-  width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
-  background-color: #0e2b52;
+  height: var(--page-intro-band-h);
+  padding: 0;
+  box-sizing: border-box;
   overflow: hidden;
+  background-color: #0e2b52;
   color: #fff;
 }
 
 .rv-banner-img {
+  position: absolute;
+  left: 0;
+  bottom: 0;
   display: block;
   width: 100%;
   height: auto;
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
 }
 
 .rv-banner-overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(
-    120deg,
-    rgba(26, 58, 107, 0.72),
-    rgba(37, 99, 235, 0.28)
+    135deg,
+    rgba(14, 43, 82, 0.82) 0%,
+    rgba(22, 61, 114, 0.72) 55%,
+    rgba(45, 46, 107, 0.78) 100%
   );
   pointer-events: none;
 }
 
-.rv-banner-copy {
-  position: absolute;
-  inset: 0;
+.rv-banner-inner {
+  position: relative;
   z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 0 28px;
-  pointer-events: none;
+  width: 100%;
+}
+
+.rv-banner-eyebrow {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #85b7eb;
+  margin-bottom: 6px;
 }
 
 .rv-banner h1 {
-  margin: 0;
+  margin: 0 0 4px;
   font-family: "IncheonMICEOTF", var(--font-header, Pretendard), sans-serif;
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 500;
-  letter-spacing: 6px;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+  letter-spacing: 0;
+  color: #fff;
+  line-height: 1.3;
+  text-shadow: none;
 }
 
 .rv-banner p {
-  margin: 10px 0 0;
+  margin: 0;
   font-size: 14px;
-  opacity: 0.95;
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
+  font-weight: 300;
+  color: #b5d4f4;
+  line-height: 1.5;
+  opacity: 1;
+  text-shadow: none;
 }
 
 .rv-body {
@@ -900,13 +920,12 @@
     padding: 16px 14px 0;
   }
 
-  .rv-banner-copy {
+  .rv-banner-inner {
     padding: 0 16px;
   }
 
   .rv-banner h1 {
-    font-size: 22px;
-    letter-spacing: 4px;
+    font-size: 20px;
   }
 
   .rv-grid {

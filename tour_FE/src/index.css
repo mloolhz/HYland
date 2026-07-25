@@ -32,6 +32,7 @@
   --text:#1B2A41; --muted:#64748B; --line:#E2E8F1; --white:#fff;
   --r:12px; --shadow:0 2px 10px rgba(45,46,107,.06); --shadow-lg:0 12px 32px rgba(45,46,107,.14);
   --head-h:74px;
+  --page-intro-band-h:126px;
   --font:"IncheonMICEOTF", sans-serif;
   --font-header:"Pretendard Variable", Pretendard, sans-serif;
   --ph1: url('https://i.postimg.cc/wBGzcSD0/baegyeong1.jpg');
@@ -135,11 +136,11 @@ html.site-menu-open{overflow:hidden;overscroll-behavior:none}
 .logo{display:flex;align-items:center;flex:none}
 .logo-img{display:block;height:36px;width:auto;max-width:min(220px,42vw);object-fit:contain;transform:translateY(-3px);transition:filter .25s,transform .25s}
 .site-head.scrolled .logo-img{filter:none}
-.nav-links-wrap{position:relative;align-self:stretch;display:grid;grid-template-columns:repeat(6,max-content);column-gap:0;flex:none;overflow:visible}
+.nav-links-wrap{position:relative;align-self:center;display:grid;grid-template-columns:repeat(6,max-content);column-gap:0;flex:none;overflow:visible;height:74px}
 .nav-links-wrap::before{content:"";position:fixed;top:74px;left:0;right:0;height:0;opacity:0;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid transparent;box-shadow:0 8px 18px rgba(45,46,107,.08);transition:height .34s cubic-bezier(.22,.7,.3,1),opacity .24s ease,border-color .22s ease;pointer-events:none;z-index:0}
 .nav-links-wrap.is-open::before{height:220px;opacity:1;border-top-color:var(--line);pointer-events:auto}
 .nav-links{display:contents}
-.nav-item{display:flex;flex-direction:column;align-items:stretch;position:relative;z-index:1}
+.nav-item{position:relative;z-index:1;height:74px;display:flex;align-items:center;justify-content:center}
 .nav-links-wrap.is-open .nav-link{font-weight:700}
 .nav-links .nav-link{position:relative;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:500;color:#33445F;padding:0 14px;height:74px;white-space:nowrap;flex-shrink:0;transition:color .15s,font-weight .15s}
 .nav-links .nav-link::after{content:"";position:absolute;left:14px;right:14px;bottom:0;height:3px;background:var(--navy);transform:scaleX(0);transition:transform .18s}
@@ -147,9 +148,8 @@ html.site-menu-open{overflow:hidden;overscroll-behavior:none}
 .nav-links .nav-link.is-hovered{color:var(--navy)}
 .nav-links .nav-link:hover::after,
 .nav-links .nav-link.is-hovered::after{transform:scaleX(1)}
-.nav-dropdown-col{display:none;flex-direction:column;align-items:center;padding:12px 14px 18px;gap:2px;min-height:0}
-.nav-links-wrap.is-open .nav-dropdown-col{display:flex}
-.nav-links-wrap.is-open .nav-dropdown-col:empty{display:flex;padding-bottom:18px}
+.nav-dropdown-col{display:none;position:absolute;top:100%;left:50%;transform:translateX(-50%);flex-direction:column;align-items:center;padding:12px 14px 18px;gap:2px;min-width:max-content;z-index:2}
+.nav-links-wrap.is-open .nav-dropdown-col:has(.nav-dropdown-link){display:flex}
 .nav-dropdown-link{display:block;width:100%;padding:5px 0;font-size:14px;font-weight:500;color:#667788;white-space:nowrap;text-align:center;transition:color .15s}
 .nav-dropdown-link:hover,
 .nav-dropdown-link:focus-visible{color:var(--navy)}

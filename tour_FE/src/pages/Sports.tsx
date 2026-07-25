@@ -108,6 +108,7 @@ export function Sports() {
           />
           <div className="sp-hero-overlay" aria-hidden="true" />
           <div className={`${CONTAINER} sp-hero-inner`}>
+            <span className="sp-hero-eyebrow">LEISURE SPORTS</span>
             <h1 className="sp-hero-title">레저스포츠</h1>
             <p className="sp-hero-desc">인천의 섬에서 즐길 수 있는 레저 종목을 카테고리별로 만나보세요</p>
           </div>

@@ -64,15 +64,18 @@
 
 /* ── My rank card ── */
 .lbp-me {
-  display: flex;
-  align-items: center;
-  gap: 16px;
   background: linear-gradient(150deg, var(--navy), var(--sea-dark));
   border-radius: 16px;
   box-shadow: var(--shadow-lg);
   padding: 18px 22px;
   margin-bottom: 24px;
   color: #fff;
+}
+
+.lbp-me__top {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .lbp-me__ava {
@@ -145,7 +148,7 @@
     font-size: 25px;
   }
 
-  .lbp-me {
+  .lbp-me__top {
     flex-wrap: wrap;
   }
 
@@ -160,5 +163,225 @@
   .lbp-me__pts {
     padding-left: 0;
     border-left: none;
+  }
+}
+
+/* ── 다음 순위까지 게이지 (내 순위 카드 내부) ── */
+.lbp-next {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.lbp-next__label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 13px;
+  color: #cdddf5;
+  margin-bottom: 9px;
+}
+
+.lbp-next__label b {
+  color: #fff;
+  font-weight: 800;
+}
+
+.lbp-next__label--top {
+  margin-bottom: 0;
+  font-size: 14px;
+  color: var(--goldL);
+  font-weight: 700;
+}
+
+.lbp-next__gap {
+  flex-shrink: 0;
+  font-weight: 900;
+  color: var(--goldL);
+}
+
+.lbp-next__track {
+  height: 9px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.16);
+  overflow: hidden;
+}
+
+.lbp-next__fill {
+  display: block;
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--goldL), var(--gold));
+  transition: width 1s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+/* ── 순위 변동 뱃지 ── */
+.lbp-delta {
+  flex-shrink: 0;
+  min-width: 34px;
+  text-align: center;
+  font-size: 11.5px;
+  font-weight: 800;
+  padding: 3px 7px;
+  border-radius: 99px;
+  font-variant-numeric: tabular-nums;
+}
+
+.lbp-delta--up {
+  color: #1f9d57;
+  background: rgba(46, 158, 104, 0.14);
+}
+
+.lbp-delta--down {
+  color: #d15b5b;
+  background: rgba(209, 91, 91, 0.14);
+}
+
+.lbp-delta--new {
+  color: var(--blue);
+  background: rgba(15, 95, 204, 0.14);
+}
+
+.lbp-delta--same {
+  color: var(--muted);
+  background: var(--sky2);
+}
+
+/* ── 공용 섹션 헤더 ── */
+.lbp-section-head {
+  margin: 32px 0 14px;
+}
+
+.lbp-section-head h2 {
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.lbp-section-head p {
+  margin-top: 4px;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.lbp-section-head p b {
+  color: var(--blue);
+  font-weight: 800;
+}
+
+/* ── 내 부문별 순위 ── */
+.lbp-mine__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.lbp-mine__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: 18px 10px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.lbp-mine__card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.lbp-mine__card.is-active {
+  border-color: var(--blue2);
+  box-shadow: 0 0 0 2px rgba(63, 130, 224, 0.22), var(--shadow);
+}
+
+.lbp-mine__cat {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.lbp-mine__rank {
+  font-size: 30px;
+  font-weight: 900;
+  color: var(--navy);
+  line-height: 1;
+}
+
+.lbp-mine__rank i {
+  font-style: normal;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--muted);
+  margin-left: 2px;
+}
+
+.lbp-mine__pts {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--blue);
+}
+
+/* ── 시즌 리워드 배너 ── */
+.lbp-reward__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.lbp-reward__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+  background: linear-gradient(180deg, #fffdf7, #fff);
+  border: 1px solid rgba(226, 162, 51, 0.4);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 22px 18px;
+}
+
+.lbp-reward__medal {
+  font-size: 34px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.lbp-reward__rank {
+  font-size: 13px;
+  font-weight: 800;
+  color: #8a5a10;
+  background: rgba(242, 200, 109, 0.32);
+  padding: 3px 12px;
+  border-radius: 99px;
+}
+
+.lbp-reward__title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--navy);
+  margin-top: 4px;
+}
+
+.lbp-reward__desc {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+@media (max-width: 720px) {
+  .lbp-mine__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .lbp-reward__grid {
+    grid-template-columns: 1fr;
   }
 }
