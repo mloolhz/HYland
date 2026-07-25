@@ -47,6 +47,7 @@ export type IslandBtiResultCode =
 
 export interface IslandBtiResultData {
   code: IslandBtiResultCode;
+  themeColor: string;
   name: string;
   englishTraits: string[];
   tagline: string;

@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { PassportBook, type PassportBookHandle } from "@/components/landing/PassportBook";
 import { PASSPORT_BADGES } from "@/components/landing/passport-book-data";
 import { buildBookSpreads, type BookNavState } from "@/components/landing/passport-book-spreads";
+import { useOptionalProfileCharacter } from "@/context/ProfileCharacterContext";
 import type { UserProfile } from "@/lib/user-profile";
 
 const BOOK_SPREADS = buildBookSpreads(PASSPORT_BADGES);
@@ -21,6 +22,8 @@ type MyPagePassportBookProps = {
 export function MyPagePassportBook({ profile }: MyPagePassportBookProps) {
   const [nav, setNav] = useState<BookNavState>(INITIAL_NAV);
   const bookRef = useRef<PassportBookHandle>(null);
+  const profileCharacterContext = useOptionalProfileCharacter();
+  const isProfileSelectModalOpen = profileCharacterContext?.isProfileSelectModalOpen ?? false;
 
   return (
     <div className="mp-passport-book" aria-label="i-바다패스 여권">
@@ -47,7 +50,7 @@ export function MyPagePassportBook({ profile }: MyPagePassportBookProps) {
                 type="button"
                 className="passport-book__tab passport-book__tab--prev"
                 aria-label="이전 페이지"
-                disabled={nav.flipping}
+                disabled={nav.flipping || isProfileSelectModalOpen}
                 onClick={() => bookRef.current?.goPrev()}
               >
                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -67,7 +70,7 @@ export function MyPagePassportBook({ profile }: MyPagePassportBookProps) {
                 type="button"
                 className="passport-book__tab passport-book__tab--next"
                 aria-label="다음 페이지"
-                disabled={nav.flipping}
+                disabled={nav.flipping || isProfileSelectModalOpen}
                 onClick={() => bookRef.current?.goNext()}
               >
                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">

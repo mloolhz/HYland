@@ -24,6 +24,7 @@ export const ISLAND_BTI_RESULT_CODES: IslandBtiResultCode[] = [
 export const ISLAND_BTI_RESULTS: Record<IslandBtiResultCode, IslandBtiResultData> = {
   AWCP: {
     code: "AWCP",
+    themeColor: "#087E8B",
     name: "파도 작전대장",
     englishTraits: ["Active", "Water", "Crew", "Planned"],
     tagline: "목표를 세우고 크루와 함께 바다를 정복하는 지휘관",
@@ -43,6 +44,7 @@ export const ISLAND_BTI_RESULTS: Record<IslandBtiResultCode, IslandBtiResultData
   },
   AWCF: {
     code: "AWCF",
+    themeColor: "#00A8CC",
     name: "즉흥 해양원정대",
     englishTraits: ["Active", "Water", "Crew", "Flow"],
     tagline: "친구들과 바다를 발견하는 순간 바로 뛰어드는 행동파",
@@ -62,6 +64,7 @@ export const ISLAND_BTI_RESULTS: Record<IslandBtiResultCode, IslandBtiResultData
   },
   AWIP: {
     code: "AWIP",
+    themeColor: "#2457C5",
     name: "블루 코스마스터",
     englishTraits: ["Active", "Water", "Independent", "Planned"],
     tagline: "나만의 해양 도전을 정교하게 설계하는 기록형 탐험가",
@@ -81,6 +84,7 @@ export const ISLAND_BTI_RESULTS: Record<IslandBtiResultCode, IslandBtiResultData
   },
   AWIF: {
     code: "AWIF",
+    themeColor: "#18A0FB",
     name: "자유파도 개척자",
     englishTraits: ["Active", "Water", "Independent", "Flow"],
     tagline: "지도보다 파도를 따라 움직이는 자유로운 해양 모험가",
@@ -100,6 +104,7 @@ export const ISLAND_BTI_RESULTS: Record<IslandBtiResultCode, IslandBtiResultData
   },
   ALCP: {
     code: "ALCP",
+    themeColor: "#287D4F",
     name: "산해 챌린지 리더",
     englishTraits: ["Active", "Land", "Crew", "Planned"],
     tagline: "크루와 함께 섬의 코스를 완주하는 원정대장",
@@ -119,6 +124,7 @@ export const ISLAND_BTI_RESULTS: Record<IslandBtiResultCode, IslandBtiResultData
   },
   ALCF: {
     code: "ALCF",
+    themeColor: "#56A447",
     name: "섬길 번개대장",
     englishTraits: ["Active", "Land", "Crew", "Flow"],
     tagline: "친구들과 재미있는 길이 보이면 일단 출발하는 현장파",
@@ -138,6 +144,7 @@ export const ISLAND_BTI_RESULTS: Record<IslandBtiResultCode, IslandBtiResultData
   },
   ALIP: {
     code: "ALIP",
+    themeColor: "#536B32",
     name: "정상 정복 설계자",
     englishTraits: ["Active", "Land", "Independent", "Planned"],
     tagline: "코스를 분석하고 자신의 힘으로 완주하는 정복자",
@@ -157,6 +164,7 @@ export const ISLAND_BTI_RESULTS: Record<IslandBtiResultCode, IslandBtiResultData
   },
   ALIF: {
     code: "ALIF",
+    themeColor: "#77A65A",
     name: "무계획 트레일러",
     englishTraits: ["Active", "Land", "Independent", "Flow"],
     tagline: "발길 닿는 대로 섬의 숨은 길을 찾아가는 탐험가",
@@ -176,6 +184,7 @@ export const ISLAND_BTI_RESULTS: Record<IslandBtiResultCode, IslandBtiResultData
   },
   BWCP: {
     code: "BWCP",
+    themeColor: "#55BFC4",
     name: "바다 피크닉 플래너",
     englishTraits: ["Breezy", "Water", "Crew", "Planned"],
     tagline: "모두가 편안한 바다 하루를 준비하는 섬 여행 총무",
@@ -195,6 +204,7 @@ export const ISLAND_BTI_RESULTS: Record<IslandBtiResultCode, IslandBtiResultData
   },
   BWCF: {
     code: "BWCF",
+    themeColor: "#7DD7D8",
     name: "물멍 놀이메이트",
     englishTraits: ["Breezy", "Water", "Crew", "Flow"],
     tagline: "바다와 친구만 있으면 일정이 없어도 행복한 분위기 담당",
@@ -214,6 +224,7 @@ export const ISLAND_BTI_RESULTS: Record<IslandBtiResultCode, IslandBtiResultData
   },
   BWIP: {
     code: "BWIP",
+    themeColor: "#7898C8",
     name: "고요한 해변 수집가",
     englishTraits: ["Breezy", "Water", "Independent", "Planned"],
     tagline: "조용한 바다를 찾아 나만의 휴식을 설계하는 기록가",
@@ -233,6 +244,7 @@ export const ISLAND_BTI_RESULTS: Record<IslandBtiResultCode, IslandBtiResultData
   },
   BWIF: {
     code: "BWIF",
+    themeColor: "#9AD9E5",
     name: "느긋한 섬유영자",
     englishTraits: ["Breezy", "Water", "Independent", "Flow"],
     tagline: "한적한 바다 앞에서 아무것도 하지 않을 자유를 즐기는 사람",
@@ -252,6 +264,7 @@ export const ISLAND_BTI_RESULTS: Record<IslandBtiResultCode, IslandBtiResultData
   },
   BLCP: {
     code: "BLCP",
+    themeColor: "#D59A45",
     name: "섬마을 일정반장",
     englishTraits: ["Breezy", "Land", "Crew", "Planned"],
     tagline: "걷고 먹고 쉬는 완벽한 섬 하루를 설계하는 여행 총무",
@@ -271,6 +284,7 @@ export const ISLAND_BTI_RESULTS: Record<IslandBtiResultCode, IslandBtiResultData
   },
   BLCF: {
     code: "BLCF",
+    themeColor: "#E7B968",
     name: "골목 산책 메이트",
     englishTraits: ["Breezy", "Land", "Crew", "Flow"],
     tagline: "친구들과 걷다가 마음에 드는 곳에 멈추는 발견형 여행자",
@@ -290,6 +304,7 @@ export const ISLAND_BTI_RESULTS: Record<IslandBtiResultCode, IslandBtiResultData
   },
   BLIP: {
     code: "BLIP",
+    themeColor: "#9B8063",
     name: "풍경 기록 설계자",
     englishTraits: ["Breezy", "Land", "Independent", "Planned"],
     tagline: "조용한 섬의 풍경을 차분하게 수집하는 아카이빙 여행자",
@@ -309,6 +324,7 @@ export const ISLAND_BTI_RESULTS: Record<IslandBtiResultCode, IslandBtiResultData
   },
   BLIF: {
     code: "BLIF",
+    themeColor: "#C3AE86",
     name: "바람 따라 산책자",
     englishTraits: ["Breezy", "Land", "Independent", "Flow"],
     tagline: "목적지 없이 천천히 걸으며 섬의 분위기를 느끼는 자유인",
@@ -382,3 +398,25 @@ export function getIslandBtiAxisRatios(scores: IslandBtiScoreMap): IslandBtiAxis
     };
   });
 }
+
+export type IslandBtiPercentages = {
+  AB: number;
+  WL: number;
+  CI: number;
+  PF: number;
+};
+
+export function getIslandBtiPercentages(scores: IslandBtiScoreMap): IslandBtiPercentages {
+  return {
+    AB: Math.max(scores.A, scores.B) * 20,
+    WL: Math.max(scores.W, scores.L) * 20,
+    CI: Math.max(scores.C, scores.I) * 20,
+    PF: Math.max(scores.P, scores.F) * 20,
+  };
+}
+
+/**
+ * main.tsx 라우터 기준 전용 AI 추천 페이지 경로.
+ * 현재는 랜딩 페이지 AISection/HeroSection 위젯만 존재하며 별도 route 없음.
+ */
+export const ISLAND_BTI_AI_RECOMMEND_PATH: string | null = null;

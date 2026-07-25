@@ -7,6 +7,7 @@ import {
   useState,
 } from "react";
 import type { UserProfile } from "@/lib/user-profile";
+import { useOptionalProfileCharacter } from "@/context/ProfileCharacterContext";
 import { PassportBadgeSpreadPage } from "./PassportBadgeSpreadPage";
 import { PassportProfilePage } from "./PassportProfilePage";
 import type { BookNavState, PassportBookSpread } from "./passport-book-spreads";
@@ -81,6 +82,8 @@ export const PassportBook = forwardRef<PassportBookHandle, PassportBookProps>(fu
   const [targetIndex, setTargetIndex] = useState(0);
   const spreadRef = useRef(spreadIndex);
   spreadRef.current = spreadIndex;
+  const profileCharacterContext = useOptionalProfileCharacter();
+  const isProfileSelectModalOpen = profileCharacterContext?.isProfileSelectModalOpen ?? false;
 
   const publishNav = useCallback(
     (index: number, nextFlip: typeof flip) => {
@@ -121,6 +124,7 @@ export const PassportBook = forwardRef<PassportBookHandle, PassportBookProps>(fu
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
+      if (isProfileSelectModalOpen) return;
       if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) return;
       if (event.key === "ArrowLeft") {
         event.preventDefault();
@@ -133,7 +137,7 @@ export const PassportBook = forwardRef<PassportBookHandle, PassportBookProps>(fu
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [goPrev, goNext]);
+  }, [goPrev, goNext, isProfileSelectModalOpen]);
 
   const current = spreads[spreadIndex];
   const target = spreads[targetIndex];

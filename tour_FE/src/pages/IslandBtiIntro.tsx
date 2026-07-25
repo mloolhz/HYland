@@ -1,5 +1,11 @@
 import { Link } from "react-router-dom";
-import { CONTAINER } from "@/constants/layout";
+import type { CSSProperties } from "react";
+import { CONTAINER } from "@/constants/layout";import { ProfileCharacterVisual } from "@/components/landing/ProfileCharacterVisual";
+import { ISLAND_BTI_PROFILE_CHARACTERS } from "@/data/profile-characters";
+
+const SAMPLE_ISLAND_BTI_CHARACTER =
+  ISLAND_BTI_PROFILE_CHARACTERS.find((character) => character.islandBtiCode === "BWCF") ??
+  ISLAND_BTI_PROFILE_CHARACTERS[0];
 
 export function IslandBtiIntro() {
   return (
@@ -39,6 +45,57 @@ export function IslandBtiIntro() {
             </Link>
           </div>
         </section>
+
+        <section
+          className="ibti-card ibti-character-unlock"
+          aria-labelledby="ibti-character-unlock-title"
+        >
+          <div className="ibti-character-unlock__content">
+            <h2 id="ibti-character-unlock-title" className="ibti-character-unlock__title">
+              섬BTI로 나만의 탐험대원을 만나보세요
+            </h2>
+            <div className="ibti-character-unlock__texts">
+              <p className="ibti-character-unlock__text">
+                검사를 완료하면 나의 여행 성향에 해당하는 섬BTI 캐릭터가 해금돼요.
+              </p>
+              <p className="ibti-character-unlock__text">
+                해금된 캐릭터는 섬여권의 대표 프로필로 선택할 수 있습니다.
+              </p>
+            </div>            <ul className="ibti-character-unlock__highlights">
+              <li>16가지 여행 유형</li>
+              <li>검사 결과에 해당하는 캐릭터 1개 해금</li>
+              <li>섬여권 대표 프로필로 설정 가능</li>
+            </ul>
+            <p className="ibti-character-unlock__link-note">
+              위의 <strong>시작하기</strong> 버튼으로 검사를 시작하면 나의 섬BTI 캐릭터를 해금할 수
+              있어요.
+            </p>
+          </div>
+          <div className="ibti-character-unlock__preview" aria-hidden="true">
+            <div
+              className="ibti-character-unlock__preview-card"
+              style={
+                {
+                  "--character-theme": SAMPLE_ISLAND_BTI_CHARACTER.themeColor,
+                } as CSSProperties
+              }
+            >
+              <div className="ibti-character-unlock__preview-frame">
+                <ProfileCharacterVisual
+                  character={SAMPLE_ISLAND_BTI_CHARACTER}
+                  compact
+                  className="ibti-character-unlock__preview-visual ibti-character-unlock__preview-visual--avatar-only"
+                />
+              </div>
+              {SAMPLE_ISLAND_BTI_CHARACTER.islandBtiCode ? (
+                <span className="ibti-character-unlock__preview-code">
+                  {SAMPLE_ISLAND_BTI_CHARACTER.islandBtiCode}
+                </span>
+              ) : null}
+              <p className="ibti-character-unlock__preview-name">{SAMPLE_ISLAND_BTI_CHARACTER.name}</p>
+            </div>
+            <p className="ibti-character-unlock__preview-caption">섬BTI 캐릭터 예시</p>
+          </div>        </section>
       </div>
     </main>
   );
