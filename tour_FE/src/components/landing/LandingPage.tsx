@@ -10,6 +10,7 @@ import { MapSection } from "./MapSection";
 import { MissionSection } from "./MissionSection";
 import { RelatedSitesBand } from "./RelatedSitesBand";
 import { ScrollToTopButton } from "@/components/ScrollToTopButton";
+import { IslandBtiPromoModal } from "@/components/island-bti/IslandBtiPromoModal";
 import { SiteFooter } from "./SiteFooter";
 import { SiteHeader } from "./SiteHeader";
 import { ToastProvider } from "./ToastProvider";
@@ -89,6 +90,7 @@ function LandingPageContent() {
   return (
     <>
       <SiteHeader />
+      <IslandBtiPromoModal />
       <HeroSection
         agentInputRef={agentInputRef}
         agentActive={agentActive}

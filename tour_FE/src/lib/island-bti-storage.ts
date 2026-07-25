@@ -101,3 +101,8 @@ export function removeLatestIslandBtiResult(
   if (sorted.length === 0) return [];
   return sorted.slice(0, -1);
 }
+
+/** 검사 기록 존재 여부 — 프로모션 등에서 재사용 */
+export function hasStoredIslandBtiResult(): boolean {
+  return getLatestIslandBtiResult(loadIslandBtiHistory()) !== null;
+}
