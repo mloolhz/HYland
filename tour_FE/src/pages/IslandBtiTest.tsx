@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CONTAINER } from "@/constants/layout";
 import { ISLAND_BTI_QUESTIONS, ISLAND_BTI_QUESTION_COUNT } from "@/data/island-bti/questions";
+import { calculateIslandBtiResult } from "@/lib/island-bti";
 
 export function IslandBtiTest() {
   const navigate = useNavigate();
@@ -30,7 +31,12 @@ export function IslandBtiTest() {
   const handleNext = () => {
     if (!canGoNext) return;
     if (isLastQuestion) {
-      navigate("/island-bti/result");
+      try {
+        const resultData = calculateIslandBtiResult(answers, ISLAND_BTI_QUESTIONS);
+        navigate("/island-bti/result", { state: resultData });
+      } catch (error) {
+        console.error("Island BTI result calculation failed:", error);
+      }
       return;
     }
     setCurrentQuestionIndex((index) => index + 1);

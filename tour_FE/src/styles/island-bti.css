@@ -242,16 +242,18 @@
 
 .ibti-result-layout {
   max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
 }
 
-.ibti-result-hero {
+.ibti-result-main {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 16px;
+  gap: 12px;
   padding-bottom: 24px;
-  margin-bottom: 24px;
   border-bottom: 1px dashed var(--line);
 }
 
@@ -269,20 +271,6 @@
   letter-spacing: 0.12em;
 }
 
-.ibti-result-avatar {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  border: 2px dashed rgba(15, 95, 204, 0.35);
-  background: linear-gradient(180deg, var(--sky) 0%, #fff 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--muted);
-}
-
 .ibti-result-name {
   margin: 0;
   font-size: 26px;
@@ -291,12 +279,216 @@
   letter-spacing: -0.02em;
 }
 
-.ibti-result-desc {
+.ibti-result-traits {
   margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--blue);
+  letter-spacing: 0.02em;
+}
+
+.ibti-result-tagline {
+  margin: 4px 0 0;
   font-size: 15px;
   color: var(--muted);
   line-height: 1.65;
-  max-width: 480px;
+  max-width: 520px;
+}
+
+.ibti-result-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ibti-result-section__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.ibti-axis-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ibti-axis-item__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.ibti-axis-item__label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.ibti-axis-item__value {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--blue);
+  white-space: nowrap;
+}
+
+.ibti-axis-item__track {
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(15, 95, 204, 0.1);
+  overflow: hidden;
+}
+
+.ibti-axis-item__fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #2480f5 0%, var(--blue) 100%);
+}
+
+.ibti-desc-list {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--text);
+}
+
+.ibti-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ibti-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--sky);
+  border: 1px solid rgba(15, 95, 204, 0.15);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.ibti-island-rank {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ibti-island-rank li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(15, 95, 204, 0.04);
+  border: 1px solid var(--line);
+}
+
+.ibti-island-rank__label {
+  flex-shrink: 0;
+  min-width: 52px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--blue);
+}
+
+.ibti-island-rank__name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.ibti-result-text {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text);
+}
+
+.ibti-match-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ibti-match-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.ibti-match-item__label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.ibti-match-item__value {
+  font-size: 15px;
+  color: var(--navy);
+  line-height: 1.5;
+}
+
+.ibti-match-item__value strong {
+  font-weight: 800;
+  color: var(--blue);
+}
+
+.ibti-result-notice {
+  margin: 0;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: rgba(15, 95, 204, 0.06);
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--muted);
+}
+
+.ibti-actions--result {
+  flex-direction: column;
+  align-items: stretch;
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+.ibti-actions--result .btn {
+  width: 100%;
+}
+
+.ibti-passport-save:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.ibti-passport-save-note {
+  margin: -4px 0 0;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
 }
 
 @media (max-width: 640px) {
@@ -319,5 +511,19 @@
   .ibti-start-btn {
     width: 100%;
     min-width: 0;
+  }
+
+  .ibti-result-name {
+    font-size: 22px;
+  }
+
+  .ibti-axis-item__head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .ibti-axis-item__value {
+    white-space: normal;
   }
 }

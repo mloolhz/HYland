@@ -26,3 +26,36 @@ export const ISLAND_BTI_AXIS_VALUES: Record<
   CI: ["C", "I"],
   PF: ["P", "F"],
 };
+
+export type IslandBtiResultCode =
+  | "AWCP"
+  | "AWCF"
+  | "AWIP"
+  | "AWIF"
+  | "ALCP"
+  | "ALCF"
+  | "ALIP"
+  | "ALIF"
+  | "BWCP"
+  | "BWCF"
+  | "BWIP"
+  | "BWIF"
+  | "BLCP"
+  | "BLCF"
+  | "BLIP"
+  | "BLIF";
+
+export interface IslandBtiResultData {
+  code: IslandBtiResultCode;
+  name: string;
+  englishTraits: string[];
+  tagline: string;
+  description: string[];
+  recommendedActivities: string[];
+  recommendedIslands: string[];
+  recommendationReason: string;
+  travelTip: string;
+  bestMatch: IslandBtiResultCode;
+  complementaryMatch: IslandBtiResultCode;
+  cautionMatch: IslandBtiResultCode;
+}
