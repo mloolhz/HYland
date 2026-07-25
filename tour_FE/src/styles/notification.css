@@ -314,6 +314,35 @@
   color: #9AA4B2;
 }
 
+.noti-item-remove {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  margin-left: 4px;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  color: #CBD5E1;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+
+.noti-item-remove .ti {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.noti-item:hover .noti-item-remove,
+.noti-item-remove:hover,
+.noti-item-remove:focus-visible {
+  color: #9AA4B2;
+  background: rgba(15, 23, 42, 0.05);
+}
+
 .noti-item--page {
   padding: 18px 22px;
   border-bottom: 0.5px solid #F1F5F9;
