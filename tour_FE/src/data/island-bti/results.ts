@@ -353,6 +353,8 @@ export function getIslandBtiResult(code: string): IslandBtiResultData | null {
   return ISLAND_BTI_RESULTS[code];
 }
 
+export { getIslandBtiType, getIslandBtiTypeSafe } from "@/lib/island-bti-type";
+
 const AXIS_DISPLAY_LABELS: Record<"AB" | "WL" | "CI" | "PF", string> = {
   AB: "활동 에너지",
   WL: "선호 공간",

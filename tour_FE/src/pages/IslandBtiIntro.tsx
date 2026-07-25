@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import type { CSSProperties } from "react";
-import { CONTAINER } from "@/constants/layout";import { ProfileCharacterVisual } from "@/components/landing/ProfileCharacterVisual";
+import { IslandBtiContainer } from "@/components/island-bti/IslandBtiContainer";
+import { ProfileCharacterVisual } from "@/components/landing/ProfileCharacterVisual";
 import { ISLAND_BTI_PROFILE_CHARACTERS } from "@/data/profile-characters";
 
 const SAMPLE_ISLAND_BTI_CHARACTER =
@@ -10,7 +11,7 @@ const SAMPLE_ISLAND_BTI_CHARACTER =
 export function IslandBtiIntro() {
   return (
     <main className="ibti-page">
-      <div className={CONTAINER}>
+      <IslandBtiContainer>
         <header className="ibti-head">
           <span className="ibti-head__eyebrow">ISLAND BTI</span>
           <h1 className="ibti-head__title">섬BTI로 나의 여행 성향 찾기</h1>
@@ -95,8 +96,9 @@ export function IslandBtiIntro() {
               <p className="ibti-character-unlock__preview-name">{SAMPLE_ISLAND_BTI_CHARACTER.name}</p>
             </div>
             <p className="ibti-character-unlock__preview-caption">섬BTI 캐릭터 예시</p>
-          </div>        </section>
-      </div>
+          </div>
+        </section>
+      </IslandBtiContainer>
     </main>
   );
 }

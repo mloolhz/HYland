@@ -61,17 +61,33 @@ export interface IslandBtiResultData {
   cautionMatch: IslandBtiResultCode;
 }
 
-export interface CurrentIslandBtiResult {
+/** 4개 축별 우세 점수 (각 축 0~5) */
+export type IslandBtiDimensionScores = {
+  AB: number;
+  WL: number;
+  CI: number;
+  PF: number;
+};
+
+/** 8극성 원시 점수 — 검사·표시·저장에 사용 */
+export type IslandBtiAxisScores = {
+  A: number;
+  B: number;
+  W: number;
+  L: number;
+  C: number;
+  I: number;
+  P: number;
+  F: number;
+};
+
+/** localStorage에 저장되는 검사 기록 */
+export interface IslandBtiResultRecord {
+  id: string;
   code: IslandBtiResultCode;
-  scores: {
-    A: number;
-    B: number;
-    W: number;
-    L: number;
-    C: number;
-    I: number;
-    P: number;
-    F: number;
-  };
+  scores: IslandBtiAxisScores;
   testedAt: string;
 }
+
+/** @deprecated IslandBtiResultRecord에서 id를 제외한 형태 — 기존 컴포넌트 호환용 */
+export type CurrentIslandBtiResult = Omit<IslandBtiResultRecord, "id">;

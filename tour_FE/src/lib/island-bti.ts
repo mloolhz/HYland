@@ -1,10 +1,11 @@
 import { ISLAND_BTI_AXIS_VALUES } from "@/types/island-bti";
-import type { IslandBtiAxisValue, IslandBtiDimension, IslandBtiQuestion } from "@/types/island-bti";
+import type { IslandBtiAxisScores, IslandBtiAxisValue, IslandBtiDimension, IslandBtiQuestion } from "@/types/island-bti";
+
+/** @alias IslandBtiAxisScores */
+export type IslandBtiScoreMap = IslandBtiAxisScores;
 
 /** questionId → 선택한 option index (0 | 1) */
 export type IslandBtiAnswers = Record<number, number>;
-
-export type IslandBtiScoreMap = Record<IslandBtiAxisValue, number>;
 
 export type IslandBtiCalculationResult = {
   result: string;

@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { CONTAINER } from "@/constants/layout";
+import { IslandBtiContainer } from "@/components/island-bti/IslandBtiContainer";
+import { useIslandBti } from "@/context/ProfileCharacterContext";
 import {
   getIslandBtiAxisRatios,
   getIslandBtiPercentages,
@@ -8,13 +9,14 @@ import {
   ISLAND_BTI_AI_RECOMMEND_PATH,
   ISLAND_BTI_RESULTS,
 } from "@/data/island-bti/results";
-import { isIslandBtiCalculationResult } from "@/lib/island-bti";
+import { formatIslandBtiDate } from "@/lib/format-island-bti-date";
+import { isIslandBtiCalculationResult, type IslandBtiCalculationResult } from "@/lib/island-bti";
 import type { IslandBtiResultCode } from "@/types/island-bti";
 
 function ResultEmptyState() {
   return (
     <main className="ibti-page">
-      <div className={CONTAINER}>
+      <IslandBtiContainer>
         <header className="ibti-head">
           <span className="ibti-head__eyebrow">ISLAND BTI RESULT</span>
           <h1 className="ibti-head__title">나의 섬BTI</h1>
@@ -28,7 +30,7 @@ function ResultEmptyState() {
             </Link>
           </div>
         </section>
-      </div>
+      </IslandBtiContainer>
     </main>
   );
 }
@@ -48,8 +50,19 @@ function MatchItem({ label, code }: { label: string; code: IslandBtiResultCode }
 export function IslandBtiResult() {
   const location = useLocation();
   const navigate = useNavigate();
-  const calculation = isIslandBtiCalculationResult(location.state) ? location.state : null;
+  const { latestResult } = useIslandBti();
+
+  const calculationFromState = isIslandBtiCalculationResult(location.state)
+    ? location.state
+    : null;
+
+  const calculationFromStorage: IslandBtiCalculationResult | null = latestResult
+    ? { result: latestResult.code, scores: latestResult.scores }
+    : null;
+
+  const calculation = calculationFromState ?? calculationFromStorage;
   const profile = calculation ? getIslandBtiResult(calculation.result) : null;
+  const testedAtLabel = latestResult ? formatIslandBtiDate(latestResult.testedAt) : null;
 
   if (!calculation || !profile) {
     return <ResultEmptyState />;
@@ -79,10 +92,13 @@ export function IslandBtiResult() {
 
   return (
     <main className="ibti-page">
-      <div className={CONTAINER}>
+      <IslandBtiContainer>
         <header className="ibti-head">
           <span className="ibti-head__eyebrow">ISLAND BTI RESULT</span>
           <h1 className="ibti-head__title">나의 섬BTI</h1>
+          {testedAtLabel ? (
+            <p className="ibti-head__sub">검사일 {testedAtLabel}</p>
+          ) : null}
         </header>
 
         <section
@@ -242,7 +258,7 @@ export function IslandBtiResult() {
             </Link>
           </div>
         </section>
-      </div>
+      </IslandBtiContainer>
     </main>
   );
 }

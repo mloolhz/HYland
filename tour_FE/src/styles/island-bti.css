@@ -3,10 +3,19 @@
   position: relative;
   isolation: isolate;
   min-height: calc(100vh - var(--head-h));
-  padding-top: calc(var(--head-h) + 32px);
-  padding-bottom: 72px;
+  padding-top: calc(var(--head-h) + 48px);
+  padding-bottom: 64px;
   overflow: hidden;
   background: var(--alt);
+}
+
+/* 섬BTI 공통 중앙 Wrapper */
+.ibti-container {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 32px;
+  box-sizing: border-box;
 }
 
 .ibti-page::before {
@@ -34,7 +43,15 @@
 }
 
 .ibti-head {
+  width: 100%;
+  max-width: 720px;
+  margin-inline: auto;
   margin-bottom: 28px;
+}
+
+/* 인트로: 타이틀과 하얀 카드(640px) 왼쪽 정렬 일치 */
+.ibti-container > .ibti-head:has(+ .ibti-intro-card) {
+  max-width: 640px;
 }
 
 .ibti-head__eyebrow {
@@ -71,7 +88,9 @@
 }
 
 .ibti-intro-card {
+  width: 100%;
   max-width: 640px;
+  margin-inline: auto;
   padding: 36px 32px;
 }
 
@@ -133,7 +152,9 @@
 }
 
 .ibti-character-unlock {
+  width: 100%;
   max-width: 640px;
+  margin-inline: auto;
   margin-top: 20px;
   display: grid;
   grid-template-columns: 1fr auto;
@@ -263,6 +284,10 @@
 }
 
 @media (max-width: 640px) {
+  .ibti-container {
+    padding-inline: 20px;
+  }
+
   .ibti-character-unlock {
     grid-template-columns: 1fr;
     gap: 18px;
@@ -390,8 +415,19 @@
   box-shadow: none;
 }
 
-.ibti-result-layout {
+.ibti-container > .ibti-card {
+  width: 100%;
+  margin-inline: auto;
+}
+
+.ibti-container > .ibti-card:not(.ibti-intro-card):not(.ibti-character-unlock):not(.ibti-result-layout) {
   max-width: 720px;
+}
+
+.ibti-result-layout {
+  width: 100%;
+  max-width: 720px;
+  margin-inline: auto;
   display: flex;
   flex-direction: column;
   gap: 28px;
