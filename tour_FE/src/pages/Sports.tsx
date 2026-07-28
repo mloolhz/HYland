@@ -72,7 +72,7 @@ function BookingMethodLink({
 
   return (
     <a
-      className={`sp-booking-btn${primary ? " sp-booking-btn--primary" : " sp-booking-btn--secondary"}`}
+      className="sp-booking-btn sp-booking-btn--external"
       href={method.url}
       target="_blank"
       rel="noopener noreferrer"

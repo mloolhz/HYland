@@ -90,7 +90,6 @@ export function AiRecommend() {
       <div className={`${CONTAINER} ai-page-inner`}>
         <header className="ai-page-head">
           <h1>인천섬 레저누리 AI 추천</h1>
-          <p>원하는 레저·조건을 알려주시면 섬과 코스를 추천해 드려요.</p>
         </header>
 
         <div className="ai-chat" aria-live="polite">

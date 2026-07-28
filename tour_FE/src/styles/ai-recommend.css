@@ -15,6 +15,7 @@
 
 .ai-page-head {
   margin-bottom: 20px;
+  padding-top: 4px;
 }
 
 .ai-page-head h1 {
@@ -23,13 +24,6 @@
   font-weight: 800;
   color: var(--navy, #0e2b52);
   letter-spacing: -0.02em;
-}
-
-.ai-page-head p {
-  margin: 8px 0 0;
-  font-size: 14px;
-  color: var(--muted, #5f6b7c);
-  line-height: 1.5;
 }
 
 .ai-chat {
@@ -185,16 +179,34 @@
   padding: 7px 12px;
   text-decoration: none;
   cursor: pointer;
-  border: none;
+  border: 1px solid transparent;
+  transition: all 0.15s;
+}
+
+.ai-rec-btn--external {
+  background: #fff;
+  color: #2563eb;
+  border-color: #2563eb;
+}
+
+.ai-rec-btn--external:hover {
+  background: #2563eb;
+  color: #fff;
+}
+
+.ai-rec-btn--external:hover .ai-rec-external {
+  color: #fff;
 }
 
 .ai-rec-btn--primary {
   background: #1f4fb8;
   color: #fff;
+  border-color: #1f4fb8;
 }
 
 .ai-rec-btn--primary:hover {
   background: #1a4399;
+  border-color: #1a4399;
 }
 
 .ai-rec-btn--ghost {
@@ -209,6 +221,7 @@
 
 .ai-rec-external {
   font-size: 12px;
+  color: inherit;
   opacity: 0.85;
 }
 

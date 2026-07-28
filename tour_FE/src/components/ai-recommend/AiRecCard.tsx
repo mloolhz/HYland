@@ -21,7 +21,7 @@ export function AiRecCard({ item }: AiRecCardProps) {
       <div className="ai-rec-actions">
         {booking?.url && (
           <a
-            className="ai-rec-btn ai-rec-btn--primary"
+            className="ai-rec-btn ai-rec-btn--external"
             href={booking.url}
             target="_blank"
             rel="noopener noreferrer"
