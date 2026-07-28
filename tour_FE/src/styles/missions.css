@@ -33,6 +33,48 @@
   z-index: -1;
 }
 
+/* ── 미션·리더보드 통합 토글 ── */
+.hub-toggle {
+  display: flex;
+  gap: 5px;
+  width: max-content;
+  max-width: 100%;
+  margin: 0 auto 28px;
+  padding: 5px;
+  background: linear-gradient(150deg, var(--navy), var(--sea-dark));
+  border-radius: 99px;
+  box-shadow: var(--shadow-lg);
+}
+
+.hub-toggle button {
+  padding: 10px 30px;
+  border: 0;
+  border-radius: 99px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14.5px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 0.16s ease, color 0.16s ease;
+}
+
+.hub-toggle button:hover {
+  color: #fff;
+}
+
+.hub-toggle button.on {
+  background: #fff;
+  color: var(--navy);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+}
+
+@media (max-width: 480px) {
+  .hub-toggle button {
+    padding: 9px 18px;
+    font-size: 13.5px;
+  }
+}
+
 /* ── Header ── */
 .ms-head {
   margin-bottom: 24px;

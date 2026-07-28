@@ -17,8 +17,7 @@ import { Notifications } from "@/pages/Notifications";
 import { PostDetail } from "@/pages/PostDetail";
 import { Signup } from "@/pages/Signup";
 import { IslandExplorer } from "@/pages/IslandExplorer";
-import { Missions } from "@/pages/Missions";
-import { Leaderboard } from "@/pages/Leaderboard";
+import { MissionHub } from "@/pages/MissionHub";
 import { MyPage } from "@/pages/MyPage";
 import { MyPageSettings } from "@/pages/MyPageSettings";
 import { MyPageProfileEdit } from "@/pages/MyPageProfileEdit";
@@ -40,8 +39,8 @@ const router = createBrowserRouter([
     errorElement: <RouterError />,
     children: [
       { path: "islands", element: <IslandExplorer /> },
-      { path: "missions", element: <Missions /> },
-      { path: "leaderboard", element: <Leaderboard /> },
+      { path: "missions", element: <MissionHub /> },
+      { path: "leaderboard", element: <MissionHub /> },
       { path: "community", element: <Community /> },
       { path: "community/write", element: <WritePost /> },
       { path: "community/my-posts", element: <MyPostsPage /> },

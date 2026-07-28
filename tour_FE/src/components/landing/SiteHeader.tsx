@@ -84,17 +84,10 @@ function NavLinkItems({
       </a>
       <Link
         to="/missions"
-        className={linkClass(onMissions)}
+        className={linkClass(onMissions || onLeaderboard)}
         onClick={onNavigate}
       >
-        미션 &amp; 인증
-      </Link>
-      <Link
-        to="/leaderboard"
-        className={linkClass(onLeaderboard)}
-        onClick={onNavigate}
-      >
-        리더보드
+        미션 &amp; 리더보드
       </Link>
       <Link
         to="/community"
