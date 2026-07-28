@@ -22,6 +22,7 @@ import { Leaderboard } from "@/pages/Leaderboard";
 import { MyPage } from "@/pages/MyPage";
 import { MyPageSettings } from "@/pages/MyPageSettings";
 import { MyPageProfileEdit } from "@/pages/MyPageProfileEdit";
+import { AiRecommend } from "@/pages/AiRecommend";
 import { Sports } from "@/pages/Sports";
 import { WritePost } from "@/pages/WritePost";
 import "./index.css";
@@ -34,6 +35,7 @@ import "./styles/notification.css";
 import "./styles/sports.css";
 import "./styles/missions.css";
 import "./styles/leaderboard.css";
+import "./styles/ai-recommend.css";
 
 const router = createBrowserRouter([
   { path: "/", element: <LandingPage />, errorElement: <RouterError /> },
@@ -45,6 +47,7 @@ const router = createBrowserRouter([
       { path: "missions", element: <Missions /> },
       { path: "leaderboard", element: <Leaderboard /> },
       { path: "sports", element: <Sports /> },
+      { path: "ai-recommend", element: <AiRecommend /> },
       { path: "community", element: <Community /> },
       { path: "community/write", element: <WritePost /> },
       { path: "community/my-posts", element: <MyPostsPage /> },

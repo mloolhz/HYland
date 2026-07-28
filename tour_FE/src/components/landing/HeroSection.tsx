@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type RefObject } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthorAvatar } from "@/components/community/AuthorAvatar";
 import { formatNumber } from "@/lib/landing-data";
 import { getCurrentUserProfile, getPassportExpPercent } from "@/lib/user-profile";
@@ -35,6 +35,7 @@ export function HeroSection({
   agentActive = false,
   onAgentActiveChange,
 }: HeroSectionProps) {
+  const navigate = useNavigate();
   const { showToast } = useToast();
   const profile = getCurrentUserProfile();
   const expPercent = getPassportExpPercent(profile);
@@ -55,7 +56,7 @@ export function HeroSection({
       showToast("질문을 입력해 주세요");
       return;
     }
-    showToast("AI 어시스턴트 서비스는 아직 개발중이에요.");
+    navigate("/ai-recommend", { state: { initialMessage: query } });
     setAgentQuery("");
   };
 

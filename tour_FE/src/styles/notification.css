@@ -440,7 +440,8 @@
 }
 
 .noti-page-head {
-  margin-bottom: 22px;
+  margin-bottom: 20px;
+  padding-top: 4px;
 }
 
 .noti-page-head h1 {
