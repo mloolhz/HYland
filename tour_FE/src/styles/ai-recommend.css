@@ -2,18 +2,38 @@
 
 .ai-page {
   background: #f7f9fc;
-  min-height: calc(100vh - var(--head-h, 74px));
-  padding: 28px 0 48px;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  padding-top: calc(var(--head-h, 74px) + 40px);
+  padding-bottom: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+body:has(.ai-page) {
+  overflow: hidden;
+}
+
+.ai-page ~ footer {
+  display: none;
 }
 
 .ai-page-inner {
+  flex: 1;
+  min-height: 0;
   max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - var(--head-h, 74px) - 76px);
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .ai-page-head {
+  flex-shrink: 0;
   margin-bottom: 20px;
   padding-top: 4px;
 }
@@ -27,12 +47,32 @@
 }
 
 .ai-chat {
+  position: relative;
   flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 8px 0 16px;
+  padding: 0 0 16px;
   overflow-y: auto;
+  overflow-anchor: none;
+  overscroll-behavior: contain;
+}
+
+.ai-chat-turn {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-anchor: none;
+}
+
+.ai-chat-spacer {
+  flex-shrink: 0;
+  height: 1px;
+}
+
+.ai-chat-spacer--grow {
+  min-height: calc(100vh - var(--head-h, 74px) - 40px - var(--ai-chat-offset, 14rem));
 }
 
 .ai-empty {
@@ -185,8 +225,9 @@
 
 .ai-rec-btn--external {
   background: #fff;
-  color: #2563eb;
+  color: #1a1a1a;
   border-color: #2563eb;
+  font-weight: 500;
 }
 
 .ai-rec-btn--external:hover {
@@ -245,91 +286,70 @@
 }
 
 .ai-course-list {
+  position: relative;
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 0 0 0 24px;
+}
+
+.ai-course-list::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 6px;
+  bottom: 6px;
+  width: 1px;
+  background: #d9d9d9;
 }
 
 .ai-course-step {
-  display: flex;
-  gap: 12px;
   position: relative;
+  margin-bottom: 22px;
 }
 
-.ai-course-track {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 14px;
-  flex-shrink: 0;
-  padding-top: 6px;
+.ai-course-step:last-child {
+  margin-bottom: 0;
 }
 
 .ai-course-dot {
-  width: 12px;
-  height: 12px;
+  position: absolute;
+  left: -24px;
+  top: 4px;
+  width: 11px;
+  height: 11px;
   border-radius: 50%;
-  background: var(--step-color, #1f4fb8);
-  border: 2px solid #fff;
-  box-shadow: 0 0 0 2px var(--step-color, #1f4fb8);
-  flex-shrink: 0;
+  border: 1.5px solid #1a1a1a;
+  background: #fff;
+  box-sizing: border-box;
 }
 
-.ai-course-line {
-  flex: 1;
-  width: 2px;
-  min-height: 24px;
-  background: linear-gradient(
-    to bottom,
-    var(--step-color, #1f4fb8) 0%,
-    color-mix(in srgb, var(--step-color, #1f4fb8) 40%, #e8edf3) 100%
-  );
-  margin: 4px 0;
+.ai-course-step:nth-child(even) .ai-course-dot {
+  background: #1a1a1a;
 }
 
 .ai-course-body {
-  flex: 1;
-  padding-bottom: 18px;
+  min-width: 0;
 }
 
-.ai-course-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--step-color, #1f4fb8);
-  background: color-mix(in srgb, var(--step-color, #1f4fb8) 12%, #fff);
-  border-radius: 999px;
-  padding: 4px 10px;
-  margin-bottom: 6px;
-}
-
-.ai-course-badge-icon {
+.ai-course-time {
+  margin: 0 0 4px;
   font-size: 13px;
-  line-height: 1;
-}
-
-.ai-course-badge-time {
+  color: #6b6b6b;
   font-variant-numeric: tabular-nums;
-}
-
-.ai-course-badge-period {
-  opacity: 0.85;
 }
 
 .ai-course-activity {
   display: block;
   font-size: 14px;
-  font-weight: 700;
-  color: #1a2332;
+  font-weight: 500;
+  color: #1a1a1a;
   margin-bottom: 4px;
 }
 
 .ai-course-desc {
   margin: 0;
-  font-size: 13px;
-  color: #5f6b7c;
+  font-size: 14px;
+  color: #4a4a4a;
   line-height: 1.5;
 }
 
@@ -394,11 +414,10 @@
   display: flex;
   gap: 10px;
   align-items: flex-end;
+  flex-shrink: 0;
   padding: 12px 0 8px;
   border-top: 1px solid #e4eaf2;
   background: #f7f9fc;
-  position: sticky;
-  bottom: 0;
 }
 
 .ai-composer-input {
@@ -447,8 +466,10 @@
 }
 
 .ai-demo-note {
+  flex-shrink: 0;
   margin: 0;
-  padding-top: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
   font-size: 12px;
   color: #9aa4b2;
   text-align: center;
@@ -456,7 +477,8 @@
 
 @media (max-width: 640px) {
   .ai-page {
-    padding: 20px 0 32px;
+    padding-top: calc(var(--head-h, 74px) + 24px);
+    padding-bottom: 0;
   }
 
   .ai-bubble {

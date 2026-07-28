@@ -1,8 +1,5 @@
-export type CoursePeriod = "dawn" | "morning" | "noon" | "afternoon" | "sunset";
-
 export type CourseStep = {
   time: string;
-  period: CoursePeriod;
   activity: string;
   desc: string;
 };

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getAiRecommendation } from "@/api/ai-recommend";
 import { AiResponseContent } from "@/components/ai-recommend/AiResponseContent";
@@ -16,8 +16,64 @@ type LocationState = {
   initialMessage?: string;
 };
 
+type Turn = {
+  user: Extract<ChatMessage, { role: "user" }>;
+  assistant?: Extract<ChatMessage, { role: "assistant" }>;
+};
+
 function createId() {
   return `msg-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+}
+
+function groupTurns(messages: ChatMessage[]): Turn[] {
+  const turns: Turn[] = [];
+  for (let i = 0; i < messages.length; i++) {
+    const msg = messages[i];
+    if (msg.role !== "user") continue;
+    const next = messages[i + 1];
+    const assistant = next?.role === "assistant" ? next : undefined;
+    turns.push({ user: msg, assistant });
+    if (assistant) i++;
+  }
+  return turns;
+}
+
+function getMaxScrollTop(container: HTMLElement) {
+  return Math.max(0, container.scrollHeight - container.clientHeight);
+}
+
+function clampScrollBottom(container: HTMLElement) {
+  const max = getMaxScrollTop(container);
+  if (container.scrollTop > max) {
+    container.scrollTop = max;
+  }
+}
+
+function snapTurnToTop(container: HTMLElement, turnEl: HTMLElement) {
+  const containerTop = container.getBoundingClientRect().top;
+  const turnTop =
+    container.scrollTop + (turnEl.getBoundingClientRect().top - containerTop);
+
+  const prev = turnEl.previousElementSibling as HTMLElement | null;
+  let target = turnTop;
+  if (prev) {
+    const prevBottom =
+      container.scrollTop + (prev.getBoundingClientRect().bottom - containerTop);
+    target = Math.max(turnTop, Math.ceil(prevBottom) + 1);
+  }
+
+  container.scrollTop = Math.ceil(target);
+}
+
+function scrollTurnToContainerTop(container: HTMLElement, turnEl: HTMLElement) {
+  snapTurnToTop(container, turnEl);
+  requestAnimationFrame(() => {
+    snapTurnToTop(container, turnEl);
+    requestAnimationFrame(() => {
+      snapTurnToTop(container, turnEl);
+      setTimeout(() => snapTurnToTop(container, turnEl), 0);
+    });
+  });
 }
 
 export function AiRecommend() {
@@ -28,11 +84,17 @@ export function AiRecommend() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [bootstrapped, setBootstrapped] = useState(false);
-  const chatEndRef = useRef<HTMLDivElement>(null);
+  const turnRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+  const chatScrollRef = useRef<HTMLDivElement>(null);
+  const scrollToUserIdRef = useRef<string | null>(null);
+  const activeTurnIdRef = useRef<string | null>(null);
   const initialHandled = useRef(false);
 
-  const scrollToBottom = useCallback(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  const turns = useMemo(() => groupTurns(messages), [messages]);
+
+  const setTurnRef = useCallback((id: string, el: HTMLDivElement | null) => {
+    if (el) turnRefs.current.set(id, el);
+    else turnRefs.current.delete(id);
   }, []);
 
   const sendMessage = useCallback(
@@ -41,6 +103,8 @@ export function AiRecommend() {
       if (!trimmed || loading) return;
 
       const userMsg: ChatMessage = { id: createId(), role: "user", text: trimmed };
+      scrollToUserIdRef.current = userMsg.id;
+      activeTurnIdRef.current = userMsg.id;
       setMessages((prev) => [...prev, userMsg]);
       setInput("");
       setLoading(true);
@@ -62,6 +126,84 @@ export function AiRecommend() {
     [loading, messages],
   );
 
+  const trySnapActiveTurn = useCallback(() => {
+    const turnId = activeTurnIdRef.current;
+    if (!turnId) return;
+
+    const container = chatScrollRef.current;
+    const turnEl = turnRefs.current.get(turnId);
+    if (!container || !turnEl) return;
+
+    snapTurnToTop(container, turnEl);
+  }, []);
+
+  useLayoutEffect(() => {
+    const id = scrollToUserIdRef.current;
+    if (!id) return;
+
+    const lastMsg = messages[messages.length - 1];
+    if (lastMsg?.role !== "user" || lastMsg.id !== id) return;
+
+    const container = chatScrollRef.current;
+    const turnEl = turnRefs.current.get(id);
+    if (!container || !turnEl) return;
+
+    scrollToUserIdRef.current = null;
+    scrollTurnToContainerTop(container, turnEl);
+  }, [messages, loading]);
+
+  useLayoutEffect(() => {
+    const turnId = activeTurnIdRef.current;
+    if (!turnId) return;
+
+    const lastMsg = messages[messages.length - 1];
+    if (lastMsg?.role !== "assistant") return;
+
+    const container = chatScrollRef.current;
+    const turnEl = turnRefs.current.get(turnId);
+    if (!container || !turnEl) return;
+
+    activeTurnIdRef.current = null;
+    scrollTurnToContainerTop(container, turnEl);
+    requestAnimationFrame(() => clampScrollBottom(container));
+  }, [messages]);
+
+  useLayoutEffect(() => {
+    if (loading) return;
+    const container = chatScrollRef.current;
+    if (!container) return;
+    clampScrollBottom(container);
+  }, [loading, messages]);
+
+  useEffect(() => {
+    const container = chatScrollRef.current;
+    if (!container) return;
+
+    const onScroll = () => {
+      if (loading) return;
+      clampScrollBottom(container);
+    };
+
+    container.addEventListener("scroll", onScroll, { passive: true });
+    return () => container.removeEventListener("scroll", onScroll);
+  }, [loading]);
+
+  useEffect(() => {
+    if (!loading || !activeTurnIdRef.current) return;
+
+    const container = chatScrollRef.current;
+    if (!container) return;
+
+    trySnapActiveTurn();
+
+    const observer = new ResizeObserver(() => {
+      trySnapActiveTurn();
+    });
+    observer.observe(container);
+
+    return () => observer.disconnect();
+  }, [loading, messages, trySnapActiveTurn]);
+
   useEffect(() => {
     if (initialHandled.current) return;
     if (initialMessage) {
@@ -73,10 +215,6 @@ export function AiRecommend() {
       setBootstrapped(true);
     }
   }, [initialMessage, location.pathname, navigate, sendMessage]);
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages, loading, scrollToBottom]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -92,7 +230,7 @@ export function AiRecommend() {
           <h1>인천섬 레저누리 AI 추천</h1>
         </header>
 
-        <div className="ai-chat" aria-live="polite">
+        <div className="ai-chat" ref={chatScrollRef} aria-live="polite">
           {isEmpty && (
             <div className="ai-empty">
               <p>원하는 레저나 조건을 입력해보세요.</p>
@@ -106,25 +244,40 @@ export function AiRecommend() {
             </div>
           )}
 
-          {messages.map((msg) =>
-            msg.role === "user" ? (
-              <div key={msg.id} className="ai-bubble ai-bubble--user">
-                <p>{msg.text}</p>
-              </div>
-            ) : (
-              <div key={msg.id} className="ai-bubble ai-bubble--assistant">
-                <AiResponseContent response={msg.response} onFollowup={(text) => void sendMessage(text)} />
-              </div>
-            ),
-          )}
+          {turns.map((turn, index) => {
+            const isLast = index === turns.length - 1;
+            return (
+              <div
+                key={turn.user.id}
+                ref={(el) => setTurnRef(turn.user.id, el)}
+                className="ai-chat-turn"
+              >
+                <div className="ai-bubble ai-bubble--user">
+                  <p>{turn.user.text}</p>
+                </div>
 
-          {loading && (
-            <div className="ai-bubble ai-bubble--assistant ai-bubble--loading" aria-busy="true">
-              <p>AI가 추천을 준비하고 있어요…</p>
-            </div>
-          )}
+                {turn.assistant && (
+                  <div className="ai-bubble ai-bubble--assistant">
+                    <AiResponseContent
+                      response={turn.assistant.response}
+                      onFollowup={(text) => void sendMessage(text)}
+                    />
+                  </div>
+                )}
 
-          <div ref={chatEndRef} />
+                {isLast && loading && (
+                  <div className="ai-bubble ai-bubble--assistant ai-bubble--loading" aria-busy="true">
+                    <p>AI가 추천을 준비하고 있어요…</p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          <div
+            className={`ai-chat-spacer${loading ? " ai-chat-spacer--grow" : ""}`}
+            aria-hidden="true"
+          />
         </div>
 
         <form className="ai-composer" onSubmit={handleSubmit}>

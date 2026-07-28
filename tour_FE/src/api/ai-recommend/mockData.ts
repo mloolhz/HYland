@@ -55,12 +55,12 @@ const FAMILY_DAY: AiResponse = {
   course: {
     title: "무의도 가족 당일치기 코스",
     steps: [
-      { time: "09:00", period: "morning", activity: "인천항 출발 · 무의도 도착", desc: "배편 시간을 미리 확인하고 여유 있게 이동해요." },
-      { time: "10:30", period: "morning", activity: "하나개 유원지 · 짚라인", desc: "가족이 함께 즐기기 좋은 스릴 체험으로 하루를 시작해요." },
-      { time: "12:30", period: "noon", activity: "점심 · 하나개 해변 산책", desc: "해변 근처 식당에서 식사 후 가벼운 산책을 즐겨요." },
-      { time: "14:00", period: "afternoon", activity: "ATV 체험", desc: "숲길과 해변 코스를 사륜바이크로 달려보세요." },
-      { time: "16:00", period: "afternoon", activity: "카약 · 투명 카약", desc: "잔잔한 바다 위에서 가족 사진도 남겨요." },
-      { time: "18:00", period: "sunset", activity: "일몰 감상 후 귀항", desc: "서해 노을을 보며 하루를 마무리해요." },
+      { time: "09:00", activity: "인천항 출발 · 무의도 도착", desc: "배편 시간을 미리 확인하고 여유 있게 이동해요." },
+      { time: "10:30", activity: "하나개 유원지 · 짚라인", desc: "가족이 함께 즐기기 좋은 스릴 체험으로 하루를 시작해요." },
+      { time: "12:30", activity: "점심 · 하나개 해변 산책", desc: "해변 근처 식당에서 식사 후 가벼운 산책을 즐겨요." },
+      { time: "14:00", activity: "ATV 체험", desc: "숲길과 해변 코스를 사륜바이크로 달려보세요." },
+      { time: "16:00", activity: "카약 · 투명 카약", desc: "잔잔한 바다 위에서 가족 사진도 남겨요." },
+      { time: "18:00", activity: "일몰 감상 후 귀항", desc: "서해 노을을 보며 하루를 마무리해요." },
     ],
   },
   tips: [
@@ -80,10 +80,10 @@ const COUPLE_DAY: AiResponse = {
   course: {
     title: "영흥도 커플 당일 코스",
     steps: [
-      { time: "10:00", period: "morning", activity: "십리포 해안 산책", desc: "소나무 숲과 바다가 어우러진 둘레길을 걸어요." },
-      { time: "13:00", period: "noon", activity: "해안 카페 · 점심", desc: "전망 좋은 카페에서 여유로운 시간을 보내요." },
-      { time: "16:00", period: "afternoon", activity: "해변 산책", desc: "조용한 해변을 따라 천천히 걸으며 대화해요." },
-      { time: "18:30", period: "sunset", activity: "일몰 감상", desc: "서해 노을이 지는 순간을 함께해요." },
+      { time: "10:00", activity: "십리포 해안 산책", desc: "소나무 숲과 바다가 어우러진 둘레길을 걸어요." },
+      { time: "13:00", activity: "해안 카페 · 점심", desc: "전망 좋은 카페에서 여유로운 시간을 보내요." },
+      { time: "16:00", activity: "해변 산책", desc: "조용한 해변을 따라 천천히 걸으며 대화해요." },
+      { time: "18:30", activity: "일몰 감상", desc: "서해 노을이 지는 순간을 함께해요." },
     ],
   },
   tips: ["편한 신발과 겉옷을 챙기세요.", "일몰 시간은 계절마다 달라요 — 사전에 확인하세요."],
@@ -99,10 +99,10 @@ const HEALING_DAY: AiResponse = {
   course: {
     title: "덕적도 · 석모도 힐링 코스",
     steps: [
-      { time: "09:30", period: "morning", activity: "덕적도 서포리 산림욕", desc: "피톤치드 가득한 숲길을 천천히 걸어요." },
-      { time: "12:00", period: "noon", activity: "섬 마을 점심", desc: "신선한 해산물로 가볍게 식사해요." },
-      { time: "15:00", period: "afternoon", activity: "석모도 온천 · 스파", desc: "미네랄 온천에서 피로를 풀어요." },
-      { time: "17:30", period: "sunset", activity: "해안 산책", desc: "온천 후 바닷바람을 맞으며 산책해요." },
+      { time: "09:30", activity: "덕적도 서포리 산림욕", desc: "피톤치드 가득한 숲길을 천천히 걸어요." },
+      { time: "12:00", activity: "섬 마을 점심", desc: "신선한 해산물로 가볍게 식사해요." },
+      { time: "15:00", activity: "석모도 온천 · 스파", desc: "미네랄 온천에서 피로를 풀어요." },
+      { time: "17:30", activity: "해안 산책", desc: "온천 후 바닷바람을 맞으며 산책해요." },
     ],
   },
   tips: ["산림욕은 아침·오전이 가장 시원해요.", "온천 이용 전 운영 시간을 확인하세요."],
@@ -118,8 +118,8 @@ const RAINY_DAY: AiResponse = {
   course: {
     title: "비 오는 날 대체 코스",
     steps: [
-      { time: "10:00", period: "morning", activity: "강화도 갯벌·어촌 체험", desc: "실내·프로그램형 체험으로 날씨 걱정 없이 즐겨요." },
-      { time: "14:00", period: "afternoon", activity: "석모도 온천", desc: "따뜻한 온천에서 비 소리를 들으며 휴식해요." },
+      { time: "10:00", activity: "강화도 갯벌·어촌 체험", desc: "실내·프로그램형 체험으로 날씨 걱정 없이 즐겨요." },
+      { time: "14:00", activity: "석모도 온천", desc: "따뜻한 온천에서 비 소리를 들으며 휴식해요." },
     ],
   },
   tips: ["우천 시 야외 레저는 취소될 수 있어요.", "체험 프로그램은 사전 예약을 권장합니다."],
@@ -136,10 +136,10 @@ const OVERNIGHT: AiResponse = {
   course: {
     title: "자월도 1박 2일 코스",
     steps: [
-      { time: "1일 14:00", period: "afternoon", activity: "자월도 도착 · 캠핑장 세팅", desc: "야영장에 도착해 텐트를 설치해요." },
-      { time: "1일 18:00", period: "sunset", activity: "해안 산책 · 일몰", desc: "노을을 보며 저녁을 준비해요." },
-      { time: "1일 21:00", period: "dawn", activity: "은하수 체험(프로그램)", desc: "맑은 날 밤하늘을 감상해요." },
-      { time: "2일 09:00", period: "morning", activity: "섬 일주 · 해안 산책", desc: "아침 바닷바람을 맞으며 섬을 둘러봐요." },
+      { time: "1일 14:00", activity: "자월도 도착 · 캠핑장 세팅", desc: "야영장에 도착해 텐트를 설치해요." },
+      { time: "1일 18:00", activity: "해안 산책 · 일몰", desc: "노을을 보며 저녁을 준비해요." },
+      { time: "1일 21:00", activity: "은하수 체험(프로그램)", desc: "맑은 날 밤하늘을 감상해요." },
+      { time: "2일 09:00", activity: "섬 일주 · 해안 산책", desc: "아침 바닷바람을 맞으며 섬을 둘러봐요." },
     ],
   },
   tips: ["캠핑 장비와 방한·방습 용품을 챙기세요.", "은하수 프로그램은 날씨에 따라 달라질 수 있어요."],
@@ -156,9 +156,9 @@ const ACTIVE_DAY: AiResponse = {
   course: {
     title: "강화도 · 무의도 액티브 코스",
     steps: [
-      { time: "10:00", period: "morning", activity: "강화씨사이드리조트 · 루지", desc: "경사로를 달리는 스릴을 먼저 즐겨요." },
-      { time: "13:00", period: "noon", activity: "무의도 이동 · 점심", desc: "배편 시간에 맞춰 무의도로 이동해요." },
-      { time: "15:00", period: "afternoon", activity: "하나개 짚라인 · ATV", desc: "유원지에서 액티비티를 이어가요." },
+      { time: "10:00", activity: "강화씨사이드리조트 · 루지", desc: "경사로를 달리는 스릴을 먼저 즐겨요." },
+      { time: "13:00", activity: "무의도 이동 · 점심", desc: "배편 시간에 맞춰 무의도로 이동해요." },
+      { time: "15:00", activity: "하나개 짚라인 · ATV", desc: "유원지에서 액티비티를 이어가요." },
     ],
   },
   tips: ["루지와 유원지는 성수기 대기가 있을 수 있어요.", "편한 복장과 운동화를 착용하세요."],
@@ -174,9 +174,9 @@ const DEFAULT: AiResponse = {
   course: {
     title: "인천 섬 하루 추천 코스",
     steps: [
-      { time: "10:00", period: "morning", activity: "무의도 · 카약 체험", desc: "잔잔한 바다에서 레저를 시작해요." },
-      { time: "14:00", period: "afternoon", activity: "영흥도 · 해안 산책", desc: "둘레길을 따라 바다 풍경을 즐겨요." },
-      { time: "18:00", period: "sunset", activity: "일몰 감상", desc: "서해 노을로 하루를 마무리해요." },
+      { time: "10:00", activity: "무의도 · 카약 체험", desc: "잔잔한 바다에서 레저를 시작해요." },
+      { time: "14:00", activity: "영흥도 · 해안 산책", desc: "둘레길을 따라 바다 풍경을 즐겨요." },
+      { time: "18:00", activity: "일몰 감상", desc: "서해 노을로 하루를 마무리해요." },
     ],
   },
   tips: ["섬마다 배편 시간이 다르니 미리 확인하세요.", "날씨와 물때를 체크하면 더 즐거운 여행이 돼요."],
