@@ -90,9 +90,9 @@ export function IslandDetailPanel({ island, isOpen, onClose }: IslandDetailPanel
           </section>
 
           <div className="isl-detail-actions">
-            <a className="btn btn-navy" href="/#booking">
-              {island.bookingLabel ?? "자세히 보기"}
-            </a>
+            <Link className="btn btn-navy" to="/sports">
+              {island.bookingLabel ?? "레저스포츠 보기"}
+            </Link>
             <Link
               className="btn btn-white"
               to={`/community?islands=${serializeIslandsQuery(new Set([island.name]))}`}

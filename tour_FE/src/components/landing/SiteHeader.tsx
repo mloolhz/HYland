@@ -58,7 +58,6 @@ function MenuIcon({ open }: { open: boolean }) {
 function buildNavItems(
   onIslands: boolean,
   onSports: boolean,
-  onReservation: boolean,
   onMissions: boolean,
   onLeaderboard: boolean,
   onCommunity: boolean,
@@ -83,20 +82,6 @@ function buildNavItems(
         { label: "육상레저", href: "/sports?category=land" },
         { label: "체험", href: "/sports?category=exp" },
         { label: "힐링", href: "/sports?category=heal" },
-      ],
-    },
-    {
-      id: "reservation",
-      label: "레저 예약",
-      href: "/reservation",
-      isRoute: true,
-      active: onReservation,
-      subItems: [
-        { label: "전체 프로그램", href: "/reservation" },
-        { label: "수상레저", href: "/reservation?category=water" },
-        { label: "육상레저", href: "/reservation?category=land" },
-        { label: "체험", href: "/reservation?category=exp" },
-        { label: "힐링", href: "/reservation?category=heal" },
       ],
     },
     {
@@ -344,7 +329,6 @@ export function SiteHeader() {
   const onCommunity = location.pathname.startsWith("/community");
   const onIslands = location.pathname.startsWith("/islands");
   const onSports = location.pathname.startsWith("/sports");
-  const onReservation = location.pathname.startsWith("/reservation");
   const onMissions = location.pathname.startsWith("/missions");
   const onLeaderboard = location.pathname.startsWith("/leaderboard");
   const navItems = useMemo(
@@ -352,12 +336,11 @@ export function SiteHeader() {
       buildNavItems(
         onIslands,
         onSports,
-        onReservation,
         onMissions,
         onLeaderboard,
         onCommunity,
       ),
-    [onIslands, onSports, onReservation, onMissions, onLeaderboard, onCommunity],
+    [onIslands, onSports, onMissions, onLeaderboard, onCommunity],
   );
   const headerSolid = headerScrolled || navMegaOpen;
   const closeNavMega = useCallback(() => {

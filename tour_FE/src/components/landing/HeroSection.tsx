@@ -206,8 +206,8 @@ export function HeroSection({
             <Link className="btn btn-navy" to="/islands">
               탐험 시작하기 →
             </Link>
-            <Link className="btn btn-white" to="/reservation">
-              레저 예약 보기
+            <Link className="btn btn-white" to="/sports">
+              레저스포츠 보기
             </Link>
           </div>
           <div className="cats" aria-label="레저 카테고리">
@@ -375,8 +375,8 @@ export function HeroSection({
               <span className="q" {...demoProps("나에게 맞는 섬BTI를 찾아보세요!")}>
                 <i>🏝️</i>섬BTI
               </span>
-              <Link className="q" to="/reservation">
-                <i>📅</i>레저 예약
+              <Link className="q" to="/sports">
+                <i>📅</i>레저스포츠
               </Link>
               <span className="q" {...demoProps("안전 정보 페이지는 준비 중이에요")}>
                 <i>🛟</i>안전 정보

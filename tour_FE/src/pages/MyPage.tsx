@@ -4,7 +4,6 @@ import { CountUpNumber } from "@/components/mypage/CountUpNumber";
 import { MyPageHeader } from "@/components/mypage/MyPageHeader";
 import { MyPageLeaderboard } from "@/components/mypage/MyPageLeaderboard";
 import { MyPagePassportBook } from "@/components/mypage/MyPagePassportBook";
-import { MyPageReservations } from "@/components/mypage/MyPageReservations";
 import { ISLAND_BTI } from "@/constants/island";
 import { CONTAINER } from "@/constants/layout";
 import {
@@ -102,19 +101,6 @@ export function MyPage() {
           </div>
 
           <MyPagePassportBook profile={profile} />
-        </section>
-
-        <section className="mp-section mp-reservation-section" aria-labelledby="mp-reservation-title">
-          <div className="mp-section-head">
-            <div>
-              <p className="mp-section-label">레저 예약</p>
-              <h2 id="mp-reservation-title" className="mp-section-title">
-                예약 내역
-              </h2>
-            </div>
-          </div>
-
-          <MyPageReservations />
         </section>
       </div>
     </main>

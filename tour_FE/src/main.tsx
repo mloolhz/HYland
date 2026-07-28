@@ -23,10 +23,6 @@ import { MyPage } from "@/pages/MyPage";
 import { MyPageSettings } from "@/pages/MyPageSettings";
 import { MyPageProfileEdit } from "@/pages/MyPageProfileEdit";
 import { Sports } from "@/pages/Sports";
-import { ReservationList } from "@/pages/ReservationList";
-import { ReservationDetail } from "@/pages/ReservationDetail";
-import { ReservationCheckout } from "@/pages/ReservationCheckout";
-import { ReservationComplete } from "@/pages/ReservationComplete";
 import { WritePost } from "@/pages/WritePost";
 import "./index.css";
 import "./styles/auth.css";
@@ -36,7 +32,6 @@ import "./styles/mypage.css";
 import "./styles/passport-book.css";
 import "./styles/notification.css";
 import "./styles/sports.css";
-import "./styles/reservation.css";
 import "./styles/missions.css";
 import "./styles/leaderboard.css";
 
@@ -50,10 +45,6 @@ const router = createBrowserRouter([
       { path: "missions", element: <Missions /> },
       { path: "leaderboard", element: <Leaderboard /> },
       { path: "sports", element: <Sports /> },
-      { path: "reservation", element: <ReservationList /> },
-      { path: "reservation/complete/:reservationId", element: <ReservationComplete /> },
-      { path: "reservation/:productId/checkout", element: <ReservationCheckout /> },
-      { path: "reservation/:productId", element: <ReservationDetail /> },
       { path: "community", element: <Community /> },
       { path: "community/write", element: <WritePost /> },
       { path: "community/my-posts", element: <MyPostsPage /> },
