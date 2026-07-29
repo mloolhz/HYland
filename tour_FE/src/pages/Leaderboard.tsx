@@ -23,7 +23,7 @@ function RankDeltaBadge({ delta }: { delta: RankDelta | undefined }) {
   return <span className="lbp-delta lbp-delta--same">–</span>;
 }
 
-export function Leaderboard() {
+export function LeaderboardView() {
   const [category, setCategory] = useState<MissionCategory>("탐험");
   const data = CATEGORY_LEADERBOARD[category];
   const deltas = CATEGORY_RANK_DELTAS[category];
@@ -33,8 +33,7 @@ export function Leaderboard() {
   const bestCategory = allRanks.reduce((best, cur) => (cur.rank < best.rank ? cur : best));
 
   return (
-    <main className="lbp-page">
-      <div className="container">
+    <div className="container">
         <header className="lbp-head">
           <span className="lbp-head__eyebrow">LEADERBOARD</span>
           <h1 className="lbp-head__title">탐험가 리더보드</h1>
@@ -194,7 +193,6 @@ export function Leaderboard() {
             ))}
           </div>
         </section>
-      </div>
-    </main>
+    </div>
   );
 }

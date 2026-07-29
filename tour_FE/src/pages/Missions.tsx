@@ -117,7 +117,7 @@ function CategoryGroup({ category, filter }: { category: MissionCategory; filter
   );
 }
 
-export function Missions() {
+export function MissionsView() {
   const [filter, setFilter] = useState<MissionFilter>("전체");
 
   const counts = useMemo(() => {
@@ -126,38 +126,36 @@ export function Missions() {
   }, []);
 
   return (
-    <main className="ms-page">
-      <div className="container">
-        <header className="ms-head">
-          <span className="ms-head__eyebrow">MISSION &amp; BADGE</span>
-          <h1 className="ms-head__title">미션 &amp; 인증</h1>
-          <p className="ms-head__sub">
-            게이지를 가득 채워 귀여운 배지를 모아보세요! 모은 배지는 바다패스 여권에 기록됩니다.
-          </p>
-        </header>
+    <div className="container">
+      <header className="ms-head">
+        <span className="ms-head__eyebrow">MISSION &amp; BADGE</span>
+        <h1 className="ms-head__title">미션 &amp; 인증</h1>
+        <p className="ms-head__sub">
+          게이지를 가득 채워 귀여운 배지를 모아보세요! 모은 배지는 바다패스 여권에 기록됩니다.
+        </p>
+      </header>
 
-        <MissionSummary />
+      <MissionSummary />
 
-        <div className="ms-filter" role="tablist" aria-label="미션 필터">
-          {FILTERS.map((f) => (
-            <button
-              key={f}
-              type="button"
-              role="tab"
-              aria-selected={filter === f}
-              className={filter === f ? "on" : ""}
-              onClick={() => setFilter(f)}
-            >
-              {f}
-              <span className="ms-filter__count">{counts[f]}</span>
-            </button>
-          ))}
-        </div>
-
-        {MISSION_CATEGORIES.map((category) => (
-          <CategoryGroup key={category} category={category} filter={filter} />
+      <div className="ms-filter" role="tablist" aria-label="미션 필터">
+        {FILTERS.map((f) => (
+          <button
+            key={f}
+            type="button"
+            role="tab"
+            aria-selected={filter === f}
+            className={filter === f ? "on" : ""}
+            onClick={() => setFilter(f)}
+          >
+            {f}
+            <span className="ms-filter__count">{counts[f]}</span>
+          </button>
         ))}
       </div>
-    </main>
+
+      {MISSION_CATEGORIES.map((category) => (
+        <CategoryGroup key={category} category={category} filter={filter} />
+      ))}
+    </div>
   );
 }

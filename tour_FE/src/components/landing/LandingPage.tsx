@@ -24,13 +24,9 @@ function LandingPageContent() {
     navigate("/login");
   }, [navigate]);
 
-  const activateAgentInput = useCallback(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    setAgentActive(true);
-    window.setTimeout(() => {
-      agentInputRef.current?.focus({ preventScroll: true });
-    }, 480);
-  }, []);
+  const goToAiRecommend = useCallback(() => {
+    navigate("/ai-recommend");
+  }, [navigate]);
 
   useEffect(() => {
     const io = new IntersectionObserver(
@@ -95,7 +91,7 @@ function LandingPageContent() {
         onAgentActiveChange={setAgentActive}
       />
       <MapSection />
-      <AISection onRequestCustomRecommendation={activateAgentInput} />
+      <AISection onRequestCustomRecommendation={goToAiRecommend} />
       <BookingSection />
       <MissionSection />
       <LeaderboardSection onGoToLogin={goToLogin} />

@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   SPORTS_CATEGORIES,
   SPORTS_DATA,
+  type BookingMethod,
   type CategoryKey,
   type Sport,
   type SportIsland,
@@ -12,7 +13,6 @@ import {
   resolveSportIslandAccent,
   resolveSportIslandRegion,
 } from "@/lib/sports-region";
-import { SPORT_DEFAULT_PRODUCT } from "@/api/reservation";
 import { CONTAINER } from "@/constants/layout";
 
 const HERO_IMAGE = "/_Pngtree_progressive_leisure_jet_boat_aquatics_16900908.jpg";
@@ -48,6 +48,77 @@ function SportPhoto({ sport }: { sport: Sport }) {
         </div>
       )}
     </div>
+  );
+}
+
+function BookingMethodLink({
+  method,
+  primary = false,
+}: {
+  method: BookingMethod;
+  primary?: boolean;
+}) {
+  if (method.type === "phone" && method.tel) {
+    const telHref = `tel:${method.tel.replace(/[^\d+]/g, "")}`;
+    return (
+      <a className={`sp-booking-btn${primary ? " sp-booking-btn--primary" : " sp-booking-btn--secondary"}`} href={telHref}>
+        <span className="sp-booking-btn-label">{method.label}</span>
+        <span className="sp-booking-btn-sub">전화 문의: {method.tel}</span>
+      </a>
+    );
+  }
+
+  if (!method.url) return null;
+
+  return (
+    <a
+      className="sp-booking-btn sp-booking-btn--external"
+      href={method.url}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <span className="sp-booking-btn-label">{method.label}</span>
+      <span className="sp-booking-btn-external" aria-hidden="true">
+        ↗
+      </span>
+    </a>
+  );
+}
+
+function SportBookingSection({ sport }: { sport: Sport }) {
+  const { booking } = sport;
+  const hasBooking = booking.length > 0;
+  const infoOnly = hasBooking && booking.every((method) => method.type === "info");
+
+  return (
+    <section className="sp-section" aria-labelledby="sp-booking-heading">
+      <h3 id="sp-booking-heading" className="sp-section-title">
+        예약
+      </h3>
+      {hasBooking ? (
+        <div className="sp-booking-box">
+          <p className="sp-booking-lead">
+            {infoOnly
+              ? "예약 없이 즐기는 활동입니다. 코스·이용 정보를 확인하세요."
+              : "이 활동은 아래 예약처에서 예약할 수 있습니다."}
+          </p>
+          <div className="sp-booking-actions">
+            {booking.map((method, index) => (
+              <BookingMethodLink key={`${method.type}-${method.label}`} method={method} primary={index === 0} />
+            ))}
+          </div>
+          {!infoOnly && (
+            <p className="sp-booking-note">외부 예약처로 이동합니다. 결제·예약은 해당 사이트에서 진행됩니다.</p>
+          )}
+        </div>
+      ) : (
+        <div className="sp-booking-box sp-booking-box--free">
+          <strong>별도 예약이 필요 없는 자유 활동입니다.</strong>
+          {" · "}
+          각 섬의 코스·물때 정보를 확인하고 자유롭게 즐기세요.
+        </div>
+      )}
+    </section>
   );
 }
 
@@ -205,37 +276,7 @@ export function Sports() {
               </ul>
             </section>
 
-            <section className="sp-section" aria-labelledby="sp-booking-heading">
-              <h3 id="sp-booking-heading" className="sp-section-title">
-                예약
-              </h3>
-              {selected.pay ? (
-                <div className="sp-booking-box">
-                  <strong>이 종목은 사전 예약이 가능합니다.</strong>
-                  {" · "}
-                  <button
-                    type="button"
-                    className="sp-booking-cta"
-                    onClick={() => {
-                      const productId = SPORT_DEFAULT_PRODUCT[selected.id];
-                      if (productId) {
-                        navigate(`/reservation/${productId}`);
-                      } else {
-                        navigate("/reservation");
-                      }
-                    }}
-                  >
-                    예약하기
-                  </button>
-                </div>
-              ) : (
-                <div className="sp-booking-box sp-booking-box--free">
-                  <strong>별도 예약이 필요 없는 자유 활동입니다.</strong>
-                  {" · "}
-                  각 섬의 코스·물때 정보를 확인하고 자유롭게 즐기세요.
-                </div>
-              )}
-            </section>
+            <SportBookingSection sport={selected} />
           </div>
         </>
       )}

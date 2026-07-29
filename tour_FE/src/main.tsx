@@ -17,16 +17,12 @@ import { Notifications } from "@/pages/Notifications";
 import { PostDetail } from "@/pages/PostDetail";
 import { Signup } from "@/pages/Signup";
 import { IslandExplorer } from "@/pages/IslandExplorer";
-import { Missions } from "@/pages/Missions";
-import { Leaderboard } from "@/pages/Leaderboard";
+import { MissionHub } from "@/pages/MissionHub";
 import { MyPage } from "@/pages/MyPage";
 import { MyPageSettings } from "@/pages/MyPageSettings";
 import { MyPageProfileEdit } from "@/pages/MyPageProfileEdit";
+import { AiRecommend } from "@/pages/AiRecommend";
 import { Sports } from "@/pages/Sports";
-import { ReservationList } from "@/pages/ReservationList";
-import { ReservationDetail } from "@/pages/ReservationDetail";
-import { ReservationCheckout } from "@/pages/ReservationCheckout";
-import { ReservationComplete } from "@/pages/ReservationComplete";
 import { WritePost } from "@/pages/WritePost";
 import "./index.css";
 import "./styles/auth.css";
@@ -36,9 +32,9 @@ import "./styles/mypage.css";
 import "./styles/passport-book.css";
 import "./styles/notification.css";
 import "./styles/sports.css";
-import "./styles/reservation.css";
 import "./styles/missions.css";
 import "./styles/leaderboard.css";
+import "./styles/ai-recommend.css";
 
 const router = createBrowserRouter([
   { path: "/", element: <LandingPage />, errorElement: <RouterError /> },
@@ -47,13 +43,10 @@ const router = createBrowserRouter([
     errorElement: <RouterError />,
     children: [
       { path: "islands", element: <IslandExplorer /> },
-      { path: "missions", element: <Missions /> },
-      { path: "leaderboard", element: <Leaderboard /> },
+      { path: "missions", element: <MissionHub /> },
+      { path: "leaderboard", element: <MissionHub /> },
       { path: "sports", element: <Sports /> },
-      { path: "reservation", element: <ReservationList /> },
-      { path: "reservation/complete/:reservationId", element: <ReservationComplete /> },
-      { path: "reservation/:productId/checkout", element: <ReservationCheckout /> },
-      { path: "reservation/:productId", element: <ReservationDetail /> },
+      { path: "ai-recommend", element: <AiRecommend /> },
       { path: "community", element: <Community /> },
       { path: "community/write", element: <WritePost /> },
       { path: "community/my-posts", element: <MyPostsPage /> },

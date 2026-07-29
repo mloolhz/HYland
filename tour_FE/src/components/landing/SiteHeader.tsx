@@ -59,9 +59,7 @@ function MenuIcon({ open }: { open: boolean }) {
 function buildNavItems(
   onIslands: boolean,
   onSports: boolean,
-  onReservation: boolean,
-  onMissions: boolean,
-  onLeaderboard: boolean,
+  onMissionsHub: boolean,
   onCommunity: boolean,
 ): NavItem[] {
   return [
@@ -87,33 +85,11 @@ function buildNavItems(
       ],
     },
     {
-      id: "reservation",
-      label: "레저 예약",
-      href: "/reservation",
-      isRoute: true,
-      active: onReservation,
-      subItems: [
-        { label: "전체 프로그램", href: "/reservation" },
-        { label: "수상레저", href: "/reservation?category=water" },
-        { label: "육상레저", href: "/reservation?category=land" },
-        { label: "체험", href: "/reservation?category=exp" },
-        { label: "힐링", href: "/reservation?category=heal" },
-      ],
-    },
-    {
       id: "mission",
       label: "미션 & 인증",
       href: "/missions",
       isRoute: true,
-      active: onMissions,
-      subItems: [],
-    },
-    {
-      id: "leaderboard",
-      label: "리더보드",
-      href: "/leaderboard",
-      isRoute: true,
-      active: onLeaderboard,
+      active: onMissionsHub,
       subItems: [],
     },
     {
@@ -230,11 +206,21 @@ function DesktopNav({
             <div key={item.id} className="nav-item" onMouseEnter={handleItemEnter}>
               {item.isRoute ? (
                 <Link to={item.href} {...triggerProps}>
-                  {item.label}
+                  <span className="nav-link__label">
+                    <span className="nav-link__label-visible">{item.label}</span>
+                    <span className="nav-link__label-bold" aria-hidden="true">
+                      {item.label}
+                    </span>
+                  </span>
                 </Link>
               ) : (
                 <a href={item.href} {...triggerProps}>
-                  {item.label}
+                  <span className="nav-link__label">
+                    <span className="nav-link__label-visible">{item.label}</span>
+                    <span className="nav-link__label-bold" aria-hidden="true">
+                      {item.label}
+                    </span>
+                  </span>
                 </a>
               )}
               <div className="nav-dropdown-col" aria-hidden={!isOpen || !hasSubItems}>
@@ -345,20 +331,17 @@ export function SiteHeader() {
   const onCommunity = location.pathname.startsWith("/community");
   const onIslands = location.pathname.startsWith("/islands");
   const onSports = location.pathname.startsWith("/sports");
-  const onReservation = location.pathname.startsWith("/reservation");
-  const onMissions = location.pathname.startsWith("/missions");
-  const onLeaderboard = location.pathname.startsWith("/leaderboard");
+  const onMissionsHub =
+    location.pathname.startsWith("/missions") || location.pathname.startsWith("/leaderboard");
   const navItems = useMemo(
     () =>
       buildNavItems(
         onIslands,
         onSports,
-        onReservation,
-        onMissions,
-        onLeaderboard,
+        onMissionsHub,
         onCommunity,
       ),
-    [onIslands, onSports, onReservation, onMissions, onLeaderboard, onCommunity],
+    [onIslands, onSports, onMissionsHub, onCommunity],
   );
   const headerSolid = headerScrolled || navMegaOpen;
   const closeNavMega = useCallback(() => {
