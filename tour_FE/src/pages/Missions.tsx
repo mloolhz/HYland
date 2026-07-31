@@ -84,6 +84,7 @@ function QuestCard({ quest, index }: { quest: MissionQuest; index: number }) {
 }
 
 function CategoryGroup({ category, filter }: { category: MissionCategory; filter: MissionFilter }) {
+  const [expanded, setExpanded] = useState(false);
   const { emoji, color } = CATEGORY_META[category];
   const { earned, total } = getCategoryProgress(category);
   const quests = MISSION_QUESTS.filter((q) => q.category === category && matchesFilter(q, filter));
@@ -91,28 +92,59 @@ function CategoryGroup({ category, filter }: { category: MissionCategory; filter
 
   const style = { "--cat": color } as CSSProperties;
   const pct = total > 0 ? Math.round((earned / total) * 100) : 0;
+  const panelId = `ms-group-panel-${category}`;
 
   return (
-    <section className="ms-group" aria-label={`${category} 미션`} style={style}>
-      <div className="ms-group__head">
-        <h2 className="ms-group__title">
-          <span className="ms-group__emoji" aria-hidden="true">
-            {emoji}
+    <section
+      className={`ms-group${expanded ? " is-open" : ""}`}
+      aria-label={`${category} 미션`}
+      style={style}
+    >
+      <button
+        type="button"
+        className="ms-group__toggle"
+        aria-expanded={expanded}
+        aria-controls={panelId}
+        onClick={() => setExpanded((open) => !open)}
+      >
+        <span className="ms-group__head">
+          <span className="ms-group__title">
+            <span className="ms-group__emoji" aria-hidden="true">
+              {emoji}
+            </span>
+            {category}
+            <small>
+              배지 {earned}/{total}
+            </small>
           </span>
-          {category}
-          <small>
-            배지 {earned}/{total}
-          </small>
-        </h2>
-        <div className="ms-group__progress" aria-hidden="true">
-          <span className="ms-group__progress-fill" style={{ width: `${pct}%` }} />
+          <span className="ms-group__progress" aria-hidden="true">
+            <span className="ms-group__progress-fill" style={{ width: `${pct}%` }} />
+          </span>
+          <span className="ms-group__action">
+            <span className="ms-group__chevron" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M4 6l4 4 4-4"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+          </span>
+        </span>
+      </button>
+
+      <div id={panelId} className={`ms-group__panel${expanded ? " is-open" : ""}`}>
+        <div className="ms-group__panel-inner">
+          <ul className="ms-quest-grid">
+            {quests.map((quest, i) => (
+              <QuestCard key={quest.id} quest={quest} index={i} />
+            ))}
+          </ul>
         </div>
       </div>
-      <ul className="ms-quest-grid">
-        {quests.map((quest, i) => (
-          <QuestCard key={quest.id} quest={quest} index={i} />
-        ))}
-      </ul>
     </section>
   );
 }
@@ -127,14 +159,6 @@ export function MissionsView() {
 
   return (
     <div className="container">
-      <header className="ms-head">
-        <span className="ms-head__eyebrow">MISSION &amp; BADGE</span>
-        <h1 className="ms-head__title">미션 &amp; 인증</h1>
-        <p className="ms-head__sub">
-          게이지를 가득 채워 귀여운 배지를 모아보세요! 모은 배지는 바다패스 여권에 기록됩니다.
-        </p>
-      </header>
-
       <MissionSummary />
 
       <div className="ms-filter" role="tablist" aria-label="미션 필터">
@@ -153,9 +177,11 @@ export function MissionsView() {
         ))}
       </div>
 
-      {MISSION_CATEGORIES.map((category) => (
-        <CategoryGroup key={category} category={category} filter={filter} />
-      ))}
+      <div className="ms-groups">
+        {MISSION_CATEGORIES.map((category) => (
+          <CategoryGroup key={category} category={category} filter={filter} />
+        ))}
+      </div>
     </div>
   );
 }

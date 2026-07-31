@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { PassportBook, type PassportBookHandle } from "@/components/landing/PassportBook";
+import { MyPagePassportProfilePage } from "@/components/mypage/MyPagePassportProfilePage";
 import { PASSPORT_BADGES } from "@/components/landing/passport-book-data";
 import { buildBookSpreads, type BookNavState } from "@/components/landing/passport-book-spreads";
 import type { UserProfile } from "@/lib/user-profile";
@@ -23,7 +24,7 @@ export function MyPagePassportBook({ profile }: MyPagePassportBookProps) {
   const bookRef = useRef<PassportBookHandle>(null);
 
   return (
-    <div className="mp-passport-book" aria-label="i-바다패스 여권">
+    <div className="mp-passport-book" aria-label="섬 여권">
       <div className="passport-book passport-book--open passport-book--embedded">
         <div className="passport-book__shell">
           <div className="passport-book__frame">
@@ -33,6 +34,7 @@ export function MyPagePassportBook({ profile }: MyPagePassportBookProps) {
                 spreads={BOOK_SPREADS}
                 profile={profile}
                 titleId="mp-passport-title"
+                ProfilePage={MyPagePassportProfilePage}
                 onNavStateChange={setNav}
               />
 

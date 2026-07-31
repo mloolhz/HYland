@@ -1,9 +1,10 @@
-import { useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { CommunityHeader } from "@/components/community/CommunityHeader";
 import { CURRENT_USER_ID } from "@/constants/auth";
 import { ISLAND_CATALOG } from "@/constants/island";
 import { CONTAINER } from "@/constants/layout";
+import { COMMUNITY_ACTIVITY_OPTIONS } from "@/lib/community-activities";
 import { addPost, usePosts } from "@/lib/post-store";
 import type { Post, PostType } from "@/types/community";
 
@@ -13,29 +14,85 @@ const TYPE_OPTIONS: { value: PostType; label: string }[] = [
   { value: "question", label: "질문" },
 ];
 
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+
+type WritePrefill = {
+  type?: PostType;
+  island?: string;
+  activity?: string;
+};
+
+function formatFileSize(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
 export function WritePost() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const prefill = (location.state as WritePrefill | null) ?? null;
   const posts = usePosts();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const author = useMemo(() => {
     const existing = posts.find((p) => p.author.id === CURRENT_USER_ID);
     return existing?.author ?? { id: CURRENT_USER_ID, nickname: "이파도", bti: "파도형" as const };
   }, [posts]);
 
-  const [type, setType] = useState<PostType>("review");
+  const [type, setType] = useState<PostType>(prefill?.type ?? "review");
   const [title, setTitle] = useState("");
-  const [island, setIsland] = useState("");
-  const [activity, setActivity] = useState("");
+  const [island, setIsland] = useState(prefill?.island ?? "");
+  const [activity, setActivity] = useState(prefill?.activity ?? "");
   const [content, setContent] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
+  const [imageError, setImageError] = useState("");
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    return () => {
+      if (imagePreviewUrl) URL.revokeObjectURL(imagePreviewUrl);
+    };
+  }, [imagePreviewUrl]);
+
+  const handleImageSelect = (file: File | null) => {
+    setImageError("");
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      setImageError("이미지 파일(JPG, PNG 등)만 첨부할 수 있습니다.");
+      return;
+    }
+    if (file.size > MAX_IMAGE_BYTES) {
+      setImageError("이미지 용량은 최대 5MB까지 가능합니다.");
+      return;
+    }
+
+    if (imagePreviewUrl) URL.revokeObjectURL(imagePreviewUrl);
+    setImageFile(file);
+    setImagePreviewUrl(URL.createObjectURL(file));
+  };
+
+  const handleRemoveImage = () => {
+    if (imagePreviewUrl) URL.revokeObjectURL(imagePreviewUrl);
+    setImageFile(null);
+    setImagePreviewUrl(null);
+    setImageError("");
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!title.trim() || !island || !activity.trim() || !content.trim()) {
+    if (!title.trim() || !island || !activity || !content.trim()) {
       setError("제목, 섬, 활동, 내용은 모두 입력해주세요.");
       return;
     }
+
+    // TODO: 이미지 업로드 API 연동 — 업로드 API가 없어 첨부 파일은 현재 게시글에 저장되지 않음.
+    // API 연동 시: imageFile을 업로드 → 반환 URL을 images 배열에 저장.
+    const images: string[] | undefined = undefined;
+    void imageFile;
 
     const newPost: Post = {
       id: `p-${Date.now()}`,
@@ -43,8 +100,8 @@ export function WritePost() {
       title: title.trim(),
       content: content.trim(),
       island,
-      activity: activity.trim(),
-      images: imageUrl.trim() ? [imageUrl.trim()] : undefined,
+      activity,
+      images,
       author,
       createdAt: new Date().toISOString(),
       likes: 0,
@@ -122,15 +179,23 @@ export function WritePost() {
                 <label className="cm-write-label" htmlFor="write-activity">
                   활동
                 </label>
-                <input
+                <select
                   id="write-activity"
-                  type="text"
                   className="cm-write-input"
                   value={activity}
                   onChange={(e) => setActivity(e.target.value)}
-                  placeholder="예: 카약, 하이킹, 캠핑"
-                  maxLength={20}
-                />
+                >
+                  <option value="">활동 선택</option>
+                  {COMMUNITY_ACTIVITY_OPTIONS.map((group) => (
+                    <optgroup key={group.key} label={group.label}>
+                      {group.activities.map((name) => (
+                        <option key={name} value={name}>
+                          {name}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </select>
               </div>
             </div>
 
@@ -149,17 +214,62 @@ export function WritePost() {
             </div>
 
             <div className="cm-write-field">
-              <label className="cm-write-label" htmlFor="write-image">
-                이미지 URL <span className="cm-write-optional">(선택)</span>
-              </label>
+              <span className="cm-write-label">
+                이미지 <span className="cm-write-optional">(선택)</span>
+              </span>
               <input
-                id="write-image"
-                type="url"
-                className="cm-write-input"
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                placeholder="https://..."
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="cm-write-file-input"
+                onChange={(e) => handleImageSelect(e.target.files?.[0] ?? null)}
+                aria-label="이미지 파일 선택"
               />
+
+              {imagePreviewUrl && imageFile ? (
+                <div className="cm-write-image-preview">
+                  <img src={imagePreviewUrl} alt="" className="cm-write-image-thumb" />
+                  <div className="cm-write-image-meta">
+                    <span className="cm-write-image-name">{imageFile.name}</span>
+                    <span className="cm-write-image-size">{formatFileSize(imageFile.size)}</span>
+                  </div>
+                  <button
+                    type="button"
+                    className="cm-write-image-remove"
+                    onClick={handleRemoveImage}
+                    aria-label="첨부 이미지 제거"
+                  >
+                    ×
+                  </button>
+                </div>
+              ) : (
+                <div
+                  className="cm-write-image-drop"
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => fileInputRef.current?.click()}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      fileInputRef.current?.click();
+                    }
+                  }}
+                >
+                  <p className="cm-write-image-hint">클릭하여 파일 선택 · JPG, PNG (최대 5MB)</p>
+                  <button
+                    type="button"
+                    className="cm-write-image-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      fileInputRef.current?.click();
+                    }}
+                  >
+                    파일 첨부
+                  </button>
+                </div>
+              )}
+
+              {imageError && <p className="cm-write-error">{imageError}</p>}
             </div>
 
             {error && <p className="cm-write-error">{error}</p>}

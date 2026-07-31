@@ -13,7 +13,10 @@
 
 .isl-header {
   position: relative;
-  padding: 22px 0;
+  min-height: var(--page-intro-band-h);
+  padding: 0;
+  display: flex;
+  align-items: center;
   overflow: hidden;
 }
 
@@ -28,6 +31,7 @@
 
 .isl-header-inner {
   position: relative;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -252,13 +256,82 @@
 
 .isl-explorer.selected .land {
   stroke: #fff;
-  stroke-width: 3;
-  filter: brightness(1.15) drop-shadow(0 0 6px rgba(46, 158, 104, 0.6));
+  stroke-width: 3.2;
+  filter: brightness(1.18) drop-shadow(0 0 8px rgba(255, 255, 255, 0.55));
 }
 
 .isl-explorer.todo.selected .land {
-  stroke: var(--blue);
-  filter: brightness(1.2) saturate(0.6);
+  fill: #c9d6e8;
+  stroke: #fff;
+  stroke-width: 3;
+  filter: brightness(1.15) saturate(0.75) drop-shadow(0 0 8px rgba(255, 255, 255, 0.45));
+}
+
+.isl-explorer.todo.selected {
+  filter: none;
+}
+
+.isl-map-has-selection .isl-explorer:not(.selected) {
+  opacity: 0.58;
+}
+
+.isl-map-has-selection .isl-explorer:not(.selected).todo {
+  filter: url(#isl-fog) saturate(0.2);
+}
+
+.isl-selected-marker {
+  pointer-events: none;
+  filter: drop-shadow(0 2px 4px rgba(15, 35, 80, 0.4));
+}
+
+.isl-boat-icon {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: islBoatBob 2.6s ease-in-out infinite;
+}
+
+.isl-boat-hull {
+  fill: #0f5fcc;
+  stroke: #083d8c;
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+.isl-boat-hull-shine {
+  fill: #4d92e8;
+  stroke: none;
+  opacity: 0.85;
+}
+
+.isl-boat-mast {
+  stroke: #2d2e6b;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.isl-boat-sail-main,
+.isl-boat-sail-jib {
+  stroke: #dbe6f2;
+  stroke-width: 1.2;
+  stroke-linejoin: round;
+}
+
+.isl-boat-sail-main {
+  fill: #ffffff;
+}
+
+.isl-boat-sail-jib {
+  fill: #f3f7fc;
+}
+
+@keyframes islBoatBob {
+  0%,
+  100% {
+    transform: scale(0.62) translateY(0);
+  }
+  50% {
+    transform: scale(0.62) translateY(-1.5px);
+  }
 }
 
 .isl-explorer {
@@ -312,42 +385,60 @@
 }
 
 .isl-detail-head {
-  padding: 22px 22px 16px;
+  padding: 18px 20px 16px;
   border-bottom: 1px solid var(--line);
   background: linear-gradient(180deg, var(--sky) 0%, #fff 100%);
 }
 
+.isl-detail-head-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
 .isl-detail-region {
   display: inline-block;
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 800;
   color: var(--blue);
   background: #fff;
   border: 1px solid var(--blue2);
   border-radius: 4px;
-  padding: 3px 9px;
-  margin-bottom: 8px;
+  padding: 3px 8px;
 }
 
-.isl-detail-title-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.isl-detail-title-row h2 {
-  font-size: 22px;
+.isl-detail-head h2 {
+  font-size: 21px;
   font-weight: 800;
   color: var(--navy);
   letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.isl-detail-intro {
+  font-size: 13.5px;
+  color: var(--text);
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.isl-detail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
 }
 
 .isl-detail-badge {
   flex: none;
-  font-size: 11px;
+  margin-left: auto;
+  font-size: 10.5px;
   font-weight: 800;
-  padding: 4px 10px;
+  padding: 4px 9px;
   border-radius: 999px;
 }
 
@@ -366,10 +457,17 @@
 }
 
 .isl-detail-body {
-  padding: 20px 22px 22px;
+  padding: 16px 20px 20px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 14px;
+}
+
+.isl-detail-block h4 {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--muted);
+  margin-bottom: 8px;
 }
 
 .isl-detail-section h4 {
@@ -385,6 +483,24 @@
   font-size: 14.5px;
   color: var(--text);
   line-height: 1.65;
+}
+
+.isl-course-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+}
+
+.isl-course-tags li {
+  font-size: 12px;
+  font-weight: 700;
+  color: #33445f;
+  background: var(--alt);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 11px;
+  line-height: 1.2;
 }
 
 .isl-course-list {
@@ -420,6 +536,52 @@
   flex: none;
 }
 
+.isl-badge-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.isl-badge-section-head h4 {
+  margin-bottom: 0;
+}
+
+.isl-badge-count {
+  flex: none;
+  font-size: 10.5px;
+  font-weight: 800;
+  color: var(--blue-d);
+  background: var(--sky);
+  border: 1px solid var(--sky2);
+  border-radius: 999px;
+  padding: 3px 8px;
+}
+
+.isl-badge-stamps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px 6px;
+}
+
+.isl-badge-stamps .passport-stamp-wrap {
+  width: 100%;
+}
+
+.isl-badge-stamps .passport-stamp {
+  max-height: 84px;
+  padding: 5px 4px;
+}
+
+.isl-badge-stamps .passport-stamp__island {
+  font-size: 8.5px;
+}
+
+.isl-badge-stamps .passport-stamp__activity {
+  font-size: 7px;
+}
+
 .isl-ferry-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -449,16 +611,27 @@
 
 .isl-detail-actions {
   display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  padding-top: 4px;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 2px;
 }
 
 .isl-detail-actions .btn {
-  flex: 1;
-  min-width: 120px;
+  width: 100%;
   text-align: center;
   justify-content: center;
+}
+
+.isl-detail-link {
+  align-self: center;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.isl-detail-link:hover {
+  color: var(--blue);
 }
 
 /* ── Mobile overlay ── */

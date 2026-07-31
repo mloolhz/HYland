@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { AnimatedWidthBar } from "@/components/mypage/AnimatedWidthBar";
+import { CountUpNumber } from "@/components/mypage/CountUpNumber";
 import {
   avaColor,
   CATEGORY_LEADERBOARD,
@@ -34,14 +36,6 @@ export function LeaderboardView() {
 
   return (
     <div className="container">
-      <header className="lbp-head">
-          <span className="lbp-head__eyebrow">LEADERBOARD</span>
-          <h1 className="lbp-head__title">탐험가 리더보드</h1>
-          <p className="lbp-head__sub">
-            미션을 완료하면 카테고리별 포인트가 쌓여요. 부문별 최고의 탐험가는 누구일까요?
-          </p>
-        </header>
-
         {/* 내 순위 카드 + 다음 순위까지 게이지 */}
         <section className="lbp-me" aria-label="내 순위">
           <div className="lbp-me__top">
@@ -54,10 +48,20 @@ export function LeaderboardView() {
             </div>
             <div className="lbp-me__figures">
               <div className="lbp-me__rank">
-                <strong>{myRank.rank}</strong>
+                <strong>
+                  <CountUpNumber value={myRank.rank} delay={0} className="lbp-me__count" />
+                </strong>
                 <span>위</span>
               </div>
-              <div className="lbp-me__pts">{formatNumber(myRank.points)} P</div>
+              <div className="lbp-me__pts">
+                <CountUpNumber
+                  value={myRank.points}
+                  delay={120}
+                  format={formatNumber}
+                  suffix=" P"
+                  className="lbp-me__count"
+                />
+              </div>
             </div>
           </div>
 
@@ -68,10 +72,22 @@ export function LeaderboardView() {
                   <span>
                     🔥 다음 순위 <b>{myRank.nextName}</b>까지
                   </span>
-                  <span className="lbp-next__gap">{formatNumber(myRank.pointsToNext)} P</span>
+                  <span className="lbp-next__gap">
+                    <CountUpNumber
+                      value={myRank.pointsToNext}
+                      delay={280}
+                      format={formatNumber}
+                      suffix=" P"
+                      className="lbp-me__count"
+                    />
+                  </span>
                 </div>
                 <div className="lbp-next__track">
-                  <span className="lbp-next__fill" style={{ width: `${myRank.progressPercent}%` }} />
+                  <AnimatedWidthBar
+                    width={myRank.progressPercent}
+                    delay={240}
+                    className="lbp-next__fill"
+                  />
                 </div>
               </>
             ) : (

@@ -1,4 +1,14 @@
 /* ---------- passport book modal ---------- */
+:root {
+  --passport-card-radius: 12px;
+  --passport-card-border: 1px solid rgba(210, 195, 170, 0.38);
+  --passport-card-bg: rgba(255, 251, 244, 0.88);
+  --passport-card-shadow: 0 1px 3px rgba(15, 39, 72, 0.04);
+  --passport-navy: #0f2748;
+  --passport-gold: #cba968;
+  --passport-text-muted: #647085;
+  --passport-turquoise: #2d87b2;
+}
 /* 메인 .passport-cover 와 동일 — 한 페이지 width:height = 2:3, 펼침(2페이지) = 4:3 */
 .passport-modal{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:24px 16px;pointer-events:none}
 .passport-modal--open{pointer-events:auto}
@@ -61,7 +71,7 @@
 .passport-front-cover__face--back{transform:rotateY(180deg);background:linear-gradient(180deg,#faf6ee 0%,#f0e8d8 100%);border:1px solid rgba(45,46,107,.1)}
 .passport-front-cover__inner-paper{position:absolute;inset:12px;border-radius:8px;border:1px dashed rgba(45,46,107,.12);background:repeating-linear-gradient(0deg,transparent,transparent 22px,rgba(45,46,107,.035) 22px,rgba(45,46,107,.035) 23px)}
 .passport-front-cover__sheen{position:absolute;top:0;left:0;right:0;height:46%;border-radius:12px 12px 40% 40%;background:linear-gradient(128deg,rgba(255,255,255,.14) 0%,transparent 62%);pointer-events:none}
-.passport-front-cover__title{font-size:15px;font-weight:800;letter-spacing:.04em;text-shadow:0 1px 2px rgba(0,0,0,.28)}
+.passport-front-cover__title{font-size:13px;font-weight:800;letter-spacing:.12em;line-height:1.35;text-align:center;text-transform:uppercase;text-shadow:0 1px 2px rgba(0,0,0,.28)}
 .passport-front-cover__emblem{width:72px;height:72px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.28))}
 .passport-front-cover__footer{font-size:10px;font-weight:800;letter-spacing:.22em;text-shadow:0 1px 2px rgba(0,0,0,.28)}
 
@@ -178,3 +188,32 @@
   .passport-book--open .passport-book__cover{transform:none!important;opacity:0}
   .passport-book--open .passport-book__back-board{opacity:0!important;visibility:hidden!important}
 }
+
+.passport-page__bti{margin-top:14px}
+
+.passport-bti-card{position:relative;z-index:1;display:flex;flex-direction:column;flex-shrink:0;min-height:88px;max-height:94px;border-radius:var(--passport-card-radius)}
+.passport-bti-card--filled{background:var(--passport-card-bg);border:var(--passport-card-border);box-shadow:var(--passport-card-shadow);border-left:3px solid color-mix(in srgb,var(--bti-theme,var(--passport-turquoise)) 55%,transparent)}
+.passport-bti-card--empty{padding:8px 10px;max-height:none;background:var(--passport-card-bg);border:var(--passport-card-border);box-shadow:var(--passport-card-shadow);justify-content:center}
+.passport-bti-card__hit{display:flex;align-items:center;gap:10px;width:100%;height:100%;padding:10px 12px;border:0;background:transparent;text-align:left;cursor:pointer;transition:background .15s ease}
+.passport-bti-card__avatar{flex:none;width:40px;height:40px;border-radius:50%;overflow:hidden;border:1.5px solid color-mix(in srgb,var(--bti-theme,var(--passport-turquoise)) 28%,#fff);box-shadow:var(--passport-card-shadow)}
+.passport-bti-card__body{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;justify-content:center}
+.passport-bti-card__kicker{margin:0;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--passport-gold);line-height:1.35;white-space:nowrap}
+.passport-bti-card__headline{display:flex;align-items:center;gap:5px;min-width:0;line-height:1.25}
+.passport-bti-card__code{font-size:15px;font-weight:800;letter-spacing:.03em;color:var(--passport-navy);line-height:1.2;flex:none}
+.passport-bti-card__pill{display:inline-flex;align-items:center;padding:1px 6px;border-radius:999px;background:color-mix(in srgb,var(--bti-theme,var(--passport-turquoise)) 12%,#fff);border:1px solid color-mix(in srgb,var(--bti-theme,var(--passport-turquoise)) 26%,#fff);font-size:10px;font-weight:600;color:var(--passport-navy);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.passport-bti-card__traits,.passport-bti-card__date{margin:0;font-size:10px;font-weight:500;color:var(--passport-text-muted);line-height:1.35;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;overflow:hidden}
+.passport-bti-card__chevron{flex:none;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--passport-navy);background:rgba(255,255,255,.88);border:var(--passport-card-border);transition:background .15s ease}
+.passport-bti-card__chevron svg{width:11px;height:11px}
+.passport-bti-card__hit:hover{background:rgba(255,255,255,.35)}
+.passport-bti-card__avatar .profile-character-visual{border-radius:50%}
+.passport-bti-card__empty-lead{margin:0 0 4px;font-size:14px;font-weight:700;color:var(--passport-navy);line-height:1.3}
+.passport-bti-card__empty-desc{margin:0 0 8px;font-size:12px;font-weight:500;line-height:1.4;color:var(--passport-text-muted);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.passport-bti-card__cta{display:inline-flex;align-items:center;justify-content:center;min-height:32px;padding:0 14px;border:none;border-radius:999px;background:var(--passport-navy);color:#fff;font-size:12px;font-weight:700;text-decoration:none;cursor:pointer;align-self:flex-start;box-shadow:0 3px 10px rgba(15,39,72,.12);transition:background .15s ease}
+.passport-bti-card__cta:hover{background:#0a2248}
+
+.profile-character-visual{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;overflow:hidden;border-radius:inherit}
+.profile-character-visual--island-bti{position:relative;background:color-mix(in srgb,var(--character-theme,var(--blue)) 16%,#fff);color:var(--navy)}
+.profile-character-visual__silhouette{width:72%;height:72%;display:block;color:color-mix(in srgb,var(--character-theme,var(--blue)) 55%,var(--navy))}
+.profile-character-visual__code{position:absolute;bottom:8%;left:50%;transform:translateX(-50%);font-size:9px;font-weight:800;letter-spacing:.08em;color:var(--navy);background:rgba(255,255,255,.82);padding:2px 6px;border-radius:999px;line-height:1.2}
+.profile-character-visual__name{font-size:10px;font-weight:700;color:var(--navy);text-align:center;line-height:1.3;padding:0 4px}
+.profile-character-visual--fallback{background:#f8fafc;color:var(--navy)}

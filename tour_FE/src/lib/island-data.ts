@@ -209,3 +209,15 @@ export function getIslandStats() {
   const visited = ISLANDS.filter((i) => i.visited).length;
   return { visited, total: ISLANDS.length, percent: Math.round((visited / ISLANDS.length) * 100) };
 }
+
+export type IslandNavSubItem = {
+  label: string;
+  href: string;
+};
+
+export const ISLAND_REGION_SUB_ITEMS: IslandNavSubItem[] = Array.from(
+  new Set(ISLANDS.map((island) => island.region)),
+).map((region) => ({
+  label: region,
+  href: `/islands?region=${encodeURIComponent(region)}`,
+}));

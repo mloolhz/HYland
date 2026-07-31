@@ -1,0 +1,565 @@
+/* Leisure sports hub — Blueshark-style layout */
+
+.sp-page {
+  background: #fff;
+  min-height: calc(100vh - var(--head-h, 74px));
+  padding-top: var(--head-h, 74px);
+  padding-bottom: 72px;
+  font-size: 14px;
+  color: #4a5567;
+}
+
+/* ① Hero — 마이페이지·커뮤니티 소개란과 동일한 박스 높이 */
+.sp-hero-band {
+  margin-bottom: 20px;
+}
+
+.sp-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: var(--page-intro-band-h);
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  background-color: #0e2b52;
+}
+
+.sp-hero-img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 62%;
+}
+
+.sp-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(14, 43, 82, 0.82) 0%,
+    rgba(22, 61, 114, 0.72) 55%,
+    rgba(45, 46, 107, 0.78) 100%
+  );
+  pointer-events: none;
+}
+
+.sp-hero-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+.sp-hero-eyebrow {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #85b7eb;
+  margin-bottom: 6px;
+}
+
+.sp-hero-title {
+  margin: 0 0 4px;
+  font-family: "IncheonMICEOTF", var(--font-header, Pretendard), sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: #fff;
+  line-height: 1.3;
+  text-shadow: none;
+}
+
+.sp-hero-desc {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 300;
+  color: #b5d4f4;
+  line-height: 1.5;
+}
+
+/* ② Category tabs */
+.sp-tabs {
+  display: flex;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px;
+  border-bottom: 1px solid #94a3b8;
+}
+
+.sp-tab {
+  flex: 1;
+  margin: 0;
+  padding: 18px 8px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: #8a94a3;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.sp-tab:hover {
+  color: #1a3a6b;
+}
+
+.sp-tab.is-active {
+  color: #2563eb;
+  border-bottom-color: #2563eb;
+}
+
+.sp-tab:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: -2px;
+}
+
+/* ③ Center category title — no blue square */
+.sp-cat-title-wrap {
+  padding: 2.5rem 24px 2rem;
+  text-align: center;
+}
+
+.sp-cat-title {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 500;
+  color: #1a3a6b;
+  line-height: 1.3;
+}
+
+/* Content */
+.sp-content {
+  padding-bottom: 8px;
+}
+
+/* ④ Sport grid — cell borders only (no empty trailing column line) */
+.sp-sport-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.sp-sport-btn {
+  box-sizing: border-box;
+  width: 25%;
+  margin: 0 -1px -1px 0;
+  padding: 18px 10px;
+  border: 1px solid #94a3b8;
+  border-radius: 0;
+  background: #fff;
+  color: #4a5567;
+  font-size: 14px;
+  font-weight: 400;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.sp-sport-btn:hover {
+  background: #f7f9fc;
+  color: #1a3a6b;
+  z-index: 1;
+}
+
+.sp-sport-btn.is-active {
+  background: #2563eb;
+  color: #fff;
+  font-weight: 500;
+  z-index: 1;
+}
+
+.sp-sport-btn:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: -2px;
+  z-index: 2;
+}
+
+/* ⑤ Detail: photo | info */
+.sp-detail {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 28px;
+  margin-top: 28px;
+  align-items: start;
+}
+
+/* Photo frame — large slot; images keep own aspect (no forced crop) */
+.sp-photo-frame {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 420px;
+  padding: 0;
+  border: 1px solid #cbd5e1;
+  border-radius: 0;
+  background: #dce6f0;
+  overflow: hidden;
+}
+
+.sp-photo-img {
+  display: block;
+  max-width: 100%;
+  max-height: 560px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.sp-photo-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 420px;
+  padding: 24px;
+  color: #64748b;
+  font-size: 14px;
+  text-align: center;
+}
+
+.sp-detail-info {
+  min-width: 0;
+}
+
+.sp-detail-cat {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #2563eb;
+}
+
+.sp-detail-name {
+  margin: 0 0 12px;
+  font-size: 24px;
+  font-weight: 500;
+  color: #1a3a6b;
+  line-height: 1.3;
+}
+
+.sp-detail-desc {
+  margin: 0 0 18px;
+  font-size: 14px;
+  line-height: 1.8;
+  color: #4a5567;
+}
+
+.sp-meta {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 14px 0;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.sp-meta-row {
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.sp-meta-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #8a94a3;
+}
+
+.sp-meta-value {
+  font-size: 14px;
+  color: #1a3a6b;
+  font-weight: 500;
+}
+
+.sp-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 0;
+  background: #fff;
+  color: #4a5567;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.sp-badge--pay {
+  border-color: #2563eb;
+  color: #2563eb;
+  background: rgba(37, 99, 235, 0.06);
+}
+
+/* ⑥⑦ Independent sections */
+.sp-section {
+  margin-top: 40px;
+}
+
+.sp-section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 16px;
+  font-size: 17px;
+  font-weight: 500;
+  color: #1a3a6b;
+  line-height: 1.3;
+}
+
+.sp-section-title::before {
+  content: "";
+  display: block;
+  width: 5px;
+  height: 18px;
+  background: #2563eb;
+  flex: none;
+}
+
+.sp-island-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sp-island-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 0;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.sp-island-card:hover {
+  border-color: #2563eb;
+  background: #f8fafc;
+}
+
+.sp-island-card:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 1px;
+}
+
+.sp-island-bar {
+  width: 5px;
+  height: 28px;
+  flex: none;
+}
+
+.sp-island-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.sp-island-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a3a6b;
+  line-height: 1.35;
+}
+
+.sp-island-region {
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.35;
+}
+
+.sp-island-arrow {
+  flex: none;
+  color: #94a3b8;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.sp-booking-box {
+  padding: 20px 18px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 0;
+  background: #f8fafc;
+  color: #4a5567;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.sp-booking-box strong {
+  font-weight: 500;
+  color: #1a3a6b;
+}
+
+.sp-booking-box--free {
+  border-style: solid;
+}
+
+.sp-booking-lead {
+  margin: 0 0 14px;
+  color: #4a5567;
+}
+
+.sp-booking-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sp-booking-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #fff;
+  color: #1a3a6b;
+  text-decoration: none;
+  transition: all 0.15s;
+}
+
+.sp-booking-btn:hover {
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+
+.sp-booking-btn--external {
+  border-color: #2563eb;
+  background: #fff;
+  color: #1a1a1a;
+  font-weight: 500;
+}
+
+.sp-booking-btn--external:hover {
+  background: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
+}
+
+.sp-booking-btn--external:hover .sp-booking-btn-external {
+  color: #fff;
+}
+
+.sp-booking-btn--primary {
+  border-color: #2563eb;
+  background: #eff6ff;
+  font-weight: 700;
+}
+
+.sp-booking-btn--secondary {
+  font-size: 13px;
+}
+
+.sp-booking-btn-label {
+  flex: 1;
+  min-width: 0;
+}
+
+.sp-booking-btn-sub {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.sp-booking-btn-external {
+  flex: none;
+  font-size: 14px;
+  color: inherit;
+  opacity: 0.85;
+}
+
+.sp-booking-note {
+  margin: 12px 0 0;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.sp-booking-cta {
+  display: inline;
+  margin-left: 4px;
+  border: 0;
+  background: none;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #2563eb;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .sp-hero-title {
+    font-size: 22px;
+    letter-spacing: 4px;
+  }
+
+  .sp-tab {
+    padding: 14px 4px;
+    font-size: 15px;
+  }
+
+  .sp-cat-title-wrap {
+    padding: 1.75rem 16px 1.5rem;
+  }
+
+  .sp-cat-title {
+    font-size: 24px;
+  }
+
+  .sp-sport-btn {
+    width: 50%;
+    padding: 16px 8px;
+  }
+
+  .sp-detail {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .sp-photo-frame {
+    min-height: 280px;
+  }
+
+  .sp-photo-img {
+    max-height: 360px;
+  }
+
+  .sp-photo-placeholder {
+    min-height: 280px;
+  }
+
+  .sp-detail-name {
+    font-size: 22px;
+  }
+
+  .sp-island-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .sp-section {
+    margin-top: 32px;
+  }
+}

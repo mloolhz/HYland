@@ -1,4 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
+import { MissionHubHeader } from "@/components/mission/MissionHubHeader";
 import { MissionsView } from "@/pages/Missions";
 import { LeaderboardView } from "@/pages/Leaderboard";
 
@@ -16,8 +17,10 @@ export function MissionHub() {
   const view: HubView = location.pathname.startsWith("/leaderboard") ? "leaderboard" : "mission";
 
   return (
-    <main className="ms-page hub-page">
-      <div className="container">
+    <main className="ms-page">
+      <MissionHubHeader />
+
+      <div className="container ms-hub-toolbar">
         <div className="hub-toggle" role="tablist" aria-label="미션·리더보드 전환">
           {TABS.map((tab) => (
             <button

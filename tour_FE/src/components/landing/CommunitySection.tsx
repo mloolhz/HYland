@@ -89,8 +89,11 @@ export function CommunitySection() {
             </div>
           </div>
           <div className="com-btns">
-            <Link to="/community" className="btn btn-gold">
-              커뮤니티 바로가기
+            <Link to="/community/write" className="btn btn-gold">
+              후기 남기기
+            </Link>
+            <Link className="btn btn-outline" to="/community">
+              전체 후기 보기
             </Link>
           </div>
         </div>

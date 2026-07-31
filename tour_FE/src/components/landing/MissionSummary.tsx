@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CountUpNumber } from "@/components/mypage/CountUpNumber";
 import { MISSION_QUESTS, missionQuestState } from "@/mocks/missions";
 
@@ -6,7 +6,21 @@ import { MISSION_QUESTS, missionQuestState } from "@/mocks/missions";
 function RingGauge({ percent }: { percent: number }) {
   const radius = 58;
   const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (percent / 100) * circumference;
+  const [animatedPercent, setAnimatedPercent] = useState(0);
+
+  useEffect(() => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) {
+      setAnimatedPercent(percent);
+      return;
+    }
+
+    setAnimatedPercent(0);
+    const timer = window.setTimeout(() => setAnimatedPercent(percent), 200);
+    return () => window.clearTimeout(timer);
+  }, [percent]);
+
+  const offset = circumference - (animatedPercent / 100) * circumference;
 
   return (
     <div className="ms-ring" role="img" aria-label={`전체 달성률 ${percent}%`}>
@@ -24,10 +38,10 @@ function RingGauge({ percent }: { percent: number }) {
         />
       </svg>
       <div className="ms-ring__label">
-        <strong>
-          <CountUpNumber value={percent} suffix="%" delay={200} />
-        </strong>
-        <span>전체 달성률</span>
+        <span className="ms-ring__percent">
+          <CountUpNumber value={percent} suffix="%" delay={200} className="ms-ring__count" />
+        </span>
+        <span className="ms-ring__caption">전체 달성률</span>
       </div>
     </div>
   );
@@ -47,23 +61,23 @@ export function MissionSummary() {
     <section className="ms-summary" aria-label="미션 요약">
       <RingGauge percent={stats.percent} />
       <ul className="ms-summary__stats">
-        <li>
-          <b>
-            <CountUpNumber value={stats.earned} delay={120} />
-          </b>
-          <span>획득 배지</span>
+        <li className="ms-summary__stat ms-summary__stat--earned">
+          <span className="ms-summary__num">
+            <CountUpNumber value={stats.earned} delay={120} className="ms-summary__count" />
+          </span>
+          <span className="ms-summary__label">획득 배지</span>
         </li>
-        <li>
-          <b>
-            <CountUpNumber value={stats.doing} delay={200} />
-          </b>
-          <span>진행 중</span>
+        <li className="ms-summary__stat ms-summary__stat--doing">
+          <span className="ms-summary__num">
+            <CountUpNumber value={stats.doing} delay={200} className="ms-summary__count" />
+          </span>
+          <span className="ms-summary__label">진행 중</span>
         </li>
-        <li>
-          <b>
-            <CountUpNumber value={stats.total} delay={280} />
-          </b>
-          <span>전체 미션</span>
+        <li className="ms-summary__stat ms-summary__stat--total">
+          <span className="ms-summary__num">
+            <CountUpNumber value={stats.total} delay={280} className="ms-summary__count" />
+          </span>
+          <span className="ms-summary__label">전체 미션</span>
         </li>
       </ul>
     </section>
