@@ -39,8 +39,10 @@ export function AISection({ onRequestCustomRecommendation }: AISectionProps) {
     <section className="sec" id="ai">
       <div className="container">
         <div className="sec-head reveal">
-          <span className="sec-ico">🤖</span>
-          <h2>AI 추천</h2>
+          <div className="sec-head-copy">
+            <span className="eyebrow">AI RECOMMEND</span>
+            <h2>AI 추천</h2>
+          </div>
         </div>
         <p className="sec-sub reveal">
           당신에게 딱 맞는 레저스포츠와 섬을 추천해드려요! 관심사와 체력 레벨을 알려주면 코스를 골라드립니다.
@@ -62,7 +64,7 @@ export function AISection({ onRequestCustomRecommendation }: AISectionProps) {
         <div className="center reveal">
           <button
             type="button"
-            className="btn btn-outline"
+            className="btn btn-outline btn-ai-custom"
             style={{ minWidth: 260 }}
             onClick={onRequestCustomRecommendation}
           >

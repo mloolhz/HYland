@@ -14,8 +14,9 @@ import {
   resolveSportIslandRegion,
 } from "@/lib/sports-region";
 import { CONTAINER } from "@/constants/layout";
+import { LEISURE_SPORTS_HERO } from "@/lib/landing-images";
 
-const HERO_IMAGE = "/_Pngtree_progressive_leisure_jet_boat_aquatics_16900908.jpg";
+const HERO_IMAGE = LEISURE_SPORTS_HERO;
 
 function MetaRow({ label, value }: { label: string; value: string }) {
   return (

@@ -143,6 +143,23 @@
   border-left: 1px solid rgba(255, 255, 255, 0.18);
 }
 
+.lbp-me__count {
+  display: inline-block;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  line-height: inherit;
+  font-variant-numeric: tabular-nums;
+}
+
+.lbp-me__rank .lbp-me__count {
+  color: var(--goldL);
+}
+
+.lbp-next__gap .lbp-me__count {
+  color: var(--goldL);
+}
+
 @media (max-width: 560px) {
   .lbp-head__title {
     font-size: 25px;

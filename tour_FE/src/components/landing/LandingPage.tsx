@@ -1,14 +1,14 @@
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AISection } from "./AISection";
-import { BookingSection } from "./BookingSection";
 import { CommunitySection } from "./CommunitySection";
 import { HeroSection } from "./HeroSection";
 import { LeaderboardSection } from "./LeaderboardSection";
 import { MapSection } from "./MapSection";
 import { MissionSection } from "./MissionSection";
 import { RelatedSitesBand } from "./RelatedSitesBand";
+import { IslandBtiPromoModal } from "@/components/island-bti/IslandBtiPromoModal";
 import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { SiteFooter } from "./SiteFooter";
 import { SiteHeader } from "./SiteHeader";
@@ -17,8 +17,6 @@ import { NotificationProvider } from "@/store/notifications";
 
 function LandingPageContent() {
   const navigate = useNavigate();
-  const agentInputRef = useRef<HTMLTextAreaElement>(null);
-  const [agentActive, setAgentActive] = useState(false);
 
   const goToLogin = useCallback(() => {
     navigate("/login");
@@ -52,7 +50,6 @@ function LandingPageContent() {
     };
 
     stagger(".ai-grid .ai-card", 120);
-    stagger(".book-card .row", 70);
     stagger(".badge-grid .badge", 70);
     stagger(".cats .cat", 55);
 
@@ -85,14 +82,10 @@ function LandingPageContent() {
   return (
     <>
       <SiteHeader />
-      <HeroSection
-        agentInputRef={agentInputRef}
-        agentActive={agentActive}
-        onAgentActiveChange={setAgentActive}
-      />
+      <IslandBtiPromoModal />
+      <HeroSection />
       <MapSection />
       <AISection onRequestCustomRecommendation={goToAiRecommend} />
-      <BookingSection />
       <MissionSection />
       <LeaderboardSection onGoToLogin={goToLogin} />
       <CommunitySection />

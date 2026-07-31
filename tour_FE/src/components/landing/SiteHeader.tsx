@@ -59,6 +59,7 @@ function MenuIcon({ open }: { open: boolean }) {
 function buildNavItems(
   onIslands: boolean,
   onSports: boolean,
+  onAiRecommend: boolean,
   onMissionsHub: boolean,
   onCommunity: boolean,
 ): NavItem[] {
@@ -83,6 +84,14 @@ function buildNavItems(
         { label: "체험", href: "/sports?category=exp" },
         { label: "힐링", href: "/sports?category=heal" },
       ],
+    },
+    {
+      id: "ai-recommend",
+      label: "AI 추천",
+      href: "/ai-recommend",
+      isRoute: true,
+      active: onAiRecommend,
+      subItems: [],
     },
     {
       id: "mission",
@@ -331,6 +340,7 @@ export function SiteHeader() {
   const onCommunity = location.pathname.startsWith("/community");
   const onIslands = location.pathname.startsWith("/islands");
   const onSports = location.pathname.startsWith("/sports");
+  const onAiRecommend = location.pathname.startsWith("/ai-recommend");
   const onMissionsHub =
     location.pathname.startsWith("/missions") || location.pathname.startsWith("/leaderboard");
   const navItems = useMemo(
@@ -338,10 +348,11 @@ export function SiteHeader() {
       buildNavItems(
         onIslands,
         onSports,
+        onAiRecommend,
         onMissionsHub,
         onCommunity,
       ),
-    [onIslands, onSports, onMissionsHub, onCommunity],
+    [onIslands, onSports, onAiRecommend, onMissionsHub, onCommunity],
   );
   const headerSolid = headerScrolled || navMegaOpen;
   const closeNavMega = useCallback(() => {

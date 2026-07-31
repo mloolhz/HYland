@@ -22,8 +22,10 @@ export function MissionSection() {
     <section className="sec" id="mission">
       <div className="container">
         <div className="sec-head reveal">
-          <span className="sec-ico">⭐</span>
-          <h2>미션 &amp; 인증</h2>
+          <div className="sec-head-copy">
+            <span className="eyebrow">MISSION &amp; BADGE</span>
+            <h2>미션 &amp; 인증</h2>
+          </div>
           <Link className="more" to="/missions">
             자세히 보기 →
           </Link>

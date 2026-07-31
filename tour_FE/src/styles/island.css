@@ -13,7 +13,10 @@
 
 .isl-header {
   position: relative;
-  padding: 22px 0;
+  min-height: var(--page-intro-band-h);
+  padding: 0;
+  display: flex;
+  align-items: center;
   overflow: hidden;
 }
 
@@ -28,6 +31,7 @@
 
 .isl-header-inner {
   position: relative;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
