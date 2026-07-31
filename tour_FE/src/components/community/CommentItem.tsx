@@ -182,8 +182,13 @@ export function CommentGroup({
               <CommentBubble
                 comment={reply}
                 isReply
+                showReplyButton={isLoggedIn}
+                onReply={() => onReply(reply.id)}
                 onDelete={() => onDeleteComment(reply.id)}
               />
+              {replyingTo === reply.id && (
+                <InlineReplyInput mention={reply.author.nickname} onCancel={onCancelReply} />
+              )}
             </div>
           ))}
         </div>

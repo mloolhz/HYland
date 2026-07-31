@@ -920,8 +920,8 @@ a.cm-post-row:hover {
 
 .cm-detail-title {
   font-size: 26px;
-  font-weight: 500;
-  color: var(--cm-ink);
+  font-weight: 700;
+  color: #14264a;
   line-height: 1.35;
   margin-bottom: 12px;
 }
@@ -935,26 +935,29 @@ a.cm-post-row:hover {
   min-width: 0;
 }
 
+.cm-detail-author .cm-post-nick {
+  font-weight: 700;
+  color: #1a3a6b;
+}
+
 .cm-detail-date {
   font-size: 14px;
   font-weight: 400;
-  color: var(--cm-faint);
+  color: #8a94a6;
   margin-left: 20px;
-}
-
-.cm-detail-divider {
-  border: 0;
-  border-top: 1px solid #d1d9e6;
-  margin: 16px 0;
 }
 
 .cm-detail-body {
   padding: 32px 0;
+  border-top: 1px solid #cbd5e1;
+  border-bottom: 1px solid #cbd5e1;
+  min-height: min(360px, calc(100vh - 26rem));
+  box-sizing: border-box;
 }
 
 .cm-detail-content {
   font-size: 16px;
-  color: var(--cm-body);
+  color: #384252;
   line-height: 1.8;
   width: 100%;
   max-width: none;
@@ -989,6 +992,7 @@ a.cm-post-row:hover {
   display: flex;
   align-items: center;
   gap: 12px;
+  margin-top: 16px;
 }
 
 .cm-detail-actions-side {
@@ -1002,7 +1006,58 @@ a.cm-post-row:hover {
   font-size: var(--ts-sub);
   font-weight: 600;
   color: var(--cm-ink);
+  margin-top: 20px;
   margin-bottom: 12px;
+}
+
+.cm-detail-panel .cm-action-btn--like {
+  color: #e0396b;
+  font-weight: 600;
+}
+
+.cm-detail-panel .cm-action-btn--like svg {
+  color: #e0396b;
+  fill: #e0396b;
+}
+
+.cm-detail-panel .cm-comment-bubble {
+  background: #f4f6f9;
+  border: none;
+  border-radius: 8px;
+}
+
+.cm-detail-panel .cm-comment-bubble-reply {
+  background: #eaeef4;
+  border: none;
+}
+
+.cm-detail-panel .cm-comment-nick {
+  font-weight: 700;
+  color: #1a3a6b;
+}
+
+.cm-detail-panel .cm-comment-time {
+  color: #8a94a6;
+}
+
+.cm-detail-panel .cm-comment-body {
+  color: #384252;
+}
+
+.cm-detail-panel .cm-comment-actions .cm-comment-action:first-child {
+  color: #e0396b;
+  font-weight: 600;
+}
+
+.cm-detail-panel .cm-chip-author {
+  color: #2563eb;
+  background: #eaf1fe;
+}
+
+.cm-detail-panel .cm-thread-submit:not(:disabled) {
+  background: #2563eb;
+  color: #fff;
+  font-weight: 600;
 }
 
 .cm-detail-related {
@@ -1679,6 +1734,10 @@ a.cm-post-row:hover {
   background: #fff;
   border: 0.5px solid var(--cm-line);
   border-radius: 8px;
+}
+
+.cm-comment-reply-wrap > .cm-inline-reply {
+  margin-left: 0;
 }
 
 .cm-mention-chip {

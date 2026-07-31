@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { CommunityHeader } from "@/components/community/CommunityHeader";
 import { FilterBar, type FilterValue, type ViewKey } from "@/components/community/FilterBar";
@@ -22,6 +22,7 @@ import {
   type SortKey,
 } from "@/lib/posts";
 import { parseIslandsQuery, parsePageQuery, serializeIslandsQuery } from "@/lib/query";
+import { saveCommunityListSearch } from "@/lib/community-list-state";
 
 function parseView(value: string | null): ViewKey {
   return value === "gallery" ? "gallery" : "list";
@@ -53,6 +54,10 @@ export function Community() {
   const islands = useMemo(() => parseIslandsQuery(searchParams.get("islands")), [searchParams]);
   const query = searchParams.get("q") ?? "";
   const page = parsePageQuery(searchParams.get("page"));
+
+  useEffect(() => {
+    saveCommunityListSearch(searchParams.toString() ? `?${searchParams.toString()}` : "");
+  }, [searchParams]);
 
   const counts = useMemo(() => islandPostCounts(posts), [posts]);
   const notices = useMemo(() => getNoticePosts(posts), [posts]);

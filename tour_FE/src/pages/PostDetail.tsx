@@ -8,6 +8,7 @@ import { PostRow } from "@/components/community/PostRow";
 import { isCurrentUser } from "@/constants/auth";
 import { getIslandColors } from "@/constants/island";
 import { CONTAINER } from "@/constants/layout";
+import { saveCommunityListSearch } from "@/lib/community-list-state";
 import { countComments, filterPosts, findComment, removeComment, sortPosts } from "@/lib/posts";
 import { parseIslandsQuery } from "@/lib/query";
 import { formatDetailDate } from "@/lib/time";
@@ -44,6 +45,10 @@ export function PostDetail() {
 
   const backSearch =
     (location.state as { fromSearch?: string } | null)?.fromSearch ?? "";
+
+  useEffect(() => {
+    if (backSearch) saveCommunityListSearch(backSearch);
+  }, [backSearch]);
 
   const listParams = useMemo(
     () => new URLSearchParams(backSearch.replace(/^\?/, "")),
@@ -161,8 +166,6 @@ export function PostDetail() {
                 </div>
               </div>
 
-              <hr className="cm-detail-divider" />
-
               <div className="cm-detail-body">
                 <p className="cm-detail-content">{post.content}</p>
                 {images.length > 0 && (
@@ -202,8 +205,6 @@ export function PostDetail() {
                   </button>
                 </div>
               </div>
-
-              <hr className="cm-detail-divider" />
 
               <CommentThread
                 comments={comments}

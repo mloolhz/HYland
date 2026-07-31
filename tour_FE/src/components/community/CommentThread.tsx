@@ -80,6 +80,10 @@ export function CommentThread({
     onDeleteComment?.(id);
   };
 
+  const handleReply = (id: string) => {
+    setReplyingTo((current) => (current === id ? null : id));
+  };
+
   return (
     <section className="cm-detail-comments" aria-label="댓글">
       <h2 className="cm-detail-comments-title">댓글 {total}개</h2>
@@ -92,7 +96,7 @@ export function CommentThread({
               key={c.id}
               comment={c}
               replyingTo={replyingTo}
-              onReply={setReplyingTo}
+              onReply={handleReply}
               onCancelReply={() => setReplyingTo(null)}
               onDeleteComment={handleDeleteComment}
               isLoggedIn={isLoggedIn}

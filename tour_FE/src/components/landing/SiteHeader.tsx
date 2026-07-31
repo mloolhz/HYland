@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { resolveCommunityHref } from "@/lib/community-list-state";
 import { NotificationBell } from "@/components/notification/NotificationBell";
 
 const SITE_LOGO_SRC = "/incheon-island-leisure-nuri-logo.png";
@@ -61,6 +62,7 @@ function buildNavItems(
   onMissions: boolean,
   onLeaderboard: boolean,
   onCommunity: boolean,
+  communityHref: string,
 ): NavItem[] {
   return [
     {
@@ -103,7 +105,7 @@ function buildNavItems(
     {
       id: "community",
       label: "커뮤니티",
-      href: "/community",
+      href: communityHref,
       isRoute: true,
       active: onCommunity,
       subItems: [],
@@ -331,6 +333,11 @@ export function SiteHeader() {
   const onSports = location.pathname.startsWith("/sports");
   const onMissions = location.pathname.startsWith("/missions");
   const onLeaderboard = location.pathname.startsWith("/leaderboard");
+  const communityFromSearch = (location.state as { fromSearch?: string } | null)?.fromSearch;
+  const communityHref = useMemo(
+    () => resolveCommunityHref(location.pathname, location.search, communityFromSearch),
+    [location.pathname, location.search, communityFromSearch],
+  );
   const navItems = useMemo(
     () =>
       buildNavItems(
@@ -339,8 +346,9 @@ export function SiteHeader() {
         onMissions,
         onLeaderboard,
         onCommunity,
+        communityHref,
       ),
-    [onIslands, onSports, onMissions, onLeaderboard, onCommunity],
+    [onIslands, onSports, onMissions, onLeaderboard, onCommunity, communityHref],
   );
   const headerSolid = headerScrolled || navMegaOpen;
   const closeNavMega = useCallback(() => {
