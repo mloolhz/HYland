@@ -35,6 +35,7 @@ export function filterPosts(
   opts: {
     category: "all" | Post["type"];
     islands: Set<string>;
+    activities: Set<string>;
     query: string;
   },
 ): Post[] {
@@ -44,6 +45,9 @@ export function filterPosts(
   }
   if (opts.islands.size > 0) {
     arr = arr.filter((p) => opts.islands.has(p.island));
+  }
+  if (opts.activities.size > 0) {
+    arr = arr.filter((p) => opts.activities.has(p.activity));
   }
   if (opts.query.trim()) {
     const q = opts.query.trim();
@@ -72,6 +76,15 @@ export function islandPostCounts(posts: Post[]): Record<string, number> {
   for (const p of posts) {
     if (p.isNotice) continue;
     counts[p.island] = (counts[p.island] ?? 0) + 1;
+  }
+  return counts;
+}
+
+export function activityPostCounts(posts: Post[]): Record<string, number> {
+  const counts: Record<string, number> = {};
+  for (const p of posts) {
+    if (p.isNotice) continue;
+    counts[p.activity] = (counts[p.activity] ?? 0) + 1;
   }
   return counts;
 }

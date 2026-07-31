@@ -3,6 +3,10 @@ export const LANDING_IMAGE_1 = "/landing-1.png";
 export const LANDING_IMAGE_2 = "/landing-2.png";
 export const LEISURE_SPORTS_HERO = "/leisure-sports-hero.png";
 
+/** 히어로 슬라이드 1장당 표시 시간 — JS 타이머·CSS 켄번즈·페이드와 동일 */
+export const HERO_SLIDE_DURATION_MS = 6000;
+export const HERO_SLIDE_FADE_MS = 1000;
+
 const PH3 = "https://i.postimg.cc/TP4xqZnN/baegyeong3.jpg";
 const PH4 = "https://i.postimg.cc/8C0GBqLK/baegyeong4.jpg";
 const PH1 = "https://i.postimg.cc/wBGzcSD0/baegyeong1.jpg";

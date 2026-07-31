@@ -6,7 +6,11 @@ import { CountUpNumber } from "@/components/mypage/CountUpNumber";
 import { formatNumber } from "@/lib/landing-data";
 import { getCurrentUserProfile, getPassportExpPercent } from "@/lib/user-profile";
 import { demoProps } from "./ToastProvider";
-import { HERO_SLIDES } from "@/lib/landing-images";
+import {
+  HERO_SLIDE_DURATION_MS,
+  HERO_SLIDE_FADE_MS,
+  HERO_SLIDES,
+} from "@/lib/landing-images";
 import { PassportBookModal } from "./PassportBookModal";
 import { PassportCoverVisual } from "./PassportCoverVisual";
 
@@ -36,8 +40,15 @@ export function HeroSection() {
     if (!reduceMotion) {
       timerRef.current = setInterval(() => {
         setActiveSlide((prev) => (prev + 1) % SLIDE_COUNT);
-      }, 5000);
+      }, HERO_SLIDE_DURATION_MS);
     }
+  }, []);
+
+  useEffect(() => {
+    HERO_SLIDES.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
   }, []);
 
   useEffect(() => {
@@ -61,7 +72,16 @@ export function HeroSection() {
       onMouseEnter={() => timerRef.current && clearInterval(timerRef.current)}
       onMouseLeave={startHero}
     >
-      <div className="hero-slides" aria-hidden="true">
+      <div
+        className="hero-slides"
+        aria-hidden="true"
+        style={
+          {
+            "--hero-slide-duration": `${HERO_SLIDE_DURATION_MS}ms`,
+            "--hero-slide-fade": `${HERO_SLIDE_FADE_MS}ms`,
+          } as React.CSSProperties
+        }
+      >
         {HERO_SLIDES.map((src, i) => (
           <div
             key={src}

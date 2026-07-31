@@ -7,7 +7,8 @@ interface NotificationDropdownProps {
   items: Notification[];
   unreadCount: number;
   onItemClick: (n: Notification) => void;
-  onMarkAllRead: () => void;
+  onRemoveAll: () => void;
+  onRemove: (id: string) => void;
   onClose: () => void;
   listRef?: React.RefObject<HTMLDivElement | null>;
   dropdownRef?: React.RefObject<HTMLDivElement | null>;
@@ -19,7 +20,8 @@ export function NotificationDropdown({
   items,
   unreadCount,
   onItemClick,
-  onMarkAllRead,
+  onRemoveAll,
+  onRemove,
   onClose,
   listRef,
   dropdownRef,
@@ -48,10 +50,10 @@ export function NotificationDropdown({
           <button
             type="button"
             className="noti-mark-all"
-            disabled={unreadCount === 0}
-            onClick={onMarkAllRead}
+            disabled={items.length === 0}
+            onClick={onRemoveAll}
           >
-            모두 읽음
+            모두 삭제
           </button>
         </header>
 
@@ -65,6 +67,7 @@ export function NotificationDropdown({
                 notification={n}
                 variant="dropdown"
                 onClick={onItemClick}
+                onRemove={onRemove}
               />
             ))
           )}

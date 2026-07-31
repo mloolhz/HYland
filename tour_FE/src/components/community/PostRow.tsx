@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getIslandColors } from "@/constants/island";
 import { commentCount, postSummary } from "@/lib/posts";
 import { formatListDate } from "@/lib/time";
@@ -33,6 +33,7 @@ export function PostRow({
   onUnlike,
 }: PostRowProps) {
   const location = useLocation();
+  const navigate = useNavigate();
   const linkSearch = fromSearch ?? location.search;
   const colors = getIslandColors(post.island);
   const replies = commentCount(post);
@@ -127,6 +128,31 @@ export function PostRow({
     </span>
   );
 
+  const className = `cm-post-row ${gridClass}${compact ? " cm-post-row-compact" : ""}`;
+
+  const goToPost = () => {
+    navigate(`/community/${post.id}`, { state: { fromSearch: linkSearch } });
+  };
+
+  const goToAuthor = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigate(`/community/users/${post.author.id}`);
+  };
+
+  const authorCell =
+    columns === "community" ? (
+      <span className="cm-list-author cm-list-hide-mobile truncate">{post.author.nickname}</span>
+    ) : (
+      <button
+        type="button"
+        className="cm-list-author cm-list-hide-mobile truncate cm-author-link"
+        onClick={goToAuthor}
+      >
+        {post.author.nickname}
+      </button>
+    );
+
   const titleCell = (
     <div className="cm-list-title-col min-w-0">
       <div
@@ -138,9 +164,11 @@ export function PostRow({
         {replies > 0 && <span className="cm-list-comment-count">{replies}</span>}
       </div>
       {showSummary && <p className="cm-list-summary truncate">{summary}</p>}
-      <p className="cm-list-meta-mobile truncate">
-        {post.author.nickname} · {formatListDate(post.createdAt)}
-      </p>
+      {columns === "community" && (
+        <p className="cm-list-meta-mobile truncate">
+          {post.author.nickname} · {formatListDate(post.createdAt)}
+        </p>
+      )}
     </div>
   );
 
@@ -150,7 +178,7 @@ export function PostRow({
         {unlikeButton}
         {islandCell}
         {titleCell}
-        <span className="cm-list-author cm-list-hide-mobile truncate">{post.author.nickname}</span>
+        {authorCell}
         <span className="cm-list-date cm-list-hide-mobile">{formatListDate(post.createdAt)}</span>
         <span className="cm-list-views">{post.views}</span>
       </>
@@ -158,9 +186,7 @@ export function PostRow({
       <>
         {islandCell}
         {titleCell}
-        {columns === "community" && (
-          <span className="cm-list-author cm-list-hide-mobile truncate">{post.author.nickname}</span>
-        )}
+        {columns === "community" && authorCell}
         <span className="cm-list-date cm-list-hide-mobile">{formatListDate(post.createdAt)}</span>
         {(columns === "community" || columns === "myPosts") && (
           <span className="cm-list-views">{post.views}</span>
@@ -168,19 +194,20 @@ export function PostRow({
       </>
     );
 
-  const className = `cm-post-row ${gridClass}${compact ? " cm-post-row-compact" : ""}`;
-
-  if (columns === "liked") {
-    return (
-      <Link to={`/community/${post.id}`} state={{ fromSearch: linkSearch }} className={className}>
-        {row}
-      </Link>
-    );
-  }
-
   return (
-    <Link to={`/community/${post.id}`} state={{ fromSearch: linkSearch }} className={className}>
+    <div
+      className={className}
+      role="link"
+      tabIndex={0}
+      onClick={goToPost}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          goToPost();
+        }
+      }}
+    >
       {row}
-    </Link>
+    </div>
   );
 }
