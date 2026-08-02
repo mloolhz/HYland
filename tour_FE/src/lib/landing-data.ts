@@ -4,6 +4,15 @@ export type LeaderboardPeriod = "week" | "month" | "all";
 
 export type LeaderboardEntry = [name: string, points: number];
 
+/** 랜딩 미션 섹션 프리뷰용 순위 — 비로그인 구경용 더미 (5위까지) */
+export const LANDING_LEADERBOARD: LeaderboardEntry[] = [
+  ["바다별탐험가", 2480],
+  ["섬마스터", 2310],
+  ["등대지기", 2150],
+  ["갯바위", 1985],
+  ["인천갈매기", 1820],
+];
+
 /** 미션 카테고리별 리더보드 — API 연동 전 임시 데이터 */
 export const CATEGORY_LEADERBOARD: Record<MissionCategory, LeaderboardEntry[]> = {
   탐험: [

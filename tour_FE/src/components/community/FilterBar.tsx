@@ -26,7 +26,7 @@ const FILTERS: { value: FilterValue; label: string }[] = [
   { value: "all", label: "전체" },
   { value: "review", label: "후기" },
   { value: "photo", label: "인증샷" },
-  { value: "question", label: "질문" },
+  { value: "question", label: "Q&A" },
 ];
 
 function IconList() {

@@ -4,10 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { AISection } from "./AISection";
 import { CommunitySection } from "./CommunitySection";
 import { HeroSection } from "./HeroSection";
-import { LeaderboardSection } from "./LeaderboardSection";
 import { MapSection } from "./MapSection";
 import { MissionSection } from "./MissionSection";
 import { RelatedSitesBand } from "./RelatedSitesBand";
+import { SportsSection } from "./SportsSection";
+import { useLandingReveal } from "./useLandingReveal";
 import { IslandBtiPromoModal } from "@/components/island-bti/IslandBtiPromoModal";
 import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { SiteFooter } from "./SiteFooter";
@@ -18,43 +19,11 @@ import { NotificationProvider } from "@/store/notifications";
 function LandingPageContent() {
   const navigate = useNavigate();
 
-  const goToLogin = useCallback(() => {
-    navigate("/login");
-  }, [navigate]);
+  useLandingReveal();
 
   const goToAiRecommend = useCallback(() => {
     navigate("/ai-recommend");
   }, [navigate]);
-
-  useEffect(() => {
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("in");
-            io.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.12 },
-    );
-
-    document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
-
-    const stagger = (selector: string, step = 90) => {
-      document.querySelectorAll(selector).forEach((el, i) => {
-        el.classList.add("reveal");
-        (el as HTMLElement).style.transitionDelay = `${i * step}ms`;
-        io.observe(el);
-      });
-    };
-
-    stagger(".ai-grid .ai-card", 120);
-    stagger(".badge-grid .badge", 70);
-    stagger(".cats .cat", 55);
-
-    return () => io.disconnect();
-  }, []);
 
   useEffect(() => {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -85,9 +54,9 @@ function LandingPageContent() {
       <IslandBtiPromoModal />
       <HeroSection />
       <MapSection />
+      <SportsSection />
       <AISection onRequestCustomRecommendation={goToAiRecommend} />
       <MissionSection />
-      <LeaderboardSection onGoToLogin={goToLogin} />
       <CommunitySection />
       <RelatedSitesBand />
       <SiteFooter />
