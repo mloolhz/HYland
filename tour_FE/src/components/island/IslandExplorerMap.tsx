@@ -1,310 +1,242 @@
-import { useCallback, type KeyboardEvent, type ReactNode } from "react";
+import { useCallback, useRef, useState, type CSSProperties, type KeyboardEvent, type MouseEvent, type RefObject } from "react";
 import { ISLAND_MAP } from "@/lib/island-data";
+import {
+  ISLAND_MAP_AREAS,
+  ISLAND_MAP_AREA_BY_ID,
+  ISLAND_MAP_IMAGE,
+  ISLAND_MAP_VIEWBOX,
+} from "./island-map-areas";
 
 type IslandExplorerMapProps = {
-  selectedId: string | null;
-  onSelect: (id: string) => void;
+  selectedId?: string | null;
+  onSelect?: (id: string) => void;
+  readonly?: boolean;
+  captureMode?: boolean;
 };
 
 function islandClass(id: string, selectedId: string | null) {
   const island = ISLAND_MAP[id];
   const visited = island?.visited ?? false;
   const selected = selectedId === id;
-  return `isl-explorer rg${getRegionGroup(id)} ${visited ? "done" : "todo"}${selected ? " selected" : ""}`;
+  return `isl-explorer ${visited ? "done" : "todo"}${selected ? " selected" : ""}`;
 }
 
-function getRegionGroup(id: string): number {
-  const groups: Record<string, number> = {
-    baek: 1, daech: 1, yeonp: 2, gangh: 3, gyo: 3, seok: 3,
-    jang: 4, sinsi: 4, yeongj: 5, muui: 5, yheung: 6,
-    jawol: 7, seungb: 7, ijak: 7, deokj: 8, soya: 8, mungap: 8, gureop: 8,
-  };
-  return groups[id] ?? 1;
+function SelectedIslandBoat({ islandId }: { islandId: string }) {
+  const pos = ISLAND_MAP_AREA_BY_ID[islandId]?.boatPosition;
+  if (!pos) return null;
+
+  const name = ISLAND_MAP[islandId]?.name ?? "선택한 섬";
+
+  return (
+    <g
+      className="isl-selected-marker"
+      transform={`translate(${pos.x} ${pos.y})`}
+      aria-hidden="true"
+    >
+      <title>{name}</title>
+      <g className="isl-boat-icon">
+        <path className="isl-boat-hull" d="M-11 6 C-3 9.5 3 9.5 11 6 L 8.5 2.5 C2 0.8 -2 0.8 -8.5 2.5 Z" />
+        <path className="isl-boat-hull-shine" d="M-6 4.5 C-1 6.5 1 6.5 6 4.5 L 4.5 3.2 C1.5 2.2 -1.5 2.2 -4.5 3.2 Z" />
+        <line className="isl-boat-mast" x1="0" y1="2.5" x2="0" y2="-14.5" />
+        <path className="isl-boat-sail-main" d="M0.8 -14 L9.5 2.5 L0.8 2.5 Z" />
+        <path className="isl-boat-sail-jib" d="M-0.8 -12.5 L-8.5 2.5 L-0.8 2.5 Z" />
+      </g>
+    </g>
+  );
 }
 
-function IslandGroup({
+function IslandHitArea({
   id,
-  delay,
+  polygon,
+  regionColor,
   title,
   selectedId,
   onSelect,
-  children,
+  readonly = false,
 }: {
   id: string;
-  delay: string;
+  polygon: string;
+  regionColor: string;
   title: string;
   selectedId: string | null;
-  onSelect: (id: string) => void;
-  children: ReactNode;
+  onSelect?: (id: string) => void;
+  readonly?: boolean;
 }) {
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
+      if (readonly || !onSelect) return;
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         onSelect(id);
       }
     },
-    [id, onSelect],
+    [id, onSelect, readonly],
   );
+
+  const visitLabel = ISLAND_MAP[id]?.visited ? "방문 완료" : "미방문";
+  const style = { "--isl-region-color": regionColor } as CSSProperties;
 
   return (
     <g
       className={islandClass(id, selectedId)}
-      style={{ ["--d" as string]: delay }}
-      role="button"
-      tabIndex={0}
-      aria-label={`${title} · ${ISLAND_MAP[id]?.visited ? "방문 완료" : "미방문"}`}
-      aria-pressed={selectedId === id}
-      onClick={() => onSelect(id)}
-      onKeyDown={handleKeyDown}
+      style={style}
+      {...(readonly
+        ? {}
+        : {
+            role: "button",
+            tabIndex: 0,
+            "aria-label": `${title} · ${visitLabel}`,
+            "aria-pressed": selectedId === id,
+            onClick: () => onSelect?.(id),
+            onKeyDown: handleKeyDown,
+          })}
     >
-      <title>{title}</title>
-      {children}
+      <title>{`${title} · ${visitLabel}`}</title>
+      <path className="isl-hit-area" d={polygon} />
     </g>
   );
 }
 
-export function IslandExplorerMap({ selectedId, onSelect }: IslandExplorerMapProps) {
+function clientToSvgPoint(svg: SVGSVGElement, clientX: number, clientY: number) {
+  const pt = svg.createSVGPoint();
+  pt.x = clientX;
+  pt.y = clientY;
+  const ctm = svg.getScreenCTM();
+  if (!ctm) return null;
+  const local = pt.matrixTransform(ctm.inverse());
+  return { x: Math.round(local.x), y: Math.round(local.y) };
+}
+
+function MapCaptureOverlay({ svgRef }: { svgRef: RefObject<SVGSVGElement | null> }) {
+  const [captureId, setCaptureId] = useState(ISLAND_MAP_AREAS[0]?.id ?? "baek");
+  const [points, setPoints] = useState<{ x: number; y: number }[]>([]);
+
+  const handleSvgClick = (e: MouseEvent<SVGRectElement>) => {
+    const svg = svgRef.current;
+    if (!svg) return;
+    const pt = clientToSvgPoint(svg, e.clientX, e.clientY);
+    if (!pt) return;
+    setPoints((prev) => [...prev, pt]);
+    console.log(`[mapCapture:${captureId}]`, pt);
+  };
+
+  const pathFromPoints = (pts: { x: number; y: number }[]) => {
+    if (!pts.length) return "";
+    const [first, ...rest] = pts;
+    return ["M" + first.x + " " + first.y, ...rest.map((p) => `L${p.x} ${p.y}`), "Z"].join(" ");
+  };
+
+  const copyPath = async () => {
+    const d = pathFromPoints(points);
+    await navigator.clipboard.writeText(JSON.stringify({ id: captureId, d }, null, 2));
+    console.log("[mapCapture] copied", { id: captureId, d });
+  };
+
   return (
-    <svg viewBox="0 0 640 460" role="img" aria-label="인천 섬 탐험 지도">
-      <defs>
-        <filter id="isl-fog" x="-10%" y="-10%" width="120%" height="120%">
-          <feColorMatrix type="saturate" values="0.25" />
-          <feComponentTransfer>
-            <feFuncA type="linear" slope="0.88" />
-          </feComponentTransfer>
-        </filter>
-        <pattern id="isl-wvp" width="140" height="34" patternUnits="userSpaceOnUse">
-          <path d="M0 17 q17.5 -9 35 0 t35 0 t35 0 t35 0" stroke="rgba(255,255,255,.09)" strokeWidth="2" fill="none" />
-        </pattern>
-        <path id="p-baek" d="M46 52 C50 39 69 33 84 38 C98 33 109 42 106 52 C113 58 104 68 92 70 C79 77 59 74 52 66 C44 62 42 58 46 52 Z" />
-        <path id="p-daech" d="M96 100 C102 91 117 91 125 98 C131 104 124 112 114 113 C103 116 93 108 96 100 Z M130 122 C135 116 147 117 151 122 C149 128 136 130 130 122 Z" />
-        <path id="p-yeonp" d="M198 90 C206 79 225 79 233 88 C237 96 228 105 214 105 C203 105 195 98 198 90 Z M240 112 C244 107 253 108 255 113 C253 118 243 119 240 112 Z" />
-        <path id="p-gangh" d="M470 24 C492 19 513 32 517 52 C525 68 517 87 505 97 C497 111 478 119 466 111 C450 107 440 92 443 76 C436 58 448 33 470 24 Z" />
-        <path id="p-gyo" d="M392 40 C398 31 421 29 429 37 C431 44 420 50 406 50 C396 50 389 46 392 40 Z" />
-        <path id="p-seok" d="M410 72 C420 67 429 76 427 86 C433 94 427 107 416 111 C405 113 399 102 404 92 C400 82 402 76 410 72 Z" />
-        <path id="p-jang" d="M372 154 C384 143 417 139 429 146 C431 152 414 159 396 160 C382 162 369 160 372 154 Z" />
-        <path id="p-sinsi" d="M446 148 C451 143 460 144 462 149 C460 154 449 155 446 148 Z M462 155 C466 151 474 152 476 156 C474 160 465 161 462 155 Z M476 161 C480 157 487 158 489 162 C487 166 479 167 476 161 Z" />
-        <path id="p-yeongj" d="M478 178 C492 167 523 167 535 180 C545 192 543 217 531 229 C516 239 490 239 480 227 C469 214 467 190 478 178 Z" />
-        <path id="p-muui" d="M462 252 C472 245 485 252 485 262 C489 272 479 283 468 281 C457 279 453 268 460 260 Z M486 286 C490 281 498 282 500 287 C498 292 489 293 486 286 Z" />
-        <path id="p-yheung" d="M510 334 C520 325 539 329 543 340 C547 352 534 361 520 359 C509 356 503 344 510 334 Z M544 326 C548 321 556 322 558 327 C556 332 547 333 544 326 Z" />
-        <path id="p-jawol" d="M366 318 C376 309 409 307 417 315 C415 324 396 329 380 329 C369 329 363 324 366 318 Z" />
-        <path id="p-seungb" d="M422 344 C430 337 445 339 447 348 C447 356 434 361 426 357 C419 352 418 348 422 344 Z" />
-        <path id="p-ijak" d="M384 372 C392 365 415 365 419 372 C417 379 400 383 390 381 C383 379 381 376 384 372 Z M362 378 C367 373 377 374 379 379 C377 384 366 385 362 378 Z" />
-        <path id="p-deokj" d="M248 322 C256 307 283 303 297 314 C307 322 305 341 293 349 C280 357 258 355 250 344 C243 338 244 330 248 322 Z" />
-        <path id="p-soya" d="M295 352 C301 345 315 347 317 354 C315 361 302 363 296 358 Z" />
-        <path id="p-mungap" d="M250 370 C255 364 267 365 269 371 C267 377 254 378 250 370 Z" />
-        <path id="p-gureop" d="M196 346 C201 339 214 341 217 346 C215 353 202 355 196 346 Z" />
-      </defs>
+    <>
+      <rect
+        className="isl-map-capture-layer"
+        x="0"
+        y="0"
+        width={ISLAND_MAP_VIEWBOX.width}
+        height={ISLAND_MAP_VIEWBOX.height}
+        onClick={handleSvgClick}
+      />
+      {points.map((p, i) => (
+        <circle key={i} cx={p.x} cy={p.y} r={4} className="isl-map-capture-dot" />
+      ))}
+      {points.length >= 2 && (
+        <polyline
+          className="isl-map-capture-line"
+          points={points.map((p) => `${p.x},${p.y}`).join(" ")}
+        />
+      )}
+      <foreignObject x="8" y="8" width="320" height="120">
+        <div className="isl-map-capture-panel">
+          <label>
+            섬 ID
+            <select value={captureId} onChange={(e) => setCaptureId(e.target.value)}>
+              {ISLAND_MAP_AREAS.map((a) => (
+                <option key={a.id} value={a.id}>
+                  {a.name} ({a.id})
+                </option>
+              ))}
+            </select>
+          </label>
+          <div className="isl-map-capture-actions">
+            <button type="button" onClick={() => setPoints([])}>
+              초기화
+            </button>
+            <button type="button" onClick={copyPath} disabled={points.length < 3}>
+              path 복사
+            </button>
+          </div>
+          <p>클릭으로 외곽 좌표 수집 → 콘솔 확인 후 island-map-traced.json 갱신</p>
+        </div>
+      </foreignObject>
+    </>
+  );
+}
 
-      <rect x="0" y="0" width="640" height="460" rx="14" fill="#2151CE" />
-      <rect x="0" y="0" width="640" height="460" rx="14" fill="url(#isl-wvp)" />
+export function IslandExplorerMap({
+  selectedId = null,
+  onSelect,
+  readonly = false,
+  captureMode = false,
+}: IslandExplorerMapProps) {
+  const { width, height } = ISLAND_MAP_VIEWBOX;
+  const svgRef = useRef<SVGSVGElement>(null);
 
-      <path className="land-main" d="M596 0 L640 0 L640 460 L590 460 Q574 400 588 340 Q602 292 584 250 Q568 208 588 158 Q604 108 586 56 Q576 24 596 0 Z" fill="#C9D6E2" stroke="#9FB2C4" strokeWidth="1.6" />
-      <text x="617" y="140" fontSize="12.5" fontWeight="800" fill="#2D2E6B">인천</text>
-      <text x="613" y="330" fontSize="10" fill="#4A5F78">송도</text>
-      <circle cx="586" cy="232" r="4.5" fill="#0F5FCC" />
-      <text x="577" y="221" fontSize="10" fill="#2D2E6B" textAnchor="end">인천항</text>
+  return (
+    <div
+      className={[
+        "isl-map-stack",
+        !readonly && selectedId ? "isl-map-has-selection" : "",
+        captureMode ? "isl-map-capture" : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
+    >
+      <img
+        className="isl-map-image"
+        src={ISLAND_MAP_IMAGE}
+        alt={readonly ? "인천 섬 지도" : "인천 섬 탐험 지도"}
+        width={width}
+        height={height}
+        draggable={false}
+      />
 
-      <g stroke="rgba(46,74,116,.45)" strokeWidth="2.4" fill="none" strokeLinecap="round">
-        <path d="M536 188 L588 170" />
-        <path d="M534 224 L592 298" />
-      </g>
-
-      <g className="sea-route" stroke="rgba(255,255,255,.5)" strokeWidth="1.5" fill="none">
-        <path d="M580 234 C470 208 250 148 110 64" />
-        <path d="M580 234 C470 196 336 148 238 98" />
-        <path d="M580 236 C498 282 372 320 302 334" />
-        <path d="M580 238 C512 282 452 308 414 320" />
-      </g>
-
-      <g className="ferry">
-        <g transform="rotate(180)">
-          <path d="M14 2 q4 3 8 2" stroke="rgba(255,255,255,.55)" strokeWidth="2" fill="none" />
-          <path d="M-10 -1 L10 -1 Q9 5 2 5 L-6 5 Q-10 5 -10 -1 Z" fill="#fff" />
-          <rect x="-5" y="-6" width="8" height="5" rx="1.4" fill="#fff" />
-          <rect x="-3.4" y="-4.8" width="2.2" height="2.2" rx=".6" fill="#2151CE" />
-        </g>
-        <animateMotion dur="30s" repeatCount="indefinite" rotate="auto" path="M580 234 C470 208 250 148 110 64" />
-      </g>
-      <g className="ferry">
-        <g transform="rotate(180)">
-          <path d="M12 1 q4 3 8 2" stroke="rgba(255,255,255,.5)" strokeWidth="1.8" fill="none" />
-          <path d="M-8 -1 L8 -1 Q7 4 1.6 4 L-5 4 Q-8 4 -8 -1 Z" fill="#fff" />
-          <rect x="-4" y="-5" width="6.4" height="4" rx="1.2" fill="#fff" />
-        </g>
-        <animateMotion dur="22s" repeatCount="indefinite" rotate="auto" path="M580 236 C498 282 372 320 302 334" />
-      </g>
-
-      <IslandGroup id="baek" delay=".2s" title="백령도" selectedId={selectedId} onSelect={onSelect}>
-        <use href="#p-baek" className="ext" />
-        <use href="#p-baek" className="land" />
-        {ISLAND_MAP.baek?.visited && (
-          <>
-            <path d="M60 52 l5 -8 l5 8 Z" fill="#4E8C33" />
-            <circle cx="90" cy="50" r="3.4" fill="#3E7C2A" />
-            <rect x="89.3" y="52" width="1.4" height="4" fill="#6B4A2B" />
-            <circle cx="76" cy="60" r="8" fill="#2E9E68" stroke="#fff" strokeWidth="1.6" />
-            <text x="76" y="63.6" fontSize="9.5" fill="#fff" textAnchor="middle" fontWeight="bold">✓</text>
-          </>
+      <svg
+        ref={svgRef}
+        viewBox={`0 0 ${width} ${height}`}
+        preserveAspectRatio="xMidYMid meet"
+        role="img"
+        aria-hidden={!readonly}
+        aria-label={readonly ? undefined : "섬 클릭 영역"}
+        className="isl-map-overlay"
+      >
+        {captureMode && import.meta.env.DEV ? (
+          <MapCaptureOverlay svgRef={svgRef} />
+        ) : (
+          ISLAND_MAP_AREAS.map((area) => {
+            if (!area.polygon) return null;
+            return (
+              <IslandHitArea
+                key={area.id}
+                id={area.id}
+                polygon={area.polygon}
+                regionColor={area.regionColor}
+                title={area.name}
+                selectedId={selectedId}
+                onSelect={onSelect}
+                readonly={readonly}
+              />
+            );
+          })
         )}
-      </IslandGroup>
-      <IslandGroup id="daech" delay=".9s" title="대청도" selectedId={selectedId} onSelect={onSelect}>
-        <use href="#p-daech" className="ext" />
-        <use href="#p-daech" className="land" />
-      </IslandGroup>
-      <g className="pill">
-        <rect x="58" y="14" width="96" height="21" rx="10.5" fill="#C9256E" />
-        <text x="106" y="28.5" fontSize="10.5" fontWeight="800" fill="#fff" textAnchor="middle">백령·대청도권역</text>
-      </g>
 
-      <IslandGroup id="yeonp" delay=".5s" title="연평도" selectedId={selectedId} onSelect={onSelect}>
-        <use href="#p-yeonp" className="ext" />
-        <use href="#p-yeonp" className="land" />
-      </IslandGroup>
-      <g className="pill">
-        <rect x="180" y="122" width="66" height="21" rx="10.5" fill="#E23B3B" />
-        <text x="213" y="136.5" fontSize="10.5" fontWeight="800" fill="#fff" textAnchor="middle">연평도권역</text>
-      </g>
-
-      <IslandGroup id="gangh" delay="0s" title="강화도" selectedId={selectedId} onSelect={onSelect}>
-        <use href="#p-gangh" className="ext" />
-        <use href="#p-gangh" className="land" />
-        {!ISLAND_MAP.gangh?.visited && (
-          <>
-            <path d="M462 60 l7 -12 l7 12 Z" fill="#93A8BB" />
-            <path d="M476 64 l6 -10 l6 10 Z" fill="#879CB0" />
-            <circle cx="500" cy="46" r="3.6" fill="#879CB0" />
-            <rect x="499.3" y="48" width="1.4" height="4.4" fill="#7B8CA0" />
-          </>
-        )}
-      </IslandGroup>
-      <IslandGroup id="gyo" delay="1.1s" title="교동도" selectedId={selectedId} onSelect={onSelect}>
-        <use href="#p-gyo" className="ext" />
-        <use href="#p-gyo" className="land" />
-      </IslandGroup>
-      <IslandGroup id="seok" delay="1.9s" title="석모도" selectedId={selectedId} onSelect={onSelect}>
-        <use href="#p-seok" className="ext" />
-        <use href="#p-seok" className="land" />
-      </IslandGroup>
-      <g className="pill">
-        <rect x="463" y="118" width="66" height="21" rx="10.5" fill="#1F4FB8" />
-        <text x="496" y="132.5" fontSize="10.5" fontWeight="800" fill="#fff" textAnchor="middle">강화도권역</text>
-      </g>
-
-      <IslandGroup id="jang" delay=".7s" title="장봉도" selectedId={selectedId} onSelect={onSelect}>
-        <use href="#p-jang" className="ext" />
-        <use href="#p-jang" className="land" />
-      </IslandGroup>
-      <IslandGroup id="sinsi" delay="1.4s" title="신도·시도·모도" selectedId={selectedId} onSelect={onSelect}>
-        <use href="#p-sinsi" className="ext" />
-        <use href="#p-sinsi" className="land" />
-        {ISLAND_MAP.sinsi?.visited && (
-          <>
-            <circle cx="455" cy="148" r="6" fill="#2E9E68" stroke="#fff" strokeWidth="1.4" />
-            <text x="455" y="151.4" fontSize="8" fill="#fff" textAnchor="middle" fontWeight="bold">✓</text>
-          </>
-        )}
-      </IslandGroup>
-      <g className="pill">
-        <rect x="352" y="172" width="56" height="21" rx="10.5" fill="#E07A1F" />
-        <text x="380" y="186.5" fontSize="10.5" fontWeight="800" fill="#fff" textAnchor="middle">북도권역</text>
-      </g>
-
-      <IslandGroup id="yeongj" delay=".3s" title="영종도" selectedId={selectedId} onSelect={onSelect}>
-        <use href="#p-yeongj" className="ext" />
-        <use href="#p-yeongj" className="land" />
-        {ISLAND_MAP.yeongj?.visited && (
-          <>
-            <path d="M494 196 l7 -11 l7 11 Z" fill="#4E8C33" />
-            <circle cx="522" cy="192" r="3.4" fill="#3E7C2A" />
-            <rect x="521.3" y="194" width="1.4" height="4" fill="#6B4A2B" />
-            <circle cx="506" cy="212" r="8" fill="#2E9E68" stroke="#fff" strokeWidth="1.6" />
-            <text x="506" y="215.6" fontSize="9.5" fill="#fff" textAnchor="middle" fontWeight="bold">✓</text>
-          </>
-        )}
-      </IslandGroup>
-      <IslandGroup id="muui" delay="1s" title="무의도" selectedId={selectedId} onSelect={onSelect}>
-        <use href="#p-muui" className="ext" />
-        <use href="#p-muui" className="land" />
-        {ISLAND_MAP.muui?.visited && (
-          <>
-            <circle cx="471" cy="265" r="7" fill="#2E9E68" stroke="#fff" strokeWidth="1.6" />
-            <text x="471" y="268.4" fontSize="9" fill="#fff" textAnchor="middle" fontWeight="bold">✓</text>
-          </>
-        )}
-      </IslandGroup>
-      <g className="pill">
-        <rect x="446" y="234" width="106" height="21" rx="10.5" fill="#DDDA2E" />
-        <text x="499" y="248.5" fontSize="10.5" fontWeight="800" fill="#4B4708" textAnchor="middle">영종구·서해구권역</text>
-      </g>
-
-      <IslandGroup id="yheung" delay=".4s" title="영흥도" selectedId={selectedId} onSelect={onSelect}>
-        <use href="#p-yheung" className="ext" />
-        <use href="#p-yheung" className="land" />
-      </IslandGroup>
-      <g className="pill">
-        <rect x="494" y="372" width="66" height="21" rx="10.5" fill="#2F8F3C" />
-        <text x="527" y="386.5" fontSize="10.5" fontWeight="800" fill="#fff" textAnchor="middle">영흥도권역</text>
-      </g>
-
-      <IslandGroup id="jawol" delay="1.3s" title="자월도" selectedId={selectedId} onSelect={onSelect}>
-        <use href="#p-jawol" className="ext" />
-        <use href="#p-jawol" className="land" />
-      </IslandGroup>
-      <IslandGroup id="seungb" delay=".8s" title="승봉도" selectedId={selectedId} onSelect={onSelect}>
-        <use href="#p-seungb" className="ext" />
-        <use href="#p-seungb" className="land" />
-        {ISLAND_MAP.seungb?.visited && (
-          <>
-            <circle cx="434" cy="349" r="6.5" fill="#2E9E68" stroke="#fff" strokeWidth="1.4" />
-            <text x="434" y="352.6" fontSize="8.5" fill="#fff" textAnchor="middle" fontWeight="bold">✓</text>
-          </>
-        )}
-      </IslandGroup>
-      <IslandGroup id="ijak" delay="1.8s" title="대이작도" selectedId={selectedId} onSelect={onSelect}>
-        <use href="#p-ijak" className="ext" />
-        <use href="#p-ijak" className="land" />
-      </IslandGroup>
-      <g className="pill">
-        <rect x="358" y="396" width="66" height="21" rx="10.5" fill="#0F4A55" />
-        <text x="391" y="410.5" fontSize="10.5" fontWeight="800" fill="#fff" textAnchor="middle">자월도권역</text>
-      </g>
-
-      <IslandGroup id="deokj" delay=".1s" title="덕적도" selectedId={selectedId} onSelect={onSelect}>
-        <use href="#p-deokj" className="ext" />
-        <use href="#p-deokj" className="land" />
-        {ISLAND_MAP.deokj?.visited && (
-          <>
-            <path d="M262 328 l7 -11 l7 11 Z" fill="#4E8C33" />
-            <circle cx="277" cy="336" r="8" fill="#2E9E68" stroke="#fff" strokeWidth="1.6" />
-            <text x="277" y="339.6" fontSize="9.5" fill="#fff" textAnchor="middle" fontWeight="bold">✓</text>
-          </>
-        )}
-      </IslandGroup>
-      <IslandGroup id="soya" delay="1.5s" title="소야도" selectedId={selectedId} onSelect={onSelect}>
-        <use href="#p-soya" className="ext" />
-        <use href="#p-soya" className="land" />
-      </IslandGroup>
-      <IslandGroup id="mungap" delay=".6s" title="문갑도" selectedId={selectedId} onSelect={onSelect}>
-        <use href="#p-mungap" className="ext" />
-        <use href="#p-mungap" className="land" />
-      </IslandGroup>
-      <IslandGroup id="gureop" delay="1.2s" title="굴업도" selectedId={selectedId} onSelect={onSelect}>
-        <use href="#p-gureop" className="ext" />
-        <use href="#p-gureop" className="land" />
-      </IslandGroup>
-      <g className="pill">
-        <rect x="192" y="384" width="66" height="21" rx="10.5" fill="#7A3FD8" />
-        <text x="225" y="398.5" fontSize="10.5" fontWeight="800" fill="#fff" textAnchor="middle">덕적도권역</text>
-      </g>
-
-      <g transform="translate(36,414)">
-        <circle r="15" fill="#fff" opacity=".95" />
-        <path d="M0 -9 L3.4 4 L0 1.6 L-3.4 4 Z" fill="#0F5FCC" />
-        <text x="0" y="-19" fontSize="9" fontWeight="800" fill="#fff" textAnchor="middle">N</text>
-      </g>
-      <text x="622" y="446" fontSize="10" fill="rgba(255,255,255,.75)" textAnchor="end">* 실제 지형을 단순화한 지도입니다</text>
-    </svg>
+        {!readonly && !captureMode && selectedId && <SelectedIslandBoat islandId={selectedId} />}
+      </svg>
+    </div>
   );
 }

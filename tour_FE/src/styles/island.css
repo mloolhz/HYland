@@ -201,11 +201,39 @@
   overflow: hidden;
 }
 
+/* Image + SVG overlay stack */
+.isl-map-stack {
+  position: relative;
+  width: 100%;
+  line-height: 0;
+}
+
+.isl-map-stack .isl-map-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+.isl-map-stack .isl-map-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  font-family: var(--font);
+}
+
 .isl-map-card svg {
   width: 100%;
   height: auto;
   display: block;
   font-family: var(--font);
+}
+
+.isl-map-image {
+  pointer-events: none;
 }
 
 .isl-map-card svg text {
@@ -259,6 +287,182 @@
 .isl-explorer.todo.selected .land {
   stroke: var(--blue);
   filter: brightness(1.2) saturate(0.6);
+}
+
+.isl-map-has-selection .isl-explorer:not(.selected) {
+  opacity: 0.58;
+}
+
+.isl-map-has-selection .isl-explorer:not(.selected).todo {
+  filter: url(#isl-fog) saturate(0.2);
+}
+
+/* Image overlay: transparent SVG hit polygons */
+.isl-map-stack .isl-explorer {
+  animation: none;
+  filter: none;
+  cursor: pointer;
+}
+
+.isl-map-stack .isl-hit-area,
+.isl-map-stack .isl-explorer.todo .isl-hit-area,
+.isl-map-stack .isl-explorer.done .isl-hit-area {
+  fill: transparent;
+  stroke: none;
+  stroke-width: 2;
+  filter: none;
+  transition: fill 0.18s, stroke 0.18s, stroke-width 0.18s;
+  pointer-events: fill;
+}
+
+.isl-map-stack .isl-explorer.todo,
+.isl-map-stack .isl-explorer.done,
+.isl-map-stack .isl-explorer.todo.selected,
+.isl-map-stack .isl-explorer.done.selected {
+  filter: none;
+}
+
+.isl-map-stack .isl-explorer:hover .isl-hit-area,
+.isl-map-stack .isl-explorer:focus-visible .isl-hit-area {
+  fill: color-mix(in srgb, var(--isl-region-color) 28%, transparent);
+  stroke: var(--isl-region-color);
+  stroke-width: 2;
+}
+
+.isl-map-stack .isl-explorer.selected .isl-hit-area,
+.isl-map-stack .isl-explorer.todo.selected .isl-hit-area,
+.isl-map-stack .isl-explorer.done.selected .isl-hit-area {
+  fill: color-mix(in srgb, var(--isl-region-color) 22%, transparent);
+  stroke: var(--isl-region-color);
+  stroke-width: 2.5;
+}
+
+.isl-map-stack.isl-map-has-selection .isl-explorer:not(.selected),
+.isl-map-stack.isl-map-has-selection .isl-explorer:not(.selected).todo,
+.isl-map-stack.isl-map-has-selection .isl-explorer:not(.selected).done {
+  opacity: 1;
+  filter: none;
+}
+
+.isl-map-capture-layer {
+  fill: rgba(255, 0, 0, 0.04);
+  cursor: crosshair;
+}
+
+.isl-map-capture-dot {
+  fill: #ef4444;
+  stroke: #fff;
+  stroke-width: 1;
+  pointer-events: none;
+}
+
+.isl-map-capture-line {
+  fill: none;
+  stroke: #ef4444;
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+  pointer-events: none;
+}
+
+.isl-map-capture-panel {
+  font-family: var(--font);
+  font-size: 12px;
+  line-height: 1.4;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 10px;
+  box-shadow: var(--shadow-lg);
+}
+
+.isl-map-capture-panel label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.isl-map-capture-panel select {
+  font: inherit;
+  padding: 4px 6px;
+}
+
+.isl-map-capture-actions {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.isl-map-capture-actions button {
+  font: inherit;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: #fff;
+  cursor: pointer;
+}
+
+.isl-map-capture-panel p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.isl-selected-marker {
+  pointer-events: none;
+  filter: drop-shadow(0 2px 4px rgba(15, 35, 80, 0.4));
+}
+
+.isl-boat-icon {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: islBoatBob 2.6s ease-in-out infinite;
+}
+
+.isl-boat-hull {
+  fill: #0f5fcc;
+  stroke: #083d8c;
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+.isl-boat-hull-shine {
+  fill: #4d92e8;
+  stroke: none;
+  opacity: 0.85;
+}
+
+.isl-boat-mast {
+  stroke: #2d2e6b;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.isl-boat-sail-main,
+.isl-boat-sail-jib {
+  stroke: #dbe6f2;
+  stroke-width: 1.2;
+  stroke-linejoin: round;
+}
+
+.isl-boat-sail-main {
+  fill: #ffffff;
+}
+
+.isl-boat-sail-jib {
+  fill: #f3f7fc;
+}
+
+@keyframes islBoatBob {
+  0%,
+  100% {
+    transform: scale(0.62) translateY(0);
+  }
+  50% {
+    transform: scale(0.62) translateY(-1.5px);
+  }
 }
 
 .isl-explorer {

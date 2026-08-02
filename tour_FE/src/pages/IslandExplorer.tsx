@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { IslandDetailPanel } from "@/components/island/IslandDetailPanel";
 import { IslandExplorerHeader } from "@/components/island/IslandExplorerHeader";
 import { IslandExplorerMap } from "@/components/island/IslandExplorerMap";
@@ -11,7 +11,10 @@ type IslandsLocationState = {
 
 export function IslandExplorer() {
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const captureMode = import.meta.env.DEV && searchParams.get("mapCapture") === "1";
   const [selectedId, setSelectedId] = useState<string | null>(null);
+
   const selectedIsland = selectedId ? ISLAND_MAP[selectedId] ?? null : null;
 
   useEffect(() => {
@@ -51,7 +54,11 @@ export function IslandExplorer() {
           </div>
 
           <div className="isl-map-card">
-            <IslandExplorerMap selectedId={selectedId} onSelect={handleSelect} />
+            <IslandExplorerMap
+              selectedId={selectedId}
+              onSelect={handleSelect}
+              captureMode={captureMode}
+            />
           </div>
         </div>
 
