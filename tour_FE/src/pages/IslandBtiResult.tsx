@@ -18,7 +18,7 @@ function ResultEmptyState() {
     <main className="ibti-page">
       <IslandBtiContainer>
         <header className="ibti-head">
-          <span className="ibti-head__eyebrow">ISLAND BTI RESULT</span>
+          <span className="ibti-head__eyebrow">ISLAND MBTI RESULT</span>
           <h1 className="ibti-head__title">나의 섬BTI</h1>
           <p className="ibti-head__sub">검사를 완료한 후 결과를 확인할 수 있습니다.</p>
         </header>
@@ -94,7 +94,7 @@ export function IslandBtiResult() {
     <main className="ibti-page">
       <IslandBtiContainer>
         <header className="ibti-head">
-          <span className="ibti-head__eyebrow">ISLAND BTI RESULT</span>
+          <span className="ibti-head__eyebrow">ISLAND MBTI RESULT</span>
           <h1 className="ibti-head__title">나의 섬BTI</h1>
           {testedAtLabel ? (
             <p className="ibti-head__sub">검사일 {testedAtLabel}</p>

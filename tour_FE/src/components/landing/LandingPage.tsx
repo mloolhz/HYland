@@ -1,16 +1,15 @@
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AISection } from "./AISection";
-import { BookingSection } from "./BookingSection";
 import { CommunitySection } from "./CommunitySection";
 import { HeroSection } from "./HeroSection";
 import { LeaderboardSection } from "./LeaderboardSection";
 import { MapSection } from "./MapSection";
 import { MissionSection } from "./MissionSection";
 import { RelatedSitesBand } from "./RelatedSitesBand";
-import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { IslandBtiPromoModal } from "@/components/island-bti/IslandBtiPromoModal";
+import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { SiteFooter } from "./SiteFooter";
 import { SiteHeader } from "./SiteHeader";
 import { ToastProvider } from "./ToastProvider";
@@ -18,20 +17,14 @@ import { NotificationProvider } from "@/store/notifications";
 
 function LandingPageContent() {
   const navigate = useNavigate();
-  const agentInputRef = useRef<HTMLTextAreaElement>(null);
-  const [agentActive, setAgentActive] = useState(false);
 
   const goToLogin = useCallback(() => {
     navigate("/login");
   }, [navigate]);
 
-  const activateAgentInput = useCallback(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    setAgentActive(true);
-    window.setTimeout(() => {
-      agentInputRef.current?.focus({ preventScroll: true });
-    }, 480);
-  }, []);
+  const goToAiRecommend = useCallback(() => {
+    navigate("/ai-recommend");
+  }, [navigate]);
 
   useEffect(() => {
     const io = new IntersectionObserver(
@@ -57,7 +50,6 @@ function LandingPageContent() {
     };
 
     stagger(".ai-grid .ai-card", 120);
-    stagger(".book-card .row", 70);
     stagger(".badge-grid .badge", 70);
     stagger(".cats .cat", 55);
 
@@ -91,14 +83,9 @@ function LandingPageContent() {
     <>
       <SiteHeader />
       <IslandBtiPromoModal />
-      <HeroSection
-        agentInputRef={agentInputRef}
-        agentActive={agentActive}
-        onAgentActiveChange={setAgentActive}
-      />
+      <HeroSection />
       <MapSection />
-      <AISection onRequestCustomRecommendation={activateAgentInput} />
-      <BookingSection />
+      <AISection onRequestCustomRecommendation={goToAiRecommend} />
       <MissionSection />
       <LeaderboardSection onGoToLogin={goToLogin} />
       <CommunitySection />

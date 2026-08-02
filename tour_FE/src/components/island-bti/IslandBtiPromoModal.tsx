@@ -124,7 +124,7 @@ export function IslandBtiPromoModal() {
         </button>
 
         <div className="ibti-promo-modal__content">
-          <span className="ibti-promo-modal__eyebrow">ISLAND BTI</span>
+          <span className="ibti-promo-modal__eyebrow">ISLAND MBTI</span>
           <h2 id="ibti-promo-title" className="ibti-promo-modal__title">
             나와 꼭 맞는 인천 섬은 어디일까?
           </h2>

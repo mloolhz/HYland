@@ -1,61 +1,169 @@
 import type { UserProfile } from "@/lib/user-profile";
+
+import { PassportAvatarPicker } from "./PassportAvatarPicker";
 import { PassportBtiCard } from "./PassportBtiCard";
-import { PassportFooter } from "./PassportFooter";
-import { PassportProfileCard } from "./PassportProfileCard";
-import { PassportStats } from "./PassportStats";
+
+import { formatIssuedDate, formatPassportNo } from "./passport-book-data";
+
+
 
 type PassportProfilePageProps = {
+
   profile: UserProfile;
+
   titleId?: string;
+
 };
 
+
+
 export function PassportProfilePage({ profile, titleId }: PassportProfilePageProps) {
+
   return (
-    <div className="passport-page passport-page--profile passport-page--left">
-      <div className="passport-page__paper-texture" aria-hidden="true" />
-      <div className="passport-page__paper-edge passport-page__paper-edge--left" aria-hidden="true" />
 
-      <div className="passport-left-layout">
-        <header className="passport-left-layout__zone passport-left-layout__zone--header">
-          <p className="passport-page__eyebrow">ISLAND LEISURE PASSPORT</p>
+    <div className="passport-page passport-page--left">
+
+      <div className="passport-page__head">
+
+        <div>
+
+          <p className="passport-page__kicker">ISLAND PASSPORT</p>
+
           <h2 id={titleId} className="passport-page__title">
-            i-바다패스
+
+            섬 여권
+
           </h2>
-          <div className="passport-page__header-waves" aria-hidden="true">
-            <svg viewBox="0 0 80 12" fill="none">
-              <path
-                d="M0 8 C8 4 12 4 20 8 C28 12 32 12 40 8 C48 4 52 4 60 8 C68 12 72 12 80 8"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-              <path
-                d="M0 11 C8 7 12 7 20 11 C28 15 32 15 40 11 C48 7 52 7 60 11 C68 15 72 15 80 11"
-                stroke="currentColor"
-                strokeWidth="1.4"
-                strokeLinecap="round"
-                opacity=".55"
-              />
-            </svg>
-          </div>
-        </header>
 
-        <div className="passport-left-layout__zone passport-left-layout__zone--profile">
-          <PassportProfileCard profile={profile} />
         </div>
 
-        <div className="passport-left-layout__zone passport-left-layout__zone--stats">
-          <PassportStats profile={profile} />
-        </div>
+        <svg className="passport-page__anchor" viewBox="0 0 24 24" fill="none" aria-hidden="true">
 
-        <div className="passport-left-layout__zone passport-left-layout__zone--bti">
-          <PassportBtiCard allowDemoPreview />
-        </div>
+          <circle cx="12" cy="5" r="2.5" stroke="currentColor" strokeWidth="1.8" />
 
-        <footer className="passport-left-layout__zone passport-left-layout__zone--footer">
-          <PassportFooter profile={profile} />
-        </footer>
+          <path d="M12 7.5V20" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+
+          <path d="M6 14C6 17.3 8.7 20 12 20C15.3 20 18 17.3 18 14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+
+          <path d="M5 14H19" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+
+        </svg>
+
       </div>
+
+
+
+      <div className="passport-page__profile-row">
+
+        <PassportAvatarPicker />
+
+        <div className="passport-page__profile-meta">
+
+          <p className="passport-page__nickname">{profile.nickname}님</p>
+
+          <div className="passport-page__badges">
+
+            <span className="passport-page__level">Lv.{profile.level}</span>
+
+            <span className="passport-page__rank">{profile.levelTitle}</span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+
+      <ul className="passport-page__stat-list">
+
+        <li>
+
+          <span className="passport-page__stat-icon passport-page__stat-icon--island" aria-hidden="true">
+
+            <svg viewBox="0 0 24 24" fill="none">
+
+              <path d="M4 18L8 10L12 14L16 8L20 18H4Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+
+            </svg>
+
+          </span>
+
+          <span className="passport-page__stat-label">방문한 섬</span>
+
+          <span className="passport-page__stat-value">{profile.visitedIslandCount}</span>
+
+        </li>
+
+        <li>
+
+          <span className="passport-page__stat-icon passport-page__stat-icon--mission" aria-hidden="true">
+
+            <svg viewBox="0 0 24 24" fill="none">
+
+              <path d="M5 5H19V19H5V5Z" stroke="currentColor" strokeWidth="1.8" />
+
+              <path d="M9 9H15M9 13H15M9 17H12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+
+            </svg>
+
+          </span>
+
+          <span className="passport-page__stat-label">완료한 미션</span>
+
+          <span className="passport-page__stat-value">{profile.completedMissions}</span>
+
+        </li>
+
+        <li>
+
+          <span className="passport-page__stat-icon passport-page__stat-icon--badge" aria-hidden="true">
+
+            <svg viewBox="0 0 24 24" fill="none">
+
+              <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="1.8" />
+
+              <path d="M12 8V12L14.5 14.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+
+            </svg>
+
+          </span>
+
+          <span className="passport-page__stat-label">획득한 배지</span>
+
+          <span className="passport-page__stat-value">{profile.earnedBadgeCount}</span>
+
+        </li>
+
+      </ul>
+
+      <div className="passport-page__bti">
+        <PassportBtiCard allowDemoPreview />
+      </div>
+
+      <div className="passport-page__meta">
+
+        <div>
+
+          <p>PASSPORT NO. {formatPassportNo(profile)}</p>
+
+          <p>ISSUED DATE {formatIssuedDate(profile.joinedAt)}</p>
+
+          <p>ISSUED BY INCHEON LEISURE NURI</p>
+
+        </div>
+
+        <div className="passport-page__seal" aria-hidden="true">
+
+          <span>ILN</span>
+
+        </div>
+
+      </div>
+
     </div>
+
   );
+
 }
+

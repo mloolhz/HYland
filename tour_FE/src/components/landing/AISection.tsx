@@ -1,4 +1,4 @@
-import { demoProps } from "./ToastProvider";
+import { Link } from "react-router-dom";
 
 const AI_COURSES = [
   {
@@ -8,7 +8,7 @@ const AI_COURSES = [
     title: "하나개 카약 체험",
     loc: "📍 무의도 · 소요 2시간",
     why: "🤖 잔잔한 물살을 좋아하는 입문자에게 추천!",
-    demo: "카약 코스 상세는 준비 중이에요 🛶",
+    to: "/sports?category=water",
   },
   {
     thumb: "t2",
@@ -17,7 +17,7 @@ const AI_COURSES = [
     title: "무의바다누리길 트레일 러닝",
     loc: "📍 소무의도 · 코스 2.5km",
     why: "🤖 바다 조망 러닝을 원한다면 이 코스!",
-    demo: "트레일 러닝 코스 상세는 준비 중이에요 🏃",
+    to: "/sports?category=land",
   },
   {
     thumb: "t3",
@@ -26,7 +26,7 @@ const AI_COURSES = [
     title: "서해 맑은물 스노클링",
     loc: "📍 백령도 · 소요 1.5시간",
     why: "🤖 물이 맑은 날, 서해 속살을 보고 싶다면!",
-    demo: "스노클링 코스 상세는 준비 중이에요 🤿",
+    to: "/sports?category=water",
   },
 ] as const;
 
@@ -39,15 +39,17 @@ export function AISection({ onRequestCustomRecommendation }: AISectionProps) {
     <section className="sec" id="ai">
       <div className="container">
         <div className="sec-head reveal">
-          <span className="sec-ico">🤖</span>
-          <h2>AI 추천</h2>
+          <div className="sec-head-copy">
+            <span className="eyebrow">AI RECOMMEND</span>
+            <h2>AI 추천</h2>
+          </div>
         </div>
         <p className="sec-sub reveal">
           당신에게 딱 맞는 레저스포츠와 섬을 추천해드려요! 관심사와 체력 레벨을 알려주면 코스를 골라드립니다.
         </p>
         <div className="ai-grid">
           {AI_COURSES.map((course) => (
-            <article className="ai-card reveal" key={course.title} {...demoProps(course.demo)}>
+            <Link className="ai-card reveal" key={course.title} to={course.to}>
               <div className={`thumb ${course.thumb}`}>
                 <span className={`lv ${course.level}`}>{course.levelLabel}</span>
               </div>
@@ -56,13 +58,13 @@ export function AISection({ onRequestCustomRecommendation }: AISectionProps) {
                 <div className="loc">{course.loc}</div>
                 <div className="why">{course.why}</div>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
         <div className="center reveal">
           <button
             type="button"
-            className="btn btn-outline"
+            className="btn btn-outline btn-ai-custom"
             style={{ minWidth: 260 }}
             onClick={onRequestCustomRecommendation}
           >

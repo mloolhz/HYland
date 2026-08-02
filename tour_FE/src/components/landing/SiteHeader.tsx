@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { resolveCommunityHref } from "@/lib/community-list-state";
 import { NotificationBell } from "@/components/notification/NotificationBell";
+import { ISLAND_REGION_SUB_ITEMS } from "@/lib/island-data";
 
 const SITE_LOGO_SRC = "/incheon-island-leisure-nuri-logo.png";
 
@@ -58,10 +60,10 @@ function MenuIcon({ open }: { open: boolean }) {
 function buildNavItems(
   onIslands: boolean,
   onSports: boolean,
-  onReservation: boolean,
-  onMissions: boolean,
-  onLeaderboard: boolean,
+  onAiRecommend: boolean,
+  onMissionsHub: boolean,
   onCommunity: boolean,
+  communityHref: string,
 ): NavItem[] {
   return [
     {
@@ -70,7 +72,7 @@ function buildNavItems(
       href: "/islands",
       isRoute: true,
       active: onIslands,
-      subItems: [],
+      subItems: ISLAND_REGION_SUB_ITEMS,
     },
     {
       id: "sports",
@@ -79,46 +81,32 @@ function buildNavItems(
       isRoute: true,
       active: onSports,
       subItems: [
-        { label: "수상레저", href: "/sports?category=water" },
-        { label: "육상레저", href: "/sports?category=land" },
+        { label: "해상 레저", href: "/sports?category=water" },
+        { label: "육상 레저", href: "/sports?category=land" },
         { label: "체험", href: "/sports?category=exp" },
         { label: "힐링", href: "/sports?category=heal" },
       ],
     },
     {
-      id: "reservation",
-      label: "레저 예약",
-      href: "/reservation",
+      id: "ai-recommend",
+      label: "AI 추천",
+      href: "/ai-recommend",
       isRoute: true,
-      active: onReservation,
-      subItems: [
-        { label: "전체 프로그램", href: "/reservation" },
-        { label: "수상레저", href: "/reservation?category=water" },
-        { label: "육상레저", href: "/reservation?category=land" },
-        { label: "체험", href: "/reservation?category=exp" },
-        { label: "힐링", href: "/reservation?category=heal" },
-      ],
+      active: onAiRecommend,
+      subItems: [],
     },
     {
       id: "mission",
       label: "미션 & 인증",
       href: "/missions",
       isRoute: true,
-      active: onMissions,
-      subItems: [],
-    },
-    {
-      id: "leaderboard",
-      label: "리더보드",
-      href: "/leaderboard",
-      isRoute: true,
-      active: onLeaderboard,
+      active: onMissionsHub,
       subItems: [],
     },
     {
       id: "community",
       label: "커뮤니티",
-      href: "/community",
+      href: communityHref,
       isRoute: true,
       active: onCommunity,
       subItems: [],
@@ -229,11 +217,21 @@ function DesktopNav({
             <div key={item.id} className="nav-item" onMouseEnter={handleItemEnter}>
               {item.isRoute ? (
                 <Link to={item.href} {...triggerProps}>
-                  {item.label}
+                  <span className="nav-link__label">
+                    <span className="nav-link__label-visible">{item.label}</span>
+                    <span className="nav-link__label-bold" aria-hidden="true">
+                      {item.label}
+                    </span>
+                  </span>
                 </Link>
               ) : (
                 <a href={item.href} {...triggerProps}>
-                  {item.label}
+                  <span className="nav-link__label">
+                    <span className="nav-link__label-visible">{item.label}</span>
+                    <span className="nav-link__label-bold" aria-hidden="true">
+                      {item.label}
+                    </span>
+                  </span>
                 </a>
               )}
               <div className="nav-dropdown-col" aria-hidden={!isOpen || !hasSubItems}>
@@ -344,20 +342,25 @@ export function SiteHeader() {
   const onCommunity = location.pathname.startsWith("/community");
   const onIslands = location.pathname.startsWith("/islands");
   const onSports = location.pathname.startsWith("/sports");
-  const onReservation = location.pathname.startsWith("/reservation");
-  const onMissions = location.pathname.startsWith("/missions");
-  const onLeaderboard = location.pathname.startsWith("/leaderboard");
+  const onAiRecommend = location.pathname.startsWith("/ai-recommend");
+  const onMissionsHub =
+    location.pathname.startsWith("/missions") || location.pathname.startsWith("/leaderboard");
+  const communityFromSearch = (location.state as { fromSearch?: string } | null)?.fromSearch;
+  const communityHref = useMemo(
+    () => resolveCommunityHref(location.pathname, location.search, communityFromSearch),
+    [location.pathname, location.search, communityFromSearch],
+  );
   const navItems = useMemo(
     () =>
       buildNavItems(
         onIslands,
         onSports,
-        onReservation,
-        onMissions,
-        onLeaderboard,
+        onAiRecommend,
+        onMissionsHub,
         onCommunity,
+        communityHref,
       ),
-    [onIslands, onSports, onReservation, onMissions, onLeaderboard, onCommunity],
+    [onIslands, onSports, onAiRecommend, onMissionsHub, onCommunity, communityHref],
   );
   const headerSolid = headerScrolled || navMegaOpen;
   const closeNavMega = useCallback(() => {

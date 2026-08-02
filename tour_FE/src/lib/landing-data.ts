@@ -52,6 +52,30 @@ export const CATEGORY_LEADERBOARD: Record<MissionCategory, LeaderboardEntry[]> =
   ],
 };
 
+/** 순위 변동 (지난주 대비) — 양수 상승, 음수 하락, 0 동일, "new" 신규 진입. CATEGORY_LEADERBOARD 인덱스와 매칭 */
+export type RankDelta = number | "new";
+
+export const CATEGORY_RANK_DELTAS: Record<MissionCategory, RankDelta[]> = {
+  탐험: [1, -1, 2, 0, "new", -2, 1, 0, 3],
+  레저: [0, 2, -1, 1, 0, 3, -2, "new", 1],
+  생태: [2, 0, 1, -1, "new", 0, 2, -3, 1],
+  기타: [1, -2, 0, 3, -1, 0, "new", 2, -1],
+};
+
+/** 시즌 순위 보상 안내 */
+export type SeasonReward = {
+  rank: string;
+  medal: string;
+  title: string;
+  desc: string;
+};
+
+export const SEASON_REWARDS: SeasonReward[] = [
+  { rank: "1위", medal: "🏆", title: "골드 탐험가 배지", desc: "여권 특별 스탬프 + 프로필 골드 테두리" },
+  { rank: "2·3위", medal: "🥈", title: "실버 탐험가 배지", desc: "여권 특별 스탬프 지급" },
+  { rank: "4~10위", medal: "🥉", title: "브론즈 탐험가 배지", desc: "여권 기본 스탬프 지급" },
+];
+
 export const LEADERBOARD: Record<LeaderboardPeriod, LeaderboardEntry[]> = {
   week: [
     ["바다별탐험가", 2480],

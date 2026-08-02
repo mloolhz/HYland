@@ -2,6 +2,7 @@ import { SegmentedToggle } from "./SegmentedToggle";
 import type { PostType } from "@/types/community";
 import type { SortKey } from "@/lib/posts";
 import { IslandFilter } from "./IslandFilter";
+import { ActivityFilter } from "./ActivityFilter";
 
 export type FilterValue = "all" | PostType;
 export type ViewKey = "list" | "gallery";
@@ -11,11 +12,14 @@ type FilterBarProps = {
   view: ViewKey;
   sort: SortKey;
   selectedIslands: Set<string>;
+  selectedActivities: Set<string>;
   islandPostCounts: Record<string, number>;
+  activityPostCounts: Record<string, number>;
   onFilterChange: (value: FilterValue) => void;
   onViewChange: (value: ViewKey) => void;
   onSortChange: (value: SortKey) => void;
   onIslandsApply: (islands: Set<string>) => void;
+  onActivitiesApply: (activities: Set<string>) => void;
 };
 
 const FILTERS: { value: FilterValue; label: string }[] = [
@@ -49,11 +53,14 @@ export function FilterBar({
   view,
   sort,
   selectedIslands,
+  selectedActivities,
   islandPostCounts,
+  activityPostCounts,
   onFilterChange,
   onViewChange,
   onSortChange,
   onIslandsApply,
+  onActivitiesApply,
 }: FilterBarProps) {
   return (
     <div className="cm-filter-bar">
@@ -76,6 +83,11 @@ export function FilterBar({
           selected={selectedIslands}
           postCounts={islandPostCounts}
           onApply={onIslandsApply}
+        />
+        <ActivityFilter
+          selected={selectedActivities}
+          postCounts={activityPostCounts}
+          onApply={onActivitiesApply}
         />
       </div>
       <div className="cm-filter-controls">

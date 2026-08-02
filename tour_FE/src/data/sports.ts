@@ -1,8 +1,17 @@
+import { BOOKING_BY_SPORT_ID } from "./sport-booking";
+
 export type SportIsland = {
   /** IslandExplorer `ISLANDS[].id`와 일치. 없으면 목록으로 폴백 */
   id: string | null;
   n: string;
   c: string;
+};
+
+export type BookingMethod = {
+  type: "official" | "facility" | "phone" | "info";
+  label: string;
+  url?: string;
+  tel?: string;
 };
 
 export type Sport = {
@@ -15,13 +24,28 @@ export type Sport = {
   price: string;
   season: string;
   islands: SportIsland[];
+  booking: BookingMethod[];
 };
 
 export type CategoryKey = "water" | "land" | "exp" | "heal";
 
+function attachBookings(
+  data: Record<CategoryKey, Omit<Sport, "booking">[]>,
+): Record<CategoryKey, Sport[]> {
+  return Object.fromEntries(
+    Object.entries(data).map(([key, list]) => [
+      key,
+      list.map((sport) => ({
+        ...sport,
+        booking: BOOKING_BY_SPORT_ID[sport.id] ?? [],
+      })),
+    ]),
+  ) as Record<CategoryKey, Sport[]>;
+}
+
 export const SPORTS_CATEGORIES: { key: CategoryKey; label: string }[] = [
-  { key: "water", label: "수상레저" },
-  { key: "land", label: "육상레저" },
+  { key: "water", label: "해상 레저" },
+  { key: "land", label: "육상 레저" },
   { key: "exp", label: "체험" },
   { key: "heal", label: "힐링" },
 ];
@@ -31,7 +55,7 @@ export const SPORTS_CATEGORIES: { key: CategoryKey; label: string }[] = [
  * - 시도 → sinsi (신도·시도·모도)
  * - 소이작도·볼음도 → Explorer에 없음 → id:null (목록 폴백)
  */
-export const SPORTS_DATA: Record<CategoryKey, Sport[]> = {
+const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "booking">[]> = {
   water: [
     {
       id: "kayak",
@@ -347,3 +371,5 @@ export const SPORTS_DATA: Record<CategoryKey, Sport[]> = {
     },
   ],
 };
+
+export const SPORTS_DATA = attachBookings(RAW_SPORTS_DATA);

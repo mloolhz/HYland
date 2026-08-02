@@ -4,12 +4,14 @@ import { AuthorAvatar } from "@/components/community/AuthorAvatar";
 import { CommentThread } from "@/components/community/CommentThread";
 import { Lightbox } from "@/components/community/Lightbox";
 import { CommentIcon, HeartIcon } from "@/components/community/PostActionIcons";
-import { PostRow } from "@/components/community/PostRow";
 import { isCurrentUser } from "@/constants/auth";
 import { getIslandColors } from "@/constants/island";
 import { CONTAINER } from "@/constants/layout";
+import { PostDetailNavList } from "@/components/community/PostDetailNavList";
+import { saveCommunityListSearch } from "@/lib/community-list-state";
+import { getSurroundingPosts } from "@/lib/post-navigation";
 import { countComments, filterPosts, findComment, removeComment, sortPosts } from "@/lib/posts";
-import { parseIslandsQuery } from "@/lib/query";
+import { parseActivitiesQuery, parseIslandsQuery } from "@/lib/query";
 import { formatDetailDate } from "@/lib/time";
 import { getPostById, incrementPostViews, usePosts } from "@/lib/post-store";
 
@@ -45,6 +47,10 @@ export function PostDetail() {
   const backSearch =
     (location.state as { fromSearch?: string } | null)?.fromSearch ?? "";
 
+  useEffect(() => {
+    if (backSearch) saveCommunityListSearch(backSearch);
+  }, [backSearch]);
+
   const listParams = useMemo(
     () => new URLSearchParams(backSearch.replace(/^\?/, "")),
     [backSearch],
@@ -58,8 +64,9 @@ export function PostDetail() {
         ? categoryParam
         : "all";
     const islands = parseIslandsQuery(listParams.get("islands"));
+    const activities = parseActivitiesQuery(listParams.get("activities"));
     const query = listParams.get("q") ?? "";
-    return sortPosts(filterPosts(posts, { category, islands, query }), sort);
+    return sortPosts(filterPosts(posts, { category, islands, activities, query }), sort);
   }, [posts, listParams]);
 
   const { prevPost, nextPost } = useMemo(() => {
@@ -72,12 +79,10 @@ export function PostDetail() {
     };
   }, [navigablePosts, post]);
 
-  const related = useMemo(() => {
+  const surroundingPosts = useMemo(() => {
     if (!post) return [];
-    return posts.filter(
-      (p) => !p.isNotice && p.island === post.island && p.id !== post.id,
-    ).slice(0, 3);
-  }, [post, posts]);
+    return getSurroundingPosts(navigablePosts, post.id);
+  }, [navigablePosts, post]);
 
   if (!post) {
     return (
@@ -146,7 +151,9 @@ export function PostDetail() {
               <div className="cm-detail-meta">
                 <div className="cm-detail-author">
                   <AuthorAvatar author={post.author} className="cm-detail-avatar" />
-                  <span className="cm-post-nick">{post.author.nickname}</span>
+                  <Link to={`/community/users/${post.author.id}`} className="cm-post-nick cm-author-link">
+                    {post.author.nickname}
+                  </Link>
                   <time className="cm-detail-date" dateTime={post.createdAt}>
                     {formatDetailDate(post.createdAt)}
                   </time>
@@ -160,8 +167,6 @@ export function PostDetail() {
                   {post.badge && <span className="cm-badge-rare">{post.badge}</span>}
                 </div>
               </div>
-
-              <hr className="cm-detail-divider" />
 
               <div className="cm-detail-body">
                 <p className="cm-detail-content">{post.content}</p>
@@ -203,8 +208,6 @@ export function PostDetail() {
                 </div>
               </div>
 
-              <hr className="cm-detail-divider" />
-
               <CommentThread
                 comments={comments}
                 isLoggedIn
@@ -212,16 +215,7 @@ export function PostDetail() {
               />
             </div>
 
-            {related.length > 0 && (
-              <section className="cm-detail-related">
-                <h2 className="cm-detail-related-title">{post.island}의 다른 글</h2>
-                <div className="cm-post-list cm-post-list-compact">
-                  {related.map((p) => (
-                    <PostRow key={p.id} post={p} columns="community" compact fromSearch={backSearch} />
-                  ))}
-                </div>
-              </section>
-            )}
+            <PostDetailNavList items={surroundingPosts} fromSearch={backSearch} />
           </article>
         </div>
       </div>

@@ -14,19 +14,16 @@ import { MyLikedPage } from "@/pages/MyLikedPage";
 import { MyPostsPage } from "@/pages/MyPostsPage";
 import { NotFound } from "@/pages/NotFound";
 import { Notifications } from "@/pages/Notifications";
+import { UserProfilePage } from "@/pages/UserProfilePage";
 import { PostDetail } from "@/pages/PostDetail";
 import { Signup } from "@/pages/Signup";
 import { IslandExplorer } from "@/pages/IslandExplorer";
-import { Missions } from "@/pages/Missions";
-import { Leaderboard } from "@/pages/Leaderboard";
+import { MissionHub } from "@/pages/MissionHub";
 import { MyPage } from "@/pages/MyPage";
 import { MyPageSettings } from "@/pages/MyPageSettings";
 import { MyPageProfileEdit } from "@/pages/MyPageProfileEdit";
+import { AiRecommend } from "@/pages/AiRecommend";
 import { Sports } from "@/pages/Sports";
-import { ReservationList } from "@/pages/ReservationList";
-import { ReservationDetail } from "@/pages/ReservationDetail";
-import { ReservationCheckout } from "@/pages/ReservationCheckout";
-import { ReservationComplete } from "@/pages/ReservationComplete";
 import { WritePost } from "@/pages/WritePost";
 import { IslandBtiIntro } from "@/pages/IslandBtiIntro";
 import { IslandBtiTest } from "@/pages/IslandBtiTest";
@@ -40,10 +37,11 @@ import "./styles/mypage.css";
 import "./styles/passport-book.css";
 import "./styles/notification.css";
 import "./styles/sports.css";
-import "./styles/reservation.css";
 import "./styles/missions.css";
 import "./styles/leaderboard.css";
+import "./styles/ai-recommend.css";
 import "./styles/island-bti.css";
+import "./styles/island-bti-promo.css";
 
 const router = createBrowserRouter([
   { path: "/", element: <LandingPage />, errorElement: <RouterError /> },
@@ -55,19 +53,17 @@ const router = createBrowserRouter([
       { path: "island-bti", element: <IslandBtiIntro /> },
       { path: "island-bti/test", element: <IslandBtiTest /> },
       { path: "island-bti/result", element: <IslandBtiResult /> },
-      { path: "missions", element: <Missions /> },
-      { path: "leaderboard", element: <Leaderboard /> },
+      { path: "missions", element: <MissionHub /> },
+      { path: "leaderboard", element: <MissionHub /> },
       { path: "sports", element: <Sports /> },
-      { path: "reservation", element: <ReservationList /> },
-      { path: "reservation/complete/:reservationId", element: <ReservationComplete /> },
-      { path: "reservation/:productId/checkout", element: <ReservationCheckout /> },
-      { path: "reservation/:productId", element: <ReservationDetail /> },
+      { path: "ai-recommend", element: <AiRecommend /> },
       { path: "community", element: <Community /> },
       { path: "community/write", element: <WritePost /> },
       { path: "community/my-posts", element: <MyPostsPage /> },
       { path: "community/my-comments", element: <MyCommentsPage /> },
       { path: "community/liked", element: <MyLikedPage /> },
       { path: "community/me", element: <MyActivity /> },
+      { path: "community/users/:userId", element: <UserProfilePage /> },
       { path: "community/:id", element: <PostDetail /> },
       { path: "notifications", element: <Notifications /> },
       { path: "mypage", element: <MyPage /> },

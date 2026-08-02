@@ -913,6 +913,55 @@
 
 .mp-passport-book .passport-book__shell {
   margin-inline: auto;
+  aspect-ratio: 4 / 3.15;
+}
+
+/* 마이페이지 전용 프로필 페이지 — 하단 메타(PASSPORT NO 등) 잘림 방지 */
+.mp-passport-book .passport-page--mypage {
+  overflow: hidden;
+  padding: 22px 20px 16px;
+}
+
+.mp-passport-book .passport-page--mypage .passport-page__scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(45, 46, 107, 0.22) transparent;
+}
+
+.mp-passport-book .passport-page--mypage .passport-page__head {
+  margin-bottom: 14px;
+}
+
+.mp-passport-book .passport-page--mypage .passport-page__profile-row {
+  margin-bottom: 12px;
+}
+
+.mp-passport-book .passport-page--mypage .passport-page__stat-list {
+  margin-bottom: 12px;
+  gap: 8px;
+}
+
+.mp-passport-book .passport-page--mypage .passport-page__stat-list li {
+  padding: 8px 10px;
+}
+
+.mp-passport-book .passport-page--mypage .passport-page__bti {
+  margin-top: 0;
+  margin-bottom: 4px;
+}
+
+.mp-passport-book .passport-page--mypage .passport-bti-card {
+  min-height: 80px;
+  max-height: 84px;
+}
+
+.mp-passport-book .passport-page--mypage .passport-page__meta {
+  flex-shrink: 0;
+  margin-top: 0;
+  padding-top: 10px;
 }
 
 .passport-book--embedded.passport-book--open .passport-book__back-board {

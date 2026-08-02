@@ -120,7 +120,7 @@ export function IslandBtiTest() {
 
         <header className="ibti-head">
 
-          <span className="ibti-head__eyebrow">ISLAND BTI TEST</span>
+          <span className="ibti-head__eyebrow">ISLAND MBTI TEST</span>
 
           <h1 className="ibti-head__title">섬BTI 검사</h1>
 

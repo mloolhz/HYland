@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { CommunityHeader } from "@/components/community/CommunityHeader";
 import { FilterBar, type FilterValue, type ViewKey } from "@/components/community/FilterBar";
@@ -7,6 +7,7 @@ import { Lightbox } from "@/components/community/Lightbox";
 import { PostList } from "@/components/community/PostList";
 import { ProfileCard } from "@/components/community/ProfileCard";
 import { SelectedIslands } from "@/components/community/SelectedIslands";
+import { SelectedActivities } from "@/components/community/SelectedActivities";
 import { WritePostFab } from "@/components/community/WritePostFab";
 import { CONTAINER } from "@/constants/layout";
 import { usePosts } from "@/lib/post-store";
@@ -15,12 +16,14 @@ import {
   GALLERY_PAGE_SIZE,
   getNoticePosts,
   islandPostCounts,
+  activityPostCounts,
   paginate,
   sortPosts,
   totalPages,
   type SortKey,
 } from "@/lib/posts";
-import { parseIslandsQuery, parsePageQuery, serializeIslandsQuery } from "@/lib/query";
+import { parseActivitiesQuery, parseIslandsQuery, parsePageQuery, serializeActivitiesQuery, serializeIslandsQuery } from "@/lib/query";
+import { saveCommunityListSearch } from "@/lib/community-list-state";
 
 function parseView(value: string | null): ViewKey {
   return value === "gallery" ? "gallery" : "list";
@@ -50,10 +53,16 @@ export function Community() {
   const sort = parseSort(searchParams.get("sort"));
   const category = parseCategory(searchParams.get("category"));
   const islands = useMemo(() => parseIslandsQuery(searchParams.get("islands")), [searchParams]);
+  const activities = useMemo(() => parseActivitiesQuery(searchParams.get("activities")), [searchParams]);
   const query = searchParams.get("q") ?? "";
   const page = parsePageQuery(searchParams.get("page"));
 
+  useEffect(() => {
+    saveCommunityListSearch(searchParams.toString() ? `?${searchParams.toString()}` : "");
+  }, [searchParams]);
+
   const counts = useMemo(() => islandPostCounts(posts), [posts]);
+  const activityCounts = useMemo(() => activityPostCounts(posts), [posts]);
   const notices = useMemo(() => getNoticePosts(posts), [posts]);
 
   const updateQuery = useCallback(
@@ -62,6 +71,7 @@ export function Community() {
       sort?: SortKey;
       category?: FilterValue;
       islands?: Set<string>;
+      activities?: Set<string>;
       q?: string;
       page?: number;
       resetPage?: boolean;
@@ -86,6 +96,11 @@ export function Community() {
             if (serialized) next.set("islands", serialized);
             else next.delete("islands");
           }
+          if (patch.activities !== undefined) {
+            const serialized = serializeActivitiesQuery(patch.activities);
+            if (serialized) next.set("activities", serialized);
+            else next.delete("activities");
+          }
           if (patch.q !== undefined) {
             if (!patch.q.trim()) next.delete("q");
             else next.set("q", patch.q);
@@ -104,8 +119,8 @@ export function Community() {
   );
 
   const filtered = useMemo(
-    () => filterPosts(posts, { category, islands, query }),
-    [posts, category, islands, query],
+    () => filterPosts(posts, { category, islands, activities, query }),
+    [posts, category, islands, activities, query],
   );
   const sorted = useMemo(() => sortPosts(filtered, sort), [filtered, sort]);
   const galleryPosts = useMemo(
@@ -131,14 +146,18 @@ export function Community() {
   };
 
   const clearFilters = () => {
-    updateQuery({ islands: new Set(), q: "", category: "all", resetPage: true });
+    updateQuery({ islands: new Set(), activities: new Set(), q: "", category: "all", resetPage: true });
   };
 
   const emptyMessage = query.trim()
     ? "검색 결과가 없습니다."
-    : islands.size > 0
-      ? "선택한 섬에 대한 글이 아직 없습니다."
-      : "이 필터에 해당하는 글이 아직 없습니다.";
+    : islands.size > 0 && activities.size > 0
+      ? "선택한 섬·종목에 해당하는 글이 아직 없습니다."
+      : islands.size > 0
+        ? "선택한 섬에 대한 글이 아직 없습니다."
+        : activities.size > 0
+          ? "선택한 종목에 대한 글이 아직 없습니다."
+          : "이 필터에 해당하는 글이 아직 없습니다.";
 
   const currentPages = view === "gallery" ? galleryPages : listPages;
   const safePage = Math.min(page, currentPages);
@@ -193,11 +212,14 @@ export function Community() {
           view={view}
           sort={sort}
           selectedIslands={islands}
+          selectedActivities={activities}
           islandPostCounts={counts}
+          activityPostCounts={activityCounts}
           onFilterChange={(c) => updateQuery({ category: c, resetPage: true })}
           onViewChange={(v) => updateQuery({ view: v, resetPage: true })}
           onSortChange={(s) => updateQuery({ sort: s, resetPage: true })}
           onIslandsApply={(next) => updateQuery({ islands: next, resetPage: true })}
+          onActivitiesApply={(next) => updateQuery({ activities: next, resetPage: true })}
         />
 
         <SelectedIslands
@@ -208,6 +230,16 @@ export function Community() {
             updateQuery({ islands: next, resetPage: true });
           }}
           onClear={() => updateQuery({ islands: new Set(), resetPage: true })}
+        />
+
+        <SelectedActivities
+          activities={activities}
+          onRemove={(name) => {
+            const next = new Set(activities);
+            next.delete(name);
+            updateQuery({ activities: next, resetPage: true });
+          }}
+          onClear={() => updateQuery({ activities: new Set(), resetPage: true })}
         />
 
         <div className="cm-layout">

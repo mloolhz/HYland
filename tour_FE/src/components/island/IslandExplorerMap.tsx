@@ -2,8 +2,9 @@ import { useCallback, type KeyboardEvent, type ReactNode } from "react";
 import { ISLAND_MAP } from "@/lib/island-data";
 
 type IslandExplorerMapProps = {
-  selectedId: string | null;
-  onSelect: (id: string) => void;
+  selectedId?: string | null;
+  onSelect?: (id: string) => void;
+  readonly?: boolean;
 };
 
 function islandClass(id: string, selectedId: string | null) {
@@ -22,51 +23,115 @@ function getRegionGroup(id: string): number {
   return groups[id] ?? 1;
 }
 
+/** Boat marker placement per island (hand-tuned to each landmass). */
+const ISLAND_BOAT_POSITIONS: Record<string, { x: number; y: number }> = {
+  baek: { x: 76, y: 54 },
+  daech: { x: 112, y: 108 },
+  yeonp: { x: 216, y: 98 },
+  gangh: { x: 488, y: 64 },
+  gyo: { x: 410, y: 44 },
+  seok: { x: 418, y: 92 },
+  jang: { x: 400, y: 152 },
+  sinsi: { x: 462, y: 154 },
+  yeongj: { x: 506, y: 204 },
+  muui: { x: 472, y: 266 },
+  yheung: { x: 526, y: 342 },
+  jawol: { x: 392, y: 318 },
+  seungb: { x: 434, y: 348 },
+  ijak: { x: 398, y: 376 },
+  deokj: { x: 275, y: 332 },
+  soya: { x: 306, y: 354 },
+  mungap: { x: 260, y: 372 },
+  gureop: { x: 206, y: 346 },
+};
+
+function SelectedIslandBoat({ islandId }: { islandId: string }) {
+  const pos = ISLAND_BOAT_POSITIONS[islandId];
+  if (!pos) return null;
+
+  const name = ISLAND_MAP[islandId]?.name ?? "선택한 섬";
+
+  return (
+    <g
+      className="isl-selected-marker"
+      transform={`translate(${pos.x} ${pos.y})`}
+      aria-hidden="true"
+    >
+      <title>{name}</title>
+      <g className="isl-boat-icon">
+        <path className="isl-boat-hull" d="M-11 6 C-3 9.5 3 9.5 11 6 L 8.5 2.5 C2 0.8 -2 0.8 -8.5 2.5 Z" />
+        <path className="isl-boat-hull-shine" d="M-6 4.5 C-1 6.5 1 6.5 6 4.5 L 4.5 3.2 C1.5 2.2 -1.5 2.2 -4.5 3.2 Z" />
+        <line className="isl-boat-mast" x1="0" y1="2.5" x2="0" y2="-14.5" />
+        <path className="isl-boat-sail-main" d="M0.8 -14 L9.5 2.5 L0.8 2.5 Z" />
+        <path className="isl-boat-sail-jib" d="M-0.8 -12.5 L-8.5 2.5 L-0.8 2.5 Z" />
+      </g>
+    </g>
+  );
+}
+
 function IslandGroup({
   id,
   delay,
   title,
   selectedId,
   onSelect,
+  readonly = false,
   children,
 }: {
   id: string;
   delay: string;
   title: string;
   selectedId: string | null;
-  onSelect: (id: string) => void;
+  onSelect?: (id: string) => void;
+  readonly?: boolean;
   children: ReactNode;
 }) {
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
+      if (readonly || !onSelect) return;
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         onSelect(id);
       }
     },
-    [id, onSelect],
+    [id, onSelect, readonly],
   );
+
+  const visitLabel = ISLAND_MAP[id]?.visited ? "방문 완료" : "미방문";
 
   return (
     <g
       className={islandClass(id, selectedId)}
       style={{ ["--d" as string]: delay }}
-      role="button"
-      tabIndex={0}
-      aria-label={`${title} · ${ISLAND_MAP[id]?.visited ? "방문 완료" : "미방문"}`}
-      aria-pressed={selectedId === id}
-      onClick={() => onSelect(id)}
-      onKeyDown={handleKeyDown}
+      {...(readonly
+        ? {}
+        : {
+            role: "button",
+            tabIndex: 0,
+            "aria-label": `${title} · ${visitLabel}`,
+            "aria-pressed": selectedId === id,
+            onClick: () => onSelect?.(id),
+            onKeyDown: handleKeyDown,
+          })}
     >
-      <title>{title}</title>
+      <title>{`${title} · ${visitLabel}`}</title>
       {children}
     </g>
   );
 }
 
-export function IslandExplorerMap({ selectedId, onSelect }: IslandExplorerMapProps) {
+export function IslandExplorerMap({
+  selectedId = null,
+  onSelect,
+  readonly = false,
+}: IslandExplorerMapProps) {
   return (
-    <svg viewBox="0 0 640 460" role="img" aria-label="인천 섬 탐험 지도">
+    <svg
+      viewBox="0 0 640 460"
+      role="img"
+      aria-label={readonly ? "인천 섬 지도" : "인천 섬 탐험 지도"}
+      className={!readonly && selectedId ? "isl-map-has-selection" : undefined}
+    >
       <defs>
         <filter id="isl-fog" x="-10%" y="-10%" width="120%" height="120%">
           <feColorMatrix type="saturate" values="0.25" />
@@ -106,37 +171,7 @@ export function IslandExplorerMap({ selectedId, onSelect }: IslandExplorerMapPro
       <circle cx="586" cy="232" r="4.5" fill="#0F5FCC" />
       <text x="577" y="221" fontSize="10" fill="#2D2E6B" textAnchor="end">인천항</text>
 
-      <g stroke="rgba(46,74,116,.45)" strokeWidth="2.4" fill="none" strokeLinecap="round">
-        <path d="M536 188 L588 170" />
-        <path d="M534 224 L592 298" />
-      </g>
-
-      <g className="sea-route" stroke="rgba(255,255,255,.5)" strokeWidth="1.5" fill="none">
-        <path d="M580 234 C470 208 250 148 110 64" />
-        <path d="M580 234 C470 196 336 148 238 98" />
-        <path d="M580 236 C498 282 372 320 302 334" />
-        <path d="M580 238 C512 282 452 308 414 320" />
-      </g>
-
-      <g className="ferry">
-        <g transform="rotate(180)">
-          <path d="M14 2 q4 3 8 2" stroke="rgba(255,255,255,.55)" strokeWidth="2" fill="none" />
-          <path d="M-10 -1 L10 -1 Q9 5 2 5 L-6 5 Q-10 5 -10 -1 Z" fill="#fff" />
-          <rect x="-5" y="-6" width="8" height="5" rx="1.4" fill="#fff" />
-          <rect x="-3.4" y="-4.8" width="2.2" height="2.2" rx=".6" fill="#2151CE" />
-        </g>
-        <animateMotion dur="30s" repeatCount="indefinite" rotate="auto" path="M580 234 C470 208 250 148 110 64" />
-      </g>
-      <g className="ferry">
-        <g transform="rotate(180)">
-          <path d="M12 1 q4 3 8 2" stroke="rgba(255,255,255,.5)" strokeWidth="1.8" fill="none" />
-          <path d="M-8 -1 L8 -1 Q7 4 1.6 4 L-5 4 Q-8 4 -8 -1 Z" fill="#fff" />
-          <rect x="-4" y="-5" width="6.4" height="4" rx="1.2" fill="#fff" />
-        </g>
-        <animateMotion dur="22s" repeatCount="indefinite" rotate="auto" path="M580 236 C498 282 372 320 302 334" />
-      </g>
-
-      <IslandGroup id="baek" delay=".2s" title="백령도" selectedId={selectedId} onSelect={onSelect}>
+      <IslandGroup id="baek" delay=".2s" title="백령도" selectedId={selectedId} onSelect={onSelect} readonly={readonly}>
         <use href="#p-baek" className="ext" />
         <use href="#p-baek" className="land" />
         {ISLAND_MAP.baek?.visited && (
@@ -149,7 +184,7 @@ export function IslandExplorerMap({ selectedId, onSelect }: IslandExplorerMapPro
           </>
         )}
       </IslandGroup>
-      <IslandGroup id="daech" delay=".9s" title="대청도" selectedId={selectedId} onSelect={onSelect}>
+      <IslandGroup id="daech" delay=".9s" title="대청도" selectedId={selectedId} onSelect={onSelect} readonly={readonly}>
         <use href="#p-daech" className="ext" />
         <use href="#p-daech" className="land" />
       </IslandGroup>
@@ -158,7 +193,7 @@ export function IslandExplorerMap({ selectedId, onSelect }: IslandExplorerMapPro
         <text x="106" y="28.5" fontSize="10.5" fontWeight="800" fill="#fff" textAnchor="middle">백령·대청도권역</text>
       </g>
 
-      <IslandGroup id="yeonp" delay=".5s" title="연평도" selectedId={selectedId} onSelect={onSelect}>
+      <IslandGroup id="yeonp" delay=".5s" title="연평도" selectedId={selectedId} onSelect={onSelect} readonly={readonly}>
         <use href="#p-yeonp" className="ext" />
         <use href="#p-yeonp" className="land" />
       </IslandGroup>
@@ -167,7 +202,7 @@ export function IslandExplorerMap({ selectedId, onSelect }: IslandExplorerMapPro
         <text x="213" y="136.5" fontSize="10.5" fontWeight="800" fill="#fff" textAnchor="middle">연평도권역</text>
       </g>
 
-      <IslandGroup id="gangh" delay="0s" title="강화도" selectedId={selectedId} onSelect={onSelect}>
+      <IslandGroup id="gangh" delay="0s" title="강화도" selectedId={selectedId} onSelect={onSelect} readonly={readonly}>
         <use href="#p-gangh" className="ext" />
         <use href="#p-gangh" className="land" />
         {!ISLAND_MAP.gangh?.visited && (
@@ -179,11 +214,11 @@ export function IslandExplorerMap({ selectedId, onSelect }: IslandExplorerMapPro
           </>
         )}
       </IslandGroup>
-      <IslandGroup id="gyo" delay="1.1s" title="교동도" selectedId={selectedId} onSelect={onSelect}>
+      <IslandGroup id="gyo" delay="1.1s" title="교동도" selectedId={selectedId} onSelect={onSelect} readonly={readonly}>
         <use href="#p-gyo" className="ext" />
         <use href="#p-gyo" className="land" />
       </IslandGroup>
-      <IslandGroup id="seok" delay="1.9s" title="석모도" selectedId={selectedId} onSelect={onSelect}>
+      <IslandGroup id="seok" delay="1.9s" title="석모도" selectedId={selectedId} onSelect={onSelect} readonly={readonly}>
         <use href="#p-seok" className="ext" />
         <use href="#p-seok" className="land" />
       </IslandGroup>
@@ -192,11 +227,11 @@ export function IslandExplorerMap({ selectedId, onSelect }: IslandExplorerMapPro
         <text x="496" y="132.5" fontSize="10.5" fontWeight="800" fill="#fff" textAnchor="middle">강화도권역</text>
       </g>
 
-      <IslandGroup id="jang" delay=".7s" title="장봉도" selectedId={selectedId} onSelect={onSelect}>
+      <IslandGroup id="jang" delay=".7s" title="장봉도" selectedId={selectedId} onSelect={onSelect} readonly={readonly}>
         <use href="#p-jang" className="ext" />
         <use href="#p-jang" className="land" />
       </IslandGroup>
-      <IslandGroup id="sinsi" delay="1.4s" title="신도·시도·모도" selectedId={selectedId} onSelect={onSelect}>
+      <IslandGroup id="sinsi" delay="1.4s" title="신도·시도·모도" selectedId={selectedId} onSelect={onSelect} readonly={readonly}>
         <use href="#p-sinsi" className="ext" />
         <use href="#p-sinsi" className="land" />
         {ISLAND_MAP.sinsi?.visited && (
@@ -211,7 +246,7 @@ export function IslandExplorerMap({ selectedId, onSelect }: IslandExplorerMapPro
         <text x="380" y="186.5" fontSize="10.5" fontWeight="800" fill="#fff" textAnchor="middle">북도권역</text>
       </g>
 
-      <IslandGroup id="yeongj" delay=".3s" title="영종도" selectedId={selectedId} onSelect={onSelect}>
+      <IslandGroup id="yeongj" delay=".3s" title="영종도" selectedId={selectedId} onSelect={onSelect} readonly={readonly}>
         <use href="#p-yeongj" className="ext" />
         <use href="#p-yeongj" className="land" />
         {ISLAND_MAP.yeongj?.visited && (
@@ -224,7 +259,7 @@ export function IslandExplorerMap({ selectedId, onSelect }: IslandExplorerMapPro
           </>
         )}
       </IslandGroup>
-      <IslandGroup id="muui" delay="1s" title="무의도" selectedId={selectedId} onSelect={onSelect}>
+      <IslandGroup id="muui" delay="1s" title="무의도" selectedId={selectedId} onSelect={onSelect} readonly={readonly}>
         <use href="#p-muui" className="ext" />
         <use href="#p-muui" className="land" />
         {ISLAND_MAP.muui?.visited && (
@@ -239,7 +274,7 @@ export function IslandExplorerMap({ selectedId, onSelect }: IslandExplorerMapPro
         <text x="499" y="248.5" fontSize="10.5" fontWeight="800" fill="#4B4708" textAnchor="middle">영종구·서해구권역</text>
       </g>
 
-      <IslandGroup id="yheung" delay=".4s" title="영흥도" selectedId={selectedId} onSelect={onSelect}>
+      <IslandGroup id="yheung" delay=".4s" title="영흥도" selectedId={selectedId} onSelect={onSelect} readonly={readonly}>
         <use href="#p-yheung" className="ext" />
         <use href="#p-yheung" className="land" />
       </IslandGroup>
@@ -248,11 +283,11 @@ export function IslandExplorerMap({ selectedId, onSelect }: IslandExplorerMapPro
         <text x="527" y="386.5" fontSize="10.5" fontWeight="800" fill="#fff" textAnchor="middle">영흥도권역</text>
       </g>
 
-      <IslandGroup id="jawol" delay="1.3s" title="자월도" selectedId={selectedId} onSelect={onSelect}>
+      <IslandGroup id="jawol" delay="1.3s" title="자월도" selectedId={selectedId} onSelect={onSelect} readonly={readonly}>
         <use href="#p-jawol" className="ext" />
         <use href="#p-jawol" className="land" />
       </IslandGroup>
-      <IslandGroup id="seungb" delay=".8s" title="승봉도" selectedId={selectedId} onSelect={onSelect}>
+      <IslandGroup id="seungb" delay=".8s" title="승봉도" selectedId={selectedId} onSelect={onSelect} readonly={readonly}>
         <use href="#p-seungb" className="ext" />
         <use href="#p-seungb" className="land" />
         {ISLAND_MAP.seungb?.visited && (
@@ -262,7 +297,7 @@ export function IslandExplorerMap({ selectedId, onSelect }: IslandExplorerMapPro
           </>
         )}
       </IslandGroup>
-      <IslandGroup id="ijak" delay="1.8s" title="대이작도" selectedId={selectedId} onSelect={onSelect}>
+      <IslandGroup id="ijak" delay="1.8s" title="대이작도" selectedId={selectedId} onSelect={onSelect} readonly={readonly}>
         <use href="#p-ijak" className="ext" />
         <use href="#p-ijak" className="land" />
       </IslandGroup>
@@ -271,7 +306,7 @@ export function IslandExplorerMap({ selectedId, onSelect }: IslandExplorerMapPro
         <text x="391" y="410.5" fontSize="10.5" fontWeight="800" fill="#fff" textAnchor="middle">자월도권역</text>
       </g>
 
-      <IslandGroup id="deokj" delay=".1s" title="덕적도" selectedId={selectedId} onSelect={onSelect}>
+      <IslandGroup id="deokj" delay=".1s" title="덕적도" selectedId={selectedId} onSelect={onSelect} readonly={readonly}>
         <use href="#p-deokj" className="ext" />
         <use href="#p-deokj" className="land" />
         {ISLAND_MAP.deokj?.visited && (
@@ -282,15 +317,15 @@ export function IslandExplorerMap({ selectedId, onSelect }: IslandExplorerMapPro
           </>
         )}
       </IslandGroup>
-      <IslandGroup id="soya" delay="1.5s" title="소야도" selectedId={selectedId} onSelect={onSelect}>
+      <IslandGroup id="soya" delay="1.5s" title="소야도" selectedId={selectedId} onSelect={onSelect} readonly={readonly}>
         <use href="#p-soya" className="ext" />
         <use href="#p-soya" className="land" />
       </IslandGroup>
-      <IslandGroup id="mungap" delay=".6s" title="문갑도" selectedId={selectedId} onSelect={onSelect}>
+      <IslandGroup id="mungap" delay=".6s" title="문갑도" selectedId={selectedId} onSelect={onSelect} readonly={readonly}>
         <use href="#p-mungap" className="ext" />
         <use href="#p-mungap" className="land" />
       </IslandGroup>
-      <IslandGroup id="gureop" delay="1.2s" title="굴업도" selectedId={selectedId} onSelect={onSelect}>
+      <IslandGroup id="gureop" delay="1.2s" title="굴업도" selectedId={selectedId} onSelect={onSelect} readonly={readonly}>
         <use href="#p-gureop" className="ext" />
         <use href="#p-gureop" className="land" />
       </IslandGroup>
@@ -298,6 +333,8 @@ export function IslandExplorerMap({ selectedId, onSelect }: IslandExplorerMapPro
         <rect x="192" y="384" width="66" height="21" rx="10.5" fill="#7A3FD8" />
         <text x="225" y="398.5" fontSize="10.5" fontWeight="800" fill="#fff" textAnchor="middle">덕적도권역</text>
       </g>
+
+      {!readonly && selectedId && <SelectedIslandBoat islandId={selectedId} />}
 
       <g transform="translate(36,414)">
         <circle r="15" fill="#fff" opacity=".95" />

@@ -27,6 +27,7 @@ interface NotificationStore {
   markAsRead: (id: string) => void;
   markAllAsRead: () => void;
   remove: (id: string) => void;
+  removeAll: () => void;
   // TODO: SSE로 실시간 알림 수신 → items 앞에 prepend
 }
 
@@ -49,9 +50,13 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
     setItems((prev) => prev.filter((n) => n.id !== id));
   }, []);
 
+  const removeAll = useCallback(() => {
+    setItems([]);
+  }, []);
+
   const value = useMemo(
-    () => ({ items, unreadCount, markAsRead, markAllAsRead, remove }),
-    [items, unreadCount, markAsRead, markAllAsRead, remove],
+    () => ({ items, unreadCount, markAsRead, markAllAsRead, remove, removeAll }),
+    [items, unreadCount, markAsRead, markAllAsRead, remove, removeAll],
   );
 
   return (

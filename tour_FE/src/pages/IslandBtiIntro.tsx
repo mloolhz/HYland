@@ -13,7 +13,7 @@ export function IslandBtiIntro() {
     <main className="ibti-page">
       <IslandBtiContainer>
         <header className="ibti-head">
-          <span className="ibti-head__eyebrow">ISLAND BTI</span>
+          <span className="ibti-head__eyebrow">ISLAND MBTI</span>
           <h1 className="ibti-head__title">섬BTI로 나의 여행 성향 찾기</h1>
           <p className="ibti-head__sub">
             20가지 질문으로 나만의 섬 여행 유형을 발견해 보세요.
@@ -47,10 +47,7 @@ export function IslandBtiIntro() {
           </div>
         </section>
 
-        <section
-          className="ibti-card ibti-character-unlock"
-          aria-labelledby="ibti-character-unlock-title"
-        >
+        <section className="ibti-character-unlock" aria-labelledby="ibti-character-unlock-title">
           <div className="ibti-character-unlock__content">
             <h2 id="ibti-character-unlock-title" className="ibti-character-unlock__title">
               섬BTI로 나만의 탐험대원을 만나보세요

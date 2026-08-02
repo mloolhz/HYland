@@ -5,6 +5,7 @@ import {
   useImperativeHandle,
   useRef,
   useState,
+  type ComponentType,
 } from "react";
 import type { UserProfile } from "@/lib/user-profile";
 import { useOptionalProfileCharacter } from "@/context/ProfileCharacterContext";
@@ -12,7 +13,12 @@ import { PassportBadgeSpreadPage } from "./PassportBadgeSpreadPage";
 import { PassportProfilePage } from "./PassportProfilePage";
 import type { BookNavState, PassportBookSpread } from "./passport-book-spreads";
 
-const FLIP_MS = 580;
+export type PassportProfilePageComponent = ComponentType<{
+  profile: UserProfile;
+  titleId?: string;
+}>;
+
+const FLIP_MS = 400;
 
 export type PassportBookHandle = {
   goPrev: () => void;
@@ -24,6 +30,7 @@ type PassportBookProps = {
   profile: UserProfile;
   titleId?: string;
   onNavStateChange?: (state: BookNavState) => void;
+  ProfilePage?: PassportProfilePageComponent;
 };
 
 function LeftPage({
@@ -31,16 +38,18 @@ function LeftPage({
   profile,
   titleId,
   totalSpreads,
+  ProfilePage,
 }: {
   spread: PassportBookSpread;
   profile: UserProfile;
   titleId?: string;
   totalSpreads: number;
+  ProfilePage: PassportProfilePageComponent;
 }) {
   return (
     <div className="passport-book__page passport-book__page--left">
       {spread.left.type === "profile" ? (
-        <PassportProfilePage profile={profile} titleId={titleId} />
+        <ProfilePage profile={profile} titleId={titleId} />
       ) : (
         <PassportBadgeSpreadPage
           badges={spread.left.badges}
@@ -73,7 +82,7 @@ function RightPage({
 }
 
 export const PassportBook = forwardRef<PassportBookHandle, PassportBookProps>(function PassportBook(
-  { spreads, profile, titleId, onNavStateChange },
+  { spreads, profile, titleId, onNavStateChange, ProfilePage = PassportProfilePage },
   ref,
 ) {
   const totalSpreads = spreads.length;
@@ -151,7 +160,13 @@ export const PassportBook = forwardRef<PassportBookHandle, PassportBookProps>(fu
         {/* 현재 spread — 고정 grid, document flow 세로 쌓임 없음 */}
         <div className="passport-book__layer passport-book__layer--base">
           <div className="passport-book__page-slot passport-book__page-slot--left">
-            <LeftPage spread={baseLeftSpread} profile={profile} titleId={titleId} totalSpreads={totalSpreads} />
+            <LeftPage
+              spread={baseLeftSpread}
+              profile={profile}
+              titleId={titleId}
+              totalSpreads={totalSpreads}
+              ProfilePage={ProfilePage}
+            />
           </div>
           <div className="passport-book__spine" aria-hidden="true" />
           <div className="passport-book__page-slot passport-book__page-slot--right">
@@ -169,9 +184,7 @@ export const PassportBook = forwardRef<PassportBookHandle, PassportBookProps>(fu
                   totalSpreads={totalSpreads}
                 />
               </div>
-              <div className="passport-book__page-turn-face passport-book__page-turn-face--back" aria-hidden="true">
-                <div className="passport-book__page-paper-back" />
-              </div>
+              <div className="passport-book__page-turn-face passport-book__page-turn-face--back" aria-hidden="true" />
             </div>
           </div>
         )}

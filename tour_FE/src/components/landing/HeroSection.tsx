@@ -1,63 +1,38 @@
-import { useCallback, useEffect, useRef, useState, type RefObject } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthorAvatar } from "@/components/community/AuthorAvatar";
+import { AnimatedWidthBar } from "@/components/mypage/AnimatedWidthBar";
+import { CountUpNumber } from "@/components/mypage/CountUpNumber";
 import { formatNumber } from "@/lib/landing-data";
 import { getCurrentUserProfile, getPassportExpPercent } from "@/lib/user-profile";
+import { demoProps } from "./ToastProvider";
+import {
+  HERO_SLIDE_DURATION_MS,
+  HERO_SLIDE_FADE_MS,
+  HERO_SLIDES,
+} from "@/lib/landing-images";
 import { PassportBookModal } from "./PassportBookModal";
 import { PassportCoverVisual } from "./PassportCoverVisual";
-import { demoProps, useToast } from "./ToastProvider";
 
 /** 패스포트 카드가 로그인 상태로 노출되는 동안 프로필 표시 */
 const SHOW_LANDING_PROFILE = true;
 
-const SLIDE_COUNT = 5;
+const SLIDE_COUNT = HERO_SLIDES.length;
 const CATEGORIES = [
-  ["⛵", "해상 레저"],
-  ["🤿", "수중 레저"],
-  ["🥾", "육상 레저"],
-  ["🎯", "체험·힐링"],
-  ["⋯", "기타 레저"],
+  { icon: "⛵", label: "해상 레저", to: "/sports?category=water" },
+  { icon: "🥾", label: "육상 레저", to: "/sports?category=land" },
+  { icon: "🎯", label: "체험", to: "/sports?category=exp" },
+  { icon: "🌿", label: "힐링", to: "/sports?category=heal" },
 ] as const;
 
-const AGENT_PLACEHOLDERS = [
-  "초보자가 가기 좋은 섬 추천해줘",
-  "당일치기 가능한 섬 추천",
-  "카약 타기 좋은 곳 알려줘",
-] as const;
-
-type HeroSectionProps = {
-  agentInputRef?: RefObject<HTMLTextAreaElement | null>;
-  agentActive?: boolean;
-  onAgentActiveChange?: (active: boolean) => void;
-};
-
-export function HeroSection({
-  agentInputRef,
-  agentActive = false,
-  onAgentActiveChange,
-}: HeroSectionProps) {
-  const { showToast } = useToast();
+export function HeroSection() {
   const profile = getCurrentUserProfile();
   const expPercent = getPassportExpPercent(profile);
   const [activeSlide, setActiveSlide] = useState(0);
   const [showScrollHint, setShowScrollHint] = useState(true);
-  const [agentQuery, setAgentQuery] = useState("");
-  const [agentPlaceholderIndex, setAgentPlaceholderIndex] = useState(0);
-  const [activeCategory, setActiveCategory] = useState<string>(CATEGORIES[0][1]);
   const [passportModalOpen, setPassportModalOpen] = useState(false);
   const passportTriggerRef = useRef<HTMLButtonElement>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const agentPlaceholderTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  const handleAgentSubmit = () => {
-    const query = agentQuery.trim();
-    if (!query) {
-      showToast("질문을 입력해 주세요");
-      return;
-    }
-    showToast("AI 어시스턴트 서비스는 아직 개발중이에요.");
-    setAgentQuery("");
-  };
 
   const startHero = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
@@ -65,8 +40,15 @@ export function HeroSection({
     if (!reduceMotion) {
       timerRef.current = setInterval(() => {
         setActiveSlide((prev) => (prev + 1) % SLIDE_COUNT);
-      }, 5000);
+      }, HERO_SLIDE_DURATION_MS);
     }
+  }, []);
+
+  useEffect(() => {
+    HERO_SLIDES.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
   }, []);
 
   useEffect(() => {
@@ -83,25 +65,6 @@ export function HeroSection({
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => {
-    if (agentPlaceholderTimerRef.current) clearInterval(agentPlaceholderTimerRef.current);
-
-    if (agentQuery.trim() || agentActive) return;
-
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduceMotion) return;
-
-    agentPlaceholderTimerRef.current = setInterval(() => {
-      setAgentPlaceholderIndex((prev) => (prev + 1) % AGENT_PLACEHOLDERS.length);
-    }, 4000);
-
-    return () => {
-      if (agentPlaceholderTimerRef.current) clearInterval(agentPlaceholderTimerRef.current);
-    };
-  }, [agentQuery, agentActive]);
-
-  const agentPlaceholder = AGENT_PLACEHOLDERS[agentPlaceholderIndex];
-
   return (
     <section
       className="hero"
@@ -109,29 +72,24 @@ export function HeroSection({
       onMouseEnter={() => timerRef.current && clearInterval(timerRef.current)}
       onMouseLeave={startHero}
     >
-      <div className="hero-slides" aria-hidden="true">
-        {Array.from({ length: SLIDE_COUNT }, (_, i) => (
-          <div key={i} className={`slide s${i + 1}${activeSlide === i ? " on" : ""}`} />
+      <div
+        className="hero-slides"
+        aria-hidden="true"
+        style={
+          {
+            "--hero-slide-duration": `${HERO_SLIDE_DURATION_MS}ms`,
+            "--hero-slide-fade": `${HERO_SLIDE_FADE_MS}ms`,
+          } as React.CSSProperties
+        }
+      >
+        {HERO_SLIDES.map((src, i) => (
+          <div
+            key={src}
+            className={`slide${activeSlide === i ? " on" : ""}`}
+            style={{ backgroundImage: `url("${src}")` }}
+          />
         ))}
         <div className="hero-shade" />
-      </div>
-
-      <div
-        className={`scroll-indicator${showScrollHint ? "" : " is-hidden"}`}
-        aria-hidden={!showScrollHint}
-      >
-        <span className="scroll-indicator__label">스크롤하여 더 알아보기</span>
-        <a href="#map" className="scroll-indicator__chevron" aria-label="아래로 스크롤하여 더 알아보기">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path
-              d="M7 10l5 5 5-5M7 14l5 5 5-5"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </a>
       </div>
 
       <div className="hero-inner">
@@ -143,88 +101,32 @@ export function HeroSection({
             <br />
             시작하세요
           </h1>
-          <div className="hero-action-group">
-            <p className="hero-sub">
-              <span className="hero-sub-line">해상·수중·육상·체험 레저까지 —</span>
-              <span className="hero-sub-line hero-sub-line--anchor">
-                인천의 섬에서 다양한 레저스포츠를 만나보세요.
-              </span>
-            </p>
+          <p className="hero-sub">
+            해상·수중·육상·체험 레저까지 —
+            <br />
+            인천의 섬에서 다양한 레저스포츠를 만나보세요.
+          </p>
+          <div className="hero-copy-actions">
             <div className="hero-cta">
-              <a className="btn btn-hero-primary" href="#map">
-                탐험 시작하기
-                <span className="btn-hero-arrow" aria-hidden="true">
-                  →
-                </span>
-              </a>
-              <a className="btn btn-hero-secondary" href="#booking">
-                레저 예약 보기
-              </a>
+              <Link className="btn btn-hero-start" to="/islands">
+                탐험 시작하기 →
+              </Link>
             </div>
-          </div>
-          <div className="cats" aria-label="레저 카테고리">
-            {CATEGORIES.map(([icon, label]) => (
-              <button
-                type="button"
-                key={label}
-                className={`cat${activeCategory === label ? " is-active" : ""}`}
-                aria-pressed={activeCategory === label}
-                onClick={() => setActiveCategory(label)}
-              >
-                <i aria-hidden="true">{icon}</i>
-                <span>{label}</span>
-              </button>
-            ))}
+            <div className="cats" aria-label="레저 카테고리">
+              {CATEGORIES.map(({ icon, label, to }, index) => (
+                <Link className={`cat${index === 0 ? " cat--featured" : ""}`} key={label} to={to}>
+                  <i>{icon}</i>
+                  {label}
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
 
-        <div className="hero-side">
-          <div className="pc-agent" id="ai-agent" role="search">
-            <div className={`pc-agent-panel${agentActive ? " is-active" : ""}`}>
-              <div className="pc-agent-head">
-                <span className="pc-agent-title">인천섬 레저누리 AI 추천 서비스</span>
-              </div>
-              <div className="pc-agent-field">
-                <textarea
-                  ref={agentInputRef}
-                  className="pc-agent-input"
-                  value={agentQuery}
-                  onChange={(event) => setAgentQuery(event.target.value)}
-                  onFocus={() => onAgentActiveChange?.(true)}
-                  onBlur={() => onAgentActiveChange?.(false)}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter" && !event.shiftKey) {
-                      event.preventDefault();
-                      handleAgentSubmit();
-                    }
-                  }}
-                  placeholder={agentPlaceholder}
-                  rows={2}
-                  aria-label="AI에게 질문하기"
-                />
-                <button
-                  type="button"
-                  className="pc-agent-send"
-                  onClick={handleAgentSubmit}
-                  aria-label="질문 보내기"
-                  disabled={!agentQuery.trim()}
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path
-                      d="M12 19V5M12 5l-6 6M12 5l6 6"
-                      stroke="currentColor"
-                      strokeWidth="2.25"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-          <aside className="pass-card" aria-label="나의 i-바다패스">
+        <div className="pass-card-wrap">
+          <aside className="pass-card" aria-label="나의 섬 여권">
             <div className="pc-head">
-              <h3>나의 i-바다패스</h3>
+              <h3>나의 섬 여권</h3>
               {SHOW_LANDING_PROFILE ? (
                 <Link to="/mypage" className="pc-profile-link">
                   <AuthorAvatar author={{ nickname: profile.nickname }} className="pc-profile-avatar" />
@@ -250,14 +152,9 @@ export function HeroSection({
                   <PassportCoverVisual />
                 </button>
               ) : (
-                <Link
-                  to="/login"
-                  className="passport-cover passport-cover--link"
-                  aria-label="로그인 후 여권 보기"
-                  {...demoProps("로그인 후 여권을 확인할 수 있어요")}
-                >
+                <div className="passport-cover" aria-hidden="true">
                   <PassportCoverVisual />
-                </Link>
+                </div>
               )}
 
               <div className="passport-info">
@@ -274,72 +171,44 @@ export function HeroSection({
                     aria-valuemax={100}
                     aria-label="경험치 진행률"
                   >
-                    <span className="passport-progress-fill" style={{ width: `${expPercent}%` }} />
+                    <AnimatedWidthBar width={expPercent} className="passport-progress-fill" />
                   </div>
                   <p className="passport-exp">
-                    EXP {formatNumber(profile.expCurrent)} / {formatNumber(profile.expMax)}
+                    EXP{" "}
+                    <CountUpNumber value={profile.expCurrent} delay={200} format={formatNumber} />
+                    {" / "}
+                    {formatNumber(profile.expMax)}
                   </p>
                 </div>
 
                 <div className="passport-metrics" aria-label="탐험 현황">
                   <div className="passport-metric">
-                    <b>{profile.visitedIslandCount}</b>
+                    <CountUpNumber value={profile.visitedIslandCount} delay={320} className="passport-metric__value" />
                     <span>방문 섬</span>
                   </div>
                   <div className="passport-metric">
-                    <b>{profile.completedMissions}</b>
+                    <CountUpNumber value={profile.completedMissions} delay={400} className="passport-metric__value" />
                     <span>완료 미션</span>
                   </div>
                   <div className="passport-metric">
-                    <b>{profile.earnedBadgeCount}</b>
+                    <CountUpNumber value={profile.earnedBadgeCount} delay={480} className="passport-metric__value" />
                     <span>획득 배지</span>
                   </div>
                 </div>
-
-                {SHOW_LANDING_PROFILE ? (
-                  <Link to="/mypage" className="btn-passport-view">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <rect x="4" y="2" width="16" height="20" rx="2" stroke="currentColor" strokeWidth="1.8" />
-                      <circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="1.8" />
-                      <path d="M8 17c.8-2 2.2-3 4-3s3.2 1 4 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                    </svg>
-                    여권 보기
-                  </Link>
-                ) : (
-                  <Link to="/login" className="btn-passport-view" {...demoProps("로그인 후 여권을 확인할 수 있어요")}>
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <rect x="4" y="2" width="16" height="20" rx="2" stroke="currentColor" strokeWidth="1.8" />
-                      <circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="1.8" />
-                      <path d="M8 17c.8-2 2.2-3 4-3s3.2 1 4 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                    </svg>
-                    여권 보기
-                  </Link>
-                )}
               </div>
             </div>
 
             <div className="quick-grid">
-              <span className="q" {...demoProps("추천 섬 페이지는 준비 중이에요")}>
+              <Link className="q" to="/islands">
                 <i>📍</i>추천 섬
-              </span>
-              <Link to="/island-bti" className="q">
+              </Link>
+              <Link className="q" to="/island-bti">
                 <i>🏝️</i>섬BTI
               </Link>
-              <span className="q" {...demoProps("레저 예약은 아래 섹션에서 미리 만나보세요")}>
-                <i>📅</i>레저 예약
-              </span>
               <span className="q" {...demoProps("안전 정보 페이지는 준비 중이에요")}>
-                <i aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <circle cx="12" cy="12" r="8.5" stroke="currentColor" strokeWidth="1.8" />
-                    <circle cx="12" cy="12" r="3.5" stroke="currentColor" strokeWidth="1.8" />
-                    <path d="M12 4.5v2M12 17.5v2M4.5 12h2M17.5 12h2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                  </svg>
-                </i>
-                안전 정보
+                <i>🛟</i>안전 정보
               </span>
             </div>
-            <p className="pc-foot">로그인하면 방문 기록 · 미션 · 배지가 여권에 자동 저장돼요</p>
           </aside>
           <a
             className="btn-ipass"
@@ -350,6 +219,21 @@ export function HeroSection({
             <span className="ip-badge">인천시민</span>인천 i 바다패스로 예매하기<span className="ip-arrow">→</span>
           </a>
         </div>
+      </div>
+
+      <div className={`hero-scroll-hint${showScrollHint ? "" : " is-hidden"}`}>
+        <span className="hero-scroll-label">스크롤하여 더 알아보기</span>
+        <a href="#map" className="hero-scroll-chevron" aria-label="아래로 스크롤하여 더 알아보기">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M7 10l5 5 5-5M7 14l5 5 5-5"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </a>
       </div>
 
       <PassportBookModal
