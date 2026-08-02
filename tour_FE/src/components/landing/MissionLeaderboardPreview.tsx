@@ -4,8 +4,9 @@ import { avaColor, formatNumber, LANDING_LEADERBOARD } from "@/lib/landing-data"
 const PODIUM_ORDER = [2, 1, 3] as const;
 const MEDALS = ["🥈", "🏆", "🥉"] as const;
 
-const topThree = LANDING_LEADERBOARD.slice(0, 3);
-const restRanks = LANDING_LEADERBOARD.slice(3);
+const PREVIEW_LEADERBOARD = LANDING_LEADERBOARD.slice(0, 5);
+const topThree = PREVIEW_LEADERBOARD.slice(0, 3);
+const restRanks = PREVIEW_LEADERBOARD.slice(3);
 
 /** 랜딩 미션 섹션 우측 — 비로그인용 리더보드 프리뷰 */
 export function MissionLeaderboardPreview() {
