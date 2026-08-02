@@ -3,7 +3,7 @@ import type { BookingMethod } from "@/data/sports";
 const DODO_OFFICIAL: BookingMethod = {
   type: "official",
   label: "도도하게 살아보기 예약",
-  url: "https://www.dodohansum.com",
+  url: "https://www.tour08.co.kr/home/event/event_view.asp?te_idx=130",
 };
 
 const ISUM_THEME_LIST =

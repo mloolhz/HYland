@@ -1,4 +1,5 @@
 import { SPORTS_CATEGORIES, SPORTS_DATA, type CategoryKey } from "@/data/sports";
+import { serializeActivitiesQuery } from "@/lib/query";
 
 export type CommunityActivityGroup = {
   key: CategoryKey;
@@ -14,3 +15,9 @@ export const COMMUNITY_ACTIVITY_OPTIONS: CommunityActivityGroup[] = SPORTS_CATEG
     activities: SPORTS_DATA[cat.key].map((sport) => sport.name),
   }),
 );
+
+/** 종목명 → 커뮤니티 활동 필터 URL (`/community?activities=...`) */
+export function buildCommunitySportHref(sportName: string): string {
+  const serialized = serializeActivitiesQuery(new Set([sportName]));
+  return serialized ? `/community?activities=${serialized}` : "/community";
+}

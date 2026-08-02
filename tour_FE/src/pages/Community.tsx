@@ -21,7 +21,7 @@ import {
   totalPages,
   type SortKey,
 } from "@/lib/posts";
-import { parseIslandsQuery, parsePageQuery, serializeIslandsQuery } from "@/lib/query";
+import { parseActivitiesQuery, parseIslandsQuery, parsePageQuery, serializeIslandsQuery } from "@/lib/query";
 import { saveCommunityListSearch } from "@/lib/community-list-state";
 
 function parseView(value: string | null): ViewKey {
@@ -52,6 +52,7 @@ export function Community() {
   const sort = parseSort(searchParams.get("sort"));
   const category = parseCategory(searchParams.get("category"));
   const islands = useMemo(() => parseIslandsQuery(searchParams.get("islands")), [searchParams]);
+  const activities = useMemo(() => parseActivitiesQuery(searchParams.get("activities")), [searchParams]);
   const query = searchParams.get("q") ?? "";
   const page = parsePageQuery(searchParams.get("page"));
 
@@ -110,8 +111,8 @@ export function Community() {
   );
 
   const filtered = useMemo(
-    () => filterPosts(posts, { category, islands, query }),
-    [posts, category, islands, query],
+    () => filterPosts(posts, { category, islands, activities, query }),
+    [posts, category, islands, activities, query],
   );
   const sorted = useMemo(() => sortPosts(filtered, sort), [filtered, sort]);
   const galleryPosts = useMemo(

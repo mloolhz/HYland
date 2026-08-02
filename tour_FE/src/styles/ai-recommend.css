@@ -223,6 +223,11 @@ body:has(.ai-page) {
   transition: all 0.15s;
 }
 
+button.ai-rec-btn {
+  font: inherit;
+  cursor: default;
+}
+
 .ai-rec-btn--external {
   background: #fff;
   color: #1a1a1a;
@@ -258,6 +263,19 @@ body:has(.ai-page) {
 
 .ai-rec-btn--ghost:hover {
   background: #eef3fc;
+}
+
+.ai-rec-btn--community {
+  background: #fff;
+  color: #4a5567;
+  border-color: #cbd5e1;
+  box-shadow: none;
+}
+
+.ai-rec-btn--community:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: #33445f;
 }
 
 .ai-rec-external {

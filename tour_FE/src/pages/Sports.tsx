@@ -13,6 +13,7 @@ import {
   resolveSportIslandAccent,
   resolveSportIslandRegion,
 } from "@/lib/sports-region";
+import { SportCommunityLink } from "@/components/sports/SportCommunityLink";
 import { CONTAINER } from "@/constants/layout";
 
 const HERO_IMAGE = "/_Pngtree_progressive_leisure_jet_boat_aquatics_16900908.jpg";
@@ -71,17 +72,12 @@ function BookingMethodLink({
   if (!method.url) return null;
 
   return (
-    <a
-      className="sp-booking-btn sp-booking-btn--external"
-      href={method.url}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
+    <button type="button" className="sp-booking-btn sp-booking-btn--external">
       <span className="sp-booking-btn-label">{method.label}</span>
       <span className="sp-booking-btn-external" aria-hidden="true">
         ↗
       </span>
-    </a>
+    </button>
   );
 }
 
@@ -239,9 +235,12 @@ export function Sports() {
                   <MetaRow label="가격" value={selected.price} />
                   <MetaRow label="가능 시기" value={selected.season} />
                 </div>
-                <span className={`sp-badge${selected.pay ? " sp-badge--pay" : ""}`}>
-                  {selected.pay ? "예약/시설 이용" : "자유 활동"}
-                </span>
+                <div className="sp-detail-cta">
+                  <span className={`sp-badge${selected.pay ? " sp-badge--pay" : ""}`}>
+                    {selected.pay ? "예약/시설 이용" : "자유 활동"}
+                  </span>
+                  <SportCommunityLink sportName={selected.name} />
+                </div>
               </div>
             </section>
 
