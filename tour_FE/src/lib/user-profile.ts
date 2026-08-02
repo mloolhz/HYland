@@ -92,9 +92,11 @@ export function getLeaderboardRank(period: LeaderboardPeriod = "month") {
 
 /** 데모 사용자의 카테고리별 미션 포인트 — 공개 리더보드에는 미포함 */
 export const MY_CATEGORY_POINTS: Record<MissionCategory, number> = {
-  탐험: 1520,
-  레저: 980,
-  생태: 1780,
+  섬: 1520,
+  해상: 980,
+  육상: 1240,
+  체험: 1780,
+  힐링: 1410,
   기타: 1610,
 };
 
@@ -130,7 +132,7 @@ export function getCategoryLeaderboardRank(category: MissionCategory) {
   };
 }
 
-/** 4개 카테고리 전체의 내 순위 요약 */
+/** 카테고리 전체의 내 순위 요약 */
 export function getAllCategoryRanks() {
   return MISSION_CATEGORIES.map((category) => getCategoryLeaderboardRank(category));
 }

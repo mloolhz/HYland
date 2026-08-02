@@ -8,7 +8,7 @@ type LeaderboardSectionProps = {
 };
 
 export function LeaderboardSection({ onGoToLogin }: LeaderboardSectionProps) {
-  const [category, setCategory] = useState<MissionCategory>("탐험");
+  const [category, setCategory] = useState<MissionCategory>("섬");
   const data = CATEGORY_LEADERBOARD[category];
 
   const handleLogin = () => {
@@ -34,7 +34,7 @@ export function LeaderboardSection({ onGoToLogin }: LeaderboardSectionProps) {
           <div className="lb-top">
             <div className="lb-bar">
               <div className="lb-title">
-                LEADERBOARD <small>미션 카테고리별 순위</small>
+                LEADERBOARD <small>미션 &amp; 인증 카테고리별 순위</small>
               </div>
               <div className="lb-tabs" role="tablist">
                 {MISSION_CATEGORIES.map((c) => (

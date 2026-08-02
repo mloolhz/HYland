@@ -6,20 +6,19 @@ import { IslandBadgeList } from "./IslandBadgeList";
 
 type IslandDetailPanelProps = {
   island: IslandInfo | null;
-  isOpen: boolean;
   onClose: () => void;
 };
 
-export function IslandDetailPanel({ island, isOpen, onClose }: IslandDetailPanelProps) {
+export function IslandDetailPanel({ island, onClose }: IslandDetailPanelProps) {
   if (!island) {
     return (
-      <aside className="isl-detail" aria-label="섬 상세 정보">
+      <aside className="isl-detail isl-detail--empty" aria-label="섬 상세 정보">
         <div className="isl-detail-empty">
           <div className="isl-detail-empty-icon" aria-hidden="true">
-            🗺️
+            🏝️
           </div>
           <h3>섬을 선택해 주세요</h3>
-          <p>지도에서 섬을 클릭하면 탐험 정보를 확인할 수 있어요.</p>
+          <p>지도에서 섬을 클릭하면 상세 정보를 확인할 수 있어요</p>
         </div>
       </aside>
     );
@@ -29,13 +28,9 @@ export function IslandDetailPanel({ island, isOpen, onClose }: IslandDetailPanel
 
   return (
     <>
-      <div
-        className={`isl-detail-backdrop${isOpen ? " is-open" : ""}`}
-        onClick={onClose}
-        aria-hidden="true"
-      />
+      <div className="isl-detail-backdrop is-open" onClick={onClose} aria-hidden="true" />
       <aside
-        className={`isl-detail${isOpen ? " is-open" : ""}`}
+        className="isl-detail is-open"
         aria-label={`${island.name} 상세 정보`}
         role="dialog"
         aria-modal="true"

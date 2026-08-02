@@ -140,16 +140,73 @@
 
 /* ── Main layout ── */
 .isl-main {
-  display: grid;
-  grid-template-columns: 1fr 360px;
-  gap: 24px;
-  align-items: start;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
 }
 
 .isl-map-area {
+  flex: 1 1 0;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+.isl-detail-slot {
+  flex: 0 0 300px;
+  width: 300px;
+  min-width: 300px;
+}
+
+.isl-detail-slot .isl-detail-backdrop {
+  display: none;
+}
+
+.isl-region-toggle {
+  --isl-toggle-radius: 10px;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  width: 100%;
+  gap: 2px;
+  padding: 4px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-lg);
+  box-sizing: border-box;
+}
+
+.isl-region-toggle__btn {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  padding: 8px 2px;
+  border-radius: var(--isl-toggle-radius);
+  font-size: 11.5px;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  text-align: center;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+  white-space: nowrap;
+}
+
+.isl-region-toggle__btn:hover {
+  color: var(--navy);
+}
+
+.isl-region-toggle__btn.is-active {
+  background: var(--blue);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(45, 46, 107, 0.22);
 }
 
 .isl-map-toolbar {
@@ -197,23 +254,132 @@
 }
 
 .isl-map-card {
+  width: 100%;
   background: #fff;
   border-radius: 16px;
   border: 1px solid var(--line);
   box-shadow: var(--shadow-lg);
-  padding: 16px;
+  padding: 10px;
+  overflow: visible;
+}
+
+.isl-map-interactive {
+  position: relative;
+  width: 100%;
+  isolation: isolate;
+}
+
+.isl-map-wrap {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  border-radius: 10px;
   overflow: hidden;
+}
+
+.isl-map-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  font-family: var(--font);
 }
 
 .isl-map-card svg {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
   font-family: var(--font);
 }
 
 .isl-map-card svg text {
   font-family: var(--font);
+}
+
+.isl-map-tooltip {
+  position: absolute;
+  z-index: 40;
+  pointer-events: none;
+  transform: translate(-50%, calc(-100% - 14px));
+  min-width: 128px;
+  padding: 10px 12px 9px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid var(--line);
+  box-shadow: 0 10px 28px rgba(45, 46, 107, 0.16);
+}
+
+.isl-map-tooltip::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  width: 12px;
+  height: 12px;
+  transform: translateX(-50%) rotate(45deg);
+  background: #fff;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.isl-map-tooltip__name {
+  margin: 0 0 6px;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--navy);
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.isl-map-tooltip__status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  font-size: 11.5px;
+  font-weight: 800;
+  line-height: 1.2;
+  border-radius: 999px;
+  padding: 5px 10px;
+}
+
+.isl-map-tooltip__status.is-visited {
+  color: #0f6e56;
+  background: #e1f5ee;
+}
+
+.isl-map-tooltip__status.is-unvisited {
+  color: #5f6b7c;
+  background: #eef2f7;
+}
+
+.isl-map-tooltip__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.isl-map-tooltip__status.is-visited .isl-map-tooltip__dot {
+  background: var(--green);
+}
+
+.isl-map-tooltip__status.is-unvisited .isl-map-tooltip__dot {
+  background: #c9d6e2;
+  border: 1.5px solid #9fb2c4;
+}
+
+@keyframes islTooltipIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-100% - 8px));
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, calc(-100% - 14px));
+  }
 }
 
 /* ── Interactive map islands ── */
@@ -271,7 +437,22 @@
   filter: none;
 }
 
-.isl-map-has-selection .isl-explorer:not(.selected) {
+.isl-explorer.is-dimmed {
+  opacity: 0.16;
+  transition: opacity 0.28s ease, filter 0.28s ease;
+}
+
+.isl-explorer.is-dimmed:hover,
+.isl-explorer.is-dimmed:focus-visible {
+  opacity: 0.82;
+}
+
+.isl-region-pill.is-dimmed {
+  opacity: 0.14;
+  transition: opacity 0.28s ease;
+}
+
+.isl-map-has-selection .isl-explorer:not(.selected):not(.is-dimmed) {
   opacity: 0.58;
 }
 
@@ -279,9 +460,82 @@
   filter: url(#isl-fog) saturate(0.2);
 }
 
+/* Image overlay: transparent SVG hit polygons */
+.isl-map-svg .isl-explorer {
+  animation: none;
+  filter: none;
+  cursor: pointer;
+}
+
+.isl-map-svg image {
+  pointer-events: none;
+}
+
+.isl-map-svg .isl-map-region-dim {
+  fill: rgba(5, 14, 38, 0.72);
+  pointer-events: none;
+}
+
+.isl-map-svg .isl-hit-area,
+.isl-map-svg .isl-explorer.todo .isl-hit-area,
+.isl-map-svg .isl-explorer.done .isl-hit-area {
+  fill: transparent;
+  stroke: none;
+  stroke-width: 2.5;
+  filter: none;
+  transition: fill 0.15s ease, stroke 0.15s ease, stroke-width 0.15s ease, filter 0.15s ease;
+  pointer-events: fill;
+}
+
+.isl-map-svg .isl-explorer.todo,
+.isl-map-svg .isl-explorer.done,
+.isl-map-svg .isl-explorer.todo.selected,
+.isl-map-svg .isl-explorer.done.selected {
+  filter: none;
+}
+
+.isl-map-svg.isl-map-has-region .isl-explorer:not(.is-dimmed) .isl-hit-area {
+  fill: color-mix(in srgb, var(--isl-region-color) 26%, transparent);
+  stroke: var(--isl-region-color);
+  stroke-width: 3;
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--isl-region-color) 55%, transparent));
+}
+
+.isl-map-svg .isl-explorer:hover .isl-hit-area,
+.isl-map-svg .isl-explorer:focus-visible .isl-hit-area {
+  fill: color-mix(in srgb, var(--isl-region-color) 44%, transparent);
+  stroke: var(--isl-region-color);
+  stroke-width: 3.5;
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--isl-region-color) 75%, transparent));
+}
+
+.isl-map-svg .isl-explorer.is-dimmed:hover .isl-hit-area,
+.isl-map-svg .isl-explorer.is-dimmed:focus-visible .isl-hit-area {
+  fill: color-mix(in srgb, var(--isl-region-color) 36%, transparent);
+  stroke: var(--isl-region-color);
+  stroke-width: 3;
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--isl-region-color) 65%, transparent));
+}
+
+.isl-map-svg .isl-explorer.selected .isl-hit-area,
+.isl-map-svg .isl-explorer.todo.selected .isl-hit-area,
+.isl-map-svg .isl-explorer.done.selected .isl-hit-area {
+  fill: color-mix(in srgb, var(--isl-region-color) 34%, transparent);
+  stroke: var(--isl-region-color);
+  stroke-width: 3.5;
+  filter: drop-shadow(0 0 12px color-mix(in srgb, var(--isl-region-color) 80%, transparent));
+}
+
+.isl-map-svg.isl-map-has-selection .isl-explorer:not(.selected),
+.isl-map-svg.isl-map-has-selection .isl-explorer:not(.selected).todo,
+.isl-map-svg.isl-map-has-selection .isl-explorer:not(.selected).done {
+  opacity: 1;
+  filter: none;
+}
+
 .isl-selected-marker {
   pointer-events: none;
-  filter: drop-shadow(0 2px 4px rgba(15, 35, 80, 0.4));
+  filter: drop-shadow(0 3px 6px rgba(15, 35, 80, 0.45));
 }
 
 .isl-boat-icon {
@@ -327,10 +581,10 @@
 @keyframes islBoatBob {
   0%,
   100% {
-    transform: scale(0.62) translateY(0);
+    transform: scale(1) translateY(0);
   }
   50% {
-    transform: scale(0.62) translateY(-1.5px);
+    transform: scale(1) translateY(-2.5px);
   }
 }
 
@@ -355,9 +609,13 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
-  min-height: 360px;
+  min-height: 320px;
   padding: 32px 24px;
   text-align: center;
+}
+
+.isl-detail--empty {
+  min-height: 400px;
 }
 
 .isl-detail-empty-icon {
@@ -641,7 +899,33 @@
 
 @media (max-width: 1024px) {
   .isl-main {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
+
+  .isl-detail-slot {
+    flex: none;
+    width: auto;
+    min-width: 0;
+    height: 0;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .isl-detail-slot .isl-detail-backdrop {
+    display: block;
+  }
+
+  .isl-region-toggle {
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 4px;
+  }
+
+  .isl-region-toggle__btn {
+    flex: 1 1 calc(33.333% - 4px);
+    min-width: calc(33.333% - 4px);
+    font-size: 11px;
+    padding: 7px 4px;
   }
 
   .isl-detail {
@@ -653,7 +937,6 @@
     max-height: 78vh;
     overflow-y: auto;
     transform: translateY(100%);
-    transition: transform 0.32s cubic-bezier(0.22, 0.7, 0.3, 1);
     box-shadow: 0 -12px 40px rgba(45, 46, 107, 0.18);
   }
 
@@ -669,7 +952,6 @@
     background: rgba(15, 35, 60, 0.45);
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.28s;
   }
 
   .isl-detail-backdrop.is-open {
@@ -698,6 +980,10 @@
 }
 
 @media (max-width: 640px) {
+  .isl-map-wrap {
+    height: min(340px, 48vh);
+  }
+
   .isl-header-inner {
     flex-direction: column;
     align-items: flex-start;
@@ -719,6 +1005,19 @@
 
 @media (prefers-reduced-motion: reduce) {
   .isl-explorer {
+    animation: none;
+  }
+
+  .isl-map-tooltip {
+    animation: none;
+  }
+
+  .isl-main,
+  .isl-map-card,
+  .isl-map-area,
+  .isl-detail-slot,
+  .isl-detail-slot .isl-detail {
+    transition: none;
     animation: none;
   }
 

@@ -1,5 +1,7 @@
 import type { CSSProperties } from "react";
 import { CATEGORY_META, missionQuestPercent, missionQuestState, type MissionQuest } from "@/mocks/missions";
+import { IslandStampNameArt } from "./IslandStampNameArt";
+import { SPORT_BADGE_ICONS } from "./sport-badge-icons";
 
 type MissionBadgeProps = {
   quest: MissionQuest;
@@ -14,6 +16,10 @@ export function MissionBadge({ quest, size = 96, tooltip = true }: MissionBadgeP
   const state = missionQuestState(quest);
   const percent = missionQuestPercent(quest);
   const { color } = CATEGORY_META[quest.category];
+  const isIslandBadge = quest.category === "섬";
+  const islandName = isIslandBadge ? quest.title.replace(/ 방문$/, "") : "";
+  const foilColor =
+    quest.tier === "전설" ? "#C99A2E" : quest.tier === "희귀" ? "#97A3B2" : color;
   const nearComplete = state === "doing" && percent >= 67;
   const tierClass = quest.tier === "전설" ? "legend" : quest.tier === "희귀" ? "rare" : "common";
 
@@ -30,12 +36,15 @@ export function MissionBadge({ quest, size = 96, tooltip = true }: MissionBadgeP
         ? `진행 ${percent}% · ${quest.target - quest.current}${quest.unit} 남음`
         : `${quest.target}${quest.unit} 달성 시 획득`;
 
+  const sportIcon = quest.sportId ? SPORT_BADGE_ICONS[quest.sportId] : null;
+
   return (
     <div
       className={[
         "mbadge",
         `mbadge--${state}`,
         `mbadge--${tierClass}`,
+        isIslandBadge ? "mbadge--island" : "",
         nearComplete ? "mbadge--near" : "",
         tooltip ? "mbadge--interactive" : "",
       ]
@@ -65,18 +74,38 @@ export function MissionBadge({ quest, size = 96, tooltip = true }: MissionBadgeP
           </g>
         )}
 
-        <text className="mbadge__stars" x="50" y="26" textAnchor="middle">
-          ★ ★ ★
-        </text>
-        <line className="mbadge__divider" x1="35" y1="64" x2="65" y2="64" />
-        <text className="mbadge__label" x="50" y="79" textAnchor="middle">
-          {quest.category}
-        </text>
+        {isIslandBadge ? (
+          <g className="mbadge__island-art">
+            <circle className="mbadge__island-halo" cx="50" cy="50" r="24" />
+            {[0, 45, 90, 135, 180, 225, 270, 315].map((deg) => {
+              const rad = (deg * Math.PI) / 180;
+              const x = 50 + Math.cos(rad) * 31;
+              const y = 50 + Math.sin(rad) * 31;
+              return <circle key={deg} className="mbadge__island-spark" cx={x} cy={y} r="0.85" />;
+            })}
+            <IslandStampNameArt questId={quest.id} islandName={islandName} foilColor={foilColor} />
+          </g>
+        ) : (
+          <>
+            <text className="mbadge__stars" x="50" y="26" textAnchor="middle">
+              ★ ★ ★
+            </text>
+            <line className="mbadge__divider" x1="35" y1="64" x2="65" y2="64" />
+            <text className="mbadge__label" x="50" y="79" textAnchor="middle">
+              {quest.category}
+            </text>
+          </>
+        )}
       </svg>
 
-      <span className="mbadge__emoji" aria-hidden="true">
-        {quest.icon}
-      </span>
+      {!isIslandBadge && (
+        <span
+          className={`mbadge__emoji${sportIcon ? " mbadge__emoji--svg" : ""}`}
+          aria-hidden="true"
+        >
+          {sportIcon ?? quest.icon}
+        </span>
+      )}
 
       {state === "earned" && (
         <span className="mbadge__seal" aria-hidden="true">

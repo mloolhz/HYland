@@ -1,21 +1,14 @@
 import type { MissionCategory } from "@/mocks/missions";
+import { SEASON_REWARDS, type SeasonReward } from "@/mocks/missions";
 
-export type LeaderboardPeriod = "week" | "month" | "all";
+export type { SeasonReward };
+export { SEASON_REWARDS };
 
 export type LeaderboardEntry = [name: string, points: number];
 
-/** 랜딩 미션 섹션 프리뷰용 순위 — 비로그인 구경용 더미 (5위까지) */
-export const LANDING_LEADERBOARD: LeaderboardEntry[] = [
-  ["바다별탐험가", 2480],
-  ["섬마스터", 2310],
-  ["등대지기", 2150],
-  ["갯바위", 1985],
-  ["인천갈매기", 1820],
-];
-
-/** 미션 카테고리별 리더보드 — API 연동 전 임시 데이터 */
+/** 미션 & 인증 카테고리별 리더보드 — API 연동 전 임시 데이터 */
 export const CATEGORY_LEADERBOARD: Record<MissionCategory, LeaderboardEntry[]> = {
-  탐험: [
+  섬: [
     ["바다별탐험가", 2480],
     ["섬마스터", 2310],
     ["등대지기", 2150],
@@ -26,21 +19,43 @@ export const CATEGORY_LEADERBOARD: Record<MissionCategory, LeaderboardEntry[]> =
     ["서해바람", 1340],
     ["트레일홀릭", 1180],
   ],
-  레저: [
+  해상: [
     ["카약조아", 2620],
     ["SUP러버", 2440],
-    ["라이딩킹", 2285],
     ["파도소리", 2090],
-    ["영종라이더", 1930],
     ["물때달인", 1770],
+    ["영종라이더", 1930],
     ["갯바위", 1610],
     ["섬돌이", 1450],
     ["바다별탐험가", 1295],
+    ["서핑러버", 1185],
   ],
-  생태: [
+  육상: [
+    ["라이딩킹", 2285],
+    ["트레일홀릭", 2040],
+    ["영종라이더", 1880],
+    ["섬돌이", 1720],
+    ["백패커준", 1560],
+    ["파도소리", 1410],
+    ["인천갈매기", 1270],
+    ["갯바위", 1140],
+    ["덕적드림", 1010],
+  ],
+  체험: [
     ["갯바위", 2350],
     ["물때달인", 2180],
+    ["백령홀릭", 1550],
+    ["섬돌이", 1875],
+    ["파도소리", 1710],
+    ["덕적드림", 1400],
+    ["인천갈매기", 1260],
+    ["서해바람", 1120],
+    ["카약조아", 980],
+  ],
+  힐링: [
     ["노을수집가", 2020],
+    ["갯바위", 2350],
+    ["물때달인", 2180],
     ["섬돌이", 1875],
     ["파도소리", 1710],
     ["백령홀릭", 1550],
@@ -61,29 +76,22 @@ export const CATEGORY_LEADERBOARD: Record<MissionCategory, LeaderboardEntry[]> =
   ],
 };
 
+/** 랜딩 리더보드 프리뷰 호환 — 섬 카테고리 기준 */
+export const LANDING_LEADERBOARD: LeaderboardEntry[] = CATEGORY_LEADERBOARD.섬;
+
 /** 순위 변동 (지난주 대비) — 양수 상승, 음수 하락, 0 동일, "new" 신규 진입. CATEGORY_LEADERBOARD 인덱스와 매칭 */
 export type RankDelta = number | "new";
 
 export const CATEGORY_RANK_DELTAS: Record<MissionCategory, RankDelta[]> = {
-  탐험: [1, -1, 2, 0, "new", -2, 1, 0, 3],
-  레저: [0, 2, -1, 1, 0, 3, -2, "new", 1],
-  생태: [2, 0, 1, -1, "new", 0, 2, -3, 1],
+  섬: [1, -1, 2, 0, "new", -2, 1, 0, 3],
+  해상: [0, 2, -1, 1, 0, 3, -2, "new", 1],
+  육상: [1, 0, -1, 2, "new", -1, 0, 3, -2],
+  체험: [2, 0, 1, -1, "new", 0, 2, -3, 1],
+  힐링: [0, 2, -1, 1, 0, "new", -2, 1, 0],
   기타: [1, -2, 0, 3, -1, 0, "new", 2, -1],
 };
 
-/** 시즌 순위 보상 안내 */
-export type SeasonReward = {
-  rank: string;
-  medal: string;
-  title: string;
-  desc: string;
-};
-
-export const SEASON_REWARDS: SeasonReward[] = [
-  { rank: "1위", medal: "🏆", title: "골드 탐험가 배지", desc: "여권 특별 스탬프 + 프로필 골드 테두리" },
-  { rank: "2·3위", medal: "🥈", title: "실버 탐험가 배지", desc: "여권 특별 스탬프 지급" },
-  { rank: "4~10위", medal: "🥉", title: "브론즈 탐험가 배지", desc: "여권 기본 스탬프 지급" },
-];
+export type LeaderboardPeriod = "week" | "month" | "all";
 
 export const LEADERBOARD: Record<LeaderboardPeriod, LeaderboardEntry[]> = {
   week: [
