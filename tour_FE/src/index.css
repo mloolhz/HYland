@@ -400,8 +400,8 @@ html.site-menu-open{overflow:hidden;overscroll-behavior:none}
 .lb-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:30px}
 .lb-title{font-size:21px;font-weight:900;letter-spacing:.02em;display:flex;align-items:center;gap:10px}
 .lb-title small{font-size:12px;font-weight:600;color:#A9C2EA;letter-spacing:0}
-.lb-tabs{display:flex;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:3px}
-.lb-tabs button{font-size:13px;font-weight:800;color:#C6D8F5;padding:7px 18px;border-radius:6px;transition:.15s}
+.lb-tabs{display:flex;flex-wrap:wrap;gap:3px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:3px}
+.lb-tabs button{font-size:12.5px;font-weight:800;color:#C6D8F5;padding:7px 14px;border-radius:6px;transition:.15s;white-space:nowrap}
 .lb-tabs button.on{background:#fff;color:var(--navy)}
 .podium{position:relative;z-index:2;display:flex;justify-content:center;align-items:flex-end;gap:34px}
 .pd{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:118px}

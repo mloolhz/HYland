@@ -3,8 +3,8 @@ import { MissionBadge } from "./MissionBadge";
 import { MissionSummary } from "./MissionSummary";
 import { MISSION_QUESTS, missionQuestState, type MissionQuest } from "@/mocks/missions";
 
-/** 랜딩 프리뷰: 4개 카테고리 + 획득/진행/전설이 골고루 보이도록 큐레이션 */
-const PREVIEW_IDS = [1, 3, 5, 6, 11, 13, 16, 22];
+/** 랜딩 프리뷰: 6개 카테고리 + 획득/진행/전설이 골고루 보이도록 큐레이션 */
+const PREVIEW_IDS = [1, 10, 15, 30, 35, 49, 34, 44];
 
 const PREVIEW_BADGES = PREVIEW_IDS.map((id) => MISSION_QUESTS.find((q) => q.id === id)).filter(
   (q): q is MissionQuest => Boolean(q),

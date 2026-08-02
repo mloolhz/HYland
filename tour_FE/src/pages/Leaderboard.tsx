@@ -26,7 +26,7 @@ function RankDeltaBadge({ delta }: { delta: RankDelta | undefined }) {
 }
 
 export function LeaderboardView() {
-  const [category, setCategory] = useState<MissionCategory>("탐험");
+  const [category, setCategory] = useState<MissionCategory>("섬");
   const data = CATEGORY_LEADERBOARD[category];
   const deltas = CATEGORY_RANK_DELTAS[category];
   const me = getCurrentUserProfile();

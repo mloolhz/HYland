@@ -786,6 +786,23 @@
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.14));
 }
 
+.mbadge__emoji--svg {
+  display: grid;
+  place-items: center;
+  width: 0.95em;
+  height: 0.95em;
+  color: var(--foil, var(--cat));
+}
+
+.mbadge__emoji--svg svg {
+  width: 100%;
+  height: 100%;
+}
+
+.mbadge--locked .mbadge__emoji--svg {
+  color: #aeb8c4;
+}
+
 .mbadge--doing .mbadge__emoji {
   opacity: 0.9;
 }
@@ -793,6 +810,68 @@
 .mbadge--locked .mbadge__emoji {
   filter: grayscale(1);
   opacity: 0.42;
+}
+
+/* 섬 배지 — SVG 텍스트 스탬프 아트 */
+.mbadge__island-art {
+  transition: opacity 0.2s ease;
+}
+
+.mbadge__island-halo {
+  fill: color-mix(in srgb, var(--foil) 7%, transparent);
+  stroke: color-mix(in srgb, var(--foil) 18%, transparent);
+  stroke-width: 0.6;
+}
+
+.mbadge__island-spark {
+  fill: var(--foil);
+  opacity: 0.42;
+}
+
+.mbadge__island-rule {
+  stroke: var(--foil);
+  stroke-width: 0.85;
+  stroke-linecap: round;
+  opacity: 0.38;
+}
+
+.mbadge__island-text {
+  font-family: "IncheonMICEOTF", var(--font-header, Pretendard), sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  paint-order: stroke fill;
+}
+
+.mbadge__island-text--shadow {
+  fill: color-mix(in srgb, var(--foil) 45%, #1a2744);
+  stroke: none;
+  opacity: 0.5;
+}
+
+.mbadge__island-text--fill {
+  stroke: color-mix(in srgb, var(--foil) 55%, #fff);
+  stroke-width: 0.35;
+}
+
+.mbadge--locked .mbadge__island-art {
+  opacity: 0.48;
+}
+
+.mbadge--locked .mbadge__island-text--fill {
+  fill: #aeb8c4;
+  stroke: #c8d0da;
+}
+
+.mbadge--doing .mbadge__island-art {
+  opacity: 0.88;
+}
+
+.mbadge--earned.mbadge--island .mbadge__island-text--fill {
+  stroke-width: 0.42;
+}
+
+.mbadge--earned.mbadge--island .mbadge__island-spark {
+  opacity: 0.62;
 }
 
 /* 획득 인장(✓) / 미획득 자물쇠 */

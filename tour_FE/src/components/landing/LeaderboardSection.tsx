@@ -8,7 +8,7 @@ type LeaderboardSectionProps = {
 };
 
 export function LeaderboardSection({ onGoToLogin }: LeaderboardSectionProps) {
-  const [category, setCategory] = useState<MissionCategory>("탐험");
+  const [category, setCategory] = useState<MissionCategory>("섬");
   const data = CATEGORY_LEADERBOARD[category];
 
   const handleLogin = () => {
