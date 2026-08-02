@@ -1,6 +1,6 @@
 export type MissionBadgeState = "earned" | "doing" | "locked";
 
-/* ── 미션 & 인증 (게이지형 퀘스트) — API 연동 전 임시 데이터 (랜딩·미션 페이지 공용 단일 출처) ── */
+/* ── 미션 (게이지형 퀘스트) — API 연동 전 임시 데이터 (랜딩·미션 페이지 공용 단일 출처) ── */
 
 export type MissionCategory = "탐험" | "레저" | "생태" | "기타";
 

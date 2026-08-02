@@ -97,11 +97,14 @@ function buildNavItems(
     },
     {
       id: "mission",
-      label: "미션 & 인증",
+      label: "미션",
       href: "/missions",
       isRoute: true,
       active: onMissionsHub,
-      subItems: [],
+      subItems: [
+        { label: "섬 탐험 미션", href: "/missions" },
+        { label: "리더보드", href: "/leaderboard" },
+      ],
     },
     {
       id: "community",

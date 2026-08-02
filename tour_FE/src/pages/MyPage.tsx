@@ -93,7 +93,7 @@ export function MyPage() {
         <section className="mp-section mp-mission-section" aria-labelledby="mp-mission-title">
           <div className="mp-section-head">
             <div>
-              <p className="mp-section-label">미션 &amp; 인증</p>
+              <p className="mp-section-label">미션</p>
               <h2 id="mp-mission-title" className="mp-section-title">
                 획득 배지
               </h2>

@@ -6,11 +6,11 @@ import { LeaderboardView } from "@/pages/Leaderboard";
 type HubView = "mission" | "leaderboard";
 
 const TABS: { key: HubView; label: string; path: string }[] = [
-  { key: "mission", label: "미션 & 인증", path: "/missions" },
+  { key: "mission", label: "섬 탐험 미션", path: "/missions" },
   { key: "leaderboard", label: "리더보드", path: "/leaderboard" },
 ];
 
-/** 미션 & 인증 + 리더보드 통합 페이지 — 상단 토글로 전환 */
+/** 미션 + 리더보드 통합 페이지 — 상단 토글로 전환 */
 export function MissionHub() {
   const location = useLocation();
   const navigate = useNavigate();

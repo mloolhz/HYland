@@ -4,7 +4,7 @@ export type LeaderboardPeriod = "week" | "month" | "all";
 
 export type LeaderboardEntry = [name: string, points: number];
 
-/** 미션 & 인증 카테고리별 리더보드 — API 연동 전 임시 데이터 */
+/** 미션 카테고리별 리더보드 — API 연동 전 임시 데이터 */
 export const CATEGORY_LEADERBOARD: Record<MissionCategory, LeaderboardEntry[]> = {
   탐험: [
     ["바다별탐험가", 2480],
