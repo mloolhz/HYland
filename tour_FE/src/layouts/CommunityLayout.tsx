@@ -12,7 +12,9 @@ export function CommunityLayout() {
       <NotificationProvider>
         <SiteHeader />
         <ScrollToTop />
-        <Outlet />
+        <div className="route-fade-root" data-route-fade-root>
+          <Outlet />
+        </div>
         <ScrollToTopButton />
         <SiteFooter />
       </NotificationProvider>

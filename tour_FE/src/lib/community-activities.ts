@@ -16,8 +16,8 @@ export const COMMUNITY_ACTIVITY_OPTIONS: CommunityActivityGroup[] = SPORTS_CATEG
   }),
 );
 
-/** 종목명 → 커뮤니티 활동 필터 URL (`/community?activities=...`) */
-export function buildCommunitySportHref(sportName: string): string {
-  const serialized = serializeActivitiesQuery(new Set([sportName]));
+/** 종목명으로 필터된 커뮤니티 목록 경로 (`/community?activities=...`) */
+export function buildCommunityActivityLink(activityName: string): string {
+  const serialized = serializeActivitiesQuery(new Set([activityName]));
   return serialized ? `/community?activities=${serialized}` : "/community";
 }

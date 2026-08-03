@@ -36,6 +36,7 @@ import "./styles/sports.css";
 import "./styles/missions.css";
 import "./styles/leaderboard.css";
 import "./styles/ai-recommend.css";
+import "./styles/route-fade.css";
 
 const router = createBrowserRouter([
   { path: "/", element: <LandingPage />, errorElement: <RouterError /> },
