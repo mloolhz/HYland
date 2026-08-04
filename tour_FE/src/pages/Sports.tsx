@@ -5,8 +5,6 @@ import {
   SPORTS_DATA,
   type BookingMethod,
   type CategoryKey,
-  type InfoSource,
-  type ReservationType,
   type Sport,
   type SportIsland,
 } from "@/data/sports";
@@ -243,14 +241,9 @@ export function Sports() {
                   <MetaRow label="가격" value={selected.price} />
                   <MetaRow label="가능 시기" value={selected.season} />
                 </div>
-                <div className="sp-detail-actions">
-                  {selected.pay ? (
-                    <span className="sp-badge sp-badge--pay">예약/시설 이용</span>
-                  ) : (
-                    <span className="sp-badge">자유 활동</span>
-                  )}
-                  <SportCommunityLink sportName={selected.name} />
-                </div>
+                <span className={`sp-badge${selected.pay ? " sp-badge--pay" : ""}`}>
+                  {selected.pay ? "예약/시설 이용" : "자유 활동"}
+                </span>
               </div>
             </section>
 
