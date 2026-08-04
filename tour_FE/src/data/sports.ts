@@ -1,6 +1,4 @@
-import type { InfoSource, ReservationType, SportInfoConfig } from "./sport-info";
-import { getSportInfo } from "./sport-info";
-import { getIslandColors } from "@/constants/island";
+import { BOOKING_BY_SPORT_ID } from "./sport-booking";
 
 export type SportIsland = {
   /** IslandExplorer `ISLANDS[].id`와 일치. 없으면 목록으로 폴백 */
@@ -9,7 +7,12 @@ export type SportIsland = {
   c: string;
 };
 
-export type { InfoSource, ReservationType };
+export type BookingMethod = {
+  type: "official" | "facility" | "phone" | "info";
+  label: string;
+  url?: string;
+  tel?: string;
+};
 
 export type Sport = {
   id: string;
@@ -21,30 +24,21 @@ export type Sport = {
   price: string;
   season: string;
   islands: SportIsland[];
-  reservationType: ReservationType;
-  sources: InfoSource[];
+  booking: BookingMethod[];
 };
 
 export type CategoryKey = "water" | "land" | "exp" | "heal";
 
-function island(id: string, name: string): SportIsland {
-  return { id, n: name, c: getIslandColors(name).accent };
-}
-
-function attachInfo(
-  data: Record<CategoryKey, Omit<Sport, "reservationType" | "sources">[]>,
+function attachBookings(
+  data: Record<CategoryKey, Omit<Sport, "booking">[]>,
 ): Record<CategoryKey, Sport[]> {
   return Object.fromEntries(
     Object.entries(data).map(([key, list]) => [
       key,
-      list.map((sport) => {
-        const info: SportInfoConfig = getSportInfo(sport.id);
-        return {
-          ...sport,
-          reservationType: info.reservationType,
-          sources: info.sources,
-        };
-      }),
+      list.map((sport) => ({
+        ...sport,
+        booking: BOOKING_BY_SPORT_ID[sport.id] ?? [],
+      })),
     ]),
   ) as Record<CategoryKey, Sport[]>;
 }
@@ -61,7 +55,7 @@ export const SPORTS_CATEGORIES: { key: CategoryKey; label: string }[] = [
  * - 시도 → sinsi (신도·시도·모도)
  * - 소이작도·볼음도 → Explorer에 없음 → id:null (목록 폴백)
  */
-const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sources">[]> = {
+const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "booking">[]> = {
   water: [
     {
       id: "kayak",
@@ -161,10 +155,10 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
       name: "캠핑",
       pay: true,
       photo: "/sports/camp.jpg",
-      diff: "초보 가능",
-      price: "무료~3만원 (야영장별 상이)",
-      season: "3~11월",
-      desc: "데크·취사장·샤워장을 갖춘 섬 야영장에서 파도 소리와 별빛 아래 즐기는 캠핑. 오토캠핑·차박도 가능.",
+      diff: "입문",
+      price: "무료~2만원",
+      season: "4~10월",
+      desc: "해변과 숲이 어우러진 섬에서 별과 파도 소리를 배경으로 하룻밤. 야영장이 갖춰진 섬에서 즐깁니다.",
       islands: [
         island("deokj", "덕적도"),
         island("jawol", "자월도"),
@@ -275,8 +269,8 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
       name: "모노레일",
       pay: true,
       photo: "/sports/atv.jpg",
-      diff: "누구나",
-      price: "문의",
+      diff: "초급",
+      price: "2만원대~",
       season: "연중",
       desc: "강화도 해변 위를 달리는 모노레일 체험. 바다 전망을 즐기며 가족과 함께 탑승할 수 있습니다.",
       islands: [{ id: "gangh", n: "강화도", c: "#F59E0B" }],
@@ -393,5 +387,4 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
   ],
 };
 
-export const SPORTS_DATA = attachInfo(RAW_SPORTS_DATA);
-
+export const SPORTS_DATA = attachBookings(RAW_SPORTS_DATA);

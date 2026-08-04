@@ -8,7 +8,7 @@ type LeaderboardSectionProps = {
 };
 
 export function LeaderboardSection({ onGoToLogin }: LeaderboardSectionProps) {
-  const [category, setCategory] = useState<MissionCategory>("탐험");
+  const [category, setCategory] = useState<MissionCategory>("섬");
   const data = CATEGORY_LEADERBOARD[category];
 
   const handleLogin = () => {
@@ -19,8 +19,10 @@ export function LeaderboardSection({ onGoToLogin }: LeaderboardSectionProps) {
     <section className="sec" id="leaderboard">
       <div className="container">
         <div className="sec-head reveal">
-          <span className="sec-ico">🏆</span>
-          <h2>탐험가 리더보드</h2>
+          <div className="sec-head-copy">
+            <span className="eyebrow">LEADERBOARD</span>
+            <h2>탐험가 리더보드</h2>
+          </div>
           <Link className="more" to="/leaderboard">
             더보기 →
           </Link>

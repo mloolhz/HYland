@@ -451,52 +451,17 @@
   gap: 10px;
 }
 
-.sp-booking-group {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.sp-booking-group--island {
-  padding-top: 4px;
-  border-top: 1px solid #e2e8f0;
-}
-
-.sp-booking-group--island:first-child {
-  padding-top: 0;
-  border-top: none;
-}
-
-.sp-booking-island {
-  margin: 0;
-  font-size: 13px;
-  font-weight: 600;
-  color: #1a3a6b;
-}
-
-.sp-booking-btn-copy {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
-}
-
 .sp-booking-btn {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  width: 100%;
   padding: 12px 14px;
   border: 1px solid #cbd5e1;
   border-radius: 8px;
   background: #fff;
   color: #1a3a6b;
-  font: inherit;
-  text-align: left;
   text-decoration: none;
-  cursor: pointer;
   transition: all 0.15s;
 }
 
@@ -526,6 +491,10 @@
   border-color: #2563eb;
   background: #eff6ff;
   font-weight: 700;
+}
+
+.sp-booking-btn--secondary {
+  font-size: 13px;
 }
 
 .sp-booking-btn-label {

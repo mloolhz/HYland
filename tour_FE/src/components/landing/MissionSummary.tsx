@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CountUpNumber } from "@/components/mypage/CountUpNumber";
 import { MISSION_QUESTS, missionQuestState } from "@/mocks/missions";
 
@@ -6,7 +6,21 @@ import { MISSION_QUESTS, missionQuestState } from "@/mocks/missions";
 function RingGauge({ percent }: { percent: number }) {
   const radius = 58;
   const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (percent / 100) * circumference;
+  const [animatedPercent, setAnimatedPercent] = useState(0);
+
+  useEffect(() => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) {
+      setAnimatedPercent(percent);
+      return;
+    }
+
+    setAnimatedPercent(0);
+    const timer = window.setTimeout(() => setAnimatedPercent(percent), 200);
+    return () => window.clearTimeout(timer);
+  }, [percent]);
+
+  const offset = circumference - (animatedPercent / 100) * circumference;
 
   return (
     <div className="ms-ring" role="img" aria-label={`전체 달성률 ${percent}%`}>

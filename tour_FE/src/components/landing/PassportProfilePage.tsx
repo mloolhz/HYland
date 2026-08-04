@@ -1,6 +1,7 @@
 import type { UserProfile } from "@/lib/user-profile";
 
 import { PassportAvatarPicker } from "./PassportAvatarPicker";
+import { PassportBtiCard } from "./PassportBtiCard";
 
 import { formatIssuedDate, formatPassportNo } from "./passport-book-data";
 
@@ -30,7 +31,7 @@ export function PassportProfilePage({ profile, titleId }: PassportProfilePagePro
 
           <h2 id={titleId} className="passport-page__title">
 
-            i-바다패스
+            섬 여권
 
           </h2>
 
@@ -136,7 +137,9 @@ export function PassportProfilePage({ profile, titleId }: PassportProfilePagePro
 
       </ul>
 
-
+      <div className="passport-page__bti">
+        <PassportBtiCard allowDemoPreview />
+      </div>
 
       <div className="passport-page__meta">
 

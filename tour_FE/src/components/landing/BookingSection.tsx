@@ -14,8 +14,8 @@ export function BookingSection() {
         <div className="sec-head reveal">
           <span className="sec-ico">📅</span>
           <h2>레저 스포츠 예약</h2>
-          <Link className="more" to="/sports">
-            더보기 →
+          <Link className="more" to="/reservation">
+            자세히 보기 →
           </Link>
         </div>
         <p className="sec-sub reveal">원하는 섬과 스포츠를 선택하고 간편하게 예약하세요.</p>
@@ -28,13 +28,13 @@ export function BookingSection() {
                 <span>{item.desc}</span>
               </div>
               <div className="price">{item.price}</div>
-              <Link className="go" to="/sports">
+              <Link className="go" to="/reservation">
                 예약
               </Link>
             </div>
           ))}
           <div className="book-foot">
-            <Link className="btn btn-outline btn-block" to="/sports">
+            <Link className="btn btn-outline btn-block" to="/reservation">
               전체 예약 보기
             </Link>
           </div>

@@ -9,7 +9,7 @@ type AiResponseContentProps = {
 
 export function AiResponseContent({ response, onFollowup }: AiResponseContentProps) {
   const infoOnly = response.recommendations.every(
-    (r) => r.reservationType === "free" || r.reservationType === "info" || r.reservationType === "community",
+    (r) => r.booking?.url?.includes("isum.incheon.go.kr"),
   );
 
   return (

@@ -1,8 +1,8 @@
 /**
  * Island map hit areas for `public/island-explorer-map.png` (1024×642).
  *
- * Polygon paths are image-traced via `scripts/trace-island-map.py` (not hand-guessed).
- * Re-measure with Figma/Inkscape or dev capture mode: `/islands?mapCapture=1`
+ * Polygon paths are derived from `public/island-explorer-map.png` green-island blob tracing.
+ * Re-run the trace script or dev capture mode (`/islands?mapCapture=1`) after map art changes.
  */
 import { getIslandColors } from "@/constants/island";
 import { ISLANDS } from "@/lib/island-data";

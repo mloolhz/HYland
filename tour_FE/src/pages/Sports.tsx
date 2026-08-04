@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   SPORTS_CATEGORIES,
   SPORTS_DATA,
+  type BookingMethod,
   type CategoryKey,
   type InfoSource,
   type ReservationType,
@@ -15,14 +16,9 @@ import {
   resolveSportIslandRegion,
 } from "@/lib/sports-region";
 import { CONTAINER } from "@/constants/layout";
-import { SportCommunityLink } from "@/components/sports/SportCommunityLink";
-import {
-  bookingLeadText,
-  bookingSectionTitle,
-  sourceButtonLabel,
-} from "@/lib/sport-booking-resolve";
+import { LEISURE_SPORTS_HERO } from "@/lib/landing-images";
 
-const HERO_IMAGE = "/_Pngtree_progressive_leisure_jet_boat_aquatics_16900908.jpg";
+const HERO_IMAGE = LEISURE_SPORTS_HERO;
 
 function MetaRow({ label, value }: { label: string; value: string }) {
   return (
@@ -58,27 +54,33 @@ function SportPhoto({ sport }: { sport: Sport }) {
   );
 }
 
-function InfoSourceLink({
-  source,
-  reservationType,
+function BookingMethodLink({
+  method,
   primary = false,
 }: {
-  source: InfoSource;
-  reservationType: ReservationType;
+  method: BookingMethod;
   primary?: boolean;
 }) {
+  if (method.type === "phone" && method.tel) {
+    const telHref = `tel:${method.tel.replace(/[^\d+]/g, "")}`;
+    return (
+      <a className={`sp-booking-btn${primary ? " sp-booking-btn--primary" : " sp-booking-btn--secondary"}`} href={telHref}>
+        <span className="sp-booking-btn-label">{method.label}</span>
+        <span className="sp-booking-btn-sub">전화 문의: {method.tel}</span>
+      </a>
+    );
+  }
+
+  if (!method.url) return null;
+
   return (
     <a
-      className={`sp-booking-btn sp-booking-btn--external${primary ? " sp-booking-btn--primary" : ""}`}
-      href={source.url}
+      className="sp-booking-btn sp-booking-btn--external"
+      href={method.url}
       target="_blank"
       rel="noopener noreferrer"
     >
-      <span className="sp-booking-btn-copy">
-        <span className="sp-booking-btn-label">{sourceButtonLabel(source, reservationType)}</span>
-        {source.note && <span className="sp-booking-btn-sub">{source.note}</span>}
-        {source.tel && <span className="sp-booking-btn-sub">전화 문의: {source.tel}</span>}
-      </span>
+      <span className="sp-booking-btn-label">{method.label}</span>
       <span className="sp-booking-btn-external" aria-hidden="true">
         ↗
       </span>
@@ -87,38 +89,34 @@ function InfoSourceLink({
 }
 
 function SportBookingSection({ sport }: { sport: Sport }) {
-  const hasSources = sport.sources.length > 0;
-  const isCommunityOnly = sport.reservationType === "community";
+  const { booking } = sport;
+  const hasBooking = booking.length > 0;
+  const infoOnly = hasBooking && booking.every((method) => method.type === "info");
 
   return (
     <section className="sp-section" aria-labelledby="sp-booking-heading">
       <h3 id="sp-booking-heading" className="sp-section-title">
-        {bookingSectionTitle(sport.reservationType)}
+        예약
       </h3>
-      {hasSources ? (
+      {hasBooking ? (
         <div className="sp-booking-box">
-          <p className="sp-booking-lead">{bookingLeadText(sport)}</p>
+          <p className="sp-booking-lead">
+            {infoOnly
+              ? "예약 없이 즐기는 활동입니다. 코스·이용 정보를 확인하세요."
+              : "이 활동은 아래 예약처에서 예약할 수 있습니다."}
+          </p>
           <div className="sp-booking-actions">
-            {sport.sources.map((source, index) => (
-              <InfoSourceLink
-                key={`${source.provider}-${source.url}`}
-                source={source}
-                reservationType={sport.reservationType}
-                primary={index === 0}
-              />
+            {booking.map((method, index) => (
+              <BookingMethodLink key={`${method.type}-${method.label}`} method={method} primary={index === 0} />
             ))}
           </div>
-        </div>
-      ) : isCommunityOnly ? (
-        <div className="sp-booking-box sp-booking-box--free">
-          <strong>예약처가 없는 종목입니다.</strong>
-          {" · "}
-          커뮤니티에서 후기와 정보를 확인해 보세요.
+          {!infoOnly && (
+            <p className="sp-booking-note">외부 예약처로 이동합니다. 결제·예약은 해당 사이트에서 진행됩니다.</p>
+          )}
         </div>
       ) : (
         <div className="sp-booking-box sp-booking-box--free">
           <strong>별도 예약이 필요 없는 자유 활동입니다.</strong>
-          {sport.id === "backpack" && " 배편은 사전 예매가 필수입니다."}
           {" · "}
           각 섬의 코스·물때 정보를 확인하고 자유롭게 즐기세요.
         </div>

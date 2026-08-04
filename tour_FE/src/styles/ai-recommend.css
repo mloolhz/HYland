@@ -230,13 +230,6 @@ body:has(.ai-page) {
   font-weight: 500;
 }
 
-.ai-rec-btn-copy {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  align-items: flex-start;
-}
-
 .ai-rec-btn--external:hover {
   background: #2563eb;
   color: #fff;
@@ -265,19 +258,6 @@ body:has(.ai-page) {
 
 .ai-rec-btn--ghost:hover {
   background: #eef3fc;
-}
-
-.ai-rec-btn--community {
-  background: #f8fafc;
-  color: #4a5567;
-  border: 1px solid #d1d5db;
-  font-weight: 500;
-}
-
-.ai-rec-btn--community:hover {
-  background: #f1f5f9;
-  border-color: #94a3b8;
-  color: #1a3a6b;
 }
 
 .ai-rec-external {

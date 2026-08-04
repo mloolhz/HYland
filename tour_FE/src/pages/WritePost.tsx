@@ -11,7 +11,7 @@ import type { Post, PostType } from "@/types/community";
 const TYPE_OPTIONS: { value: PostType; label: string }[] = [
   { value: "review", label: "후기" },
   { value: "photo", label: "인증샷" },
-  { value: "question", label: "질문" },
+  { value: "question", label: "Q&A" },
 ];
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
@@ -92,6 +92,7 @@ export function WritePost() {
     // TODO: 이미지 업로드 API 연동 — 업로드 API가 없어 첨부 파일은 현재 게시글에 저장되지 않음.
     // API 연동 시: imageFile을 업로드 → 반환 URL을 images 배열에 저장.
     const images: string[] | undefined = undefined;
+    void imageFile;
 
     const newPost: Post = {
       id: `p-${Date.now()}`,

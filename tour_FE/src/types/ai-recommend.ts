@@ -8,7 +8,6 @@ export type RecItemBooking = {
   label: string;
   url?: string;
   tel?: string;
-  note?: string;
 };
 
 export type RecItem = {
@@ -19,8 +18,7 @@ export type RecItem = {
   categoryKey: string;
   sportId: string;
   name: string;
-  reservationType?: "reservable" | "free" | "community" | "info";
-  sources?: RecItemBooking[];
+  booking?: RecItemBooking;
 };
 
 export type AiResponse = {

@@ -14,17 +14,21 @@ import { MyLikedPage } from "@/pages/MyLikedPage";
 import { MyPostsPage } from "@/pages/MyPostsPage";
 import { NotFound } from "@/pages/NotFound";
 import { Notifications } from "@/pages/Notifications";
+import { UserProfilePage } from "@/pages/UserProfilePage";
 import { PostDetail } from "@/pages/PostDetail";
 import { Signup } from "@/pages/Signup";
 import { IslandExplorer } from "@/pages/IslandExplorer";
-import { Missions } from "@/pages/Missions";
-import { Leaderboard } from "@/pages/Leaderboard";
+import { MissionHub } from "@/pages/MissionHub";
 import { MyPage } from "@/pages/MyPage";
 import { MyPageSettings } from "@/pages/MyPageSettings";
 import { MyPageProfileEdit } from "@/pages/MyPageProfileEdit";
 import { AiRecommend } from "@/pages/AiRecommend";
 import { Sports } from "@/pages/Sports";
 import { WritePost } from "@/pages/WritePost";
+import { IslandBtiIntro } from "@/pages/IslandBtiIntro";
+import { IslandBtiTest } from "@/pages/IslandBtiTest";
+import { IslandBtiResult } from "@/pages/IslandBtiResult";
+import { ProfileCharacterProvider } from "@/context/ProfileCharacterContext";
 import "./index.css";
 import "./styles/auth.css";
 import "./styles/community.css";
@@ -36,7 +40,8 @@ import "./styles/sports.css";
 import "./styles/missions.css";
 import "./styles/leaderboard.css";
 import "./styles/ai-recommend.css";
-import "./styles/route-fade.css";
+import "./styles/island-bti.css";
+import "./styles/island-bti-promo.css";
 
 const router = createBrowserRouter([
   { path: "/", element: <LandingPage />, errorElement: <RouterError /> },
@@ -45,8 +50,11 @@ const router = createBrowserRouter([
     errorElement: <RouterError />,
     children: [
       { path: "islands", element: <IslandExplorer /> },
-      { path: "missions", element: <Missions /> },
-      { path: "leaderboard", element: <Leaderboard /> },
+      { path: "island-bti", element: <IslandBtiIntro /> },
+      { path: "island-bti/test", element: <IslandBtiTest /> },
+      { path: "island-bti/result", element: <IslandBtiResult /> },
+      { path: "missions", element: <MissionHub /> },
+      { path: "leaderboard", element: <MissionHub /> },
       { path: "sports", element: <Sports /> },
       { path: "ai-recommend", element: <AiRecommend /> },
       { path: "community", element: <Community /> },
@@ -55,6 +63,7 @@ const router = createBrowserRouter([
       { path: "community/my-comments", element: <MyCommentsPage /> },
       { path: "community/liked", element: <MyLikedPage /> },
       { path: "community/me", element: <MyActivity /> },
+      { path: "community/users/:userId", element: <UserProfilePage /> },
       { path: "community/:id", element: <PostDetail /> },
       { path: "notifications", element: <Notifications /> },
       { path: "mypage", element: <MyPage /> },
@@ -76,6 +85,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <ProfileCharacterProvider>
+      <RouterProvider router={router} />
+    </ProfileCharacterProvider>
   </StrictMode>,
 );

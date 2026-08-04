@@ -2,7 +2,7 @@ import { CURRENT_USER_ID } from "@/constants/auth";
 import type { IslandBti } from "@/constants/island";
 import { ISLANDS, type IslandInfo } from "@/lib/island-data";
 import { CATEGORY_LEADERBOARD, LEADERBOARD, type LeaderboardPeriod } from "@/lib/landing-data";
-import type { MissionCategory } from "@/mocks/missions";
+import { MISSION_CATEGORIES, type MissionCategory } from "@/mocks/missions";
 import { DEMO_USER_PASSPORT, type UserPassportStats } from "@/mocks/userPassport";
 import { MOCK_POSTS } from "@/mocks/posts";
 
@@ -92,16 +92,47 @@ export function getLeaderboardRank(period: LeaderboardPeriod = "month") {
 
 /** 데모 사용자의 카테고리별 미션 포인트 — 공개 리더보드에는 미포함 */
 export const MY_CATEGORY_POINTS: Record<MissionCategory, number> = {
-  탐험: 1520,
-  레저: 980,
-  생태: 1780,
+  섬: 1520,
+  해상: 980,
+  육상: 1240,
+  체험: 1780,
+  힐링: 1410,
   기타: 1610,
 };
 
 export function getCategoryLeaderboardRank(category: MissionCategory) {
   const points = MY_CATEGORY_POINTS[category];
   const board = CATEGORY_LEADERBOARD[category];
-  const rank = board.filter(([, score]) => score > points).length + 1;
+  const above = board.filter(([, score]) => score > points);
+  const below = board.filter(([, score]) => score < points);
+  const rank = above.length + 1;
 
-  return { rank, points, category, boardSize: board.length };
+  // 바로 위 순위(다음 목표)와 바로 아래 순위
+  const next = above.length > 0 ? above[above.length - 1] : null;
+  const prevScore = below.length > 0 ? below[0][1] : Math.round(points * 0.85);
+
+  const nextName = next ? next[0] : null;
+  const nextPoints = next ? next[1] : null;
+  const pointsToNext = next ? next[1] - points : 0;
+
+  // 아래 순위 대비 다음 순위까지의 진행률
+  const span = nextPoints !== null ? nextPoints - prevScore : 1;
+  const progressPercent =
+    nextPoints === null ? 100 : Math.max(4, Math.min(100, Math.round(((points - prevScore) / span) * 100)));
+
+  return {
+    rank,
+    points,
+    category,
+    boardSize: board.length,
+    nextName,
+    nextPoints,
+    pointsToNext,
+    progressPercent,
+  };
+}
+
+/** 카테고리 전체의 내 순위 요약 */
+export function getAllCategoryRanks() {
+  return MISSION_CATEGORIES.map((category) => getCategoryLeaderboardRank(category));
 }

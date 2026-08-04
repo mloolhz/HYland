@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useLocation, useSearchParams } from "react-router-dom";
-import { PageFade } from "@/components/RouteFade";
+import { useSearchParams } from "react-router-dom";
 import { CommunityHeader } from "@/components/community/CommunityHeader";
 import { FilterBar, type FilterValue, type ViewKey } from "@/components/community/FilterBar";
 import { GalleryGrid } from "@/components/community/GalleryGrid";
@@ -9,6 +8,7 @@ import { PopularIslands } from "@/components/community/PopularIslands";
 import { PostList } from "@/components/community/PostList";
 import { ProfileCard } from "@/components/community/ProfileCard";
 import { SelectedIslands } from "@/components/community/SelectedIslands";
+import { SelectedActivities } from "@/components/community/SelectedActivities";
 import { WritePostFab } from "@/components/community/WritePostFab";
 import { CONTAINER } from "@/constants/layout";
 import { usePosts } from "@/lib/post-store";
@@ -17,14 +17,14 @@ import {
   GALLERY_PAGE_SIZE,
   getNoticePosts,
   islandPostCounts,
+  activityPostCounts,
   paginate,
   sortPosts,
   totalPages,
   type SortKey,
 } from "@/lib/posts";
-import { parseActivitiesQuery, parseIslandsQuery, parsePageQuery, serializeIslandsQuery } from "@/lib/query";
+import { parseActivitiesQuery, parseIslandsQuery, parsePageQuery, serializeActivitiesQuery, serializeIslandsQuery } from "@/lib/query";
 import { saveCommunityListSearch } from "@/lib/community-list-state";
-import type { CommunityEnterFadeState } from "@/lib/route-fade";
 
 function parseView(value: string | null): ViewKey {
   return value === "gallery" ? "gallery" : "list";
@@ -65,6 +65,7 @@ export function Community() {
   }, [searchParams]);
 
   const counts = useMemo(() => islandPostCounts(posts), [posts]);
+  const activityCounts = useMemo(() => activityPostCounts(posts), [posts]);
   const notices = useMemo(() => getNoticePosts(posts), [posts]);
 
   const updateQuery = useCallback(
@@ -73,6 +74,7 @@ export function Community() {
       sort?: SortKey;
       category?: FilterValue;
       islands?: Set<string>;
+      activities?: Set<string>;
       q?: string;
       page?: number;
       resetPage?: boolean;
@@ -96,6 +98,11 @@ export function Community() {
             const serialized = serializeIslandsQuery(patch.islands);
             if (serialized) next.set("islands", serialized);
             else next.delete("islands");
+          }
+          if (patch.activities !== undefined) {
+            const serialized = serializeActivitiesQuery(patch.activities);
+            if (serialized) next.set("activities", serialized);
+            else next.delete("activities");
           }
           if (patch.q !== undefined) {
             if (!patch.q.trim()) next.delete("q");
@@ -142,14 +149,18 @@ export function Community() {
   };
 
   const clearFilters = () => {
-    updateQuery({ islands: new Set(), q: "", category: "all", resetPage: true });
+    updateQuery({ islands: new Set(), activities: new Set(), q: "", category: "all", resetPage: true });
   };
 
   const emptyMessage = query.trim()
     ? "검색 결과가 없습니다."
-    : islands.size > 0
-      ? "선택한 섬에 대한 글이 아직 없습니다."
-      : "이 필터에 해당하는 글이 아직 없습니다.";
+    : islands.size > 0 && activities.size > 0
+      ? "선택한 섬·종목에 해당하는 글이 아직 없습니다."
+      : islands.size > 0
+        ? "선택한 섬에 대한 글이 아직 없습니다."
+        : activities.size > 0
+          ? "선택한 종목에 대한 글이 아직 없습니다."
+          : "이 필터에 해당하는 글이 아직 없습니다.";
 
   const currentPages = view === "gallery" ? galleryPages : listPages;
   const safePage = Math.min(page, currentPages);
@@ -200,20 +211,20 @@ export function Community() {
       <CommunityHeader />
 
       <div className={CONTAINER}>
-        <div className="cm-list-toolbar">
-          <FilterBar
-            active={category}
-            view={view}
-            sort={sort}
-            selectedIslands={islands}
-            islandPostCounts={counts}
-            onFilterChange={(c) => updateQuery({ category: c, resetPage: true })}
-            onViewChange={(v) => updateQuery({ view: v, resetPage: true })}
-            onSortChange={(s) => updateQuery({ sort: s, resetPage: true })}
-            onIslandsApply={(next) => updateQuery({ islands: next, resetPage: true })}
-          />
-          <WritePostFab />
-        </div>
+        <FilterBar
+          active={category}
+          view={view}
+          sort={sort}
+          selectedIslands={islands}
+          selectedActivities={activities}
+          islandPostCounts={counts}
+          activityPostCounts={activityCounts}
+          onFilterChange={(c) => updateQuery({ category: c, resetPage: true })}
+          onViewChange={(v) => updateQuery({ view: v, resetPage: true })}
+          onSortChange={(s) => updateQuery({ sort: s, resetPage: true })}
+          onIslandsApply={(next) => updateQuery({ islands: next, resetPage: true })}
+          onActivitiesApply={(next) => updateQuery({ activities: next, resetPage: true })}
+        />
 
         <SelectedIslands
           islands={islands}
@@ -223,6 +234,16 @@ export function Community() {
             updateQuery({ islands: next, resetPage: true });
           }}
           onClear={() => updateQuery({ islands: new Set(), resetPage: true })}
+        />
+
+        <SelectedActivities
+          activities={activities}
+          onRemove={(name) => {
+            const next = new Set(activities);
+            next.delete(name);
+            updateQuery({ activities: next, resetPage: true });
+          }}
+          onClear={() => updateQuery({ activities: new Set(), resetPage: true })}
         />
 
         <div className="cm-layout">
