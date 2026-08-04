@@ -5,6 +5,7 @@ import { AnimatedWidthBar } from "@/components/mypage/AnimatedWidthBar";
 import { CountUpNumber } from "@/components/mypage/CountUpNumber";
 import { formatNumber } from "@/lib/landing-data";
 import { getCurrentUserProfile, getPassportExpPercent } from "@/lib/user-profile";
+import { scrollToSection } from "@/utils/layout";
 import { demoProps } from "./ToastProvider";
 import {
   HERO_SLIDE_DURATION_MS,
@@ -64,6 +65,10 @@ export function HeroSection() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  const scrollToMap = () => {
+    scrollToSection("map");
+  };
 
   return (
     <section
@@ -239,7 +244,7 @@ export function HeroSection() {
             />
           </svg>
         </a>
-      </div>
+      </button>
 
       <PassportBookModal
         open={passportModalOpen}

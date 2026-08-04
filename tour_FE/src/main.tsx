@@ -42,6 +42,7 @@ import "./styles/leaderboard.css";
 import "./styles/ai-recommend.css";
 import "./styles/island-bti.css";
 import "./styles/island-bti-promo.css";
+import "./styles/route-fade.css";
 
 const router = createBrowserRouter([
   { path: "/", element: <LandingPage />, errorElement: <RouterError /> },

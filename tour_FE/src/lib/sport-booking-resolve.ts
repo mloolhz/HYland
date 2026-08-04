@@ -1,4 +1,4 @@
-import type { InfoSource, ReservationType } from "@/data/sports";
+import type { InfoSource, ReservationType } from "@/data/sport-info";
 import { getSportInfo, sourceButtonLabel } from "@/data/sport-info";
 
 export function getPrimaryInfoSource(sportId: string): InfoSource | undefined {
@@ -8,6 +8,7 @@ export function getPrimaryInfoSource(sportId: string): InfoSource | undefined {
 }
 
 export function bookingSectionTitle(reservationType: ReservationType): string {
+  if (reservationType === "mixed") return "예약 / 정보 보기";
   if (reservationType === "reservable") return "예약";
   return "이용 정보";
 }
@@ -21,6 +22,10 @@ export function bookingLeadText(sport: {
 
   if (reservationType === "community") {
     return "예약처가 없는 종목입니다. 커뮤니티에서 후기와 정보를 확인해 보세요.";
+  }
+
+  if (reservationType === "mixed") {
+    return "아래에서 예약·이용 정보를 확인할 수 있습니다.";
   }
 
   const hasPhoneInquiry = sources.some((source) => Boolean(source.tel));

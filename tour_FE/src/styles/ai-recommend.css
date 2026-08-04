@@ -226,17 +226,22 @@ body:has(.ai-page) {
 .ai-rec-btn--external {
   background: #fff;
   color: #1a1a1a;
-  border-color: #2563eb;
+  border-color: #cbd5e1;
   font-weight: 500;
 }
 
 .ai-rec-btn--external:hover {
-  background: #2563eb;
-  color: #fff;
+  background: #bfdbfe;
+  color: #1e40af;
+  border-color: #60a5fa;
 }
 
 .ai-rec-btn--external:hover .ai-rec-external {
-  color: #fff;
+  color: #1e40af;
+}
+
+.ai-rec-btn--external:hover .ai-rec-phone {
+  color: #2563eb;
 }
 
 .ai-rec-btn--primary {

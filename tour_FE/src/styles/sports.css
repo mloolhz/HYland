@@ -451,6 +451,30 @@
   gap: 10px;
 }
 
+.sp-booking-box--island-follow {
+  margin-top: 12px;
+}
+
+.sp-booking-group--island + .sp-booking-group--island {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.sp-booking-island {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a3a6b;
+}
+
+.sp-booking-btn-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
 .sp-booking-btn {
   display: flex;
   align-items: center;
@@ -471,26 +495,28 @@
 }
 
 .sp-booking-btn--external {
-  border-color: #2563eb;
+  border-color: #cbd5e1;
   background: #fff;
   color: #1a1a1a;
   font-weight: 500;
 }
 
 .sp-booking-btn--external:hover {
-  background: #2563eb;
-  color: #fff;
-  border-color: #2563eb;
+  background: #bfdbfe;
+  color: #1e40af;
+  border-color: #60a5fa;
 }
 
 .sp-booking-btn--external:hover .sp-booking-btn-external {
-  color: #fff;
+  color: #1e40af;
 }
 
-.sp-booking-btn--primary {
-  border-color: #2563eb;
-  background: #eff6ff;
-  font-weight: 700;
+.sp-booking-btn--external:hover .sp-booking-btn-sub {
+  color: #2563eb;
+}
+
+.sp-booking-btn--external:hover .sp-booking-btn-external {
+  color: inherit;
 }
 
 .sp-booking-btn--secondary {

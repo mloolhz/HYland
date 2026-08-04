@@ -18,3 +18,15 @@ export function fadeOutRouteRoot(): void {
 export function clearRouteFadeOut(): void {
   document.querySelector(ROUTE_FADE_ROOT_SELECTOR)?.classList.remove("is-route-fading-out");
 }
+
+/** fade-out 상태의 route root를 새 페이지에서 fade-in */
+export function fadeInRouteRoot(): void {
+  const root = document.querySelector<HTMLElement>(ROUTE_FADE_ROOT_SELECTOR);
+  if (!root?.classList.contains("is-route-fading-out")) return;
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      root.classList.remove("is-route-fading-out");
+    });
+  });
+}

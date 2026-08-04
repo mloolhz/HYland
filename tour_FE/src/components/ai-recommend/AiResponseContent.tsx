@@ -9,8 +9,12 @@ type AiResponseContentProps = {
 
 export function AiResponseContent({ response, onFollowup }: AiResponseContentProps) {
   const infoOnly = response.recommendations.every(
-    (r) => r.booking?.url?.includes("isum.incheon.go.kr"),
+    (r) =>
+      r.reservationType === "free" ||
+      r.reservationType === "info" ||
+      r.reservationType === "community",
   );
+  const hasMixed = response.recommendations.some((r) => r.reservationType === "mixed");
 
   return (
     <div className="ai-response">
@@ -21,7 +25,9 @@ export function AiResponseContent({ response, onFollowup }: AiResponseContentPro
           <p className="ai-rec-lead">
             {infoOnly
               ? "예약 없이 즐기는 활동입니다. 코스·이용 정보를 확인하세요."
-              : "이 활동은 아래 예약처에서 예약할 수 있습니다."}
+              : hasMixed
+                ? "아래에서 예약·이용 정보를 확인할 수 있습니다."
+                : "이 활동은 아래 예약처에서 예약할 수 있습니다."}
           </p>
           {response.recommendations.map((item) => (
             <AiRecCard key={`${item.sportId}-${item.islandName}`} item={item} />

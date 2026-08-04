@@ -1,10 +1,12 @@
-export type ReservationType = "reservable" | "free" | "community" | "info";
+export type ReservationType = "reservable" | "free" | "community" | "info" | "mixed";
 
 export type InfoSource = {
   provider: string;
   url: string;
   tel?: string;
   note?: string;
+  /** 종목 reservationType이 mixed일 때 출처별 예약/정보 구분 */
+  linkType?: "reservable" | "info";
 };
 
 export type SportInfoConfig = {
@@ -99,30 +101,36 @@ export const SPORT_INFO_BY_ID: Record<string, SportInfoConfig> = {
 
   // ── 체험 ──
   mud: {
-    reservationType: "reservable",
+    reservationType: "mixed",
     sources: [
-      TOUR08_PACKAGE,
-      { provider: "영흥해양센터", url: YMCA_MUD },
+      { ...TOUR08_PACKAGE, linkType: "reservable" },
+      { provider: "영흥해양센터", url: YMCA_MUD, linkType: "info" },
       {
         provider: "옹진문화관광",
         url: "https://www.ongjin.go.kr/open_content/tour/thema/experience_beach.jsp",
+        linkType: "info",
       },
     ],
   },
   fish: {
-    reservationType: "reservable",
+    reservationType: "mixed",
     sources: [
-      TOUR08_PACKAGE,
-      { provider: "영흥해양센터", url: YMCA_FISH },
+      { ...TOUR08_PACKAGE, linkType: "reservable" },
+      { provider: "영흥해양센터", url: YMCA_FISH, linkType: "info" },
       {
         provider: "옹진문화관광",
         url: "https://www.ongjin.go.kr/open_content/tour/thema/experience_fishing.jsp",
+        linkType: "info",
       },
-      { provider: "인천투어", url: "https://itour.incheon.go.kr/ssst/ssst/list.do" },
+      {
+        provider: "인천투어",
+        url: "https://itour.incheon.go.kr/ssst/ssst/list.do",
+        linkType: "info",
+      },
     ],
   },
   pool: {
-    reservationType: "free",
+    reservationType: "reservable",
     sources: [
       { provider: "대이작도 풀등탐방", url: "https://www.puldeung.com/" },
       {
@@ -236,9 +244,7 @@ export function getSportInfo(sportId: string): SportInfoConfig {
   return SPORT_INFO_BY_ID[sportId] ?? { reservationType: "free", sources: [] };
 }
 
-export function sourceButtonLabel(source: InfoSource, reservationType: ReservationType): string {
-  if (reservationType === "free" || reservationType === "info") {
-    return `${source.provider} 정보 보기`;
-  }
-  return source.provider;
+export function sourceButtonLabel(source: InfoSource, _reservationType?: ReservationType): string {
+  const packageSuffix = source.note ? ` (${source.note})` : "";
+  return `${source.provider}${packageSuffix}`;
 }

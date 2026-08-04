@@ -8,6 +8,7 @@ export type RecItemBooking = {
   label: string;
   url?: string;
   tel?: string;
+  note?: string;
 };
 
 export type RecItem = {
@@ -18,6 +19,9 @@ export type RecItem = {
   categoryKey: string;
   sportId: string;
   name: string;
+  reservationType?: "reservable" | "free" | "community" | "info" | "mixed";
+  sources?: RecItemBooking[];
+  /** @deprecated 첫 번째 출처 — sources 사용 권장 */
   booking?: RecItemBooking;
 };
 
