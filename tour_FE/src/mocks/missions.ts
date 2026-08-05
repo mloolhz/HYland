@@ -100,7 +100,7 @@ const EXP_SPORT_ICONS: Record<string, string> = {
   pool: "🏝️",
   night: "🔦",
   zip: "",
-  atv: "🛞",
+  monorail: "🚝",
   luge: "🛷",
 };
 

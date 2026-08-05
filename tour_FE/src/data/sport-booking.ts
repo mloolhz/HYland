@@ -1,4 +1,9 @@
-import type { BookingMethod } from "@/data/sports";
+export type BookingMethod = {
+  type: "official" | "facility" | "phone" | "info";
+  label: string;
+  url?: string;
+  tel?: string;
+};
 
 const DODO_OFFICIAL: BookingMethod = {
   type: "official",

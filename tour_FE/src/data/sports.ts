@@ -1,4 +1,6 @@
-import { BOOKING_BY_SPORT_ID } from "./sport-booking";
+import type { InfoSource, ReservationType, SportInfoConfig } from "./sport-info";
+import { getSportInfo } from "./sport-info";
+import { getIslandColors } from "@/constants/island";
 
 export type SportIsland = {
   /** IslandExplorer `ISLANDS[].id`와 일치. 없으면 목록으로 폴백 */
@@ -7,12 +9,7 @@ export type SportIsland = {
   c: string;
 };
 
-export type BookingMethod = {
-  type: "official" | "facility" | "phone" | "info";
-  label: string;
-  url?: string;
-  tel?: string;
-};
+export type { InfoSource, ReservationType };
 
 export type Sport = {
   id: string;
@@ -24,21 +21,30 @@ export type Sport = {
   price: string;
   season: string;
   islands: SportIsland[];
-  booking: BookingMethod[];
+  reservationType: ReservationType;
+  sources: InfoSource[];
 };
 
 export type CategoryKey = "water" | "land" | "exp" | "heal";
 
-function attachBookings(
-  data: Record<CategoryKey, Omit<Sport, "booking">[]>,
+function island(id: string, name: string): SportIsland {
+  return { id, n: name, c: getIslandColors(name).accent };
+}
+
+function attachInfo(
+  data: Record<CategoryKey, Omit<Sport, "reservationType" | "sources">[]>,
 ): Record<CategoryKey, Sport[]> {
   return Object.fromEntries(
     Object.entries(data).map(([key, list]) => [
       key,
-      list.map((sport) => ({
-        ...sport,
-        booking: BOOKING_BY_SPORT_ID[sport.id] ?? [],
-      })),
+      list.map((sport) => {
+        const info: SportInfoConfig = getSportInfo(sport.id);
+        return {
+          ...sport,
+          reservationType: info.reservationType,
+          sources: info.sources,
+        };
+      }),
     ]),
   ) as Record<CategoryKey, Sport[]>;
 }
@@ -55,7 +61,7 @@ export const SPORTS_CATEGORIES: { key: CategoryKey; label: string }[] = [
  * - 시도 → sinsi (신도·시도·모도)
  * - 소이작도·볼음도 → Explorer에 없음 → id:null (목록 폴백)
  */
-const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "booking">[]> = {
+const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sources">[]> = {
   water: [
     {
       id: "kayak",
@@ -102,7 +108,10 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "booking">[]> = {
       price: "1만원대~",
       season: "6~9월",
       desc: "발로 페달을 밟아 움직이는 보트로, 가족 단위가 안전하게 바다 위를 즐길 수 있는 무동력 레저입니다.",
-      islands: [{ id: null, n: "소이작도", c: "#10B981" }],
+      islands: [
+        { id: null, n: "소이작도", c: "#10B981" },
+        island("yheung", "영흥도"),
+      ],
     },
   ],
   land: [
@@ -149,21 +158,32 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "booking">[]> = {
     },
     {
       id: "camp",
-      name: "캠핑·백패킹",
+      name: "캠핑",
       pay: true,
       photo: "/sports/camp.jpg",
-      diff: "입문",
-      price: "무료~2만원",
-      season: "4~10월",
-      desc: "해변과 숲이 어우러진 섬에서 별과 파도 소리를 배경으로 하룻밤. 야영장이 갖춰진 섬에서 즐깁니다.",
+      diff: "초보 가능",
+      price: "무료~3만원 (야영장별 상이)",
+      season: "3~11월",
+      desc: "데크·취사장·샤워장을 갖춘 섬 야영장에서 파도 소리와 별빛 아래 즐기는 캠핑. 오토캠핑·차박도 가능.",
       islands: [
-        { id: "muui", n: "무의도", c: "#2563EB" },
-        { id: "deokj", n: "덕적도", c: "#8B5CF6" },
-        { id: "jawol", n: "자월도", c: "#10B981" },
-        { id: "seungb", n: "승봉도", c: "#10B981" },
-        { id: "ijak", n: "대이작도", c: "#10B981" },
-        { id: "gangh", n: "강화도", c: "#F59E0B" },
+        island("deokj", "덕적도"),
+        island("jawol", "자월도"),
+        island("seungb", "승봉도"),
+        island("ijak", "대이작도"),
+        island("yeongj", "영종도"),
+        island("gangh", "강화도"),
+        island("seok", "석모도"),
       ],
+    },
+    {
+      id: "backpack",
+      name: "백패킹",
+      pay: false,
+      diff: "중급",
+      price: "무료 (배편·식사비 별도)",
+      season: "4~11월",
+      desc: "배낭을 메고 능선·초원 노지에서 하룻밤을 보내는 활동. 굴업도 개머리언덕은 국내 손꼽히는 백패킹 성지.",
+      islands: [island("gureop", "굴업도"), island("jawol", "자월도"), island("deokj", "덕적도")],
     },
   ],
   exp: [
@@ -232,6 +252,7 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "booking">[]> = {
       desc: "밤에 랜턴을 들고 갯벌에서 참소라·고동 등 해산물을 직접 채취하는 활동.",
       islands: [
         { id: "seungb", n: "승봉도", c: "#10B981" },
+        { id: "yheung", n: "영흥도", c: "#10B981" },
         { id: null, n: "소이작도", c: "#10B981" },
       ],
     },
@@ -250,15 +271,15 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "booking">[]> = {
       ],
     },
     {
-      id: "atv",
-      name: "ATV",
+      id: "monorail",
+      name: "모노레일",
       pay: true,
-      photo: "/sports/atv.jpg",
+      photo: "/sports/monorail.jpg",
       diff: "초급",
       price: "2만원대~",
       season: "연중",
-      desc: "해변과 숲길을 사륜바이크로 달리는 액티비티. 무의도 하나개 유원지에서 운영합니다.",
-      islands: [{ id: "muui", n: "무의도", c: "#2563EB" }],
+      desc: "강화도 해변 위를 달리는 모노레일 체험. 바다 전망을 즐기며 가족과 함께 탑승할 수 있습니다.",
+      islands: [{ id: "gangh", n: "강화도", c: "#F59E0B" }],
     },
     {
       id: "luge",
@@ -372,4 +393,4 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "booking">[]> = {
   ],
 };
 
-export const SPORTS_DATA = attachBookings(RAW_SPORTS_DATA);
+export const SPORTS_DATA = attachInfo(RAW_SPORTS_DATA);
