@@ -297,7 +297,36 @@
 .sp-badge--pay {
   border-color: #2563eb;
   color: #2563eb;
-  background: rgba(37, 99, 235, 0.06);
+  background: transparent;
+}
+
+.sp-detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.sp-community-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border: 1px solid #b8bddf;
+  border-radius: 999px;
+  background: #e8ebf7;
+  color: #2d2e6b;
+  font-size: 12.5px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 1px 2px rgba(45, 46, 107, 0.08);
+  transition: background 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+.sp-community-btn:hover {
+  border-color: #2d2e6b;
+  background: #2d2e6b;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(45, 46, 107, 0.18);
 }
 
 .sp-detail-actions {
@@ -451,23 +480,6 @@
   gap: 10px;
 }
 
-.sp-booking-box--island-follow {
-  margin-top: 12px;
-}
-
-.sp-booking-group--island + .sp-booking-group--island {
-  margin-top: 14px;
-  padding-top: 14px;
-  border-top: 1px solid #e2e8f0;
-}
-
-.sp-booking-island {
-  margin: 0 0 8px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #1a3a6b;
-}
-
 .sp-booking-btn-copy {
   display: flex;
   flex-direction: column;
@@ -513,10 +525,6 @@
 
 .sp-booking-btn--external:hover .sp-booking-btn-sub {
   color: #2563eb;
-}
-
-.sp-booking-btn--external:hover .sp-booking-btn-external {
-  color: inherit;
 }
 
 .sp-booking-btn--secondary {

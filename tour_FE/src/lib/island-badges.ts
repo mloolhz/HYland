@@ -37,6 +37,7 @@ const ICON_ACTIVITY: Record<IslandBadgeIcon, string> = {
   lighthouse: "등대",
   anchor: "방문",
   sun: "일출",
+  cliff: "절벽",
 };
 const ISLAND_COLLECTIBLE_BADGES: Record<string, IslandCollectibleBadgeDef[]> = {
   baek: [

@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState, type RefObject } from "react";
 import { createPortal } from "react-dom";
+import { useOptionalProfileCharacter } from "@/context/ProfileCharacterContext";
 import type { UserProfile } from "@/lib/user-profile";
 import { PassportBook, type PassportBookHandle } from "./PassportBook";
 import { PassportFrontCover } from "./PassportFrontCover";
-import { buildBookSpreads, type BookNavState } from "./passport-book-spreads";
-import { PASSPORT_BADGES } from "./passport-book-data";
+import { buildMissionBookSpreads, type BookNavState } from "./passport-book-spreads";
 import "@/styles/passport-book.css";
 
 type PassportBookModalProps = {
@@ -15,7 +15,7 @@ type PassportBookModalProps = {
 };
 
 const OPEN_MS = 650;
-const BOOK_SPREADS = buildBookSpreads(PASSPORT_BADGES);
+const BOOK_SPREADS = buildMissionBookSpreads();
 
 const INITIAL_NAV: BookNavState = {
   spread: 0,
@@ -31,6 +31,8 @@ export function PassportBookModal({ open, onClose, profile, returnFocusRef }: Pa
   const [nav, setNav] = useState<BookNavState>(INITIAL_NAV);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const bookRef = useRef<PassportBookHandle>(null);
+  const profileCharacterContext = useOptionalProfileCharacter();
+  const isProfileSelectModalOpen = profileCharacterContext?.isProfileSelectModalOpen ?? false;
 
   useEffect(() => {
     if (open) {
@@ -140,7 +142,7 @@ export function PassportBookModal({ open, onClose, profile, returnFocusRef }: Pa
                     type="button"
                     className="passport-book__tab passport-book__tab--prev"
                     aria-label="이전 페이지"
-                    disabled={nav.flipping}
+                    disabled={nav.flipping || isProfileSelectModalOpen}
                     onClick={() => bookRef.current?.goPrev()}
                   >
                     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -154,7 +156,7 @@ export function PassportBookModal({ open, onClose, profile, returnFocusRef }: Pa
                     type="button"
                     className="passport-book__tab passport-book__tab--next"
                     aria-label="다음 페이지"
-                    disabled={nav.flipping}
+                    disabled={nav.flipping || isProfileSelectModalOpen}
                     onClick={() => bookRef.current?.goNext()}
                   >
                     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">

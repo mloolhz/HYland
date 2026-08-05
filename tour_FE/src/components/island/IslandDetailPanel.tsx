@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import type { IslandInfo } from "@/lib/island-data";
 import { getCollectibleBadgesForIsland } from "@/lib/island-badges";
+import { getIslandPortalUrl } from "@/lib/island-portal-links";
 import { serializeIslandsQuery } from "@/lib/query";
 import { IslandBadgeList } from "./IslandBadgeList";
 
@@ -25,6 +26,7 @@ export function IslandDetailPanel({ island, onClose }: IslandDetailPanelProps) {
   }
 
   const collectibleBadges = getCollectibleBadgesForIsland(island);
+  const portalUrl = getIslandPortalUrl(island.id);
 
   return (
     <>
@@ -66,10 +68,29 @@ export function IslandDetailPanel({ island, onClose }: IslandDetailPanelProps) {
             </ul>
           </section>
 
+          {portalUrl && (
+            <a
+              className="isl-detail-portal"
+              href={portalUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span className="isl-detail-portal__text">
+                <span className="isl-detail-portal__label">자세히 보기</span>
+                <span className="isl-detail-portal__hint">인천 섬포털 섬정보</span>
+              </span>
+              <span className="isl-detail-portal__arrow" aria-hidden="true">
+                ↗
+              </span>
+            </a>
+          )}
+
           <div className="isl-detail-actions">
-            <Link className="btn btn-navy" to="/sports">
-              {island.bookingLabel ?? "레저스포츠 보기"}
-            </Link>
+            {island.bookingLabel && (
+              <a className="btn btn-navy" href="/#booking">
+                {island.bookingLabel}
+              </a>
+            )}
             <Link
               className="isl-detail-link"
               to={`/community?islands=${serializeIslandsQuery(new Set([island.name]))}`}

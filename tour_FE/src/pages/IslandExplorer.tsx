@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { IslandDetailPanel } from "@/components/island/IslandDetailPanel";
 import { IslandExplorerHeader } from "@/components/island/IslandExplorerHeader";
 import { IslandExplorerMap } from "@/components/island/IslandExplorerMap";
-import { IslandRegionToggle } from "@/components/island/IslandRegionToggle";
+import { IslandRegionDropdown } from "@/components/island/IslandRegionDropdown";
 import { ISLAND_MAP, parseIslandRegion, type IslandRegionName } from "@/lib/island-data";
 
 function readIslandId(param: string | null): string | null {
@@ -108,10 +108,17 @@ export function IslandExplorer() {
                 미방문
               </span>
             </div>
-            <p className="isl-map-hint">섬을 클릭하면 상세 정보를 확인할 수 있어요</p>
+            <p className="isl-map-hint">
+              권역을 선택하면 해당 섬들이 강조되고, 섬을 선택하면 상세 정보를 확인할 수 있어요
+            </p>
           </div>
 
-          <IslandRegionToggle activeRegion={activeRegion} onChange={handleRegionChange} />
+          <IslandRegionDropdown
+            activeRegion={activeRegion}
+            selectedId={selectedId}
+            onRegionChange={handleRegionChange}
+            onIslandSelect={handleSelect}
+          />
 
           <div className="isl-map-card">
             <IslandExplorerMap
