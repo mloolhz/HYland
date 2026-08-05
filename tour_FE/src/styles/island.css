@@ -17,7 +17,7 @@
   padding: 0;
   display: flex;
   align-items: center;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .isl-header-bg {
@@ -69,6 +69,188 @@
   display: flex;
   gap: 12px;
   flex-shrink: 0;
+}
+
+.isl-progress-card {
+  position: relative;
+  flex-shrink: 0;
+  width: min(100%, 248px);
+  padding: 14px 16px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 24px rgba(8, 24, 56, 0.18);
+}
+
+.isl-progress-card__head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.isl-progress-card__icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.isl-progress-card__title {
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.isl-progress-card__percent {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+  color: #fff;
+}
+
+.isl-progress-card__percent .isl-stat-number,
+.isl-progress-card__percent .isl-stat-roll-item {
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.isl-progress-card__bar {
+  height: 5px;
+  margin: 8px 0 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  overflow: hidden;
+}
+
+.isl-progress-card__bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #5ec98a 0%, #7ee8a8 100%);
+  transition: width 0.35s ease;
+}
+
+.isl-progress-card__meta {
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.72);
+  letter-spacing: -0.01em;
+}
+
+.isl-progress-card__meta strong {
+  font-weight: 800;
+  color: #fff;
+}
+
+.isl-progress-card__toggle {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #d8ebff;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.isl-progress-card__toggle:hover,
+.isl-progress-card__toggle.is-open {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.34);
+  color: #fff;
+}
+
+.isl-visit-list-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 110;
+  width: min(320px, calc(100vw - 32px));
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: #fff;
+  box-shadow: 0 16px 40px rgba(15, 35, 60, 0.18);
+}
+
+.isl-visit-list-panel--floating {
+  position: fixed;
+  top: auto;
+  right: auto;
+  z-index: 110;
+}
+
+.isl-visit-list-panel__scroll {
+  max-height: min(320px, 52vh);
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-right: 2px;
+}
+
+.isl-visit-list-section__title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.isl-visit-list-section__count {
+  margin-left: auto;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--alt);
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.isl-visit-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.isl-visit-list__item {
+  padding: 7px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.isl-visit-list__item.is-visited {
+  color: #1f5f3f;
+  background: color-mix(in srgb, var(--green) 12%, #fff);
+  border: 1px solid color-mix(in srgb, var(--green) 28%, var(--line));
+}
+
+.isl-visit-list__item.is-unvisited {
+  color: #5a6b80;
+  background: var(--alt);
+  border: 1px solid var(--line);
+}
+
+.isl-visit-list-empty {
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--alt);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
 }
 
 .isl-stat-chip {
@@ -1219,13 +1401,8 @@
     align-items: flex-start;
   }
 
-  .isl-header-stats {
+  .isl-progress-card {
     width: 100%;
-  }
-
-  .isl-stat-chip {
-    flex: 1;
-    min-width: 0;
   }
 
   .isl-ferry-grid {
