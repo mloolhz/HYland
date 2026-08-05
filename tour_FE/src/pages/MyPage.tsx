@@ -4,6 +4,7 @@ import { CountUpNumber } from "@/components/mypage/CountUpNumber";
 import { MyPageHeader } from "@/components/mypage/MyPageHeader";
 import { MyPageLeaderboard } from "@/components/mypage/MyPageLeaderboard";
 import { MyPagePassportBook } from "@/components/mypage/MyPagePassportBook";
+import { MyPageSpiritGrowthSection } from "@/components/mypage/MyPageSpiritGrowthSection";
 import { ISLAND_BTI } from "@/constants/island";
 import { CONTAINER } from "@/constants/layout";
 import {
@@ -85,6 +86,8 @@ export function MyPage() {
                 <AnimatedWidthBar width={expPercent} />
               </div>
             </div>
+
+            <MyPageSpiritGrowthSection />
           </section>
 
           <MyPageLeaderboard />
@@ -93,7 +96,7 @@ export function MyPage() {
         <section className="mp-section mp-mission-section" aria-labelledby="mp-mission-title">
           <div className="mp-section-head">
             <div>
-              <p className="mp-section-label">미션</p>
+              <p className="mp-section-label">미션 &amp; 인증</p>
               <h2 id="mp-mission-title" className="mp-section-title">
                 획득 배지
               </h2>

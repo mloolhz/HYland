@@ -38,6 +38,7 @@ import "./styles/passport-book.css";
 import "./styles/notification.css";
 import "./styles/sports.css";
 import "./styles/missions.css";
+import "./styles/island-stamp.css";
 import "./styles/leaderboard.css";
 import "./styles/ai-recommend.css";
 import "./styles/island-bti.css";

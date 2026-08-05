@@ -1,7 +1,9 @@
 import type { CSSProperties } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { IslandBtiContainer } from "@/components/island-bti/IslandBtiContainer";
-import { useIslandBti } from "@/context/ProfileCharacterContext";
+import { IslandBtiCharacterVisual } from "@/components/island-bti/IslandBtiCharacterVisual";
+import { useIslandBti, useProfileCharacter } from "@/context/ProfileCharacterContext";
+import { getMyIslandBtiProfileCharacter } from "@/data/profile-characters";
 import {
   getIslandBtiAxisRatios,
   getIslandBtiPercentages,
@@ -51,6 +53,7 @@ export function IslandBtiResult() {
   const location = useLocation();
   const navigate = useNavigate();
   const { latestResult } = useIslandBti();
+  const { setSelectedCharacterId } = useProfileCharacter();
 
   const calculationFromState = isIslandBtiCalculationResult(location.state)
     ? location.state
@@ -90,6 +93,13 @@ export function IslandBtiResult() {
     });
   };
 
+  const handleApplyToPassport = () => {
+    const character = getMyIslandBtiProfileCharacter(profile.code);
+    if (!character) return;
+    setSelectedCharacterId(character.id);
+    navigate("/mypage");
+  };
+
   return (
     <main className="ibti-page">
       <IslandBtiContainer>
@@ -107,6 +117,12 @@ export function IslandBtiResult() {
           aria-labelledby="ibti-result-name"
         >
           <div className="ibti-result-main">
+            <IslandBtiCharacterVisual
+              code={profile.code}
+              themeColor={profile.themeColor}
+              variant="hero"
+              className="ibti-result-character"
+            />
             <span className="ibti-result-code">{profile.code}</span>
             <h2 id="ibti-result-name" className="ibti-result-name">
               {profile.name}
@@ -246,10 +262,10 @@ export function IslandBtiResult() {
           </div>
 
           <div className="ibti-actions ibti-actions--result">
-            <button type="button" className="btn btn-outline ibti-passport-save" disabled>
+            <button type="button" className="btn btn-navy ibti-passport-save" onClick={handleApplyToPassport}>
               섬 여권에 등록하기
             </button>
-            <p className="ibti-passport-save-note">준비 중인 기능입니다.</p>
+            <p className="ibti-passport-save-note">나의 섬BTI 캐릭터가 여권 프로필로 설정됩니다.</p>
             <Link to="/island-bti/test" className="btn btn-outline">
               다시 검사하기
             </Link>

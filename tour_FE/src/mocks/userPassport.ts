@@ -16,9 +16,9 @@ export const DEMO_USER_PASSPORT: UserPassportStats = {
   levelTitle: "탐험가",
   expCurrent: 1350,
   expMax: 2000,
-  visitedIslandCount: 6,
-  completedMissions: 28,
-  earnedBadgeCount: 15,
-  stampCount: 12,
+  visitedIslandCount: 3,
+  completedMissions: 8,
+  earnedBadgeCount: 3,
+  stampCount: 3,
   stampTotal: 48,
 };

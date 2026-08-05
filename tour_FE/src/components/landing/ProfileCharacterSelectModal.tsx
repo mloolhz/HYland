@@ -8,6 +8,7 @@ import {
   getProfileCharacterById,
   isProfileCharacterUnlocked,
 } from "@/data/profile-characters";
+import { getIslandBtiResult } from "@/data/island-bti/results";
 import { useProfileCharacter } from "@/context/ProfileCharacterContext";
 import type { ProfileCharacter } from "@/types/profile-character";
 
@@ -54,7 +55,7 @@ function CharacterCard({
       onClick={onSelect}
     >
       <div className="profile-character-card__art">
-        <ProfileCharacterVisual character={character} className="profile-character-card__visual" compact />
+        <ProfileCharacterVisual character={character} className="profile-character-card__visual" avatarOnly />
         {selected ? (
           <span className="profile-character-card__check" aria-hidden="true">
             <CheckIcon />
@@ -63,7 +64,12 @@ function CharacterCard({
       </div>
       <span className="profile-character-card__name">{character.name}</span>
       {character.islandBtiCode ? (
-        <span className="profile-character-card__code">{character.islandBtiCode}</span>
+        <>
+          <span className="profile-character-card__code">{character.islandBtiCode}</span>
+          <span className="profile-character-card__tagline">
+            {getIslandBtiResult(character.islandBtiCode)?.tagline}
+          </span>
+        </>
       ) : null}
     </button>
   );

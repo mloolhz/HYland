@@ -9,7 +9,8 @@ import {
 } from "react";
 import type { UserProfile } from "@/lib/user-profile";
 import { useOptionalProfileCharacter } from "@/context/ProfileCharacterContext";
-import { PassportBadgeSpreadPage } from "./PassportBadgeSpreadPage";
+import { PassportMissionStampPage } from "./PassportMissionStampPage";
+import { PassportIslandStoryPage } from "./PassportIslandStoryPage";
 import { PassportProfilePage } from "./PassportProfilePage";
 import type { BookNavState, PassportBookSpread } from "./passport-book-spreads";
 
@@ -51,8 +52,8 @@ function LeftPage({
       {spread.left.type === "profile" ? (
         <ProfilePage profile={profile} titleId={titleId} />
       ) : (
-        <PassportBadgeSpreadPage
-          badges={spread.left.badges}
+        <PassportMissionStampPage
+          quests={spread.left.quests}
           spreadIndex={spread.index}
           totalSpreads={totalSpreads}
           side="left"
@@ -71,12 +72,17 @@ function RightPage({
 }) {
   return (
     <div className="passport-book__page passport-book__page--right">
-      <PassportBadgeSpreadPage
-        badges={spread.right.badges}
-        spreadIndex={spread.index}
-        totalSpreads={totalSpreads}
-        side="right"
-      />
+      {spread.right.type === "island-story" ? (
+        <PassportIslandStoryPage />
+      ) : (
+        <PassportMissionStampPage
+          quests={spread.right.quests}
+          spreadIndex={spread.index}
+          totalSpreads={totalSpreads}
+          side="right"
+          showCategorySummary={spread.right.showCategorySummary}
+        />
+      )}
     </div>
   );
 }
@@ -93,6 +99,12 @@ export const PassportBook = forwardRef<PassportBookHandle, PassportBookProps>(fu
   spreadRef.current = spreadIndex;
   const profileCharacterContext = useOptionalProfileCharacter();
   const isProfileSelectModalOpen = profileCharacterContext?.isProfileSelectModalOpen ?? false;
+
+  useEffect(() => {
+    if (spreadIndex >= totalSpreads) {
+      setSpreadIndex(Math.max(0, totalSpreads - 1));
+    }
+  }, [spreadIndex, totalSpreads]);
 
   const publishNav = useCallback(
     (index: number, nextFlip: typeof flip) => {
@@ -148,20 +160,16 @@ export const PassportBook = forwardRef<PassportBookHandle, PassportBookProps>(fu
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [goPrev, goNext, isProfileSelectModalOpen]);
 
-  const current = spreads[spreadIndex];
-  const target = spreads[targetIndex];
-
-  const baseLeftSpread = current;
-  const baseRightSpread = flip === "idle" ? current : target;
+  const current = spreads[Math.min(spreadIndex, spreads.length - 1)] ?? spreads[0];
+  const target = spreads[Math.min(targetIndex, spreads.length - 1)] ?? spreads[0];
 
   return (
     <div className="passport-book__flip-root">
       <div className="passport-book__viewport">
-        {/* 현재 spread — 고정 grid, document flow 세로 쌓임 없음 */}
         <div className="passport-book__layer passport-book__layer--base">
           <div className="passport-book__page-slot passport-book__page-slot--left">
             <LeftPage
-              spread={baseLeftSpread}
+              spread={current}
               profile={profile}
               titleId={titleId}
               totalSpreads={totalSpreads}
@@ -170,21 +178,28 @@ export const PassportBook = forwardRef<PassportBookHandle, PassportBookProps>(fu
           </div>
           <div className="passport-book__spine" aria-hidden="true" />
           <div className="passport-book__page-slot passport-book__page-slot--right">
-            <RightPage spread={baseRightSpread} totalSpreads={totalSpreads} />
+            <RightPage spread={flip === "idle" ? current : target} totalSpreads={totalSpreads} />
           </div>
         </div>
 
-        {/* 넘기는 중에만 — 오른쪽 페이지 1장 */}
         {flip !== "idle" && (
-          <div className={`passport-book__layer passport-book__layer--turn passport-book__layer--turn-${flip}`}>
+          <div
+            className={`passport-book__layer passport-book__layer--turn passport-book__layer--turn-${flip}`}
+            aria-hidden="true"
+          >
             <div className="passport-book__page-turn">
               <div className="passport-book__page-turn-face passport-book__page-turn-face--front">
-                <RightPage
-                  spread={flip === "next" ? current : target}
+                <RightPage spread={current} totalSpreads={totalSpreads} />
+              </div>
+              <div className="passport-book__page-turn-face passport-book__page-turn-face--back">
+                <LeftPage
+                  spread={target}
+                  profile={profile}
+                  titleId={titleId}
                   totalSpreads={totalSpreads}
+                  ProfilePage={ProfilePage}
                 />
               </div>
-              <div className="passport-book__page-turn-face passport-book__page-turn-face--back" aria-hidden="true" />
             </div>
           </div>
         )}
@@ -192,5 +207,3 @@ export const PassportBook = forwardRef<PassportBookHandle, PassportBookProps>(fu
     </div>
   );
 });
-
-export { FLIP_MS as BOOK_FLIP_MS };

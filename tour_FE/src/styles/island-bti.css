@@ -472,6 +472,276 @@
   border-bottom: 1px dashed var(--line);
 }
 
+.ibti-result-character {
+  margin-bottom: 4px;
+}
+
+/* ---------- 섬BTI 캐릭터 비주얼 ---------- */
+.ibti-character-visual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.ibti-character-visual__frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--ibti-character-accent, var(--blue)) 8%, #fff);
+  border: 2px solid color-mix(in srgb, var(--ibti-character-accent, var(--blue)) 22%, #fff);
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--ibti-character-accent, var(--blue)) 16%, transparent);
+  overflow: hidden;
+}
+
+.ibti-character-visual--compact .ibti-character-visual__frame,
+.ibti-character-visual--default .ibti-character-visual__frame {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border-radius: inherit;
+  border-width: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+.ibti-character-visual--hero .ibti-character-visual__frame {
+  width: min(240px, 78vw);
+  aspect-ratio: 1;
+  border-radius: 24px;
+}
+
+.ibti-character-visual__art {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.ibti-character-visual__code {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid color-mix(in srgb, var(--ibti-character-accent, var(--blue)) 30%, #fff);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--navy);
+}
+
+.ibti-character-visual__name {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--navy);
+  text-align: center;
+  line-height: 1.3;
+}
+
+.ibti-character-unlock__preview-visual--avatar-only .ibti-character-visual__code,
+.ibti-character-unlock__preview-visual--avatar-only .ibti-character-visual__name {
+  display: none;
+}
+
+/* 레벨별 정령 비주얼 강도 */
+.ibti-character-visual--spirit-lv2 .ibti-character-visual__frame {
+  box-shadow:
+    0 8px 22px color-mix(in srgb, var(--ibti-character-accent, var(--blue)) 16%, transparent),
+    0 0 0 3px color-mix(in srgb, var(--ibti-character-accent, var(--blue)) 8%, transparent);
+}
+
+.ibti-character-visual--spirit-lv3 .ibti-character-visual__frame {
+  box-shadow:
+    0 10px 28px color-mix(in srgb, var(--ibti-character-accent, var(--blue)) 24%, transparent),
+    0 0 18px color-mix(in srgb, var(--ibti-character-accent, var(--blue)) 18%, transparent);
+}
+
+.ibti-character-visual--spirit-lv4 .ibti-character-visual__frame {
+  box-shadow:
+    0 12px 32px color-mix(in srgb, var(--ibti-character-accent, var(--blue)) 30%, transparent),
+    0 0 24px color-mix(in srgb, #fbbf24 35%, var(--ibti-character-accent, var(--blue)) 20%);
+  border-color: color-mix(in srgb, #fbbf24 45%, var(--ibti-character-accent, var(--blue)) 30%);
+}
+
+/* ---------- 섬 정령 성장 패널 ---------- */
+.ibti-spirit-growth {
+  --spirit-progress: 0%;
+}
+
+.ibti-spirit-growth--full {
+  margin-top: 8px;
+  padding: 18px 16px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--island-bti-theme, var(--blue)) 6%, #fff);
+  border: 1px solid color-mix(in srgb, var(--island-bti-theme, var(--blue)) 18%, #fff);
+}
+
+.ibti-result-spirit-growth {
+  width: 100%;
+  max-width: 420px;
+  margin-inline: auto;
+}
+
+.ibti-spirit-growth__kicker {
+  margin: 0 0 6px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--island-bti-theme, var(--blue)) 70%, var(--navy));
+}
+
+.ibti-spirit-growth__heading {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--navy);
+  line-height: 1.3;
+}
+
+.ibti-spirit-growth__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--navy);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.ibti-spirit-growth__desc,
+.ibti-spirit-growth__meta,
+.ibti-spirit-growth__hint {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.ibti-spirit-growth__desc {
+  margin-bottom: 14px;
+}
+
+.ibti-spirit-growth__meta {
+  margin-top: 10px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.ibti-spirit-growth__hint {
+  margin-top: 6px;
+  font-size: 12px;
+}
+
+.ibti-spirit-growth__hint--max {
+  color: color-mix(in srgb, var(--island-bti-theme, var(--blue)) 75%, var(--navy));
+  font-weight: 700;
+}
+
+.ibti-spirit-growth__track {
+  height: 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--island-bti-theme, var(--blue)) 10%, #fff);
+  overflow: hidden;
+}
+
+.ibti-spirit-growth__track--full {
+  height: 10px;
+}
+
+.ibti-spirit-growth__fill {
+  display: block;
+  height: 100%;
+  width: var(--spirit-progress);
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--island-bti-theme, var(--blue)) 85%, #fff),
+    var(--island-bti-theme, var(--blue))
+  );
+  transition: width 0.35s ease;
+}
+
+.ibti-spirit-growth--compact {
+  padding: 6px 10px 8px;
+  border-top: 1px solid color-mix(in srgb, var(--bti-theme, var(--passport-turquoise)) 12%, #fff);
+}
+
+.ibti-spirit-growth--compact .ibti-spirit-growth__head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 5px;
+  min-width: 0;
+}
+
+.ibti-spirit-growth--compact .ibti-spirit-growth__badge {
+  min-width: 34px;
+  padding: 2px 6px;
+  font-size: 9px;
+  background: color-mix(in srgb, var(--bti-theme, var(--passport-turquoise)) 80%, var(--passport-navy));
+}
+
+.ibti-spirit-growth--compact .ibti-spirit-growth__title {
+  flex: 1;
+  min-width: 0;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--passport-navy);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ibti-spirit-growth--compact .ibti-spirit-growth__count {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--passport-text-muted);
+  white-space: nowrap;
+}
+
+.ibti-spirit-growth--compact .ibti-spirit-growth__track {
+  height: 5px;
+}
+
+.ibti-spirit-growth--inline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.ibti-spirit-growth--inline .ibti-spirit-growth__badge {
+  min-width: 32px;
+  padding: 2px 6px;
+  font-size: 9px;
+}
+
+.ibti-spirit-growth--inline .ibti-spirit-growth__title {
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.ibti-passport-save-note {
+  margin: -8px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+}
+
 .ibti-result-code {
   display: inline-flex;
   align-items: center;
