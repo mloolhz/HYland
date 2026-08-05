@@ -355,6 +355,91 @@
   width: 100%;
 }
 
+/* ── 섬 정령 성장 (마이페이지) ── */
+.mp-spirit-growth {
+  width: 100%;
+  padding-top: 4px;
+  border-top: 1px dashed var(--line);
+}
+
+.mp-spirit-growth__row {
+  display: flex;
+  align-items: stretch;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.mp-spirit-growth__character {
+  flex: none;
+}
+
+.mp-spirit-growth__character .ibti-character-visual__frame {
+  width: 112px;
+  height: 112px;
+  border-radius: 18px;
+}
+
+.mp-spirit-growth__panel {
+  flex: 1;
+  min-width: 0;
+  margin-top: 0 !important;
+  text-align: left;
+}
+
+.mp-spirit-growth__panel .ibti-spirit-growth__intro {
+  text-align: left;
+}
+
+.mp-spirit-growth__panel .ibti-spirit-growth__heading {
+  font-size: 16px;
+}
+
+.mp-spirit-growth__panel .ibti-spirit-growth__desc {
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+.mp-spirit-growth--empty {
+  margin-top: 14px;
+  padding: 16px;
+  border-radius: 14px;
+  background: var(--alt);
+  border: 1px dashed var(--line);
+  text-align: center;
+}
+
+.mp-spirit-growth__empty-title {
+  margin: 0 0 6px;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.mp-spirit-growth__empty-desc {
+  margin: 0 0 12px;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.mp-spirit-growth__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--navy);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.mp-spirit-growth__cta:hover {
+  background: #0a2248;
+}
+
 .mp-exp-head {
   display: flex;
   align-items: center;
@@ -1068,6 +1153,22 @@
   .mp-stat-chip {
     width: 60px;
     min-width: 60px;
+  }
+
+  .mp-spirit-growth__row {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .mp-spirit-growth__panel {
+    width: 100%;
+    text-align: center;
+  }
+
+  .mp-spirit-growth__panel .ibti-spirit-growth__intro,
+  .mp-spirit-growth__panel .ibti-spirit-growth__heading {
+    justify-content: center;
+    text-align: center;
   }
 }
 

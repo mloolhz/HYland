@@ -1,37 +1,52 @@
-import type { PassportBadge } from "./passport-book-data";
-
-export const BADGES_PER_SIDE = 6;
+import type { MissionQuest } from "@/mocks/missions";
+import {
+  getFeaturedMissionQuests,
+  getRemainingMissionQuests,
+} from "@/lib/passport/passport-quest-ink-stamp";
+import { PASSPORT_STAMPS_PER_PAGE } from "@/lib/passport/passport-mission-stamps";
 
 export type PassportBookSpread = {
   index: number;
-  left: { type: "profile" } | { type: "badges"; badges: PassportBadge[] };
-  right: { badges: PassportBadge[] };
+  left: { type: "profile" } | { type: "mission-stamps"; quests: MissionQuest[] };
+  right: {
+    type: "mission-stamps";
+    quests: MissionQuest[];
+    showCategorySummary?: boolean;
+  };
 };
 
-/** 여권 펼침 단위 — 1페이지: 프로필+배지6, 이후: 배지6+배지6 */
-export function buildBookSpreads(badges: PassportBadge[]): PassportBookSpread[] {
-  if (badges.length === 0) {
-    return [{ index: 0, left: { type: "profile" }, right: { badges: [] } }];
-  }
-
+/** 여권 펼침 — 0: 프로필+대표배지, 이후: 미션 배지 페이지 */
+export function buildMissionBookSpreads(): PassportBookSpread[] {
+  const featured = getFeaturedMissionQuests();
   const spreads: PassportBookSpread[] = [
     {
       index: 0,
       left: { type: "profile" },
-      right: { badges: badges.slice(0, BADGES_PER_SIDE) },
+      right: {
+        type: "mission-stamps",
+        quests: featured,
+      },
     },
   ];
 
-  let cursor = BADGES_PER_SIDE;
+  const remaining = getRemainingMissionQuests();
+  let cursor = 0;
   let spreadIndex = 1;
 
-  while (cursor < badges.length) {
+  while (cursor < remaining.length) {
+    const leftQuests = remaining.slice(cursor, cursor + PASSPORT_STAMPS_PER_PAGE);
+    const rightQuests = remaining.slice(
+      cursor + PASSPORT_STAMPS_PER_PAGE,
+      cursor + PASSPORT_STAMPS_PER_PAGE * 2,
+    );
+    if (leftQuests.length === 0 && rightQuests.length === 0) break;
+
     spreads.push({
       index: spreadIndex,
-      left: { type: "badges", badges: badges.slice(cursor, cursor + BADGES_PER_SIDE) },
-      right: { badges: badges.slice(cursor + BADGES_PER_SIDE, cursor + BADGES_PER_SIDE * 2) },
+      left: { type: "mission-stamps", quests: leftQuests },
+      right: { type: "mission-stamps", quests: rightQuests },
     });
-    cursor += BADGES_PER_SIDE * 2;
+    cursor += PASSPORT_STAMPS_PER_PAGE * 2;
     spreadIndex += 1;
   }
 
@@ -45,3 +60,6 @@ export type BookNavState = {
   canNext: boolean;
   flipping: boolean;
 };
+
+/** @deprecated legacy passport badge spreads */
+export { BADGES_PER_SIDE, buildBookSpreads } from "./passport-book-spreads-legacy";

@@ -2,7 +2,9 @@ import type { CSSProperties, MouseEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getIslandBtiResult } from "@/data/island-bti/results";
 import { getMyIslandBtiProfileCharacter } from "@/data/profile-characters";
+import { IslandSpiritGrowthPanel } from "@/components/island-bti/IslandSpiritGrowthPanel";
 import { useIslandBti } from "@/context/ProfileCharacterContext";
+import { useIslandSpiritGrowth } from "@/hooks/useIslandSpiritGrowth";
 import { formatIslandBtiDate } from "@/lib/format-island-bti-date";
 import { ProfileCharacterVisual } from "./ProfileCharacterVisual";
 import { DEMO_PASSPORT_ISLAND_BTI } from "./passport-demo-fallback";
@@ -21,6 +23,7 @@ type PassportBtiCardProps = {
 export function PassportBtiCard({ allowDemoPreview = false }: PassportBtiCardProps) {
   const navigate = useNavigate();
   const { latestResult, hasResult } = useIslandBti();
+  const spiritGrowth = useIslandSpiritGrowth();
 
   const effectiveResult =
     latestResult ?? (allowDemoPreview && !hasResult ? DEMO_PASSPORT_ISLAND_BTI : null);
@@ -68,7 +71,7 @@ export function PassportBtiCard({ allowDemoPreview = false }: PassportBtiCardPro
 
   return (
     <section
-      className="passport-bti-card passport-bti-card--filled"
+      className="passport-bti-card passport-bti-card--filled passport-bti-card--with-growth"
       style={themeStyle}
       aria-label="Island MBTI"
     >
@@ -80,12 +83,12 @@ export function PassportBtiCard({ allowDemoPreview = false }: PassportBtiCardPro
       >
         {btiCharacter ? (
           <div className="passport-bti-card__avatar">
-            <ProfileCharacterVisual character={btiCharacter} compact />
+            <ProfileCharacterVisual character={btiCharacter} compact spiritLevel={spiritGrowth.level} />
           </div>
         ) : null}
 
         <div className="passport-bti-card__body">
-          <p className="passport-bti-card__kicker">섬BTI</p>
+          <p className="passport-bti-card__kicker">섬BTI · 섬 정령</p>
           <div className="passport-bti-card__headline">
             <span className="passport-bti-card__code">{profile.code}</span>
             <span className="passport-bti-card__pill">{profile.name}</span>
@@ -108,6 +111,9 @@ export function PassportBtiCard({ allowDemoPreview = false }: PassportBtiCardPro
           </svg>
         </span>
       </button>
+      {!isDemoOnly ? (
+        <IslandSpiritGrowthPanel growth={spiritGrowth} variant="compact" className="passport-bti-card__growth" />
+      ) : null}
     </section>
   );
 }

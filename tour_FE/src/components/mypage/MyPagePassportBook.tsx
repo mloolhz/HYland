@@ -1,12 +1,11 @@
 import { useRef, useState } from "react";
 import { PassportBook, type PassportBookHandle } from "@/components/landing/PassportBook";
 import { MyPagePassportProfilePage } from "@/components/mypage/MyPagePassportProfilePage";
-import { PASSPORT_BADGES } from "@/components/landing/passport-book-data";
-import { buildBookSpreads, type BookNavState } from "@/components/landing/passport-book-spreads";
+import { buildMissionBookSpreads, type BookNavState } from "@/components/landing/passport-book-spreads";
 import { useOptionalProfileCharacter } from "@/context/ProfileCharacterContext";
 import type { UserProfile } from "@/lib/user-profile";
 
-const BOOK_SPREADS = buildBookSpreads(PASSPORT_BADGES);
+const BOOK_SPREADS = buildMissionBookSpreads();
 
 const INITIAL_NAV: BookNavState = {
   spread: 0,

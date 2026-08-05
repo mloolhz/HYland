@@ -4,8 +4,7 @@ import { useOptionalProfileCharacter } from "@/context/ProfileCharacterContext";
 import type { UserProfile } from "@/lib/user-profile";
 import { PassportBook, type PassportBookHandle } from "./PassportBook";
 import { PassportFrontCover } from "./PassportFrontCover";
-import { buildBookSpreads, type BookNavState } from "./passport-book-spreads";
-import { PASSPORT_BADGES } from "./passport-book-data";
+import { buildMissionBookSpreads, type BookNavState } from "./passport-book-spreads";
 import "@/styles/passport-book.css";
 
 type PassportBookModalProps = {
@@ -16,7 +15,7 @@ type PassportBookModalProps = {
 };
 
 const OPEN_MS = 650;
-const BOOK_SPREADS = buildBookSpreads(PASSPORT_BADGES);
+const BOOK_SPREADS = buildMissionBookSpreads();
 
 const INITIAL_NAV: BookNavState = {
   spread: 0,
