@@ -94,7 +94,12 @@ export function IslandRegionDropdown({
   };
 
   const handleSelectRegion = (region: IslandRegionName) => {
-    onRegionChange(region);
+    if (expandedRegion === region) {
+      setExpandedRegion(null);
+      return;
+    }
+
+    if (activeRegion !== region) onRegionChange(region);
     setExpandedRegion(region);
   };
 
