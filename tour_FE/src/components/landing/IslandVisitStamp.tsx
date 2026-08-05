@@ -40,7 +40,6 @@ export function IslandVisitStamp({
   const stampSize = size;
   const meta = getIslandStampMeta(islandId, questIndex);
   const tone = earned || doing ? meta.color : "locked";
-  const activity = doing ? "방문 중" : earned ? meta.activity : "미방문";
   const date = visitDate(islandName, earned, questIndex);
   const lines = islandNameLines(islandName);
 
@@ -96,13 +95,6 @@ export function IslandVisitStamp({
               </textPath>
             </text>
           </g>
-
-          {/* 좌상단, 원 바깥쪽에 걸친 노란 별 */}
-          <path
-            className="ivstamp__edge-star"
-            transform="translate(22 16) scale(1.55)"
-            d="M0 -9 L2.17 -2.99 L8.56 -2.78 L3.52 1.14 L5.29 7.28 L0 3.7 L-5.29 7.28 L-3.52 1.14 L-8.56 -2.78 L-2.17 -2.99 Z"
-          />
         </svg>
 
         {/* 배경 — 섬별 고유 장면 (글자 뒤까지 채움) */}
@@ -112,14 +104,13 @@ export function IslandVisitStamp({
           </div>
         </div>
 
-        {/* 상단 — 섬 이름 · 활동 (장면 위) */}
+        {/* 상단 — 섬 이름 (장면 위) */}
         <div className="ivstamp__head">
           {lines.map((line) => (
             <p key={line} className="ivstamp__name">
               {line}
             </p>
           ))}
-          <p className="ivstamp__activity">{activity}</p>
         </div>
       </div>
       {date && <time className="ivstamp__date">{date}</time>}

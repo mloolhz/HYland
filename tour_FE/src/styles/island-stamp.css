@@ -35,15 +35,6 @@
   stroke-width: 2.6;
 }
 
-/* 좌상단, 원 바깥쪽에 걸친 노란 별 */
-.ivstamp__edge-star {
-  fill: #ffc83d;
-  stroke: #e0a020;
-  stroke-width: 0.8;
-  stroke-linejoin: round;
-  filter: drop-shadow(0 1px 1.5px rgba(180, 130, 20, 0.35));
-}
-
 .ivstamp__ring-i {
   fill: none;
   stroke: var(--stamp-ink);
