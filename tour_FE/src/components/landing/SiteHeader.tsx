@@ -95,11 +95,14 @@ function buildNavItems(
     },
     {
       id: "mission",
-      label: "미션 & 인증",
+      label: "미션",
       href: "/missions",
       isRoute: true,
       active: onMissionsHub,
-      subItems: [],
+      subItems: [
+        { label: "섬 탐험 미션", href: "/missions" },
+        { label: "리더보드", href: "/leaderboard" },
+      ],
     },
     {
       id: "community",
@@ -107,7 +110,11 @@ function buildNavItems(
       href: "/community",
       isRoute: true,
       active: onCommunity,
-      subItems: [],
+      subItems: [
+        { label: "후기", href: "/community?category=review" },
+        { label: "인증샷", href: "/community?category=photo" },
+        { label: "Q&A", href: "/community?category=question" },
+      ],
     },
   ];
 }
@@ -344,14 +351,7 @@ export function SiteHeader() {
   const onMissionsHub =
     location.pathname.startsWith("/missions") || location.pathname.startsWith("/leaderboard");
   const navItems = useMemo(
-    () =>
-      buildNavItems(
-        onIslands,
-        onSports,
-        onAiRecommend,
-        onMissionsHub,
-        onCommunity,
-      ),
+    () => buildNavItems(onIslands, onSports, onAiRecommend, onMissionsHub, onCommunity),
     [onIslands, onSports, onAiRecommend, onMissionsHub, onCommunity],
   );
   const headerSolid = headerScrolled || navMegaOpen;

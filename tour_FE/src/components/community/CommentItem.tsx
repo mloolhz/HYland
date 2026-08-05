@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { AuthorAvatar } from "@/components/community/AuthorAvatar";
 import { isCurrentUser } from "@/constants/auth";
 import { formatDetailDate } from "@/lib/time";
@@ -124,7 +125,9 @@ export function CommentBubble({
             author={comment.author}
             className={isReply ? "cm-comment-avatar cm-comment-avatar--reply" : "cm-comment-avatar"}
           />
-          <span className="cm-comment-nick">{comment.author.nickname}</span>
+          <Link to={`/community/users/${comment.author.id}`} className="cm-comment-nick cm-author-link">
+            {comment.author.nickname}
+          </Link>
           {comment.isAuthor && <span className="cm-chip cm-chip-author">작성자</span>}
           <time className="cm-comment-time" dateTime={comment.createdAt}>
             {formatDetailDate(comment.createdAt)}
@@ -182,8 +185,13 @@ export function CommentGroup({
               <CommentBubble
                 comment={reply}
                 isReply
+                showReplyButton={isLoggedIn}
+                onReply={() => onReply(reply.id)}
                 onDelete={() => onDeleteComment(reply.id)}
               />
+              {replyingTo === reply.id && (
+                <InlineReplyInput mention={reply.author.nickname} onCancel={onCancelReply} />
+              )}
             </div>
           ))}
         </div>

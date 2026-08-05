@@ -76,6 +76,9 @@ export const CATEGORY_LEADERBOARD: Record<MissionCategory, LeaderboardEntry[]> =
   ],
 };
 
+/** 랜딩 리더보드 프리뷰 호환 — 섬 카테고리 기준 */
+export const LANDING_LEADERBOARD: LeaderboardEntry[] = CATEGORY_LEADERBOARD.섬;
+
 /** 순위 변동 (지난주 대비) — 양수 상승, 음수 하락, 0 동일, "new" 신규 진입. CATEGORY_LEADERBOARD 인덱스와 매칭 */
 export type RankDelta = number | "new";
 

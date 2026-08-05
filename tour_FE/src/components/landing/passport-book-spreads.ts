@@ -1,41 +1,104 @@
-import type { PassportBadge } from "./passport-book-data";
+import type { MissionQuest } from "@/mocks/missions";
+import {
+  getFeaturedMissionQuests,
+  getRemainingMissionQuests,
+} from "@/lib/passport/passport-quest-ink-stamp";
+import { PASSPORT_STAMPS_PER_PAGE } from "@/lib/passport/passport-mission-stamps";
 
-export const BADGES_PER_SIDE = 6;
+export type PassportBookLeftPage =
+  | { type: "profile" }
+  | { type: "mission-stamps"; quests: MissionQuest[] };
+
+export type PassportBookRightPage =
+  | {
+      type: "mission-stamps";
+      quests: MissionQuest[];
+      showCategorySummary?: boolean;
+    }
+  | { type: "island-story" };
 
 export type PassportBookSpread = {
   index: number;
-  left: { type: "profile" } | { type: "badges"; badges: PassportBadge[] };
-  right: { badges: PassportBadge[] };
+  left: PassportBookLeftPage;
+  right: PassportBookRightPage;
 };
 
-/** 여권 펼침 단위 — 1페이지: 프로필+배지6, 이후: 배지6+배지6 */
-export function buildBookSpreads(badges: PassportBadge[]): PassportBookSpread[] {
-  if (badges.length === 0) {
-    return [{ index: 0, left: { type: "profile" }, right: { badges: [] } }];
-  }
-
+/** 여권 펼침 — 0: 프로필+대표배지, 이후: 미션 배지 페이지 */
+export function buildMissionBookSpreads(): PassportBookSpread[] {
+  const featured = getFeaturedMissionQuests();
   const spreads: PassportBookSpread[] = [
     {
       index: 0,
       left: { type: "profile" },
-      right: { badges: badges.slice(0, BADGES_PER_SIDE) },
+      right: {
+        type: "mission-stamps",
+        quests: featured,
+      },
     },
   ];
 
-  let cursor = BADGES_PER_SIDE;
+  const remaining = getRemainingMissionQuests();
+  let cursor = 0;
   let spreadIndex = 1;
 
-  while (cursor < badges.length) {
+  while (cursor < remaining.length) {
+    const leftQuests = remaining.slice(cursor, cursor + PASSPORT_STAMPS_PER_PAGE);
+    const rightQuests = remaining.slice(
+      cursor + PASSPORT_STAMPS_PER_PAGE,
+      cursor + PASSPORT_STAMPS_PER_PAGE * 2,
+    );
+    if (leftQuests.length === 0 && rightQuests.length === 0) break;
+
     spreads.push({
       index: spreadIndex,
-      left: { type: "badges", badges: badges.slice(cursor, cursor + BADGES_PER_SIDE) },
-      right: { badges: badges.slice(cursor + BADGES_PER_SIDE, cursor + BADGES_PER_SIDE * 2) },
+      left: { type: "mission-stamps", quests: leftQuests },
+      right: { type: "mission-stamps", quests: rightQuests },
     });
-    cursor += BADGES_PER_SIDE * 2;
+    cursor += PASSPORT_STAMPS_PER_PAGE * 2;
     spreadIndex += 1;
   }
 
+  appendIslandStorySpread(spreads);
+
   return spreads;
+}
+
+/** 마지막 페이지 — 나의 섬 이야기 (우측) */
+function appendIslandStorySpread(spreads: PassportBookSpread[]) {
+  if (spreads.length === 0) return;
+
+  const lastIndex = spreads.length - 1;
+  const last = spreads[lastIndex];
+
+  // 프로필+대표 도장만 있는 경우 — featured 도장은 유지하고 새 spread 추가
+  if (spreads.length === 1) {
+    spreads.push({
+      index: 1,
+      left: { type: "mission-stamps", quests: [] },
+      right: { type: "island-story" },
+    });
+    return;
+  }
+
+  if (last.right.type === "mission-stamps" && last.right.quests.length === 0) {
+    spreads[lastIndex] = {
+      ...last,
+      right: { type: "island-story" },
+    };
+    return;
+  }
+
+  if (last.right.type === "mission-stamps" && last.right.quests.length > 0) {
+    spreads.push({
+      index: lastIndex + 1,
+      left: { type: "mission-stamps", quests: last.right.quests },
+      right: { type: "island-story" },
+    });
+    spreads[lastIndex] = {
+      ...last,
+      right: { type: "mission-stamps", quests: [] },
+    };
+  }
 }
 
 export type BookNavState = {
@@ -45,3 +108,6 @@ export type BookNavState = {
   canNext: boolean;
   flipping: boolean;
 };
+
+/** @deprecated legacy passport badge spreads */
+export { BADGES_PER_SIDE, buildBookSpreads } from "./passport-book-spreads-legacy";

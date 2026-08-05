@@ -215,9 +215,29 @@ export type IslandNavSubItem = {
   href: string;
 };
 
-export const ISLAND_REGION_SUB_ITEMS: IslandNavSubItem[] = Array.from(
-  new Set(ISLANDS.map((island) => island.region)),
-).map((region) => ({
+/** Explorer map / nav region order (matches map pill groups). */
+export const ISLAND_REGIONS = [
+  "백령·대청도권역",
+  "연평도권역",
+  "강화도권역",
+  "북도권역",
+  "영종구·서해구권역",
+  "영흥도권역",
+  "자월도권역",
+  "덕적도권역",
+] as const;
+
+export type IslandRegionName = (typeof ISLAND_REGIONS)[number];
+
+export function parseIslandRegion(value: string | null): IslandRegionName | null {
+  if (!value) return null;
+  const decoded = decodeURIComponent(value);
+  return ISLAND_REGIONS.includes(decoded as IslandRegionName)
+    ? (decoded as IslandRegionName)
+    : null;
+}
+
+export const ISLAND_REGION_SUB_ITEMS: IslandNavSubItem[] = ISLAND_REGIONS.map((region) => ({
   label: region,
   href: `/islands?region=${encodeURIComponent(region)}`,
 }));

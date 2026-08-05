@@ -19,8 +19,7 @@ export function MissionBadge({ quest, size = 96, tooltip = true }: MissionBadgeP
   const { color } = CATEGORY_META[quest.category];
   const isIslandBadge = quest.category === "섬";
   const islandName = isIslandBadge ? quest.title.replace(/ 방문$/, "") : "";
-  const islandId =
-    quest.islandId ?? ISLANDS.find((i) => i.name === islandName)?.id ?? "";
+  const islandId = ISLANDS.find((i) => i.name === islandName)?.id ?? "";
   const nearComplete = state === "doing" && percent >= 67;
   const tierClass = quest.tier === "전설" ? "legend" : quest.tier === "희귀" ? "rare" : "common";
 

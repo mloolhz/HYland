@@ -4,6 +4,7 @@ import { CountUpNumber } from "@/components/mypage/CountUpNumber";
 import { MyPageHeader } from "@/components/mypage/MyPageHeader";
 import { MyPageLeaderboard } from "@/components/mypage/MyPageLeaderboard";
 import { MyPagePassportBook } from "@/components/mypage/MyPagePassportBook";
+import { MyPageSpiritGrowthSection } from "@/components/mypage/MyPageSpiritGrowthSection";
 import { ISLAND_BTI } from "@/constants/island";
 import { CONTAINER } from "@/constants/layout";
 import {
@@ -85,6 +86,8 @@ export function MyPage() {
                 <AnimatedWidthBar width={expPercent} />
               </div>
             </div>
+
+            <MyPageSpiritGrowthSection />
           </section>
 
           <MyPageLeaderboard />

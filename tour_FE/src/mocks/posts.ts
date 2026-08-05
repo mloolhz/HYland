@@ -4,9 +4,9 @@ export const MOCK_POSTS: Post[] = [
   {
     id: "notice-1",
     type: "review",
-    title: "2026 인천 섬 레저시즌 안내 — 미션 & 인증 이벤트 시작",
+    title: "2026 인천 섬 레저시즌 안내 — 미션 이벤트 시작",
     content:
-      "올해 시즌 미션과 인증 이벤트가 시작됐어요. 섬 방문 스탬프를 모으면 레어카드를 받을 수 있습니다.",
+      "올해 시즌 미션이 시작됐어요. 섬 방문 스탬프를 모으면 레어카드를 받을 수 있습니다.",
     island: "무의도",
     activity: "안내",
     isNotice: true,

@@ -89,6 +89,19 @@ export function NotificationItem({
           {relativeTime(notification.createdAt)}
         </time>
       </div>
+      {variant === "dropdown" && onRemove && (
+        <button
+          type="button"
+          className="noti-item-remove"
+          aria-label="알림 삭제"
+          onClick={(e) => {
+            e.stopPropagation();
+            onRemove(notification.id);
+          }}
+        >
+          <i className="ti ti-x" aria-hidden="true" />
+        </button>
+      )}
       {variant === "page" && onRemove && (
         <div className="noti-item-menu" ref={menuRef}>
           <button

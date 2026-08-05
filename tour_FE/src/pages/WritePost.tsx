@@ -11,7 +11,7 @@ import type { Post, PostType } from "@/types/community";
 const TYPE_OPTIONS: { value: PostType; label: string }[] = [
   { value: "review", label: "후기" },
   { value: "photo", label: "인증샷" },
-  { value: "question", label: "질문" },
+  { value: "question", label: "Q&A" },
 ];
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;

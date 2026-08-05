@@ -26,7 +26,7 @@ export function NotificationBell({
   placement?: "header" | "drawer";
   onDrawerAction?: () => void;
 }) {
-  const { items, unreadCount, markAsRead, markAllAsRead } = useNotifications();
+  const { items, unreadCount, markAsRead, remove, removeAll } = useNotifications();
   const [open, setOpen] = useState(false);
   const [drawerDropdownStyle, setDrawerDropdownStyle] = useState<React.CSSProperties>({});
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -148,7 +148,8 @@ export function NotificationBell({
       items={items}
       unreadCount={unreadCount}
       onItemClick={onItemClick}
-      onMarkAllRead={markAllAsRead}
+      onRemoveAll={removeAll}
+      onRemove={remove}
       onClose={handleClose}
       listRef={listRef}
       dropdownRef={dropdownRef}

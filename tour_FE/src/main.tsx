@@ -14,6 +14,7 @@ import { MyLikedPage } from "@/pages/MyLikedPage";
 import { MyPostsPage } from "@/pages/MyPostsPage";
 import { NotFound } from "@/pages/NotFound";
 import { Notifications } from "@/pages/Notifications";
+import { UserProfilePage } from "@/pages/UserProfilePage";
 import { PostDetail } from "@/pages/PostDetail";
 import { Signup } from "@/pages/Signup";
 import { IslandExplorer } from "@/pages/IslandExplorer";
@@ -63,6 +64,7 @@ const router = createBrowserRouter([
       { path: "community/my-comments", element: <MyCommentsPage /> },
       { path: "community/liked", element: <MyLikedPage /> },
       { path: "community/me", element: <MyActivity /> },
+      { path: "community/users/:userId", element: <UserProfilePage /> },
       { path: "community/:id", element: <PostDetail /> },
       { path: "notifications", element: <Notifications /> },
       { path: "mypage", element: <MyPage /> },

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { MissionBadge } from "./MissionBadge";
-import { MissionSummary } from "./MissionSummary";
+import { MissionLeaderboardPreview } from "./MissionLeaderboardPreview";
 import { MISSION_QUESTS, missionQuestState, type MissionQuest } from "@/mocks/missions";
 
 /** 랜딩 프리뷰: 6개 카테고리 + 획득/진행/전설이 골고루 보이도록 큐레이션 */
@@ -23,18 +23,18 @@ export function MissionSection() {
       <div className="container">
         <div className="sec-head reveal">
           <div className="sec-head-copy">
-            <span className="eyebrow">MISSION &amp; BADGE</span>
-            <h2>미션 &amp; 인증</h2>
+            <span className="eyebrow">MISSION</span>
+            <h2>미션</h2>
           </div>
           <Link className="more" to="/missions">
             자세히 보기 →
           </Link>
         </div>
         <p className="sec-sub reveal">
-          미션을 완료하고 귀여운 배지를 모아보세요! 모은 배지는 바다패스 여권에 기록됩니다.
+          미션을 완료하고 배지를 모으면 탐험가 순위에 올라요. 모은 배지는 섬 여권에 기록됩니다.
         </p>
-        <div className="mis-wrap">
-          <div className="badge-card reveal">
+        <div className="mis-wrap reveal">
+          <div className="badge-card">
             <div className="mb-grid">
               {PREVIEW_BADGES.map((quest) => (
                 <div className="mb-item" key={quest.id}>
@@ -45,8 +45,8 @@ export function MissionSection() {
               ))}
             </div>
           </div>
-          <div className="reveal mis-summary-col">
-            <MissionSummary />
+          <div className="mis-lb-col">
+            <MissionLeaderboardPreview />
           </div>
         </div>
       </div>

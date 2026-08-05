@@ -25,7 +25,7 @@ export type MissionTier = "일반" | "희귀" | "전설";
 
 export const CATEGORY_META: Record<MissionCategory, { emoji: string; color: string; colorName: string }> = {
 
-  섬: { emoji: "🏝️", color: "#1565C0", colorName: "인천바다색" },
+  섬: { emoji: "🏝️", color: "#2A5C93", colorName: "인천바다색" },
 
   해상: { emoji: "⛵", color: "#1E6FA8", colorName: "바다파랑" },
 
@@ -76,9 +76,6 @@ export type MissionQuest = {
   /** 레저스포츠 종목 id (`SPORTS_DATA`와 연동, SVG 아이콘 등) */
   sportId?: string;
 
-  /** 섬 방문 퀘스트 — `ISLANDS` id */
-  islandId?: string;
-
 };
 
 
@@ -87,7 +84,6 @@ const ISLAND_VISIT_QUESTS: MissionQuest[] = ISLANDS.map((island, index) => ({
   id: index + 1,
   category: "섬",
   icon: "",
-  islandId: island.id,
   title: `${island.name} 방문`,
   desc: `${island.name}에 방문하면 획득해요`,
   current: island.visited ? 1 : 0,
@@ -104,7 +100,7 @@ const EXP_SPORT_ICONS: Record<string, string> = {
   pool: "🏝️",
   night: "🔦",
   zip: "",
-  atv: "🛞",
+  monorail: "🚝",
   luge: "🛷",
 };
 
