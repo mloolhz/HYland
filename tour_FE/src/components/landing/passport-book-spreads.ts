@@ -5,14 +5,22 @@ import {
 } from "@/lib/passport/passport-quest-ink-stamp";
 import { PASSPORT_STAMPS_PER_PAGE } from "@/lib/passport/passport-mission-stamps";
 
+export type PassportBookLeftPage =
+  | { type: "profile" }
+  | { type: "mission-stamps"; quests: MissionQuest[] };
+
+export type PassportBookRightPage =
+  | {
+      type: "mission-stamps";
+      quests: MissionQuest[];
+      showCategorySummary?: boolean;
+    }
+  | { type: "island-story" };
+
 export type PassportBookSpread = {
   index: number;
-  left: { type: "profile" } | { type: "mission-stamps"; quests: MissionQuest[] };
-  right: {
-    type: "mission-stamps";
-    quests: MissionQuest[];
-    showCategorySummary?: boolean;
-  };
+  left: PassportBookLeftPage;
+  right: PassportBookRightPage;
 };
 
 /** 여권 펼침 — 0: 프로필+대표배지, 이후: 미션 배지 페이지 */
@@ -50,7 +58,47 @@ export function buildMissionBookSpreads(): PassportBookSpread[] {
     spreadIndex += 1;
   }
 
+  appendIslandStorySpread(spreads);
+
   return spreads;
+}
+
+/** 마지막 페이지 — 나의 섬 이야기 (우측) */
+function appendIslandStorySpread(spreads: PassportBookSpread[]) {
+  if (spreads.length === 0) return;
+
+  const lastIndex = spreads.length - 1;
+  const last = spreads[lastIndex];
+
+  // 프로필+대표 도장만 있는 경우 — featured 도장은 유지하고 새 spread 추가
+  if (spreads.length === 1) {
+    spreads.push({
+      index: 1,
+      left: { type: "mission-stamps", quests: [] },
+      right: { type: "island-story" },
+    });
+    return;
+  }
+
+  if (last.right.type === "mission-stamps" && last.right.quests.length === 0) {
+    spreads[lastIndex] = {
+      ...last,
+      right: { type: "island-story" },
+    };
+    return;
+  }
+
+  if (last.right.type === "mission-stamps" && last.right.quests.length > 0) {
+    spreads.push({
+      index: lastIndex + 1,
+      left: { type: "mission-stamps", quests: last.right.quests },
+      right: { type: "island-story" },
+    });
+    spreads[lastIndex] = {
+      ...last,
+      right: { type: "mission-stamps", quests: [] },
+    };
+  }
 }
 
 export type BookNavState = {

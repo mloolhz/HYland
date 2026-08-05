@@ -28,6 +28,7 @@ export function PassportAvatarPicker() {
         <ProfileCharacterVisual
           character={selectedCharacter}
           className="passport-avatar-picker__portrait"
+          avatarOnly
         />
       </button>
 

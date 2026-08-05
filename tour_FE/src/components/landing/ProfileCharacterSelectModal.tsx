@@ -55,7 +55,7 @@ function CharacterCard({
       onClick={onSelect}
     >
       <div className="profile-character-card__art">
-        <ProfileCharacterVisual character={character} className="profile-character-card__visual" compact />
+        <ProfileCharacterVisual character={character} className="profile-character-card__visual" avatarOnly />
         {selected ? (
           <span className="profile-character-card__check" aria-hidden="true">
             <CheckIcon />

@@ -156,6 +156,9 @@
 .passport-avatar-picker__trigger:hover{transform:scale(1.03);box-shadow:0 4px 12px rgba(4,14,30,.14)}
 .passport-avatar-picker__trigger:focus-visible{outline:3px solid var(--blue2);outline-offset:2px}
 .passport-avatar-picker__portrait,.passport-avatar-art{display:block;width:100%;height:100%}
+.profile-character-visual--avatar-only{display:block;width:100%;height:100%;overflow:hidden;border-radius:inherit;background:color-mix(in srgb,var(--character-theme,var(--blue)) 14%,#fff)}
+.profile-character-visual--avatar-only .profile-character-visual__art{display:block;width:100%;height:100%}
+.passport-avatar-picker__portrait.profile-character-visual--avatar-only{border-radius:50%}
 
 /* profile avatar select modal */
 .passport-avatar-modal{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;padding:20px}
@@ -208,6 +211,7 @@
 .passport-bti-card__chevron svg{width:11px;height:11px}
 .passport-bti-card__hit:hover{background:rgba(255,255,255,.35)}
 .passport-bti-card__avatar .profile-character-visual{border-radius:50%}
+.passport-bti-card__avatar .profile-character-visual--avatar-only{width:100%;height:100%}
 .passport-bti-card__empty-lead{margin:0 0 4px;font-size:14px;font-weight:700;color:var(--passport-navy);line-height:1.3}
 .passport-bti-card__empty-desc{margin:0 0 8px;font-size:12px;font-weight:500;line-height:1.4;color:var(--passport-text-muted);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
 .passport-bti-card__cta{display:inline-flex;align-items:center;justify-content:center;min-height:32px;padding:0 14px;border:none;border-radius:999px;background:var(--passport-navy);color:#fff;font-size:12px;font-weight:700;text-decoration:none;cursor:pointer;align-self:flex-start;box-shadow:0 3px 10px rgba(15,39,72,.12);transition:background .15s ease}
@@ -236,6 +240,8 @@
 .profile-character-card--selected{border-color:var(--blue);background:color-mix(in srgb,var(--blue) 6%,#fff)}
 .profile-character-card__art{position:relative;width:100%;aspect-ratio:1;border-radius:12px;overflow:hidden;background:#fff}
 .profile-character-card__visual{width:100%;height:100%}
+.profile-character-card__visual.profile-character-visual--avatar-only{border-radius:12px}
+.profile-character-card__visual .profile-character-visual__art{border-radius:inherit}
 .profile-character-card__check{position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(42,92,147,.35)}
 .profile-character-card__check svg{width:14px;height:14px}
 .profile-character-card__name{font-size:11px;font-weight:700;color:var(--navy);text-align:center;line-height:1.25}
@@ -289,6 +295,30 @@
   .passport-page--mission-stamps{padding:16px 14px 12px}
   .passport-mstamp-grid--4col{gap:4px 5px}
   .passport-ink-stamp__date{font-size:5.5px}
+  .passport-page--island-story{padding:18px 16px 14px}
+  .passport-island-story__character{width:56px;height:56px;right:10px;bottom:10px}
 }
 
+/* ---------- 나의 섬 이야기 (여권 마지막 페이지) ---------- */
+.passport-page--island-story{padding:22px 20px 18px}
+.passport-island-story{position:relative;z-index:1;display:flex;flex-direction:column;height:100%;min-height:0;gap:12px}
+.passport-island-story__head{margin-bottom:2px}
+.passport-island-story__title{margin:0 0 6px;font-size:17px;font-weight:900;color:var(--passport-navy);letter-spacing:-.02em;line-height:1.25}
+.passport-island-story__lead{margin:0;font-size:10px;font-weight:500;line-height:1.55;color:var(--passport-text-muted)}
+.passport-island-story__list{margin:0;padding:0;display:flex;flex-direction:column;gap:0;border-top:1px solid rgba(45,46,107,.08);border-bottom:1px solid rgba(45,46,107,.08)}
+.passport-island-story__row{display:grid;grid-template-columns:minmax(0,92px) minmax(0,1fr);gap:8px;padding:7px 0;border-bottom:1px dashed rgba(45,46,107,.07)}
+.passport-island-story__row:last-child{border-bottom:none}
+.passport-island-story__label{margin:0;font-size:9px;font-weight:700;color:var(--passport-text-muted);line-height:1.45}
+.passport-island-story__value{margin:0;font-size:10px;font-weight:800;color:var(--passport-navy);line-height:1.45;word-break:keep-all}
+.passport-island-story__rate{margin-top:auto;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.45);border:1px dashed rgba(45,46,107,.1)}
+.passport-island-story__rate-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:7px}
+.passport-island-story__rate-value{font-size:13px;font-weight:900;color:color-mix(in srgb,var(--island-story-theme,var(--passport-turquoise)) 75%,var(--passport-navy))}
+.passport-island-story__rate-track{height:7px;border-radius:999px;background:rgba(45,46,107,.08);overflow:hidden}
+.passport-island-story__rate-fill{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,color-mix(in srgb,var(--island-story-theme,var(--passport-turquoise)) 70%,#fff),var(--island-story-theme,var(--passport-turquoise)));transition:width .35s ease}
+.passport-island-story__rate-meta{margin:6px 0 0;font-size:9px;font-weight:600;color:var(--passport-text-muted)}
+.passport-island-story__character{position:absolute;right:14px;bottom:12px;width:64px;height:64px;border-radius:50%;overflow:hidden;border:1.5px solid color-mix(in srgb,var(--island-story-theme,var(--passport-turquoise)) 28%,#fff);background:color-mix(in srgb,var(--island-story-theme,var(--passport-turquoise)) 10%,#fff);box-shadow:0 3px 10px rgba(4,14,30,.08);pointer-events:none}
+.passport-island-story__character .profile-character-visual,
+.passport-island-story__character .ibti-character-visual{width:100%;height:100%}
+.passport-island-story__character .profile-character-visual__art,
+.passport-island-story__character .ibti-character-visual__frame{width:100%;height:100%;border:0;box-shadow:none;background:transparent;border-radius:0}
 

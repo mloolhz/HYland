@@ -83,7 +83,7 @@ export function PassportBtiCard({ allowDemoPreview = false }: PassportBtiCardPro
       >
         {btiCharacter ? (
           <div className="passport-bti-card__avatar">
-            <ProfileCharacterVisual character={btiCharacter} compact spiritLevel={spiritGrowth.level} />
+            <ProfileCharacterVisual character={btiCharacter} avatarOnly spiritLevel={spiritGrowth.level} />
           </div>
         ) : null}
 

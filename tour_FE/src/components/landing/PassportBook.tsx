@@ -10,6 +10,7 @@ import {
 import type { UserProfile } from "@/lib/user-profile";
 import { useOptionalProfileCharacter } from "@/context/ProfileCharacterContext";
 import { PassportMissionStampPage } from "./PassportMissionStampPage";
+import { PassportIslandStoryPage } from "./PassportIslandStoryPage";
 import { PassportProfilePage } from "./PassportProfilePage";
 import type { BookNavState, PassportBookSpread } from "./passport-book-spreads";
 
@@ -71,13 +72,17 @@ function RightPage({
 }) {
   return (
     <div className="passport-book__page passport-book__page--right">
-      <PassportMissionStampPage
-        quests={spread.right.quests}
-        spreadIndex={spread.index}
-        totalSpreads={totalSpreads}
-        side="right"
-        showCategorySummary={spread.right.showCategorySummary}
-      />
+      {spread.right.type === "island-story" ? (
+        <PassportIslandStoryPage />
+      ) : (
+        <PassportMissionStampPage
+          quests={spread.right.quests}
+          spreadIndex={spread.index}
+          totalSpreads={totalSpreads}
+          side="right"
+          showCategorySummary={spread.right.showCategorySummary}
+        />
+      )}
     </div>
   );
 }
