@@ -37,7 +37,7 @@ function toSources(sportId: string) {
   return { reservationType, sources: mapped };
 }
 
-function buildRec(sportId: string, islandName: string): RecItem | null {
+export function buildRec(sportId: string, islandName: string): RecItem | null {
   const meta = findSportMeta(sportId);
   if (!meta) return null;
   const colors = getIslandColors(islandName);

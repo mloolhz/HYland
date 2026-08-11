@@ -18,7 +18,7 @@ export function AiResponseContent({ response, onFollowup }: AiResponseContentPro
 
   return (
     <div className="ai-response">
-      <p className="ai-response-text">{response.text}</p>
+      <p className="ai-response-text" style={{ whiteSpace: "pre-line" }}>{response.text}</p>
 
       {response.recommendations.length > 0 && (
         <div className="ai-rec-list">
