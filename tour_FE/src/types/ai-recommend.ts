@@ -35,4 +35,11 @@ export type AiResponse = {
 
 export type ChatMessage =
   | { id: string; role: "user"; text: string }
-  | { id: string; role: "assistant"; response: AiResponse };
+  | { id: string; role: "assistant"; isStreaming: true; streamText: string }
+  | { id: string; role: "assistant"; isStreaming?: false; response: AiResponse };
+
+export function isStreamingAssistant(
+  msg: ChatMessage,
+): msg is Extract<ChatMessage, { role: "assistant"; isStreaming: true }> {
+  return msg.role === "assistant" && msg.isStreaming === true;
+}

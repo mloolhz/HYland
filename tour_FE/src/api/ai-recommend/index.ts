@@ -8,7 +8,113 @@ export type ChatHistoryItem = {
 
 const API_BASE = "http://localhost:4000";
 
-/** 백엔드 AI 추천 호출 → 실제 종목 데이터로 채워서 반환 */
+type RecommendPayload = {
+  text?: string;
+  recommendations?: Array<{ sportId: string; islandName: string }>;
+  course?: AiResponse["course"];
+  tips?: string[];
+  followups?: string[];
+};
+
+function toAiResponse(data: RecommendPayload): AiResponse {
+  const recommendations: RecItem[] = (data.recommendations ?? [])
+    .map((r) => buildRec(r.sportId, r.islandName))
+    .filter((r): r is RecItem => r !== null);
+
+  return {
+    text: data.text ?? "",
+    recommendations,
+    course: data.course,
+    tips: data.tips,
+    followups: data.followups,
+  };
+}
+
+/** 부분 JSON에서 대화 text 필드만 추출 (스트리밍 미리보기용) */
+function extractPartialText(raw: string): string {
+  const marker = raw.match(/"text"\s*:\s*"/);
+  if (!marker || marker.index === undefined) return "";
+
+  let i = marker.index + marker[0].length;
+  let result = "";
+
+  while (i < raw.length) {
+    const ch = raw[i];
+    if (ch === "\\") {
+      if (i + 1 >= raw.length) break;
+      const next = raw[i + 1];
+      if (next === "n") result += "\n";
+      else if (next === "t") result += "\t";
+      else if (next === "r") result += "\r";
+      else if (next === '"') result += '"';
+      else if (next === "\\") result += "\\";
+      else result += next;
+      i += 2;
+      continue;
+    }
+    if (ch === '"') break;
+    result += ch;
+    i += 1;
+  }
+
+  return result;
+}
+
+type SSEEvent = { event: string; data: string };
+
+function parseSSEBuffer(buffer: string): { events: SSEEvent[]; remainder: string } {
+  const events: SSEEvent[] = [];
+  let rest = buffer.replace(/\r\n/g, "\n");
+
+  while (true) {
+    const sep = rest.indexOf("\n\n");
+    if (sep === -1) break;
+
+    const block = rest.slice(0, sep);
+    rest = rest.slice(sep + 2);
+
+    let event = "message";
+    let data = "";
+    for (const line of block.split("\n")) {
+      if (line.startsWith("event: ")) event = line.slice(7).trim();
+      else if (line.startsWith("data: ")) data += line.slice(6);
+    }
+    if (data) events.push({ event, data });
+  }
+
+  return { events, remainder: rest };
+}
+
+function handleSSEEvents(
+  events: SSEEvent[],
+  rawAccum: { value: string },
+  onTextChunk: (accumulatedText: string) => void,
+  onDone: (response: AiResponse) => void,
+): boolean {
+  for (const evt of events) {
+    if (evt.event === "chunk") {
+      const payload = JSON.parse(evt.data) as { text?: string };
+      rawAccum.value += payload.text ?? "";
+      onTextChunk(extractPartialText(rawAccum.value));
+      continue;
+    }
+
+    if (evt.event === "done") {
+      const payload = JSON.parse(evt.data) as RecommendPayload;
+      onDone(toAiResponse(payload));
+      return true;
+    }
+
+    if (evt.event === "error") {
+      const payload = JSON.parse(evt.data) as { error?: string };
+      throw new Error(payload.error ?? "추천 생성 중 오류가 발생했습니다.");
+    }
+  }
+
+  return false;
+}
+
+/** 백엔드 AI 추천 호출 → 실제 종목 데이터로 채워서 반환 (논스트리밍 폴백) */
 export async function getAiRecommendation(
   userMessage: string,
   history?: ChatHistoryItem[],
@@ -23,20 +129,68 @@ export async function getAiRecommendation(
     throw new Error("추천 요청 실패");
   }
 
-  const data = await res.json();
+  const data = (await res.json()) as RecommendPayload;
+  return toAiResponse(data);
+}
 
-  // 백엔드가 준 sportId·islandName을 실제 종목 데이터(regionColor·예약링크)로 변환
-  const recommendations: RecItem[] = (data.recommendations ?? [])
-    .map((r: { sportId: string; islandName: string }) =>
-      buildRec(r.sportId, r.islandName),
-    )
-    .filter((r: RecItem | null): r is RecItem => r !== null);
+/** SSE 스트리밍 AI 추천 */
+export async function getAiRecommendationStream(
+  userMessage: string,
+  history: ChatHistoryItem[] | undefined,
+  onTextChunk: (accumulatedText: string) => void,
+  onDone: (response: AiResponse) => void,
+): Promise<void> {
+  const res = await fetch(`${API_BASE}/api/recommend/stream`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ question: userMessage, history }),
+  });
 
-  return {
-    text: data.text ?? "",
-    recommendations,
-    course: data.course,
-    tips: data.tips,
-    followups: data.followups,
-  };
+  if (!res.ok) {
+    throw new Error("추천 요청 실패");
+  }
+
+  if (!res.body) {
+    throw new Error("스트림 응답 없음");
+  }
+
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder("utf-8");
+  let sseBuffer = "";
+  const rawAccum = { value: "" };
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+
+      if (value) {
+        sseBuffer += decoder.decode(value, { stream: true });
+        const parsed = parseSSEBuffer(sseBuffer);
+        sseBuffer = parsed.remainder;
+        if (handleSSEEvents(parsed.events, rawAccum, onTextChunk, onDone)) return;
+      }
+
+      if (done) break;
+    }
+
+    sseBuffer += decoder.decode(undefined, { stream: false });
+    const parsed = parseSSEBuffer(sseBuffer);
+    if (handleSSEEvents(parsed.events, rawAccum, onTextChunk, onDone)) return;
+
+    throw new Error("스트림이 예기치 않게 종료되었습니다.");
+  } finally {
+    reader.releaseLock();
+  }
+}
+
+/** 인기 질문 TOP N 조회. 실패 시 빈 배열(프론트에서 고정 예시로 폴백) */
+export async function getPopularQuestions(): Promise<string[]> {
+  try {
+    const res = await fetch(`${API_BASE}/api/popular-questions`);
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data.questions ?? [];
+  } catch {
+    return [];
+  }
 }

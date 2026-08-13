@@ -151,6 +151,10 @@ body:has(.ai-page) {
   color: #1a2332;
 }
 
+.ai-response-text--streaming {
+  margin: 0;
+}
+
 .ai-rec-list {
   margin-bottom: 18px;
 }

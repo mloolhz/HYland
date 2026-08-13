@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { getAiRecommendation } from "@/api/ai-recommend";
+import { getAiRecommendation, getAiRecommendationStream, getPopularQuestions } from "@/api/ai-recommend";
 import { AiResponseContent } from "@/components/ai-recommend/AiResponseContent";
 import { CONTAINER } from "@/constants/layout";
-import type { ChatMessage } from "@/types/ai-recommend";
+import { isStreamingAssistant, type ChatMessage } from "@/types/ai-recommend";
 import { AI_RECOMMEND_COPY } from "@/pages/aiRecommendCopy";
+import { useStreamTypewriter } from "@/hooks/useStreamTypewriter";
 
 type LocationState = {
   initialMessage?: string;
@@ -85,6 +86,8 @@ export function AiRecommend() {
   const scrollToUserIdRef = useRef<string | null>(null);
   const activeTurnIdRef = useRef<string | null>(null);
   const initialHandled = useRef(false);
+  const { begin: beginTypewriter, pushTarget, finishStream, abort: abortTypewriter } =
+    useStreamTypewriter();
 
   const turns = useMemo(() => groupTurns(messages), [messages]);
 
@@ -108,31 +111,62 @@ export function AiRecommend() {
       if (!trimmed || loading) return;
 
       const userMsg: ChatMessage = { id: createId(), role: "user", text: trimmed };
+      const assistantId = createId();
       scrollToUserIdRef.current = userMsg.id;
       activeTurnIdRef.current = userMsg.id;
-      setMessages((prev) => [...prev, userMsg]);
+      setMessages((prev) => [
+        ...prev,
+        userMsg,
+        { id: assistantId, role: "assistant", isStreaming: true, streamText: "" },
+      ]);
       clearInput();
       setLoading(true);
       setErrorMsg(null);
+
+      beginTypewriter({
+        onDisplay: (streamText) => {
+          setMessages((prev) =>
+            prev.map((m) =>
+              m.id === assistantId && isStreamingAssistant(m) ? { ...m, streamText } : m,
+            ),
+          );
+        },
+        onComplete: (response) => {
+          setMessages((prev) =>
+            prev.map((m) =>
+              m.id === assistantId ? { id: assistantId, role: "assistant", response } : m,
+            ),
+          );
+          setLoading(false);
+        },
+      });
 
       try {
         const history = [...messages, userMsg]
           .filter((m): m is Extract<ChatMessage, { role: "user" }> => m.role === "user")
           .map((m) => ({ role: "user" as const, text: m.text }));
 
-        const response = await getAiRecommendation(trimmed, history);
-        setMessages((prev) => [
-          ...prev,
-          { id: createId(), role: "assistant", response },
-        ]);
+        try {
+          await getAiRecommendationStream(
+            trimmed,
+            history,
+            (streamText) => pushTarget(streamText),
+            (response) => finishStream(response),
+          );
+        } catch (streamErr) {
+          console.warn("[ai-recommend] 스트리밍 실패, 논스트리밍 폴백", streamErr);
+          const response = await getAiRecommendation(trimmed, history);
+          finishStream(response);
+        }
       } catch (err) {
+        abortTypewriter();
         console.error(AI_RECOMMEND_COPY.requestFailedLog, err);
+        setMessages((prev) => prev.filter((m) => m.id !== assistantId));
         setErrorMsg(AI_RECOMMEND_COPY.error);
-      } finally {
         setLoading(false);
       }
     },
-    [clearInput, loading, messages],
+    [abortTypewriter, beginTypewriter, clearInput, finishStream, loading, messages, pushTarget],
   );
 
   const trySnapActiveTurn = useCallback(() => {
@@ -197,6 +231,14 @@ export function AiRecommend() {
     return () => container.removeEventListener("scroll", onScroll);
   }, [loading]);
 
+  const [popularQuestions, setPopularQuestions] = useState<string[]>([]);
+
+  useEffect(() => {
+    void getPopularQuestions().then((qs) => {
+      if (qs.length > 0) setPopularQuestions(qs);
+    });
+  }, []);
+
   useEffect(() => {
     if (!loading || !activeTurnIdRef.current) return;
 
@@ -244,7 +286,10 @@ export function AiRecommend() {
             <div className="ai-empty">
               <p>{AI_RECOMMEND_COPY.emptyPrompt}</p>
               <div className="ai-example-chips">
-                {AI_RECOMMEND_COPY.exampleQuestions.map((q) => (
+                {(popularQuestions.length > 0
+                  ? popularQuestions
+                  : AI_RECOMMEND_COPY.exampleQuestions
+                ).map((q) => (
                   <button key={q} type="button" className="ai-example-chip" onClick={() => void sendMessage(q)}>
                     {q}
                   </button>
@@ -255,6 +300,11 @@ export function AiRecommend() {
 
           {turns.map((turn, index) => {
             const isLast = index === turns.length - 1;
+            const streamingAssistant =
+              turn.assistant && isStreamingAssistant(turn.assistant) ? turn.assistant : null;
+            const showStreamingText = !!streamingAssistant?.streamText;
+            const showLoadingDots = isLast && loading && streamingAssistant && !showStreamingText;
+
             return (
               <div
                 key={turn.user.id}
@@ -265,16 +315,22 @@ export function AiRecommend() {
                   <p>{turn.user.text}</p>
                 </div>
 
-                {turn.assistant && (
+                {turn.assistant && !showLoadingDots && (
                   <div className="ai-bubble ai-bubble--assistant">
-                    <AiResponseContent
-                      response={turn.assistant.response}
-                      onFollowup={(text) => void sendMessage(text)}
-                    />
+                    {streamingAssistant ? (
+                      <p className="ai-response-text ai-response-text--streaming" style={{ whiteSpace: "pre-line" }}>
+                        {streamingAssistant.streamText}
+                      </p>
+                    ) : !isStreamingAssistant(turn.assistant) ? (
+                      <AiResponseContent
+                        response={turn.assistant.response}
+                        onFollowup={(text) => void sendMessage(text)}
+                      />
+                    ) : null}
                   </div>
                 )}
 
-                {isLast && loading && (
+                {showLoadingDots && (
                   <div className="ai-bubble ai-bubble--assistant ai-bubble--loading" aria-busy="true">
                     <span className="ai-loading-text">{AI_RECOMMEND_COPY.loading}</span>
                     <span className="ai-typing-dots" aria-hidden="true">
