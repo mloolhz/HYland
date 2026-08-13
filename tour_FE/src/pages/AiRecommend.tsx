@@ -4,13 +4,7 @@ import { getAiRecommendation } from "@/api/ai-recommend";
 import { AiResponseContent } from "@/components/ai-recommend/AiResponseContent";
 import { CONTAINER } from "@/constants/layout";
 import type { ChatMessage } from "@/types/ai-recommend";
-
-const EXAMPLE_QUESTIONS = [
-  "가족 당일치기 코스 추천해줘",
-  "커플에게 어울리는 섬 추천",
-  "비 오는 날 대체 코스",
-  "힐링 여행 추천",
-];
+import { AI_RECOMMEND_COPY } from "@/pages/aiRecommendCopy";
 
 type LocationState = {
   initialMessage?: string;
@@ -81,9 +75,11 @@ export function AiRecommend() {
   const navigate = useNavigate();
   const initialMessage = (location.state as LocationState | null)?.initialMessage?.trim();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [input, setInput] = useState("");
+  const [hasInput, setHasInput] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [bootstrapped, setBootstrapped] = useState(false);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const turnRefs = useRef<Map<string, HTMLDivElement>>(new Map());
   const chatScrollRef = useRef<HTMLDivElement>(null);
   const scrollToUserIdRef = useRef<string | null>(null);
@@ -97,6 +93,15 @@ export function AiRecommend() {
     else turnRefs.current.delete(id);
   }, []);
 
+  const clearInput = useCallback(() => {
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
+    setHasInput(false);
+  }, []);
+
+  const readInput = useCallback(() => inputRef.current?.value ?? "", []);
+
   const sendMessage = useCallback(
     async (text: string) => {
       const trimmed = text.trim();
@@ -106,8 +111,9 @@ export function AiRecommend() {
       scrollToUserIdRef.current = userMsg.id;
       activeTurnIdRef.current = userMsg.id;
       setMessages((prev) => [...prev, userMsg]);
-      setInput("");
+      clearInput();
       setLoading(true);
+      setErrorMsg(null);
 
       try {
         const history = [...messages, userMsg]
@@ -119,11 +125,14 @@ export function AiRecommend() {
           ...prev,
           { id: createId(), role: "assistant", response },
         ]);
+      } catch (err) {
+        console.error(AI_RECOMMEND_COPY.requestFailedLog, err);
+        setErrorMsg(AI_RECOMMEND_COPY.error);
       } finally {
         setLoading(false);
       }
     },
-    [loading, messages],
+    [clearInput, loading, messages],
   );
 
   const trySnapActiveTurn = useCallback(() => {
@@ -218,7 +227,7 @@ export function AiRecommend() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    void sendMessage(input);
+    void sendMessage(readInput());
   };
 
   const isEmpty = bootstrapped && messages.length === 0 && !loading;
@@ -227,15 +236,15 @@ export function AiRecommend() {
     <main className="ai-page">
       <div className={`${CONTAINER} ai-page-inner`}>
         <header className="ai-page-head">
-          <h1>인천섬 레저누리 AI 추천</h1>
+          <h1>{AI_RECOMMEND_COPY.title}</h1>
         </header>
 
         <div className="ai-chat" ref={chatScrollRef} aria-live="polite">
           {isEmpty && (
             <div className="ai-empty">
-              <p>원하는 레저나 조건을 입력해보세요.</p>
+              <p>{AI_RECOMMEND_COPY.emptyPrompt}</p>
               <div className="ai-example-chips">
-                {EXAMPLE_QUESTIONS.map((q) => (
+                {AI_RECOMMEND_COPY.exampleQuestions.map((q) => (
                   <button key={q} type="button" className="ai-example-chip" onClick={() => void sendMessage(q)}>
                     {q}
                   </button>
@@ -267,7 +276,25 @@ export function AiRecommend() {
 
                 {isLast && loading && (
                   <div className="ai-bubble ai-bubble--assistant ai-bubble--loading" aria-busy="true">
-                    <p>AI가 추천을 준비하고 있어요…</p>
+                    <span className="ai-loading-text">{AI_RECOMMEND_COPY.loading}</span>
+                    <span className="ai-typing-dots" aria-hidden="true">
+                      <span className="ai-dot"></span>
+                      <span className="ai-dot"></span>
+                      <span className="ai-dot"></span>
+                    </span>
+                  </div>
+                )}
+
+                {isLast && !loading && errorMsg && (
+                  <div className="ai-bubble ai-bubble--assistant ai-bubble--error" role="alert">
+                    <p>{errorMsg}</p>
+                    <button
+                      type="button"
+                      className="ai-retry-btn"
+                      onClick={() => void sendMessage(turn.user.text)}
+                    >
+                      {AI_RECOMMEND_COPY.retry}
+                    </button>
                   </div>
                 )}
               </div>
@@ -282,26 +309,32 @@ export function AiRecommend() {
 
         <form className="ai-composer" onSubmit={handleSubmit}>
           <textarea
+            ref={inputRef}
             className="ai-composer-input"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
+            defaultValue=""
+            onInput={() => setHasInput(!!inputRef.current?.value.trim())}
             onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
+              if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
                 e.preventDefault();
-                void sendMessage(input);
+                void sendMessage(readInput());
               }
             }}
-            placeholder="예: 가족 당일치기 가능한 섬 추천해줘"
+            placeholder={AI_RECOMMEND_COPY.placeholder}
             rows={2}
-            aria-label="AI에게 질문하기"
+            aria-label={AI_RECOMMEND_COPY.inputLabel}
             disabled={loading}
           />
-          <button type="submit" className="ai-composer-send" disabled={loading || !input.trim()} aria-label="전송">
-            전송
+          <button
+            type="submit"
+            className="ai-composer-send"
+            disabled={loading || !hasInput}
+            aria-label={AI_RECOMMEND_COPY.send}
+          >
+            {AI_RECOMMEND_COPY.send}
           </button>
         </form>
 
-        <p className="ai-demo-note">AI 추천은 예시 응답입니다 (실제 AI 연동 예정)</p>
+        <p className="ai-demo-note">{AI_RECOMMEND_COPY.demoNote}</p>
       </div>
     </main>
   );
