@@ -15,6 +15,5 @@ export const AI_RECOMMEND_COPY = {
   placeholder: "\uC608: \uAC00\uC871 \uB2F9\uC77C\uCE58\uAE30 \uAC00\uB2A5\uD55C \uC12C \uCD94\uCC9C\uD574\uC918",
   inputLabel: "AI\uC5D0\uAC8C \uC9C8\uBB38\uD558\uAE30",
   send: "\uC804\uC1A1",
-  demoNote: "AI \uCD94\uCC9C\uC740 \uC608\uC2DC \uC751\uB2F5\uC785\uB2C8\uB2E4 (\uC2E4\uC81C AI \uC5F0\uB3D9 \uC608\uC815)",
   requestFailedLog: "AI \uCD94\uCC9C \uC694\uCCAD \uC2E4\uD328:",
 } as const;

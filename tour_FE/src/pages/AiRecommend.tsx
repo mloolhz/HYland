@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { getAiRecommendation, getAiRecommendationStream, getPopularQuestions } from "@/api/ai-recommend";
+import {
+  getAiRecommendation,
+  getAiRecommendationStream,
+  getPopularQuestions,
+  type ChatHistoryItem,
+} from "@/api/ai-recommend";
 import { AiResponseContent } from "@/components/ai-recommend/AiResponseContent";
 import { CONTAINER } from "@/constants/layout";
 import { isStreamingAssistant, type ChatMessage } from "@/types/ai-recommend";
@@ -142,9 +147,23 @@ export function AiRecommend() {
       });
 
       try {
-        const history = [...messages, userMsg]
-          .filter((m): m is Extract<ChatMessage, { role: "user" }> => m.role === "user")
-          .map((m) => ({ role: "user" as const, text: m.text }));
+        const history: ChatHistoryItem[] = [...messages, userMsg].flatMap(
+          (m): ChatHistoryItem[] => {
+            if (m.role === "user") {
+              return [{ role: "user", text: m.text }];
+            }
+            if (isStreamingAssistant(m)) {
+              return [];
+            }
+            return [
+              {
+                role: "assistant",
+                text: m.response.text,
+                sportIds: m.response.recommendations.map((r) => r.sportId),
+              },
+            ];
+          },
+        );
 
         try {
           await getAiRecommendationStream(
@@ -274,6 +293,64 @@ export function AiRecommend() {
 
   const isEmpty = bootstrapped && messages.length === 0 && !loading;
 
+  const composerForm = (
+    <form className="ai-composer" onSubmit={handleSubmit}>
+      <textarea
+        ref={inputRef}
+        className="ai-composer-input"
+        defaultValue=""
+        onInput={() => setHasInput(!!inputRef.current?.value.trim())}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
+            e.preventDefault();
+            void sendMessage(readInput());
+          }
+        }}
+        placeholder={AI_RECOMMEND_COPY.placeholder}
+        rows={2}
+        aria-label={AI_RECOMMEND_COPY.inputLabel}
+        disabled={loading}
+      />
+      <button
+        type="submit"
+        className="ai-composer-send"
+        disabled={loading || !hasInput}
+        aria-label={AI_RECOMMEND_COPY.send}
+      >
+        {AI_RECOMMEND_COPY.send}
+      </button>
+    </form>
+  );
+
+  const exampleChips = (popularQuestions.length > 0
+    ? popularQuestions
+    : AI_RECOMMEND_COPY.exampleQuestions
+  ).map((q) => (
+    <button key={q} type="button" className="ai-example-chip" onClick={() => void sendMessage(q)}>
+      {q}
+    </button>
+  ));
+
+  if (isEmpty) {
+    return (
+      <main className="ai-page">
+        <div className={`${CONTAINER} ai-page-inner`}>
+          <header className="ai-page-head">
+            <h1>{AI_RECOMMEND_COPY.title}</h1>
+          </header>
+
+          <div className="ai-empty-center ai-fade-up">
+            <div className="ai-empty">
+              <p>{AI_RECOMMEND_COPY.emptyPrompt}</p>
+              <div className="ai-example-chips">{exampleChips}</div>
+            </div>
+            {composerForm}
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="ai-page">
       <div className={`${CONTAINER} ai-page-inner`}>
@@ -282,22 +359,6 @@ export function AiRecommend() {
         </header>
 
         <div className="ai-chat" ref={chatScrollRef} aria-live="polite">
-          {isEmpty && (
-            <div className="ai-empty">
-              <p>{AI_RECOMMEND_COPY.emptyPrompt}</p>
-              <div className="ai-example-chips">
-                {(popularQuestions.length > 0
-                  ? popularQuestions
-                  : AI_RECOMMEND_COPY.exampleQuestions
-                ).map((q) => (
-                  <button key={q} type="button" className="ai-example-chip" onClick={() => void sendMessage(q)}>
-                    {q}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
           {turns.map((turn, index) => {
             const isLast = index === turns.length - 1;
             const streamingAssistant =
@@ -363,34 +424,7 @@ export function AiRecommend() {
           />
         </div>
 
-        <form className="ai-composer" onSubmit={handleSubmit}>
-          <textarea
-            ref={inputRef}
-            className="ai-composer-input"
-            defaultValue=""
-            onInput={() => setHasInput(!!inputRef.current?.value.trim())}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
-                e.preventDefault();
-                void sendMessage(readInput());
-              }
-            }}
-            placeholder={AI_RECOMMEND_COPY.placeholder}
-            rows={2}
-            aria-label={AI_RECOMMEND_COPY.inputLabel}
-            disabled={loading}
-          />
-          <button
-            type="submit"
-            className="ai-composer-send"
-            disabled={loading || !hasInput}
-            aria-label={AI_RECOMMEND_COPY.send}
-          >
-            {AI_RECOMMEND_COPY.send}
-          </button>
-        </form>
-
-        <p className="ai-demo-note">{AI_RECOMMEND_COPY.demoNote}</p>
+        {composerForm}
       </div>
     </main>
   );

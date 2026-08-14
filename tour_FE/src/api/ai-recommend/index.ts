@@ -4,6 +4,8 @@ import { buildRec } from "./mockData";
 export type ChatHistoryItem = {
   role: "user" | "assistant";
   text: string;
+  /** assistant 턴에서 실제로 추천한 sportId 목록 (백엔드가 중복 추천 방지에 사용) */
+  sportIds?: string[];
 };
 
 const API_BASE = "http://localhost:4000";
