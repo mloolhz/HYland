@@ -47,14 +47,22 @@ body:has(.ai-page) {
   letter-spacing: -0.02em;
 }
 
-.ai-chat {
+/* .ai-stage hosts both the scrollable chat thread and the floating input
+   group, so the input group can transition position (center <-> bottom
+   dock) without the composer ever unmounting. */
+.ai-stage {
   position: relative;
   flex: 1;
   min-height: 0;
+}
+
+.ai-chat {
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 0 0 16px;
+  padding: 0 0 96px;
   overflow-y: auto;
   overflow-anchor: none;
   overscroll-behavior: contain;
@@ -76,9 +84,24 @@ body:has(.ai-page) {
   min-height: calc(100vh - var(--head-h, 74px) - 40px - var(--ai-chat-offset, 14rem));
 }
 
+/* Prompt + example chips: always mounted, faded/hidden outside the empty
+   state so the composer below it never has to remount to reposition. */
 .ai-empty {
   text-align: center;
-  padding: 48px 16px 24px;
+  padding: 0;
+  opacity: 0;
+  transform: translateY(10px);
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 320ms ease, transform 320ms ease, visibility 0s linear 320ms;
+}
+
+.ai-stage--empty .ai-empty {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 320ms ease, transform 320ms ease;
 }
 
 .ai-empty > p {
@@ -87,30 +110,25 @@ body:has(.ai-page) {
   color: #5f6b7c;
 }
 
-/* Centered first-screen layout (before any message is sent) */
-.ai-empty-center {
-  flex: 1;
-  min-height: 0;
-  width: 100%;
+/* Prompt/chips + composer, anchored to the bottom of the stage; sliding it
+   up is what makes the composer appear "centered" before the first send. */
+.ai-input-group {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  width: calc(100% - 32px);
+  max-width: 640px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   gap: 28px;
-  padding: 0 0 22vh;
-  box-sizing: border-box;
+  transform: translate(-50%, 0);
+  transition: transform 380ms cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 2;
 }
 
-.ai-empty-center .ai-empty {
-  padding: 0;
-}
-
-.ai-empty-center .ai-composer {
-  width: 100%;
-  max-width: 640px;
-  border-top: none;
-  background: transparent;
-  padding: 0;
+.ai-stage--empty .ai-input-group {
+  transform: translate(-50%, -36.5vh);
 }
 
 .ai-example-chips {
@@ -452,8 +470,15 @@ body:has(.ai-page) {
   gap: 10px;
   align-items: flex-end;
   flex-shrink: 0;
+  padding: 0;
+  border-top: 1px solid transparent;
+  background: transparent;
+  transition: padding 320ms ease, border-color 320ms ease, background-color 320ms ease;
+}
+
+.ai-stage:not(.ai-stage--empty) .ai-composer {
   padding: 12px 0 8px;
-  border-top: 1px solid #e4eaf2;
+  border-top-color: #e4eaf2;
   background: #f7f9fc;
 }
 
@@ -520,9 +545,13 @@ body:has(.ai-page) {
     justify-content: center;
   }
 
-  .ai-empty-center {
+  .ai-input-group {
     gap: 20px;
-    padding: 0 0 16vh;
+    width: calc(100% - 24px);
+  }
+
+  .ai-stage--empty .ai-input-group {
+    transform: translate(-50%, -32.5vh);
   }
 
   .ai-empty > p {
@@ -598,5 +627,15 @@ body:has(.ai-page) {
 @media (prefers-reduced-motion: reduce) {
   .ai-fade-up {
     animation: none;
+  }
+}
+
+/* Center-to-bottom composer transition: skip the animation, jump straight
+   to the resting state for reduced-motion users. */
+@media (prefers-reduced-motion: reduce) {
+  .ai-input-group,
+  .ai-empty,
+  .ai-composer {
+    transition: none !important;
   }
 }

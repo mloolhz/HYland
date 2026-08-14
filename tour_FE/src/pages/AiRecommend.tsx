@@ -331,26 +331,6 @@ export function AiRecommend() {
     </button>
   ));
 
-  if (isEmpty) {
-    return (
-      <main className="ai-page">
-        <div className={`${CONTAINER} ai-page-inner`}>
-          <header className="ai-page-head">
-            <h1>{AI_RECOMMEND_COPY.title}</h1>
-          </header>
-
-          <div className="ai-empty-center ai-fade-up">
-            <div className="ai-empty">
-              <p>{AI_RECOMMEND_COPY.emptyPrompt}</p>
-              <div className="ai-example-chips">{exampleChips}</div>
-            </div>
-            {composerForm}
-          </div>
-        </div>
-      </main>
-    );
-  }
-
   return (
     <main className="ai-page">
       <div className={`${CONTAINER} ai-page-inner`}>
@@ -358,73 +338,81 @@ export function AiRecommend() {
           <h1>{AI_RECOMMEND_COPY.title}</h1>
         </header>
 
-        <div className="ai-chat" ref={chatScrollRef} aria-live="polite">
-          {turns.map((turn, index) => {
-            const isLast = index === turns.length - 1;
-            const streamingAssistant =
-              turn.assistant && isStreamingAssistant(turn.assistant) ? turn.assistant : null;
-            const showStreamingText = !!streamingAssistant?.streamText;
-            const showLoadingDots = isLast && loading && streamingAssistant && !showStreamingText;
+        <div className={`ai-stage${isEmpty ? " ai-stage--empty" : ""}`}>
+          <div className="ai-chat" ref={chatScrollRef} aria-live="polite">
+            {turns.map((turn, index) => {
+              const isLast = index === turns.length - 1;
+              const streamingAssistant =
+                turn.assistant && isStreamingAssistant(turn.assistant) ? turn.assistant : null;
+              const showStreamingText = !!streamingAssistant?.streamText;
+              const showLoadingDots = isLast && loading && streamingAssistant && !showStreamingText;
 
-            return (
-              <div
-                key={turn.user.id}
-                ref={(el) => setTurnRef(turn.user.id, el)}
-                className="ai-chat-turn"
-              >
-                <div className="ai-bubble ai-bubble--user">
-                  <p>{turn.user.text}</p>
+              return (
+                <div
+                  key={turn.user.id}
+                  ref={(el) => setTurnRef(turn.user.id, el)}
+                  className={`ai-chat-turn${index === 0 ? " ai-fade-up" : ""}`}
+                >
+                  <div className="ai-bubble ai-bubble--user">
+                    <p>{turn.user.text}</p>
+                  </div>
+
+                  {turn.assistant && !showLoadingDots && (
+                    <div className="ai-bubble ai-bubble--assistant">
+                      {streamingAssistant ? (
+                        <p className="ai-response-text ai-response-text--streaming" style={{ whiteSpace: "pre-line" }}>
+                          {streamingAssistant.streamText}
+                        </p>
+                      ) : !isStreamingAssistant(turn.assistant) ? (
+                        <AiResponseContent
+                          response={turn.assistant.response}
+                          onFollowup={(text) => void sendMessage(text)}
+                        />
+                      ) : null}
+                    </div>
+                  )}
+
+                  {showLoadingDots && (
+                    <div className="ai-bubble ai-bubble--assistant ai-bubble--loading" aria-busy="true">
+                      <span className="ai-loading-text">{AI_RECOMMEND_COPY.loading}</span>
+                      <span className="ai-typing-dots" aria-hidden="true">
+                        <span className="ai-dot"></span>
+                        <span className="ai-dot"></span>
+                        <span className="ai-dot"></span>
+                      </span>
+                    </div>
+                  )}
+
+                  {isLast && !loading && errorMsg && (
+                    <div className="ai-bubble ai-bubble--assistant ai-bubble--error" role="alert">
+                      <p>{errorMsg}</p>
+                      <button
+                        type="button"
+                        className="ai-retry-btn"
+                        onClick={() => void sendMessage(turn.user.text)}
+                      >
+                        {AI_RECOMMEND_COPY.retry}
+                      </button>
+                    </div>
+                  )}
                 </div>
+              );
+            })}
 
-                {turn.assistant && !showLoadingDots && (
-                  <div className="ai-bubble ai-bubble--assistant">
-                    {streamingAssistant ? (
-                      <p className="ai-response-text ai-response-text--streaming" style={{ whiteSpace: "pre-line" }}>
-                        {streamingAssistant.streamText}
-                      </p>
-                    ) : !isStreamingAssistant(turn.assistant) ? (
-                      <AiResponseContent
-                        response={turn.assistant.response}
-                        onFollowup={(text) => void sendMessage(text)}
-                      />
-                    ) : null}
-                  </div>
-                )}
+            <div
+              className={`ai-chat-spacer${loading ? " ai-chat-spacer--grow" : ""}`}
+              aria-hidden="true"
+            />
+          </div>
 
-                {showLoadingDots && (
-                  <div className="ai-bubble ai-bubble--assistant ai-bubble--loading" aria-busy="true">
-                    <span className="ai-loading-text">{AI_RECOMMEND_COPY.loading}</span>
-                    <span className="ai-typing-dots" aria-hidden="true">
-                      <span className="ai-dot"></span>
-                      <span className="ai-dot"></span>
-                      <span className="ai-dot"></span>
-                    </span>
-                  </div>
-                )}
-
-                {isLast && !loading && errorMsg && (
-                  <div className="ai-bubble ai-bubble--assistant ai-bubble--error" role="alert">
-                    <p>{errorMsg}</p>
-                    <button
-                      type="button"
-                      className="ai-retry-btn"
-                      onClick={() => void sendMessage(turn.user.text)}
-                    >
-                      {AI_RECOMMEND_COPY.retry}
-                    </button>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-
-          <div
-            className={`ai-chat-spacer${loading ? " ai-chat-spacer--grow" : ""}`}
-            aria-hidden="true"
-          />
+          <div className="ai-input-group">
+            <div className="ai-empty" aria-hidden={!isEmpty}>
+              <p>{AI_RECOMMEND_COPY.emptyPrompt}</p>
+              <div className="ai-example-chips">{exampleChips}</div>
+            </div>
+            {composerForm}
+          </div>
         </div>
-
-        {composerForm}
       </div>
     </main>
   );
