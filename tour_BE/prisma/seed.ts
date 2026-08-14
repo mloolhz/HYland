@@ -1,0 +1,176 @@
+// FE 정적 데이터(tour_FE)를 DB에 시드.
+// 하드코딩 복붙이 아니라 FE 원본을 그대로 import → 항상 동기화 유지.
+import { PrismaClient } from "@prisma/client";
+import { ISLANDS } from "@/lib/island-data";
+import { SPORTS_CATEGORIES, SPORTS_DATA } from "@/data/sports";
+import { BOOKING_BY_SPORT_ID } from "@/data/sport-booking";
+import { CATEGORY_META, MISSION_CATEGORIES, MISSION_QUESTS } from "@/mocks/missions";
+
+const prisma = new PrismaClient();
+
+const RES: Record<string, string> = {
+  reservable: "RESERVABLE",
+  free: "FREE",
+  community: "COMMUNITY",
+  info: "INFO",
+  mixed: "MIXED",
+};
+const BK: Record<string, string> = {
+  official: "OFFICIAL",
+  facility: "FACILITY",
+  phone: "PHONE",
+  info: "INFO",
+};
+const TIER: Record<string, string> = { 일반: "COMMON", 희귀: "RARE", 전설: "LEGEND" };
+
+async function main() {
+  console.log("🌱 시드 시작...");
+
+  // 재실행 가능하도록 기존 마스터 데이터 삭제 (FK 역순)
+  await prisma.sportBookingMethod.deleteMany();
+  await prisma.sportIsland.deleteMany();
+  await prisma.islandLeisureCourse.deleteMany();
+  await prisma.missionQuest.deleteMany();
+  await prisma.sport.deleteMany();
+  await prisma.island.deleteMany();
+  await prisma.missionCategory.deleteMany();
+  await prisma.sportCategory.deleteMany();
+  await prisma.islandRegion.deleteMany();
+
+  // ── 섬 권역 + 섬 + 레저코스 ──
+  const regions = [...new Set(ISLANDS.map((i) => i.region))];
+  await prisma.islandRegion.createMany({ data: regions.map((r) => ({ id: r, name: r })) });
+
+  await prisma.island.createMany({
+    data: ISLANDS.map((i) => ({
+      id: i.id,
+      name: i.name,
+      regionId: i.region,
+      intro: i.intro,
+      ferryRoute: i.ferryRoute,
+      travelTime: i.travelTime,
+      bookingLabel: i.bookingLabel ?? null,
+    })),
+  });
+  const islandIds = new Set(ISLANDS.map((i) => i.id));
+
+  await prisma.islandLeisureCourse.createMany({
+    data: ISLANDS.flatMap((i) =>
+      i.leisureCourses.map((name, idx) => ({ islandId: i.id, name, sortOrder: idx })),
+    ),
+  });
+
+  // ── 레저 카테고리 + 종목 + 종목-섬 ──
+  await prisma.sportCategory.createMany({
+    data: SPORTS_CATEGORIES.map((c) => ({ id: c.key, label: c.label })),
+  });
+
+  const seenSport = new Set<string>();
+  const sportRows: any[] = [];
+  const sportIslandRows: any[] = [];
+  for (const cat of SPORTS_CATEGORIES) {
+    for (const s of SPORTS_DATA[cat.key]) {
+      if (seenSport.has(s.id)) continue;
+      seenSport.add(s.id);
+      sportRows.push({
+        id: s.id,
+        categoryId: cat.key,
+        name: s.name,
+        description: s.desc,
+        pay: s.pay,
+        photo: s.photo ?? null,
+        difficulty: s.diff,
+        price: s.price,
+        season: s.season,
+        reservationType: RES[s.reservationType] ?? "INFO",
+      });
+      for (const isl of s.islands) {
+        sportIslandRows.push({
+          sportId: s.id,
+          islandId: isl.id && islandIds.has(isl.id) ? isl.id : null,
+          displayName: isl.n,
+          color: isl.c,
+        });
+      }
+    }
+  }
+  await prisma.sport.createMany({ data: sportRows });
+  await prisma.sportIsland.createMany({ data: sportIslandRows });
+
+  // ── 예약/안내처 링크 ──
+  const bookingRows = Object.entries(BOOKING_BY_SPORT_ID)
+    .filter(([sportId]) => seenSport.has(sportId))
+    .flatMap(([sportId, methods]) =>
+      (methods as any[]).map((m) => ({
+        sportId,
+        type: BK[m.type] ?? "INFO",
+        label: m.label,
+        url: m.url ?? null,
+        tel: m.tel ?? null,
+      })),
+    );
+  await prisma.sportBookingMethod.createMany({ data: bookingRows });
+
+  // ── 미션 카테고리 + 퀘스트 ──
+  await prisma.missionCategory.createMany({
+    data: MISSION_CATEGORIES.map((c) => ({
+      id: c,
+      emoji: CATEGORY_META[c].emoji,
+      color: CATEGORY_META[c].color,
+      colorName: CATEGORY_META[c].colorName,
+    })),
+  });
+
+  const seenQuest = new Set<number>();
+  const questRows = MISSION_QUESTS.filter((q) => {
+    if (seenQuest.has(q.id)) return false;
+    seenQuest.add(q.id);
+    return true;
+  }).map((q) => {
+    const anyQ = q as any;
+    return {
+      id: q.id,
+      categoryId: q.category,
+      icon: q.icon,
+      title: q.title,
+      description: q.desc,
+      target: q.target,
+      unit: q.unit,
+      reward: q.reward,
+      tier: TIER[q.tier] ?? "COMMON",
+      islandId: anyQ.islandId && islandIds.has(anyQ.islandId) ? anyQ.islandId : null,
+      sportId: anyQ.sportId && seenSport.has(anyQ.sportId) ? anyQ.sportId : null,
+    };
+  });
+  await prisma.missionQuest.createMany({ data: questRows });
+
+  // ── 섬BTI(문항·결과)는 FE 순환참조 이슈로 다음 단계에서 별도 시드 ──
+
+  // 결과 카운트
+  const [islands, courses, sports, sportIslands, bookings2, quests, cats] = await Promise.all([
+    prisma.island.count(),
+    prisma.islandLeisureCourse.count(),
+    prisma.sport.count(),
+    prisma.sportIsland.count(),
+    prisma.sportBookingMethod.count(),
+    prisma.missionQuest.count(),
+    prisma.missionCategory.count(),
+  ]);
+  console.log("✅ 시드 완료");
+  console.table({
+    섬: islands,
+    레저코스: courses,
+    종목: sports,
+    "종목-섬": sportIslands,
+    예약안내: bookings2,
+    미션카테고리: cats,
+    미션퀘스트: quests,
+  });
+}
+
+main()
+  .catch((e) => {
+    console.error("❌ 시드 실패:", e);
+    process.exit(1);
+  })
+  .finally(() => prisma.$disconnect());
