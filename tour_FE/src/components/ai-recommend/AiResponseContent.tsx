@@ -21,7 +21,7 @@ export function AiResponseContent({ response, onFollowup }: AiResponseContentPro
       <p className="ai-response-text" style={{ whiteSpace: "pre-line" }}>{response.text}</p>
 
       {response.recommendations.length > 0 && (
-        <div className="ai-rec-list">
+        <div className="ai-rec-list ai-fade-up ai-fade-up-1">
           <p className="ai-rec-lead">
             {infoOnly
               ? "예약 없이 즐기는 활동입니다. 코스·이용 정보를 확인하세요."
@@ -36,11 +36,13 @@ export function AiResponseContent({ response, onFollowup }: AiResponseContentPro
       )}
 
       {response.course && (
-        <AiCourseTimeline title={response.course.title} steps={response.course.steps} />
+        <div className="ai-fade-up ai-fade-up-2">
+          <AiCourseTimeline title={response.course.title} steps={response.course.steps} />
+        </div>
       )}
 
       {response.tips && response.tips.length > 0 && (
-        <div className="ai-tips">
+        <div className="ai-tips ai-fade-up ai-fade-up-3">
           <h4 className="ai-tips-title">예약·이용 팁</h4>
           <ul>
             {response.tips.map((tip) => (
@@ -51,7 +53,7 @@ export function AiResponseContent({ response, onFollowup }: AiResponseContentPro
       )}
 
       {response.followups && response.followups.length > 0 && (
-        <div className="ai-followups">
+        <div className="ai-followups ai-fade-up ai-fade-up-4">
           {response.followups.map((chip) => (
             <button key={chip} type="button" className="ai-followup-chip" onClick={() => onFollowup(chip)}>
               {chip}

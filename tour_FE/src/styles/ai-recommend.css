@@ -547,3 +547,31 @@ body:has(.ai-page) {
 @media (prefers-reduced-motion: reduce) {
   .ai-dot { animation: none; opacity: 0.7; }
 }
+
+/* 추천 블록 두둥실 등장 애니메이션 */
+@keyframes ai-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ai-fade-up {
+  animation: ai-fade-up 380ms ease-out both;
+}
+
+/* 여러 요소에 시간차(stagger) — 순서대로 살짝 늦게 */
+.ai-fade-up-1 { animation-delay: 0ms; }
+.ai-fade-up-2 { animation-delay: 80ms; }
+.ai-fade-up-3 { animation-delay: 160ms; }
+.ai-fade-up-4 { animation-delay: 240ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-fade-up {
+    animation: none;
+  }
+}
