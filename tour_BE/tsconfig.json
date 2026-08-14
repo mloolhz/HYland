@@ -5,6 +5,7 @@
     "moduleResolution": "Bundler",
     "baseUrl": ".",
     "paths": {
+      "@/lib/island-bti-type": ["./prisma/_bti-stub.ts"],
       "@/*": ["../tour_FE/src/*"]
     },
     "esModuleInterop": true,

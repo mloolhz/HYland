@@ -5,6 +5,8 @@ import { ISLANDS } from "@/lib/island-data";
 import { SPORTS_CATEGORIES, SPORTS_DATA } from "@/data/sports";
 import { BOOKING_BY_SPORT_ID } from "@/data/sport-booking";
 import { CATEGORY_META, MISSION_CATEGORIES, MISSION_QUESTS } from "@/mocks/missions";
+import { ISLAND_BTI_QUESTIONS } from "@/data/island-bti/questions";
+import { ISLAND_BTI_RESULTS } from "@/data/island-bti/results";
 
 const prisma = new PrismaClient();
 
@@ -36,6 +38,8 @@ async function main() {
   await prisma.missionCategory.deleteMany();
   await prisma.sportCategory.deleteMany();
   await prisma.islandRegion.deleteMany();
+  await prisma.islandBtiQuestion.deleteMany();
+  await prisma.islandBtiResult.deleteMany();
 
   // ── 섬 권역 + 섬 + 레저코스 ──
   const regions = [...new Set(ISLANDS.map((i) => i.region))];
@@ -144,18 +148,43 @@ async function main() {
   });
   await prisma.missionQuest.createMany({ data: questRows });
 
-  // ── 섬BTI(문항·결과)는 FE 순환참조 이슈로 다음 단계에서 별도 시드 ──
+  // ── 섬BTI 문항 + 결과 ──
+  await prisma.islandBtiQuestion.createMany({
+    data: ISLAND_BTI_QUESTIONS.map((q: any) => ({
+      id: q.id,
+      dimension: q.dimension,
+      text: q.question,
+      optionA: q.options[0].text,
+      optionB: q.options[1].text,
+      axisA: q.options[0].value,
+      axisB: q.options[1].value,
+    })),
+  });
+
+  await prisma.islandBtiResult.createMany({
+    data: Object.values(ISLAND_BTI_RESULTS).map((r: any) => ({
+      code: r.code,
+      name: r.name,
+      description: Array.isArray(r.description) ? r.description.join("\n") : String(r.description),
+      themeColor: r.themeColor,
+      recommendedIslands: r.recommendedIslands,
+      recommendedActivities: r.recommendedActivities,
+    })),
+  });
 
   // 결과 카운트
-  const [islands, courses, sports, sportIslands, bookings2, quests, cats] = await Promise.all([
-    prisma.island.count(),
-    prisma.islandLeisureCourse.count(),
-    prisma.sport.count(),
-    prisma.sportIsland.count(),
-    prisma.sportBookingMethod.count(),
-    prisma.missionQuest.count(),
-    prisma.missionCategory.count(),
-  ]);
+  const [islands, courses, sports, sportIslands, bookings2, quests, cats, btiQ, btiR] =
+    await Promise.all([
+      prisma.island.count(),
+      prisma.islandLeisureCourse.count(),
+      prisma.sport.count(),
+      prisma.sportIsland.count(),
+      prisma.sportBookingMethod.count(),
+      prisma.missionQuest.count(),
+      prisma.missionCategory.count(),
+      prisma.islandBtiQuestion.count(),
+      prisma.islandBtiResult.count(),
+    ]);
   console.log("✅ 시드 완료");
   console.table({
     섬: islands,
@@ -165,6 +194,8 @@ async function main() {
     예약안내: bookings2,
     미션카테고리: cats,
     미션퀘스트: quests,
+    BTI문항: btiQ,
+    BTI유형: btiR,
   });
 }
 
