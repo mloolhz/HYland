@@ -2,15 +2,20 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { prisma } from "./prisma";
+import authRouter from "./auth";
 
 const app = express();
 app.use(cors()); // 프론트(다른 포트)에서 호출 허용
 app.use(express.json());
+app.use(express.static("public")); // 테스트 콘솔 (http://localhost:4000)
 
 // 상태 확인용
 app.get("/health", (_req, res) => {
   res.json({ ok: true, service: "tour_BE" });
 });
+
+// 인증 (회원가입/로그인/내정보/휴대폰인증)
+app.use("/auth", authRouter);
 
 // ── 섬 목록 ──
 app.get("/islands", async (_req, res) => {
