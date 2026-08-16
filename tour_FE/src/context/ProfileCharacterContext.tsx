@@ -2,6 +2,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   type ReactNode,
@@ -16,6 +17,7 @@ import {
   removeLatestIslandBtiResult,
   saveIslandBtiHistory,
 } from "@/lib/island-bti-storage";
+import { upsertUserPreferenceFromBtiResult } from "@/lib/recommendation/preference/user-preference-storage";
 import type {
   CurrentIslandBtiResult,
   IslandBtiResultCode,
@@ -62,6 +64,12 @@ export function ProfileCharacterProvider({ children }: { children: ReactNode }) 
   const islandBtiResultCode = latestResult?.code ?? null;
   const hasResult = latestResult !== null;
 
+  useEffect(() => {
+    if (latestResult) {
+      upsertUserPreferenceFromBtiResult(latestResult);
+    }
+  }, [latestResult?.id, latestResult?.code, latestResult?.testedAt]);
+
   const saveResult = useCallback(
     (code: IslandBtiResultCode, scores: IslandBtiScoreMap): IslandBtiResultRecord => {
       const record: IslandBtiResultRecord = {
@@ -76,6 +84,8 @@ export function ProfileCharacterProvider({ children }: { children: ReactNode }) 
         saveIslandBtiHistory(nextHistory);
         return nextHistory;
       });
+
+      upsertUserPreferenceFromBtiResult(record);
 
       return record;
     },

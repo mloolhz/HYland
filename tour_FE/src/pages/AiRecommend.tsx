@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   getAiRecommendation,
@@ -6,251 +6,258 @@ import {
   getPopularQuestions,
   type ChatHistoryItem,
 } from "@/api/ai-recommend";
+import { postRecommendations } from "@/api/recommendation";
+import { AiRecommendComposer } from "@/components/ai-recommend/AiRecommendComposer";
 import { AiResponseContent } from "@/components/ai-recommend/AiResponseContent";
+import { RecommendationResultsPanel } from "@/components/ai-recommend/RecommendationResultsPanel";
+import type { TripIntentFormValue } from "@/components/ai-recommend/AiTripSettingsPanel";
+import { buildApplyMessage } from "@/lib/ai-trip-labels";
 import { CONTAINER } from "@/constants/layout";
-import { isStreamingAssistant, type ChatMessage } from "@/types/ai-recommend";
+import { useIslandBti } from "@/context/ProfileCharacterContext";
+import type { AiResponse } from "@/types/ai-recommend";
+import type { RecommendationResponse } from "@/types/recommendation";
 import { AI_RECOMMEND_COPY } from "@/pages/aiRecommendCopy";
 import { useStreamTypewriter } from "@/hooks/useStreamTypewriter";
 
 type LocationState = {
   initialMessage?: string;
+  islandBti?: {
+    code: string;
+    name: string;
+  };
 };
 
-type Turn = {
-  user: Extract<ChatMessage, { role: "user" }>;
-  assistant?: Extract<ChatMessage, { role: "assistant" }>;
+type AiTurn = {
+  id: string;
+  userText: string;
+  recommendation: RecommendationResponse | null;
+  assistant: AiResponse | null;
+  /** LLM 응답이 타자기 효과로 들어오는 중일 때의 누적 텍스트 */
+  streamText: string;
+  isStreamingAssistant: boolean;
 };
 
 function createId() {
   return `msg-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
 }
 
-function groupTurns(messages: ChatMessage[]): Turn[] {
-  const turns: Turn[] = [];
-  for (let i = 0; i < messages.length; i++) {
-    const msg = messages[i];
-    if (msg.role !== "user") continue;
-    const next = messages[i + 1];
-    const assistant = next?.role === "assistant" ? next : undefined;
-    turns.push({ user: msg, assistant });
-    if (assistant) i++;
-  }
-  return turns;
-}
-
-function getMaxScrollTop(container: HTMLElement) {
-  return Math.max(0, container.scrollHeight - container.clientHeight);
-}
-
-function clampScrollBottom(container: HTMLElement) {
-  const max = getMaxScrollTop(container);
-  if (container.scrollTop > max) {
-    container.scrollTop = max;
-  }
-}
-
 function snapTurnToTop(container: HTMLElement, turnEl: HTMLElement) {
   const containerTop = container.getBoundingClientRect().top;
-  const turnTop =
-    container.scrollTop + (turnEl.getBoundingClientRect().top - containerTop);
-
-  const prev = turnEl.previousElementSibling as HTMLElement | null;
-  let target = turnTop;
-  if (prev) {
-    const prevBottom =
-      container.scrollTop + (prev.getBoundingClientRect().bottom - containerTop);
-    target = Math.max(turnTop, Math.ceil(prevBottom) + 1);
-  }
-
-  container.scrollTop = Math.ceil(target);
+  const turnTop = container.scrollTop + (turnEl.getBoundingClientRect().top - containerTop);
+  container.scrollTop = Math.max(0, Math.ceil(turnTop));
 }
 
-function scrollTurnToContainerTop(container: HTMLElement, turnEl: HTMLElement) {
+function scrollTurnToTop(container: HTMLElement, turnEl: HTMLElement) {
   snapTurnToTop(container, turnEl);
   requestAnimationFrame(() => {
     snapTurnToTop(container, turnEl);
-    requestAnimationFrame(() => {
-      snapTurnToTop(container, turnEl);
-      setTimeout(() => snapTurnToTop(container, turnEl), 0);
-    });
+    requestAnimationFrame(() => snapTurnToTop(container, turnEl));
   });
+}
+
+function defaultTripForm(): TripIntentFormValue {
+  const travelDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  return {
+    travelDate,
+    travelEndDate: travelDate,
+    duration: 1,
+    companion: "friend",
+    travelMood: "healing",
+    activities: ["바다", "산책"],
+  };
 }
 
 export function AiRecommend() {
   const location = useLocation();
   const navigate = useNavigate();
-  const initialMessage = (location.state as LocationState | null)?.initialMessage?.trim();
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [hasInput, setHasInput] = useState(false);
+  const locationState = (location.state as LocationState | null) ?? null;
+  const initialMessage = locationState?.initialMessage?.trim();
+  const { hasResult } = useIslandBti();
+
+  const [tripForm, setTripForm] = useState<TripIntentFormValue>(() => defaultTripForm());
+  const [turns, setTurns] = useState<AiTurn[]>([]);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [bootstrapped, setBootstrapped] = useState(false);
-  const inputRef = useRef<HTMLTextAreaElement>(null);
-  const turnRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [showConditionsSummary, setShowConditionsSummary] = useState(false);
+  const [pendingTurnId, setPendingTurnId] = useState<string | null>(null);
+  const [popularQuestions, setPopularQuestions] = useState<string[]>([]);
+
   const chatScrollRef = useRef<HTMLDivElement>(null);
-  const scrollToUserIdRef = useRef<string | null>(null);
-  const activeTurnIdRef = useRef<string | null>(null);
+  const turnRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+  const scrollToTurnIdRef = useRef<string | null>(null);
   const initialHandled = useRef(false);
   const { begin: beginTypewriter, pushTarget, finishStream, abort: abortTypewriter } =
     useStreamTypewriter();
 
-  const turns = useMemo(() => groupTurns(messages), [messages]);
+  const hasStarted = turns.length > 0 || loading;
 
   const setTurnRef = useCallback((id: string, el: HTMLDivElement | null) => {
     if (el) turnRefs.current.set(id, el);
     else turnRefs.current.delete(id);
   }, []);
 
-  const clearInput = useCallback(() => {
-    if (inputRef.current) {
-      inputRef.current.value = "";
-    }
-    setHasInput(false);
-  }, []);
+  const runStructuredRecommendation = useCallback(async () => {
+    return postRecommendations({
+      trip: {
+        travelDate: tripForm.travelDate,
+        travelEndDate: tripForm.travelEndDate ?? tripForm.travelDate,
+        duration: tripForm.duration,
+        companion: tripForm.companion,
+        travelMood: tripForm.travelMood,
+        activities: tripForm.activities,
+        intensity: tripForm.intensity,
+      },
+      useIslandBti: hasResult,
+    });
+  }, [tripForm, hasResult]);
 
-  const readInput = useCallback(() => inputRef.current?.value ?? "", []);
+  const executeTurn = useCallback(
+    async (userText: string, options: { withRecommendation: boolean }) => {
+      if (loading) return;
 
-  const sendMessage = useCallback(
-    async (text: string) => {
-      const trimmed = text.trim();
-      if (!trimmed || loading) return;
+      const turnId = createId();
+      scrollToTurnIdRef.current = turnId;
+      setPendingTurnId(turnId);
 
-      const userMsg: ChatMessage = { id: createId(), role: "user", text: trimmed };
-      const assistantId = createId();
-      scrollToUserIdRef.current = userMsg.id;
-      activeTurnIdRef.current = userMsg.id;
-      setMessages((prev) => [
-        ...prev,
-        userMsg,
-        { id: assistantId, role: "assistant", isStreaming: true, streamText: "" },
-      ]);
-      clearInput();
       setLoading(true);
       setErrorMsg(null);
+      setSettingsOpen(false);
+      setShowConditionsSummary(true);
+
+      setTurns((prev) => [
+        ...prev,
+        {
+          id: turnId,
+          userText,
+          recommendation: null,
+          assistant: null,
+          streamText: "",
+          isStreamingAssistant: true,
+        },
+      ]);
+
+      // 이전 턴들을 sportId 중복 추천 방지용 히스토리로 변환
+      const history: ChatHistoryItem[] = turns.flatMap((turn): ChatHistoryItem[] => {
+        const entries: ChatHistoryItem[] = [{ role: "user", text: turn.userText }];
+        if (turn.assistant) {
+          entries.push({
+            role: "assistant",
+            text: turn.assistant.text,
+            sportIds: turn.assistant.recommendations.map((r) => r.sportId),
+          });
+        }
+        return entries;
+      });
+      history.push({ role: "user", text: userText });
+
+      // 구조화 추천(섬BTI + 조건 스코어링)은 LLM 대화 응답과 독립적으로 진행 —
+      // 실패해도 대화 자체는 계속되도록 별도로 흡수
+      const recommendationPromise = options.withRecommendation
+        ? runStructuredRecommendation().catch((err) => {
+            console.error("[ai-recommend] 구조화 추천 실패", err);
+            return null;
+          })
+        : Promise.resolve(null);
 
       beginTypewriter({
         onDisplay: (streamText) => {
-          setMessages((prev) =>
-            prev.map((m) =>
-              m.id === assistantId && isStreamingAssistant(m) ? { ...m, streamText } : m,
-            ),
-          );
+          setTurns((prev) => prev.map((t) => (t.id === turnId ? { ...t, streamText } : t)));
         },
         onComplete: (response) => {
-          setMessages((prev) =>
-            prev.map((m) =>
-              m.id === assistantId ? { id: assistantId, role: "assistant", response } : m,
+          setTurns((prev) =>
+            prev.map((t) =>
+              t.id === turnId ? { ...t, assistant: response, isStreamingAssistant: false } : t,
             ),
           );
           setLoading(false);
+          setPendingTurnId(null);
         },
       });
 
       try {
-        const history: ChatHistoryItem[] = [...messages, userMsg].flatMap(
-          (m): ChatHistoryItem[] => {
-            if (m.role === "user") {
-              return [{ role: "user", text: m.text }];
-            }
-            if (isStreamingAssistant(m)) {
-              return [];
-            }
-            return [
-              {
-                role: "assistant",
-                text: m.response.text,
-                sportIds: m.response.recommendations.map((r) => r.sportId),
-              },
-            ];
-          },
-        );
-
         try {
           await getAiRecommendationStream(
-            trimmed,
+            userText,
             history,
             (streamText) => pushTarget(streamText),
             (response) => finishStream(response),
           );
         } catch (streamErr) {
           console.warn("[ai-recommend] 스트리밍 실패, 논스트리밍 폴백", streamErr);
-          const response = await getAiRecommendation(trimmed, history);
+          const response = await getAiRecommendation(userText, history);
           finishStream(response);
         }
+
+        const recommendation = await recommendationPromise;
+        setTurns((prev) => prev.map((t) => (t.id === turnId ? { ...t, recommendation } : t)));
       } catch (err) {
         abortTypewriter();
         console.error(AI_RECOMMEND_COPY.requestFailedLog, err);
-        setMessages((prev) => prev.filter((m) => m.id !== assistantId));
+        // 사용자 턴 자체는 남겨서(질문 텍스트 유지) 에러+재시도 버튼을 그 턴에 붙여 보여준다.
+        // 통째로 지우면 첫 턴 실패 시 intro 화면으로 되돌아가 에러가 보일 곳이 없어진다.
+        setTurns((prev) =>
+          prev.map((t) => (t.id === turnId ? { ...t, isStreamingAssistant: false } : t)),
+        );
         setErrorMsg(AI_RECOMMEND_COPY.error);
         setLoading(false);
+        setPendingTurnId(null);
       }
     },
-    [abortTypewriter, beginTypewriter, clearInput, finishStream, loading, messages, pushTarget],
+    [
+      abortTypewriter,
+      beginTypewriter,
+      finishStream,
+      loading,
+      pushTarget,
+      runStructuredRecommendation,
+      turns,
+    ],
   );
 
-  const trySnapActiveTurn = useCallback(() => {
-    const turnId = activeTurnIdRef.current;
+  const sendMessage = useCallback(
+    async (text: string) => {
+      const trimmed = text.trim();
+      if (!trimmed) return;
+      await executeTurn(trimmed, { withRecommendation: turns.length === 0 });
+    },
+    [executeTurn, turns.length],
+  );
+
+  const applyTripConditions = useCallback(async () => {
+    await executeTurn(buildApplyMessage(tripForm), { withRecommendation: true });
+  }, [executeTurn, tripForm]);
+
+  useLayoutEffect(() => {
+    const turnId = scrollToTurnIdRef.current;
     if (!turnId) return;
 
     const container = chatScrollRef.current;
     const turnEl = turnRefs.current.get(turnId);
     if (!container || !turnEl) return;
 
-    snapTurnToTop(container, turnEl);
-  }, []);
-
-  useLayoutEffect(() => {
-    const id = scrollToUserIdRef.current;
-    if (!id) return;
-
-    const lastMsg = messages[messages.length - 1];
-    if (lastMsg?.role !== "user" || lastMsg.id !== id) return;
-
-    const container = chatScrollRef.current;
-    const turnEl = turnRefs.current.get(id);
-    if (!container || !turnEl) return;
-
-    scrollToUserIdRef.current = null;
-    scrollTurnToContainerTop(container, turnEl);
-  }, [messages, loading]);
-
-  useLayoutEffect(() => {
-    const turnId = activeTurnIdRef.current;
-    if (!turnId) return;
-
-    const lastMsg = messages[messages.length - 1];
-    if (lastMsg?.role !== "assistant") return;
-
-    const container = chatScrollRef.current;
-    const turnEl = turnRefs.current.get(turnId);
-    if (!container || !turnEl) return;
-
-    activeTurnIdRef.current = null;
-    scrollTurnToContainerTop(container, turnEl);
-    requestAnimationFrame(() => clampScrollBottom(container));
-  }, [messages]);
-
-  useLayoutEffect(() => {
-    if (loading) return;
-    const container = chatScrollRef.current;
-    if (!container) return;
-    clampScrollBottom(container);
-  }, [loading, messages]);
+    scrollTurnToTop(container, turnEl);
+  }, [turns, loading]);
 
   useEffect(() => {
+    const turnId = scrollToTurnIdRef.current;
+    if (!turnId || loading) return;
+
     const container = chatScrollRef.current;
-    if (!container) return;
+    const turnEl = turnRefs.current.get(turnId);
+    if (!container || !turnEl) return;
 
-    const onScroll = () => {
-      if (loading) return;
-      clampScrollBottom(container);
-    };
+    scrollToTurnIdRef.current = null;
+    scrollTurnToTop(container, turnEl);
 
-    container.addEventListener("scroll", onScroll, { passive: true });
-    return () => container.removeEventListener("scroll", onScroll);
-  }, [loading]);
+    const observer = new ResizeObserver(() => {
+      scrollTurnToTop(container, turnEl);
+    });
+    observer.observe(turnEl);
 
-  const [popularQuestions, setPopularQuestions] = useState<string[]>([]);
+    return () => observer.disconnect();
+  }, [turns, loading]);
 
   useEffect(() => {
     void getPopularQuestions().then((qs) => {
@@ -259,160 +266,161 @@ export function AiRecommend() {
   }, []);
 
   useEffect(() => {
-    if (!loading || !activeTurnIdRef.current) return;
-
-    const container = chatScrollRef.current;
-    if (!container) return;
-
-    trySnapActiveTurn();
-
-    const observer = new ResizeObserver(() => {
-      trySnapActiveTurn();
-    });
-    observer.observe(container);
-
-    return () => observer.disconnect();
-  }, [loading, messages, trySnapActiveTurn]);
-
-  useEffect(() => {
     if (initialHandled.current) return;
+
     if (initialMessage) {
       initialHandled.current = true;
       setBootstrapped(true);
+      setSettingsOpen(false);
       void sendMessage(initialMessage);
       navigate(location.pathname, { replace: true, state: null });
-    } else {
-      setBootstrapped(true);
+      return;
     }
-  }, [initialMessage, location.pathname, navigate, sendMessage]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    void sendMessage(readInput());
-  };
+    if (locationState?.islandBti) {
+      initialHandled.current = true;
+      setBootstrapped(true);
+      setSettingsOpen(false);
+      void applyTripConditions();
+      navigate(location.pathname, { replace: true, state: null });
+      return;
+    }
 
-  const isEmpty = bootstrapped && messages.length === 0 && !loading;
+    setBootstrapped(true);
+  }, [
+    applyTripConditions,
+    initialMessage,
+    location.pathname,
+    locationState?.islandBti,
+    navigate,
+    sendMessage,
+  ]);
 
-  const composerForm = (
-    <form className="ai-composer" onSubmit={handleSubmit}>
-      <textarea
-        ref={inputRef}
-        className="ai-composer-input"
-        defaultValue=""
-        onInput={() => setHasInput(!!inputRef.current?.value.trim())}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
-            e.preventDefault();
-            void sendMessage(readInput());
-          }
-        }}
-        placeholder={AI_RECOMMEND_COPY.placeholder}
-        rows={2}
-        aria-label={AI_RECOMMEND_COPY.inputLabel}
-        disabled={loading}
-      />
-      <button
-        type="submit"
-        className="ai-composer-send"
-        disabled={loading || !hasInput}
-        aria-label={AI_RECOMMEND_COPY.send}
-      >
-        {AI_RECOMMEND_COPY.send}
-      </button>
-    </form>
-  );
-
-  const exampleChips = (popularQuestions.length > 0
-    ? popularQuestions
-    : AI_RECOMMEND_COPY.exampleQuestions
-  ).map((q) => (
-    <button key={q} type="button" className="ai-example-chip" onClick={() => void sendMessage(q)}>
-      {q}
-    </button>
-  ));
+  if (!bootstrapped) {
+    return <main className="ai-page" />;
+  }
 
   return (
-    <main className="ai-page">
+    <main className={`ai-page${hasStarted ? "" : " ai-page--intro"}`}>
       <div className={`${CONTAINER} ai-page-inner`}>
-        <header className="ai-page-head">
-          <h1>{AI_RECOMMEND_COPY.title}</h1>
-        </header>
+        {!hasStarted ? (
+          <div className="ai-intro">
+            <h1 className="ai-intro__title">어떤 섬 여행을 떠나볼까요?</h1>
 
-        <div className={`ai-stage${isEmpty ? " ai-stage--empty" : ""}`}>
-          <div className="ai-chat" ref={chatScrollRef} aria-live="polite">
-            {turns.map((turn, index) => {
-              const isLast = index === turns.length - 1;
-              const streamingAssistant =
-                turn.assistant && isStreamingAssistant(turn.assistant) ? turn.assistant : null;
-              const showStreamingText = !!streamingAssistant?.streamText;
-              const showLoadingDots = isLast && loading && streamingAssistant && !showStreamingText;
+            <div className="ai-example-chips">
+              {(popularQuestions.length > 0
+                ? popularQuestions
+                : AI_RECOMMEND_COPY.exampleQuestions
+              ).map((q) => (
+                <button key={q} type="button" className="ai-example-chip" onClick={() => void sendMessage(q)}>
+                  {q}
+                </button>
+              ))}
+            </div>
 
-              return (
-                <div
-                  key={turn.user.id}
-                  ref={(el) => setTurnRef(turn.user.id, el)}
-                  className={`ai-chat-turn${index === 0 ? " ai-fade-up" : ""}`}
-                >
-                  <div className="ai-bubble ai-bubble--user">
-                    <p>{turn.user.text}</p>
-                  </div>
-
-                  {turn.assistant && !showLoadingDots && (
-                    <div className="ai-bubble ai-bubble--assistant">
-                      {streamingAssistant ? (
-                        <p className="ai-response-text ai-response-text--streaming" style={{ whiteSpace: "pre-line" }}>
-                          {streamingAssistant.streamText}
-                        </p>
-                      ) : !isStreamingAssistant(turn.assistant) ? (
-                        <AiResponseContent
-                          response={turn.assistant.response}
-                          onFollowup={(text) => void sendMessage(text)}
-                        />
-                      ) : null}
-                    </div>
-                  )}
-
-                  {showLoadingDots && (
-                    <div className="ai-bubble ai-bubble--assistant ai-bubble--loading" aria-busy="true">
-                      <span className="ai-loading-text">{AI_RECOMMEND_COPY.loading}</span>
-                      <span className="ai-typing-dots" aria-hidden="true">
-                        <span className="ai-dot"></span>
-                        <span className="ai-dot"></span>
-                        <span className="ai-dot"></span>
-                      </span>
-                    </div>
-                  )}
-
-                  {isLast && !loading && errorMsg && (
-                    <div className="ai-bubble ai-bubble--assistant ai-bubble--error" role="alert">
-                      <p>{errorMsg}</p>
-                      <button
-                        type="button"
-                        className="ai-retry-btn"
-                        onClick={() => void sendMessage(turn.user.text)}
-                      >
-                        {AI_RECOMMEND_COPY.retry}
-                      </button>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-
-            <div
-              className={`ai-chat-spacer${loading ? " ai-chat-spacer--grow" : ""}`}
-              aria-hidden="true"
+            <AiRecommendComposer
+              variant="intro"
+              value={tripForm}
+              onChange={setTripForm}
+              onSubmit={(text) => void sendMessage(text)}
+              onApplyConditions={() => void applyTripConditions()}
+              loading={loading}
+              hasBtiResult={hasResult}
+              settingsOpen={settingsOpen}
+              onSettingsOpenChange={setSettingsOpen}
             />
           </div>
+        ) : (
+          <>
+            <div className="ai-chat" ref={chatScrollRef} aria-live="polite">
+              {turns.map((turn, index) => {
+                const isLast = index === turns.length - 1;
+                const showStreamingText = turn.isStreamingAssistant && !!turn.streamText;
+                const showLoadingDots =
+                  isLast && loading && turn.id === pendingTurnId && turn.isStreamingAssistant && !showStreamingText;
 
-          <div className="ai-input-group">
-            <div className="ai-empty" aria-hidden={!isEmpty}>
-              <p>{AI_RECOMMEND_COPY.emptyPrompt}</p>
-              <div className="ai-example-chips">{exampleChips}</div>
+                return (
+                  <div
+                    key={turn.id}
+                    ref={(el) => setTurnRef(turn.id, el)}
+                    className={`ai-chat-turn${index === 0 ? " ai-fade-up" : ""}`}
+                  >
+                    <div className="ai-bubble ai-bubble--user">
+                      <p>{turn.userText}</p>
+                    </div>
+
+                    {turn.recommendation ? (
+                      <div className="ai-bubble ai-bubble--assistant ai-bubble--recommendation">
+                        <RecommendationResultsPanel response={turn.recommendation} />
+                      </div>
+                    ) : null}
+
+                    {turn.assistant ? (
+                      <div className="ai-bubble ai-bubble--assistant">
+                        <AiResponseContent
+                          response={turn.assistant}
+                          onFollowup={(text) => void sendMessage(text)}
+                        />
+                      </div>
+                    ) : showStreamingText ? (
+                      <div className="ai-bubble ai-bubble--assistant">
+                        <p
+                          className="ai-response-text ai-response-text--streaming"
+                          style={{ whiteSpace: "pre-line" }}
+                        >
+                          {turn.streamText}
+                        </p>
+                      </div>
+                    ) : null}
+
+                    {showLoadingDots && (
+                      <div className="ai-bubble ai-bubble--assistant ai-bubble--loading" aria-busy="true">
+                        <span className="ai-loading-text">{AI_RECOMMEND_COPY.loading}</span>
+                        <span className="ai-typing-dots" aria-hidden="true">
+                          <span className="ai-dot"></span>
+                          <span className="ai-dot"></span>
+                          <span className="ai-dot"></span>
+                        </span>
+                      </div>
+                    )}
+
+                    {isLast && !loading && errorMsg && (
+                      <div className="ai-bubble ai-bubble--assistant ai-bubble--error" role="alert">
+                        <p>{errorMsg}</p>
+                        <button
+                          type="button"
+                          className="ai-retry-btn"
+                          onClick={() => void sendMessage(turn.userText)}
+                        >
+                          {AI_RECOMMEND_COPY.retry}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+
+              <div
+                className={`ai-chat-spacer${loading ? " ai-chat-spacer--grow" : ""}`}
+                aria-hidden="true"
+              />
             </div>
-            {composerForm}
-          </div>
-        </div>
+
+            <AiRecommendComposer
+              variant="chat"
+              value={tripForm}
+              onChange={setTripForm}
+              onSubmit={(text) => void sendMessage(text)}
+              onApplyConditions={() => void applyTripConditions()}
+              loading={loading}
+              hasBtiResult={hasResult}
+              settingsOpen={settingsOpen}
+              onSettingsOpenChange={setSettingsOpen}
+              showConditionsSummary={showConditionsSummary}
+              onConditionsSummaryChange={setShowConditionsSummary}
+            />
+          </>
+        )}
       </div>
     </main>
   );
