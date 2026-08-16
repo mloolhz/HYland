@@ -421,4 +421,4 @@ export function getIslandBtiPercentages(scores: IslandBtiScoreMap): IslandBtiPer
  * main.tsx 라우터 기준 전용 AI 추천 페이지 경로.
  * 현재는 랜딩 페이지 AISection/HeroSection 위젯만 존재하며 별도 route 없음.
  */
-export const ISLAND_BTI_AI_RECOMMEND_PATH: string | null = null;
+export const ISLAND_BTI_AI_RECOMMEND_PATH: string | null = "/ai-recommend";

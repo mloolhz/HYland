@@ -1,9 +1,14 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getAiRecommendation } from "@/api/ai-recommend";
+import { postRecommendations } from "@/api/recommendation";
 import { AiResponseContent } from "@/components/ai-recommend/AiResponseContent";
+import { RecommendationResultsPanel } from "@/components/ai-recommend/RecommendationResultsPanel";
+import { TripIntentForm, type TripIntentFormValue } from "@/components/ai-recommend/TripIntentForm";
 import { CONTAINER } from "@/constants/layout";
+import { useIslandBti } from "@/context/ProfileCharacterContext";
 import type { ChatMessage } from "@/types/ai-recommend";
+import type { RecommendationResponse } from "@/types/recommendation";
 
 const EXAMPLE_QUESTIONS = [
   "가족 당일치기 코스 추천해줘",
@@ -14,6 +19,10 @@ const EXAMPLE_QUESTIONS = [
 
 type LocationState = {
   initialMessage?: string;
+  islandBti?: {
+    code: string;
+    name: string;
+  };
 };
 
 type Turn = {
@@ -76,10 +85,29 @@ function scrollTurnToContainerTop(container: HTMLElement, turnEl: HTMLElement) {
   });
 }
 
+function defaultTripForm(): TripIntentFormValue {
+  const travelDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  return {
+    travelDate,
+    travelEndDate: travelDate,
+    duration: 1,
+    companion: "friend",
+    travelMood: "healing",
+    activities: ["바다", "산책"],
+  };
+}
+
 export function AiRecommend() {
   const location = useLocation();
   const navigate = useNavigate();
-  const initialMessage = (location.state as LocationState | null)?.initialMessage?.trim();
+  const locationState = (location.state as LocationState | null) ?? null;
+  const initialMessage = locationState?.initialMessage?.trim();
+  const { hasResult } = useIslandBti();
+
+  const [tripForm, setTripForm] = useState<TripIntentFormValue>(() => defaultTripForm());
+  const [recommendation, setRecommendation] = useState<RecommendationResponse | null>(null);
+  const [recommendLoading, setRecommendLoading] = useState(false);
+
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -96,6 +124,27 @@ export function AiRecommend() {
     if (el) turnRefs.current.set(id, el);
     else turnRefs.current.delete(id);
   }, []);
+
+  const runStructuredRecommendation = useCallback(async () => {
+    setRecommendLoading(true);
+    try {
+      const response = await postRecommendations({
+        trip: {
+          travelDate: tripForm.travelDate,
+          travelEndDate: tripForm.travelEndDate ?? tripForm.travelDate,
+          duration: tripForm.duration,
+          companion: tripForm.companion,
+          travelMood: tripForm.travelMood,
+          activities: tripForm.activities,
+          intensity: tripForm.intensity,
+        },
+        useIslandBti: hasResult,
+      });
+      setRecommendation(response);
+    } finally {
+      setRecommendLoading(false);
+    }
+  }, [tripForm, hasResult]);
 
   const sendMessage = useCallback(
     async (text: string) => {
@@ -211,17 +260,33 @@ export function AiRecommend() {
       setBootstrapped(true);
       void sendMessage(initialMessage);
       navigate(location.pathname, { replace: true, state: null });
-    } else {
-      setBootstrapped(true);
+      return;
     }
-  }, [initialMessage, location.pathname, navigate, sendMessage]);
+
+    if (locationState?.islandBti) {
+      initialHandled.current = true;
+      setBootstrapped(true);
+      void runStructuredRecommendation();
+      navigate(location.pathname, { replace: true, state: null });
+      return;
+    }
+
+    setBootstrapped(true);
+  }, [
+    initialMessage,
+    location.pathname,
+    locationState?.islandBti,
+    navigate,
+    runStructuredRecommendation,
+    sendMessage,
+  ]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     void sendMessage(input);
   };
 
-  const isEmpty = bootstrapped && messages.length === 0 && !loading;
+  const isEmpty = bootstrapped && messages.length === 0 && !loading && !recommendation;
 
   return (
     <main className="ai-page">
@@ -231,9 +296,19 @@ export function AiRecommend() {
         </header>
 
         <div className="ai-chat" ref={chatScrollRef} aria-live="polite">
+          <TripIntentForm
+            value={tripForm}
+            onChange={setTripForm}
+            onSubmit={() => void runStructuredRecommendation()}
+            loading={recommendLoading}
+            hasBtiResult={hasResult}
+          />
+
+          {recommendation ? <RecommendationResultsPanel response={recommendation} /> : null}
+
           {isEmpty && (
             <div className="ai-empty">
-              <p>원하는 레저나 조건을 입력해보세요.</p>
+              <p>조건을 입력하고 TOP 3 섬 추천을 받거나, 아래 예시 질문으로 대화할 수 있어요.</p>
               <div className="ai-example-chips">
                 {EXAMPLE_QUESTIONS.map((q) => (
                   <button key={q} type="button" className="ai-example-chip" onClick={() => void sendMessage(q)}>
@@ -291,7 +366,7 @@ export function AiRecommend() {
                 void sendMessage(input);
               }
             }}
-            placeholder="예: 가족 당일치기 가능한 섬 추천해줘"
+            placeholder="예: 1위 추천 섬 일정을 더 자세히 알려줘"
             rows={2}
             aria-label="AI에게 질문하기"
             disabled={loading}
@@ -301,7 +376,7 @@ export function AiRecommend() {
           </button>
         </form>
 
-        <p className="ai-demo-note">AI 추천은 예시 응답입니다 (실제 AI 연동 예정)</p>
+        <p className="ai-demo-note">추천 순위는 규칙 기반 엔진이 계산하고, AI는 설명·코스 문구를 생성합니다.</p>
       </div>
     </main>
   );
