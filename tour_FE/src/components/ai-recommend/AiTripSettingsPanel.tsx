@@ -4,11 +4,11 @@ import type { TripIntent } from "@/types/recommendation";
 
 export type TripIntentFormValue = TripIntent;
 
-type TripIntentFormProps = {
+type AiTripSettingsPanelProps = {
   value: TripIntentFormValue;
   onChange: (next: TripIntentFormValue) => void;
-  onSubmit: () => void;
-  loading?: boolean;
+  onApply?: () => void;
+  applying?: boolean;
   hasBtiResult?: boolean;
 };
 
@@ -29,13 +29,13 @@ const MOOD_OPTIONS = [
 
 const ACTIVITY_OPTIONS = ["바다", "산책", "카페", "트레킹", "카약", "사이클", "낚시", "갯벌"];
 
-export function TripIntentForm({
+export function AiTripSettingsPanel({
   value,
   onChange,
-  onSubmit,
-  loading = false,
+  onApply,
+  applying = false,
   hasBtiResult = false,
-}: TripIntentFormProps) {
+}: AiTripSettingsPanelProps) {
   const toggleActivity = (activity: string) => {
     const current = value.activities ?? [];
     const next = current.includes(activity)
@@ -45,35 +45,23 @@ export function TripIntentForm({
   };
 
   return (
-    <form
-      className="ai-trip-form"
-      onSubmit={(event) => {
-        event.preventDefault();
-        onSubmit();
-      }}
-    >
-      <div className="ai-trip-form__head">
-        <h2>어떤 섬 여행을 떠나볼까요?</h2>
-      </div>
-
+    <div className="ai-settings-panel">
       {!hasBtiResult ? (
-        <div className="ai-trip-bti-nudge">
-          <p>섬BTI를 하면 나에게 더 잘 맞는 섬을 골라줄 수 있어요.</p>
-          <Link to="/island-bti/test" className="ai-trip-bti-nudge__link">
-            섬BTI 검사하러 가기
-          </Link>
+        <div className="ai-settings-panel__bti">
+          <span>섬BTI를 하면 더 정확한 추천을 받을 수 있어요.</span>
+          <Link to="/island-bti/test">섬BTI 검사하기</Link>
         </div>
       ) : null}
 
-      <div className="ai-trip-form__grid">
-        <TripDateRangePicker
-          startDate={value.travelDate}
-          endDate={value.travelEndDate ?? value.travelDate}
-          onChange={({ travelDate, travelEndDate, duration }) =>
-            onChange({ ...value, travelDate, travelEndDate, duration })
-          }
-        />
+      <TripDateRangePicker
+        startDate={value.travelDate}
+        endDate={value.travelEndDate ?? value.travelDate}
+        onChange={({ travelDate, travelEndDate, duration }) =>
+          onChange({ ...value, travelDate, travelEndDate, duration })
+        }
+      />
 
+      <div className="ai-settings-panel__row">
         <label className="ai-trip-field">
           <span>동행</span>
           <select
@@ -91,7 +79,7 @@ export function TripIntentForm({
         </label>
 
         <label className="ai-trip-field">
-          <span>여행 분위기</span>
+          <span>분위기</span>
           <select
             value={value.travelMood ?? "healing"}
             onChange={(event) =>
@@ -107,8 +95,8 @@ export function TripIntentForm({
         </label>
       </div>
 
-      <fieldset className="ai-trip-fieldset">
-        <legend>관심 활동</legend>
+      <div className="ai-trip-field">
+        <span>관심 활동</span>
         <div className="ai-trip-chips">
           {ACTIVITY_OPTIONS.map((activity) => {
             const selected = value.activities?.includes(activity) ?? false;
@@ -124,11 +112,13 @@ export function TripIntentForm({
             );
           })}
         </div>
-      </fieldset>
+      </div>
 
-      <button type="submit" className="ai-trip-submit" disabled={loading}>
-        {loading ? "추천 계산 중…" : "TOP 3 섬 추천 받기"}
-      </button>
-    </form>
+      {onApply ? (
+        <button type="button" className="ai-settings-panel__apply" onClick={onApply} disabled={applying}>
+          {applying ? "추천 준비 중…" : "적용하기"}
+        </button>
+      ) : null}
+    </div>
   );
 }

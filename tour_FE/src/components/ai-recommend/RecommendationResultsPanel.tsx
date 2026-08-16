@@ -19,7 +19,7 @@ export function RecommendationResultsPanel({ response }: RecommendationResultsPa
   if (response.recommendations.length === 0) {
     return (
       <div className="ai-rec-results ai-rec-results--empty">
-        <p>현재 조건으로 추천 가능한 섬이 없어요. 날짜·예산·이동 수단을 조정해 보세요.</p>
+        <p>현재 조건으로 추천 가능한 섬이 없어요. 날짜나 여행 조건을 조정해 보세요.</p>
       </div>
     );
   }
