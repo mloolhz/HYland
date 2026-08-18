@@ -18,4 +18,5 @@ export const AI_RECOMMEND_COPY = {
   inputLabel: "AI\uC5D0\uAC8C \uC9C8\uBB38\uD558\uAE30",
   send: "\uC804\uC1A1",
   requestFailedLog: "AI \uCD94\uCC9C \uC694\uCCAD \uC2E4\uD328:",
+  suggestedQuestionsLabel: "\uC774\uC5B4\uC11C \uC774\uB7F0 \uC9C8\uBB38\uC740 \uC5B4\uB5A0\uC138\uC694?",
 } as const;

@@ -1,5 +1,5 @@
-import type { AiResponse, RecItem } from "@/types/ai-recommend";
-import type { TripIntent } from "@/types/recommendation";
+import type { AiResponse, RecItem, WeatherInfo } from "@/types/ai-recommend";
+import type { RecommendationResponse, TripIntent } from "@/types/recommendation";
 import { buildRec } from "./mockData";
 
 export type ChatHistoryItem = {
@@ -17,6 +17,7 @@ type RecommendPayload = {
   course?: AiResponse["course"];
   tips?: string[];
   followups?: string[];
+  weather?: WeatherInfo;
 };
 
 function toAiResponse(data: RecommendPayload): AiResponse {
@@ -30,6 +31,7 @@ function toAiResponse(data: RecommendPayload): AiResponse {
     course: data.course,
     tips: data.tips,
     followups: data.followups,
+    weather: data.weather,
   };
 }
 
@@ -122,11 +124,12 @@ export async function getAiRecommendation(
   userMessage: string,
   history?: ChatHistoryItem[],
   persona?: TripIntent,
+  sessionId?: string,
 ): Promise<AiResponse> {
   const res = await fetch(`${API_BASE}/api/recommend`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ question: userMessage, history, persona }),
+    body: JSON.stringify({ question: userMessage, history, persona, sessionId }),
   });
 
   if (!res.ok) {
@@ -144,11 +147,12 @@ export async function getAiRecommendationStream(
   persona: TripIntent | undefined,
   onTextChunk: (accumulatedText: string) => void,
   onDone: (response: AiResponse) => void,
+  sessionId?: string,
 ): Promise<void> {
   const res = await fetch(`${API_BASE}/api/recommend/stream`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ question: userMessage, history, persona }),
+    body: JSON.stringify({ question: userMessage, history, persona, sessionId }),
   });
 
   if (!res.ok) {
@@ -194,6 +198,62 @@ export async function getPopularQuestions(): Promise<string[]> {
     const res = await fetch(`${API_BASE}/api/popular-questions`);
     if (!res.ok) return [];
     const data = await res.json();
+    return data.questions ?? [];
+  } catch {
+    return [];
+  }
+}
+
+/** TOP3 단계에서 답변 본문 없이 날짜 기준 날씨만 빠르게 조회. 실패 시 null(폴백) */
+export async function getWeather(
+  travelDate: string,
+  travelEndDate?: string,
+): Promise<WeatherInfo | null> {
+  try {
+    const res = await fetch(`${API_BASE}/api/weather`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ travelDate, travelEndDate }),
+    });
+    if (!res.ok) return null;
+    const data = (await res.json()) as { weather?: WeatherInfo | null };
+    return data.weather ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/** 조건 패널(TOP3) 결과를 Gemini 호출 없이 그대로 저장(섬BTI 선호도·예상 질문 집계용). */
+export async function saveTop3Recommendation(
+  question: string,
+  response: RecommendationResponse,
+  persona: TripIntent & { islandBti?: string },
+  sessionId?: string,
+): Promise<void> {
+  try {
+    await fetch(`${API_BASE}/api/top3/save`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question, persona, response, sessionId }),
+    });
+  } catch {
+    // 저장 실패해도 화면 흐름에는 영향 없음(기존 saveRecommendation과 동일한 폴백)
+  }
+}
+
+/** 비슷한 조건(동행·분위기)으로 TOP3를 받은 다른 세션들이 이어서 물어본 질문. 실패 시 빈 배열 */
+export async function getSuggestedQuestions(
+  companion?: string,
+  travelMood?: string,
+): Promise<string[]> {
+  try {
+    const params = new URLSearchParams();
+    if (companion) params.set("companion", companion);
+    if (travelMood) params.set("travelMood", travelMood);
+
+    const res = await fetch(`${API_BASE}/api/suggested-questions?${params.toString()}`);
+    if (!res.ok) return [];
+    const data = (await res.json()) as { questions?: string[] };
     return data.questions ?? [];
   } catch {
     return [];

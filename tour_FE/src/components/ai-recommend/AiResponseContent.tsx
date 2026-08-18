@@ -18,6 +18,17 @@ export function AiResponseContent({ response, onFollowup }: AiResponseContentPro
 
   return (
     <div className="ai-response">
+      {response.weather && (
+        <div className="ai-weather-card ai-fade-up">
+          <div className="ai-weather-card__head">
+            <span className="ai-weather-card__badge">날씨</span>
+            <span className="ai-weather-card__date">{response.weather.date}</span>
+          </div>
+          <p className="ai-weather-card__summary">{response.weather.summary}</p>
+          <p className="ai-weather-card__recommendation">{response.weather.recommendation}</p>
+        </div>
+      )}
+
       <p className="ai-response-text" style={{ whiteSpace: "pre-line" }}>{response.text}</p>
 
       {response.recommendations.length > 0 && (

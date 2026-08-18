@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import type { RecommendationResponse } from "@/types/recommendation";
+import type { WeatherInfo } from "@/types/ai-recommend";
 
 type RecommendationResultsPanelProps = {
   response: RecommendationResponse;
+  weather?: WeatherInfo | null;
 };
 
 function ScoreRow({ label, value }: { label: string; value: number }) {
@@ -15,7 +17,7 @@ function ScoreRow({ label, value }: { label: string; value: number }) {
   );
 }
 
-export function RecommendationResultsPanel({ response }: RecommendationResultsPanelProps) {
+export function RecommendationResultsPanel({ response, weather }: RecommendationResultsPanelProps) {
   if (response.recommendations.length === 0) {
     return (
       <div className="ai-rec-results ai-rec-results--empty">
@@ -26,6 +28,19 @@ export function RecommendationResultsPanel({ response }: RecommendationResultsPa
 
   return (
     <div className="ai-rec-results">
+      {weather && (
+        <div className="ai-weather-card ai-weather-card--compact">
+          <div className="ai-weather-card__head">
+            <span className="ai-weather-card__badge">날씨</span>
+            <span className="ai-weather-card__date">{weather.date}</span>
+          </div>
+          <p className="ai-weather-card__summary">{weather.summary}</p>
+          {weather.recommendation ? (
+            <p className="ai-weather-card__recommendation">{weather.recommendation}</p>
+          ) : null}
+        </div>
+      )}
+
       {response.useIslandBti && response.userIslandBti ? (
         <p className="ai-rec-results__lead">
           {response.userIslandBti} 성향을 반영해 TOP {response.recommendations.length} 섬을 골랐어요.

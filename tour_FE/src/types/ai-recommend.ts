@@ -25,12 +25,19 @@ export type RecItem = {
   booking?: RecItemBooking;
 };
 
+export type WeatherInfo = {
+  date: string;
+  summary: string;
+  recommendation: string;
+};
+
 export type AiResponse = {
   text: string;
   recommendations: RecItem[];
   course?: { title: string; steps: CourseStep[] };
   tips?: string[];
   followups?: string[];
+  weather?: WeatherInfo;
 };
 
 export type ChatMessage =
