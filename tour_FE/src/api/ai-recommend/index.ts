@@ -1,4 +1,5 @@
 import type { AiResponse, RecItem } from "@/types/ai-recommend";
+import type { TripIntent } from "@/types/recommendation";
 import { buildRec } from "./mockData";
 
 export type ChatHistoryItem = {
@@ -120,11 +121,12 @@ function handleSSEEvents(
 export async function getAiRecommendation(
   userMessage: string,
   history?: ChatHistoryItem[],
+  persona?: TripIntent,
 ): Promise<AiResponse> {
   const res = await fetch(`${API_BASE}/api/recommend`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ question: userMessage, history }),
+    body: JSON.stringify({ question: userMessage, history, persona }),
   });
 
   if (!res.ok) {
@@ -139,13 +141,14 @@ export async function getAiRecommendation(
 export async function getAiRecommendationStream(
   userMessage: string,
   history: ChatHistoryItem[] | undefined,
+  persona: TripIntent | undefined,
   onTextChunk: (accumulatedText: string) => void,
   onDone: (response: AiResponse) => void,
 ): Promise<void> {
   const res = await fetch(`${API_BASE}/api/recommend/stream`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ question: userMessage, history }),
+    body: JSON.stringify({ question: userMessage, history, persona }),
   });
 
   if (!res.ok) {

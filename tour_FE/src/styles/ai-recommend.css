@@ -43,7 +43,9 @@ body:has(.ai-page) {
   flex-direction: column;
   align-items: center;
   gap: 28px;
-  padding: 24px 0 48px;
+  /* justify-content:center on the parent centers this block; a much larger
+     bottom padding than top biases that centered position upward. */
+  padding: 0 0 22vh;
 }
 
 .ai-intro__title {
@@ -720,6 +722,9 @@ body:has(.ai-page) {
     justify-content: center;
   }
 
+  .ai-intro {
+    padding: 0 0 16vh;
+  }
 }
 
 .ai-bubble--loading {

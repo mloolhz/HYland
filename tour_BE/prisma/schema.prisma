@@ -1,19 +1,26 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
 }
 
 model Recommendation {
   id        Int      @id @default(autoincrement())
-  question  String                       // 사용자 질문
-  response  Json                         // AI 답변 전체 (text, recommendations, course 등)
-  createdAt DateTime @default(now())      // 저장 시각
+  question  String   @db.Text
+  persona   Json?    // 조건: 날짜·동행·분위기·관심활동
+  response  Json
+  /** persona.islandBti 스냅샷 — 섬BTI 유형별 섬 선호도 집계용 인덱스 */
+  islandBti String?
+  /** 브라우저 세션 단위 식별자(FE sessionStorage) — 같은 대화 안의 턴 순서를
+      추적해 "비슷한 조건 다음에 사람들이 무엇을 물었는지" 집계에 사용 */
+  sessionId String?
+  createdAt DateTime @default(now())
+
+  @@index([islandBti])
+  @@index([sessionId, createdAt])
 }

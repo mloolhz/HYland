@@ -17,7 +17,7 @@ import { useIslandBti } from "@/context/ProfileCharacterContext";
 import type { AiResponse } from "@/types/ai-recommend";
 import type { RecommendationResponse } from "@/types/recommendation";
 import { AI_RECOMMEND_COPY } from "@/pages/aiRecommendCopy";
-import { useStreamTypewriter } from "@/hooks/useStreamTypewriter";
+import { TYPEWRITER_CHARS_PER_TICK, TYPEWRITER_TICK_MS } from "@/hooks/useStreamTypewriter";
 
 type LocationState = {
   initialMessage?: string;
@@ -27,14 +27,26 @@ type LocationState = {
   };
 };
 
+/**
+ * top3-loading/top3-typing은 조건(persona)이 설정된 턴에서만 거친다.
+ * 조건이 없으면 detail-loading에서 바로 시작해 TOP3 단계 자체가 없다.
+ */
+type TurnPhase = "top3-loading" | "top3-typing" | "detail-loading" | "detail-typing" | "done";
+
 type AiTurn = {
   id: string;
-  userText: string;
+  /** 채팅 말풍선에 보여줄 텍스트 (조건 나열 문구는 여기 넣지 않는다) */
+  displayText: string;
+  /** 백엔드 question으로 실제 전달되는 텍스트 (조건 문구가 반영될 수 있음) */
+  promptText: string;
+  hasTop3: boolean;
+  phase: TurnPhase;
   recommendation: RecommendationResponse | null;
+  /** TOP3 요약이 타이핑되는 중의 누적 텍스트 */
+  top3Text: string;
   assistant: AiResponse | null;
-  /** LLM 응답이 타자기 효과로 들어오는 중일 때의 누적 텍스트 */
+  /** 상세 답변이 타이핑되는 중의 누적 텍스트 */
   streamText: string;
-  isStreamingAssistant: boolean;
 };
 
 function createId() {
@@ -67,6 +79,32 @@ function defaultTripForm(): TripIntentFormValue {
   };
 }
 
+function buildTop3SummaryText(response: RecommendationResponse): string {
+  const lead =
+    response.useIslandBti && response.userIslandBti
+      ? `${response.userIslandBti} 성향을 반영해 TOP ${response.recommendations.length} 섬을 골랐어요.`
+      : `이번 여행 조건 중심으로 TOP ${response.recommendations.length} 섬을 골랐어요.`;
+
+  const lines = response.recommendations.map(
+    (item) => `${item.rank}위 ${item.islandName} · 추천도 ${item.finalScore}%`,
+  );
+
+  return [lead, ...lines].join("\n");
+}
+
+function LoadingDots({ label }: { label: string }) {
+  return (
+    <div className="ai-bubble ai-bubble--assistant ai-bubble--loading" aria-busy="true">
+      <span className="ai-loading-text">{label}</span>
+      <span className="ai-typing-dots" aria-hidden="true">
+        <span className="ai-dot"></span>
+        <span className="ai-dot"></span>
+        <span className="ai-dot"></span>
+      </span>
+    </div>
+  );
+}
+
 export function AiRecommend() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -81,21 +119,63 @@ export function AiRecommend() {
   const [bootstrapped, setBootstrapped] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [showConditionsSummary, setShowConditionsSummary] = useState(false);
-  const [pendingTurnId, setPendingTurnId] = useState<string | null>(null);
   const [popularQuestions, setPopularQuestions] = useState<string[]>([]);
 
   const chatScrollRef = useRef<HTMLDivElement>(null);
   const turnRefs = useRef<Map<string, HTMLDivElement>>(new Map());
-  const scrollToTurnIdRef = useRef<string | null>(null);
+  const prevTurnCountRef = useRef(0);
   const initialHandled = useRef(false);
-  const { begin: beginTypewriter, pushTarget, finishStream, abort: abortTypewriter } =
-    useStreamTypewriter();
+  const mountedRef = useRef(true);
+  // 사용자가 타이핑 도중 위로 스크롤하면 false가 되어 자동 하단 추적을 멈춘다.
+  // 프로그래매틱 스크롤은 항상 정확히 바닥까지 이동시키므로, scroll 이벤트 후
+  // 바닥 근처가 아니면 사용자가 직접 올린 것으로 판단해도 안전하다.
+  const autoScrollEnabledRef = useRef(true);
+
+  // StrictMode의 개발 모드 mount→unmount→remount 시뮬레이션에서 cleanup만 있으면
+  // remount 시 true로 복구되지 않아 이후 모든 타이핑이 첫 틱에서 즉시 중단된다.
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   const hasStarted = turns.length > 0 || loading;
 
   const setTurnRef = useCallback((id: string, el: HTMLDivElement | null) => {
     if (el) turnRefs.current.set(id, el);
     else turnRefs.current.delete(id);
+  }, []);
+
+  const scrollChatToBottom = useCallback(() => {
+    const container = chatScrollRef.current;
+    if (!container) return;
+    container.scrollTop = container.scrollHeight;
+  }, []);
+
+  /** 완성된 문자열을 캐릭터 단위로 타이핑해서 보여준다 (네트워크 스트리밍과 무관). */
+  const typeOutText = useCallback((text: string, onTick: (partial: string) => void): Promise<void> => {
+    const chars = Array.from(text);
+    if (chars.length === 0) {
+      onTick("");
+      return Promise.resolve();
+    }
+    return new Promise((resolve) => {
+      let count = 0;
+      const timer = setInterval(() => {
+        if (!mountedRef.current) {
+          clearInterval(timer);
+          resolve();
+          return;
+        }
+        count = Math.min(count + TYPEWRITER_CHARS_PER_TICK, chars.length);
+        onTick(chars.slice(0, count).join(""));
+        if (count >= chars.length) {
+          clearInterval(timer);
+          resolve();
+        }
+      }, TYPEWRITER_TICK_MS);
+    });
   }, []);
 
   const runStructuredRecommendation = useCallback(async () => {
@@ -114,33 +194,37 @@ export function AiRecommend() {
   }, [tripForm, hasResult]);
 
   const executeTurn = useCallback(
-    async (userText: string, options: { withRecommendation: boolean }) => {
+    async (
+      displayText: string,
+      promptText: string,
+      options: { withRecommendation: boolean },
+    ) => {
       if (loading) return;
 
       const turnId = createId();
-      scrollToTurnIdRef.current = turnId;
-      setPendingTurnId(turnId);
 
       setLoading(true);
       setErrorMsg(null);
       setSettingsOpen(false);
-      setShowConditionsSummary(true);
 
       setTurns((prev) => [
         ...prev,
         {
           id: turnId,
-          userText,
+          displayText,
+          promptText,
+          hasTop3: options.withRecommendation,
+          phase: options.withRecommendation ? "top3-loading" : "detail-loading",
           recommendation: null,
+          top3Text: "",
           assistant: null,
           streamText: "",
-          isStreamingAssistant: true,
         },
       ]);
 
-      // 이전 턴들을 sportId 중복 추천 방지용 히스토리로 변환
+      // 이전 턴들을 sportId 중복 추천 방지용 히스토리로 변환 (실제 backend에 보낸 promptText 기준)
       const history: ChatHistoryItem[] = turns.flatMap((turn): ChatHistoryItem[] => {
-        const entries: ChatHistoryItem[] = [{ role: "user", text: turn.userText }];
+        const entries: ChatHistoryItem[] = [{ role: "user", text: turn.promptText }];
         if (turn.assistant) {
           entries.push({
             role: "assistant",
@@ -150,114 +234,140 @@ export function AiRecommend() {
         }
         return entries;
       });
-      history.push({ role: "user", text: userText });
+      history.push({ role: "user", text: promptText });
 
-      // 구조화 추천(섬BTI + 조건 스코어링)은 LLM 대화 응답과 독립적으로 진행 —
-      // 실패해도 대화 자체는 계속되도록 별도로 흡수
-      const recommendationPromise = options.withRecommendation
-        ? runStructuredRecommendation().catch((err) => {
-            console.error("[ai-recommend] 구조화 추천 실패", err);
-            return null;
-          })
-        : Promise.resolve(null);
-
-      beginTypewriter({
-        onDisplay: (streamText) => {
-          setTurns((prev) => prev.map((t) => (t.id === turnId ? { ...t, streamText } : t)));
-        },
-        onComplete: (response) => {
-          setTurns((prev) =>
-            prev.map((t) =>
-              t.id === turnId ? { ...t, assistant: response, isStreamingAssistant: false } : t,
-            ),
-          );
-          setLoading(false);
-          setPendingTurnId(null);
-        },
-      });
+      // 조건 패널(날짜·동행·분위기·관심활동)이 실제로 적용된 턴에만 persona를 함께 보낸다.
+      const persona = options.withRecommendation
+        ? {
+            travelDate: tripForm.travelDate,
+            travelEndDate: tripForm.travelEndDate,
+            duration: tripForm.duration,
+            companion: tripForm.companion,
+            travelMood: tripForm.travelMood,
+            activities: tripForm.activities,
+          }
+        : undefined;
 
       try {
-        try {
-          await getAiRecommendationStream(
-            userText,
-            history,
-            (streamText) => pushTarget(streamText),
-            (response) => finishStream(response),
-          );
-        } catch (streamErr) {
-          console.warn("[ai-recommend] 스트리밍 실패, 논스트리밍 폴백", streamErr);
-          const response = await getAiRecommendation(userText, history);
-          finishStream(response);
+        // 1단계: TOP3 (조건이 설정된 턴에서만) — 완전히 타이핑될 때까지 상세 답변은 시작하지 않는다.
+        if (options.withRecommendation) {
+          const recommendation = await runStructuredRecommendation().catch((err) => {
+            console.error("[ai-recommend] 구조화 추천 실패", err);
+            return null;
+          });
+
+          if (recommendation && recommendation.recommendations.length > 0) {
+            setTurns((prev) =>
+              prev.map((t) =>
+                t.id === turnId ? { ...t, recommendation, phase: "top3-typing" } : t,
+              ),
+            );
+            await typeOutText(buildTop3SummaryText(recommendation), (partial) => {
+              setTurns((prev) => prev.map((t) => (t.id === turnId ? { ...t, top3Text: partial } : t)));
+            });
+          }
+
+          setTurns((prev) => prev.map((t) => (t.id === turnId ? { ...t, phase: "detail-loading" } : t)));
         }
 
-        const recommendation = await recommendationPromise;
-        setTurns((prev) => prev.map((t) => (t.id === turnId ? { ...t, recommendation } : t)));
-      } catch (err) {
-        abortTypewriter();
-        console.error(AI_RECOMMEND_COPY.requestFailedLog, err);
-        // 사용자 턴 자체는 남겨서(질문 텍스트 유지) 에러+재시도 버튼을 그 턴에 붙여 보여준다.
-        // 통째로 지우면 첫 턴 실패 시 intro 화면으로 되돌아가 에러가 보일 곳이 없어진다.
+        // 2단계: 상세 답변(LLM) — 스트리밍 우선, 실패 시 논스트리밍 폴백
+        let response: AiResponse;
+        try {
+          let streamed: AiResponse | null = null;
+          await getAiRecommendationStream(
+            promptText,
+            history,
+            persona,
+            () => {}, // 부분 미리보기는 표시하지 않는다(순서 보장을 위해 완료 후 타이핑)
+            (r) => {
+              streamed = r;
+            },
+          );
+          if (!streamed) throw new Error("스트림 응답 없음");
+          response = streamed;
+        } catch (streamErr) {
+          console.warn("[ai-recommend] 스트리밍 실패, 논스트리밍 폴백", streamErr);
+          response = await getAiRecommendation(promptText, history, persona);
+        }
+
+        setTurns((prev) => prev.map((t) => (t.id === turnId ? { ...t, phase: "detail-typing" } : t)));
+        await typeOutText(response.text, (partial) => {
+          setTurns((prev) => prev.map((t) => (t.id === turnId ? { ...t, streamText: partial } : t)));
+        });
+
         setTurns((prev) =>
-          prev.map((t) => (t.id === turnId ? { ...t, isStreamingAssistant: false } : t)),
+          prev.map((t) => (t.id === turnId ? { ...t, assistant: response, phase: "done" } : t)),
         );
+        setLoading(false);
+      } catch (err) {
+        console.error(AI_RECOMMEND_COPY.requestFailedLog, err);
+        setTurns((prev) => prev.map((t) => (t.id === turnId ? { ...t, phase: "done" } : t)));
         setErrorMsg(AI_RECOMMEND_COPY.error);
         setLoading(false);
-        setPendingTurnId(null);
       }
     },
-    [
-      abortTypewriter,
-      beginTypewriter,
-      finishStream,
-      loading,
-      pushTarget,
-      runStructuredRecommendation,
-      turns,
-    ],
+    [loading, runStructuredRecommendation, scrollChatToBottom, tripForm, turns, typeOutText],
   );
 
   const sendMessage = useCallback(
     async (text: string) => {
       const trimmed = text.trim();
       if (!trimmed) return;
-      await executeTurn(trimmed, { withRecommendation: turns.length === 0 });
+      await executeTurn(trimmed, trimmed, { withRecommendation: false });
     },
-    [executeTurn, turns.length],
+    [executeTurn],
   );
 
   const applyTripConditions = useCallback(async () => {
-    await executeTurn(buildApplyMessage(tripForm), { withRecommendation: true });
+    await executeTurn(AI_RECOMMEND_COPY.applyLabel, buildApplyMessage(tripForm), {
+      withRecommendation: true,
+    });
   }, [executeTurn, tripForm]);
 
-  useLayoutEffect(() => {
-    const turnId = scrollToTurnIdRef.current;
-    if (!turnId) return;
+  const retryTurn = useCallback(
+    (turn: AiTurn) => {
+      void executeTurn(turn.displayText, turn.promptText, { withRecommendation: turn.hasTop3 });
+    },
+    [executeTurn],
+  );
 
-    const container = chatScrollRef.current;
-    const turnEl = turnRefs.current.get(turnId);
-    if (!container || !turnEl) return;
-
-    scrollTurnToTop(container, turnEl);
-  }, [turns, loading]);
-
+  // 사용자가 직접 스크롤하면(프로그래매틱 스크롤은 항상 바닥에서 끝나므로, 바닥 근처가
+  // 아닌 상태로 scroll 이벤트가 오면 사용자가 올린 것) 자동 하단 추적을 끈다.
+  // .ai-chat은 hasStarted가 true여야 DOM에 존재하므로, 그 시점에 맞춰 다시 등록해야 한다.
   useEffect(() => {
-    const turnId = scrollToTurnIdRef.current;
-    if (!turnId || loading) return;
-
     const container = chatScrollRef.current;
-    const turnEl = turnRefs.current.get(turnId);
-    if (!container || !turnEl) return;
+    if (!container) return;
 
-    scrollToTurnIdRef.current = null;
-    scrollTurnToTop(container, turnEl);
+    const BOTTOM_THRESHOLD = 40;
+    const onScroll = () => {
+      const distanceFromBottom = container.scrollHeight - container.scrollTop - container.clientHeight;
+      autoScrollEnabledRef.current = distanceFromBottom < BOTTOM_THRESHOLD;
+    };
 
-    const observer = new ResizeObserver(() => {
-      scrollTurnToTop(container, turnEl);
-    });
-    observer.observe(turnEl);
+    container.addEventListener("scroll", onScroll, { passive: true });
+    return () => container.removeEventListener("scroll", onScroll);
+  }, [hasStarted]);
 
-    return () => observer.disconnect();
-  }, [turns, loading]);
+  // turns 배열이 바뀔 때마다: 새 턴이 막 생겼으면(질문이 아직 안 보였으면) 상단에 한 번
+  // 스냅하고, 같은 턴 안에서 내용만 자란 경우(타이핑·카드 등장)는 바닥으로 따라 내려간다.
+  // 단, 사용자가 위로 스크롤해서 자동 추적을 끈 상태라면 따라 내려가지 않는다.
+  // DOM 커밋 이후에 도는 useLayoutEffect라서 방금 렌더된 카드/텍스트 높이를 정확히 읽는다.
+  useLayoutEffect(() => {
+    const container = chatScrollRef.current;
+    const lastTurn = turns[turns.length - 1];
+    const isNewTurn = turns.length > prevTurnCountRef.current;
+    prevTurnCountRef.current = turns.length;
+
+    if (!container || !lastTurn) return;
+
+    if (isNewTurn) {
+      autoScrollEnabledRef.current = true;
+      const turnEl = turnRefs.current.get(lastTurn.id);
+      if (turnEl) scrollTurnToTop(container, turnEl);
+    } else if (autoScrollEnabledRef.current) {
+      scrollChatToBottom();
+    }
+  }, [turns, scrollChatToBottom]);
 
   useEffect(() => {
     void getPopularQuestions().then((qs) => {
@@ -335,9 +445,10 @@ export function AiRecommend() {
             <div className="ai-chat" ref={chatScrollRef} aria-live="polite">
               {turns.map((turn, index) => {
                 const isLast = index === turns.length - 1;
-                const showStreamingText = turn.isStreamingAssistant && !!turn.streamText;
-                const showLoadingDots =
-                  isLast && loading && turn.id === pendingTurnId && turn.isStreamingAssistant && !showStreamingText;
+                const showTop3Bubble =
+                  turn.hasTop3 && (turn.top3Text || turn.phase === "top3-typing");
+                const showTop3Cards =
+                  turn.recommendation && turn.phase !== "top3-loading" && turn.phase !== "top3-typing";
 
                 return (
                   <div
@@ -346,14 +457,29 @@ export function AiRecommend() {
                     className={`ai-chat-turn${index === 0 ? " ai-fade-up" : ""}`}
                   >
                     <div className="ai-bubble ai-bubble--user">
-                      <p>{turn.userText}</p>
+                      <p>{turn.displayText}</p>
                     </div>
 
-                    {turn.recommendation ? (
-                      <div className="ai-bubble ai-bubble--assistant ai-bubble--recommendation">
-                        <RecommendationResultsPanel response={turn.recommendation} />
+                    {turn.phase === "top3-loading" && <LoadingDots label={AI_RECOMMEND_COPY.loadingTop3} />}
+
+                    {showTop3Bubble && (
+                      <div className="ai-bubble ai-bubble--assistant">
+                        <p
+                          className="ai-response-text ai-response-text--streaming"
+                          style={{ whiteSpace: "pre-line" }}
+                        >
+                          {turn.top3Text}
+                        </p>
                       </div>
-                    ) : null}
+                    )}
+
+                    {showTop3Cards && (
+                      <div className="ai-bubble ai-bubble--assistant ai-bubble--recommendation ai-fade-up">
+                        <RecommendationResultsPanel response={turn.recommendation!} />
+                      </div>
+                    )}
+
+                    {turn.phase === "detail-loading" && <LoadingDots label={AI_RECOMMEND_COPY.loading} />}
 
                     {turn.assistant ? (
                       <div className="ai-bubble ai-bubble--assistant">
@@ -362,7 +488,7 @@ export function AiRecommend() {
                           onFollowup={(text) => void sendMessage(text)}
                         />
                       </div>
-                    ) : showStreamingText ? (
+                    ) : turn.phase === "detail-typing" ? (
                       <div className="ai-bubble ai-bubble--assistant">
                         <p
                           className="ai-response-text ai-response-text--streaming"
@@ -373,24 +499,13 @@ export function AiRecommend() {
                       </div>
                     ) : null}
 
-                    {showLoadingDots && (
-                      <div className="ai-bubble ai-bubble--assistant ai-bubble--loading" aria-busy="true">
-                        <span className="ai-loading-text">{AI_RECOMMEND_COPY.loading}</span>
-                        <span className="ai-typing-dots" aria-hidden="true">
-                          <span className="ai-dot"></span>
-                          <span className="ai-dot"></span>
-                          <span className="ai-dot"></span>
-                        </span>
-                      </div>
-                    )}
-
                     {isLast && !loading && errorMsg && (
                       <div className="ai-bubble ai-bubble--assistant ai-bubble--error" role="alert">
                         <p>{errorMsg}</p>
                         <button
                           type="button"
                           className="ai-retry-btn"
-                          onClick={() => void sendMessage(turn.userText)}
+                          onClick={() => retryTurn(turn)}
                         >
                           {AI_RECOMMEND_COPY.retry}
                         </button>
