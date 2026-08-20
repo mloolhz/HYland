@@ -110,6 +110,11 @@ function buildExcludedSportsSection(excludedSportIds: string[]): string {
 단, 사용자가 위 종목에 대해 더 자세히 묻거나("그거 자세히 알려줘" 등) 명시적으로 같은 것을 다시 원하는 경우에만 예외적으로 다시 언급하세요.`;
 }
 
+/** persona.weather가 이미 있으면 재검색이 필요 없으므로, travelDate가 있고 weather가 아직 없을 때만 검색이 필요하다. */
+function needsWeatherSearch(persona?: PersonaInput): boolean {
+  return !!(persona?.travelDate && !persona?.weather);
+}
+
 function buildWeatherDateLabel(travelDate: string, travelEndDate?: string): string {
   return travelEndDate && travelEndDate !== travelDate
     ? `${travelDate} ~ ${travelEndDate}`
@@ -170,9 +175,10 @@ function buildRecommendPrompt(
   const excludedSportIds = extractRecommendedSportIds(history);
 
   return `
-당신은 인천 섬 레저 추천 도우미입니다. 레저 추천뿐 아니라 사용자의 어떤 질문에도 성실하게 답변하세요.
+당신은 인천 섬 여행 도우미입니다. 레저 활동 추천뿐 아니라 각 섬의 특산물·향토음식·교통·숙소 등 인천 섬 여행과 관련된 질문에도 아는 대로 성실하게 답변하세요.
+다만 실제로 존재하는지 확인할 수 없는 특정 음식점 이름·주소·전화번호 등은 절대 지어내지 마세요. 그런 질문에는 지역 특산물·음식 종류처럼 일반적으로 알려진 정보 위주로 안내하고, 구체적인 상호는 직접 검색해보시라고 안내하세요.
 
-레저 추천과 관련된 질문(활동·코스·섬 추천 등)이면 아래 종목 목록에서만 추천하세요. 목록에 없는 종목·섬은 절대 만들지 마세요.
+레저 활동을 추천해야 하는 질문(활동·코스 추천 등)이면 "recommendations"·"course"는 아래 종목 목록에서만 채우세요. 목록에 없는 종목·섬은 절대 만들지 마세요.
 반드시 목록에 있는 sportId와 islandName(islands 중 하나)을 그대로 사용하세요.
 
 종목 목록:
@@ -191,8 +197,8 @@ ${buildWeatherSection(persona)}
 
 사용자 질문: "${question}"
 
-레저 추천과 무관한 질문(일반 상식, 날씨만 단순히 묻는 질문, 예약 취소, 길 안내, 정치 등)이어도 회피하지 말고
-"text" 필드에 성실하게 답변하세요. 이 경우 "recommendations"는 빈 배열, "course"는 null로 두세요.
+레저 활동 추천과 무관한 질문(맛집·특산물, 일반 상식, 날씨만 단순히 묻는 질문, 예약 취소, 길 안내, 정치 등)이어도 회피하지 말고
+"text" 필드에 아는 대로 성실하게 답변하세요. 이 경우 "recommendations"는 빈 배열, "course"는 null로 두세요.
 
 마크다운(\`\`\`) 없이 순수 JSON만 출력하세요:
 {
@@ -210,7 +216,8 @@ ${buildWeatherSection(persona)}
   "followups": ["후속 질문 칩 2~3개"],
   "weather": { "date": "...", "summary": "...", "recommendation": "..." }
 }
-레저 추천과 무관한 질문이면 recommendations는 [], course는 null, tips·followups도 관련 없으면 빈 배열로 두세요.
+레저 활동 추천과 무관한 질문이면 recommendations는 [], course는 null, tips·followups도 관련 없으면 빈 배열로 두세요.
+중요: "text"·"tips"·"followups"는 서로 모순되면 안 됩니다. text에서 특정 정보를 모른다고 하거나 제공할 수 없다고 답했다면, tips나 followups에도 그 정보(예: 구체적인 음식점 추천)를 채워 넣지 마세요.
 "weather" 필드는 [날씨 검색 지시]가 있을 때만, 검색에 성공한 경우에만 포함하세요. 그 외에는 필드 자체를 생략하세요.
 `.trim();
 }
@@ -305,10 +312,11 @@ router.post("/recommend/stream", async (req, res) => {
   try {
     console.log("[stream] 요청 받음, question:", question);
     const prompt = buildRecommendPrompt(question, history, persona);
+    const grounded = needsWeatherSearch(persona);
 
     console.log("[stream] Gemini 스트림 호출 시작");
     try {
-      for await (const chunk of askGeminiStream(prompt)) {
+      for await (const chunk of askGeminiStream(prompt, { grounded })) {
         chunkCount++;
         if (chunkCount <= 5 || chunkCount % 10 === 0) {
           console.log("[stream] 청크 수신", chunkCount);
@@ -323,7 +331,7 @@ router.post("/recommend/stream", async (req, res) => {
         console.error("[stream] 스트림 실패 스택:", streamErr.stack);
       }
 
-      const raw = await askGemini(prompt);
+      const raw = await askGemini(prompt, { grounded });
       fullText = raw;
       chunkCount = 1;
       console.log("[stream] 논스트리밍 폴백 성공, 전체 길이:", fullText.length);
@@ -364,7 +372,7 @@ router.post("/recommend", async (req, res) => {
     }
 
     const prompt = buildRecommendPrompt(question, history, persona);
-    const raw = await askGemini(prompt);
+    const raw = await askGemini(prompt, { grounded: needsWeatherSearch(persona) });
     const parsed = parseGeminiResponse(raw);
 
     res.json(parsed);
@@ -481,7 +489,7 @@ router.post("/weather", async (req, res) => {
       travelDate,
       typeof travelEndDate === "string" ? travelEndDate : undefined,
     );
-    const raw = await askGemini(prompt);
+    const raw = await askGemini(prompt, { grounded: true });
     const parsed = parseGeminiResponse(raw);
 
     if (!parsed || parsed.unavailable || typeof parsed.summary !== "string") {

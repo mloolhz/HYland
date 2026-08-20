@@ -33,10 +33,10 @@ type LocationState = {
 };
 
 /**
- * top3-loading/top3-typing은 조건(persona)이 설정된 턴에서만 거친다.
+ * top3-loading은 조건(persona)이 설정된 턴에서만 거친다.
  * 조건이 없으면 detail-loading에서 바로 시작해 TOP3 단계 자체가 없다.
  */
-type TurnPhase = "top3-loading" | "top3-typing" | "detail-loading" | "detail-typing" | "done";
+type TurnPhase = "top3-loading" | "detail-loading" | "detail-typing" | "done";
 
 type AiTurn = {
   id: string;
@@ -49,8 +49,6 @@ type AiTurn = {
   recommendation: RecommendationResponse | null;
   /** TOP3 단계에서 함께 조회한 여행 날짜 날씨 (없으면 null) */
   weather: WeatherInfo | null;
-  /** TOP3 요약이 타이핑되는 중의 누적 텍스트 */
-  top3Text: string;
   assistant: AiResponse | null;
   /** 상세 답변이 타이핑되는 중의 누적 텍스트 */
   streamText: string;
@@ -86,19 +84,6 @@ function defaultTripForm(): TripIntentFormValue {
     travelMood: "healing",
     activities: ["바다", "산책"],
   };
-}
-
-function buildTop3SummaryText(response: RecommendationResponse): string {
-  const lead =
-    response.useIslandBti && response.userIslandBti
-      ? `${response.userIslandBti} 성향을 반영해 TOP ${response.recommendations.length} 섬을 골랐어요.`
-      : `이번 여행 조건 중심으로 TOP ${response.recommendations.length} 섬을 골랐어요.`;
-
-  const lines = response.recommendations.map(
-    (item) => `${item.rank}위 ${item.islandName} · 추천도 ${item.finalScore}%`,
-  );
-
-  return [lead, ...lines].join("\n");
 }
 
 function LoadingDots({ label }: { label: string }) {
@@ -308,7 +293,6 @@ export function AiRecommend() {
           phase: options.withRecommendation ? "top3-loading" : "detail-loading",
           recommendation: null,
           weather: null,
-          top3Text: "",
           assistant: null,
           streamText: "",
           suggestedQuestions: null,
@@ -361,31 +345,34 @@ export function AiRecommend() {
           ]);
           weather = weatherResult;
 
-          if (recommendation && recommendation.recommendations.length > 0) {
-            setTurns((prev) =>
-              prev.map((t) =>
-                t.id === turnId ? { ...t, recommendation, weather, phase: "top3-typing" } : t,
-              ),
-            );
-            await typeOutText(buildTop3SummaryText(recommendation), (partial) => {
-              setTurns((prev) => prev.map((t) => (t.id === turnId ? { ...t, top3Text: partial } : t)));
-            });
-
-            const persona = basePersona ? { ...basePersona, weather: weather ?? undefined } : {};
-            void saveTop3Recommendation(promptText, recommendation, persona, sessionId);
-          } else if (weather) {
-            setTurns((prev) => prev.map((t) => (t.id === turnId ? { ...t, weather } : t)));
-          }
-
-          const suggestedQuestions = await getSuggestedQuestions(
-            tripForm.companion,
-            tripForm.travelMood,
-          ).catch(() => []);
-
+          // 카드(RecommendationResultsPanel)가 순위·추천도를 이미 보여주므로 같은 내용을
+          // 타이핑 애니메이션으로 다시 보여주지 않는다 — 데이터가 오는 즉시 카드를 띄운다.
           setTurns((prev) =>
-            prev.map((t) => (t.id === turnId ? { ...t, suggestedQuestions, phase: "done" } : t)),
+            prev.map((t) => (t.id === turnId ? { ...t, recommendation, weather, phase: "done" } : t)),
           );
           setLoading(false);
+
+          if (recommendation && recommendation.recommendations.length > 0) {
+            const persona = basePersona ? { ...basePersona, weather: weather ?? undefined } : {};
+            void saveTop3Recommendation(promptText, recommendation, persona, sessionId);
+          }
+
+          // 예상 질문 칩은 세션 이력을 DB에서 집계하는 별도 조회라 느릴 수 있어(수 초 이상),
+          // 카드 표시를 막지 않고 준비되는 대로 붙여준다. 섬BTI별 데이터가 아직 부족해
+          // 집계 결과가 비어있으면, 첫 화면에 뜨던 인기 질문 상위 2개로 대신 보여준다.
+          void getSuggestedQuestions(tripForm.companion, tripForm.travelMood)
+            .catch(() => [] as string[])
+            .then((suggestedQuestions) => {
+              if (!mountedRef.current) return;
+              const fallbackQuestions =
+                popularQuestions.length > 0 ? popularQuestions : AI_RECOMMEND_COPY.exampleQuestions;
+              const finalQuestions =
+                suggestedQuestions.length > 0 ? suggestedQuestions : fallbackQuestions.slice(0, 2);
+              setTurns((prev) =>
+                prev.map((t) => (t.id === turnId ? { ...t, suggestedQuestions: finalQuestions } : t)),
+              );
+            });
+
           return;
         }
 
@@ -429,7 +416,17 @@ export function AiRecommend() {
         setLoading(false);
       }
     },
-    [hasResult, islandBtiResultCode, loading, runStructuredRecommendation, sessionId, tripForm, turns, typeOutText],
+    [
+      hasResult,
+      islandBtiResultCode,
+      loading,
+      popularQuestions,
+      runStructuredRecommendation,
+      sessionId,
+      tripForm,
+      turns,
+      typeOutText,
+    ],
   );
 
   const sendMessage = useCallback(
@@ -556,10 +553,7 @@ export function AiRecommend() {
             <div className="ai-chat" ref={chatScrollRef} aria-live="polite">
               {turns.map((turn, index) => {
                 const isLast = index === turns.length - 1;
-                const showTop3Bubble =
-                  turn.hasTop3 && (turn.top3Text || turn.phase === "top3-typing");
-                const showTop3Cards =
-                  turn.recommendation && turn.phase !== "top3-loading" && turn.phase !== "top3-typing";
+                const showTop3Cards = turn.recommendation && turn.phase !== "top3-loading";
 
                 return (
                   <div
@@ -572,17 +566,6 @@ export function AiRecommend() {
                     </div>
 
                     {turn.phase === "top3-loading" && <LoadingDots label={AI_RECOMMEND_COPY.loadingTop3} />}
-
-                    {showTop3Bubble && (
-                      <div className="ai-bubble ai-bubble--assistant">
-                        <p
-                          className="ai-response-text ai-response-text--streaming"
-                          style={{ whiteSpace: "pre-line" }}
-                        >
-                          {turn.top3Text}
-                        </p>
-                      </div>
-                    )}
 
                     {showTop3Cards && (
                       <div className="ai-bubble ai-bubble--assistant ai-bubble--recommendation ai-fade-up">
