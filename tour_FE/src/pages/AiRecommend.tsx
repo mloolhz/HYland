@@ -17,6 +17,7 @@ import { RecommendationResultsPanel } from "@/components/ai-recommend/Recommenda
 import type { TripIntentFormValue } from "@/components/ai-recommend/AiTripSettingsPanel";
 import { buildApplyMessage } from "@/lib/ai-trip-labels";
 import { getAiSessionId } from "@/lib/ai-session-id";
+import { renderBoldText } from "@/lib/render-bold-text";
 import { CONTAINER } from "@/constants/layout";
 import { useIslandBti } from "@/context/ProfileCharacterContext";
 import type { AiResponse, WeatherInfo } from "@/types/ai-recommend";
@@ -84,6 +85,27 @@ function defaultTripForm(): TripIntentFormValue {
     travelMood: "healing",
     activities: ["바다", "산책"],
   };
+}
+
+/**
+ * DB에 아직 예상 질문 집계가 쌓이지 않았을 때 쓰는 대체 질문 칩.
+ * 첫 화면의 일반 예시 질문을 재활용하면 조건 패널을 이미 적용한 맥락과 안 맞고
+ * 매번 똑같아 단조로우므로, 방금 나온 TOP3 결과·여행 조건에 맞춰 만든다.
+ */
+function buildFallbackSuggestedQuestions(
+  recommendation: RecommendationResponse | null,
+  tripForm: TripIntentFormValue,
+): string[] {
+  const topIsland = recommendation?.recommendations[0]?.islandName;
+  const isMultiDay = (tripForm.duration ?? 1) > 1;
+
+  const questions: string[] = [];
+  if (topIsland) questions.push(`${topIsland}까지 가는 배편이 궁금해요`);
+  questions.push("비 오면 어떻게 하나요?");
+  questions.push(isMultiDay ? "당일치기로 줄이면 어떨까요?" : "1박 2일 코스로 늘리면 어떨까요?");
+  if (topIsland) questions.push(`${topIsland} 자세히 알려줘`);
+
+  return questions;
 }
 
 function LoadingDots({ label }: { label: string }) {
@@ -359,15 +381,15 @@ export function AiRecommend() {
 
           // 예상 질문 칩은 세션 이력을 DB에서 집계하는 별도 조회라 느릴 수 있어(수 초 이상),
           // 카드 표시를 막지 않고 준비되는 대로 붙여준다. 섬BTI별 데이터가 아직 부족해
-          // 집계 결과가 비어있으면, 첫 화면에 뜨던 인기 질문 상위 2개로 대신 보여준다.
+          // 집계 결과가 비어있으면, 방금 나온 TOP3 결과·여행 조건에 맞춘 질문으로 대신 보여준다.
           void getSuggestedQuestions(tripForm.companion, tripForm.travelMood)
             .catch(() => [] as string[])
             .then((suggestedQuestions) => {
               if (!mountedRef.current) return;
-              const fallbackQuestions =
-                popularQuestions.length > 0 ? popularQuestions : AI_RECOMMEND_COPY.exampleQuestions;
               const finalQuestions =
-                suggestedQuestions.length > 0 ? suggestedQuestions : fallbackQuestions.slice(0, 2);
+                suggestedQuestions.length > 0
+                  ? suggestedQuestions
+                  : buildFallbackSuggestedQuestions(recommendation, tripForm).slice(0, 2);
               setTurns((prev) =>
                 prev.map((t) => (t.id === turnId ? { ...t, suggestedQuestions: finalQuestions } : t)),
               );
@@ -416,17 +438,7 @@ export function AiRecommend() {
         setLoading(false);
       }
     },
-    [
-      hasResult,
-      islandBtiResultCode,
-      loading,
-      popularQuestions,
-      runStructuredRecommendation,
-      sessionId,
-      tripForm,
-      turns,
-      typeOutText,
-    ],
+    [hasResult, islandBtiResultCode, loading, runStructuredRecommendation, sessionId, tripForm, turns, typeOutText],
   );
 
   const sendMessage = useCallback(
@@ -609,7 +621,7 @@ export function AiRecommend() {
                           className="ai-response-text ai-response-text--streaming"
                           style={{ whiteSpace: "pre-line" }}
                         >
-                          {turn.streamText}
+                          {renderBoldText(turn.streamText)}
                         </p>
                       </div>
                     ) : null}

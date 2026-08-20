@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { ISLAND_BTI_RESULTS } from "@/data/island-bti/results";
 import type { RecommendationResponse } from "@/types/recommendation";
 import type { WeatherInfo } from "@/types/ai-recommend";
 
@@ -43,7 +44,11 @@ export function RecommendationResultsPanel({ response, weather }: Recommendation
 
       {response.useIslandBti && response.userIslandBti ? (
         <p className="ai-rec-results__lead">
-          {response.userIslandBti} 성향을 반영해 TOP {response.recommendations.length} 섬을 골랐어요.
+          {response.userIslandBti}
+          {ISLAND_BTI_RESULTS[response.userIslandBti]
+            ? `(${ISLAND_BTI_RESULTS[response.userIslandBti].name})`
+            : ""}{" "}
+          성향을 반영해 TOP {response.recommendations.length} 섬을 골랐어요.
         </p>
       ) : (
         <p className="ai-rec-results__lead">이번 여행 조건 중심으로 TOP {response.recommendations.length} 섬을 골랐어요.</p>

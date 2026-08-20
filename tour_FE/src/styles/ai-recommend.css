@@ -300,6 +300,11 @@ body:has(.ai-page--intro) {
   color: #1a2332;
 }
 
+.ai-response-text strong {
+  font-weight: 700;
+  color: #1a3a6b;
+}
+
 /* Weather card (Gemini 검색 기반 날씨 · 활동 추천도) */
 .ai-weather-card {
   margin: 0 0 14px;

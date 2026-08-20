@@ -202,7 +202,7 @@ ${buildWeatherSection(persona)}
 
 마크다운(\`\`\`) 없이 순수 JSON만 출력하세요:
 {
-  "text": "사용자에게 건네는 대화체 답변. 각 문장이 끝나면 줄바꿈 문자(\\n)로 구분하세요.",
+  "text": "사용자에게 건네는 대화체 답변. 각 문장이 끝나면 줄바꿈 문자(\\n)로 구분하세요. 가독성을 위해 핵심 섬 이름·활동명(특히 첫 문장에 등장하는 추천 섬 이름)은 마크다운 **굵게** 문법(**단어** 형태)으로 짧게 강조하세요. 문장 전체를 강조하지 말고 단어 단위로만 강조하고, 그 외 마크다운 문법(제목, 목록, 코드블록 등)은 쓰지 마세요.",
   "recommendations": [
     { "sportId": "목록의 sportId", "islandName": "그 종목의 islands 중 하나" }
   ],
@@ -220,6 +220,40 @@ ${buildWeatherSection(persona)}
 중요: "text"·"tips"·"followups"는 서로 모순되면 안 됩니다. text에서 특정 정보를 모른다고 하거나 제공할 수 없다고 답했다면, tips나 followups에도 그 정보(예: 구체적인 음식점 추천)를 채워 넣지 마세요.
 "weather" 필드는 [날씨 검색 지시]가 있을 때만, 검색에 성공한 경우에만 포함하세요. 그 외에는 필드 자체를 생략하세요.
 `.trim();
+}
+
+function buildQuestionRelevanceFilterPrompt(questions: string[]): string {
+  return `
+아래는 "인천 섬 레저·여행 추천" 서비스에서 실제 사용자들이 입력했던 질문 목록입니다.
+이 중 인천 섬 여행·레저 활동·코스·교통·숙소·맛집/특산물 등 이 서비스와 관련 있는 질문만 골라주세요.
+"안녕", "테스트"처럼 인사말·잡담이거나 서비스와 무관한 질문은 제외하세요.
+
+질문 목록:
+${JSON.stringify(questions)}
+
+마크다운(\`\`\`) 없이, 관련 있는 질문만 원래 순서를 유지한 채 담은 JSON 배열만 출력하세요.
+예: ["질문1", "질문2"]
+관련 있는 질문이 하나도 없으면 빈 배열 []을 출력하세요. 질문 목록에 없는 문장을 새로 만들지 마세요.
+`.trim();
+}
+
+/** DB에서 뽑은 인기·예상 질문 후보를 Gemini로 한 번 걸러서, 서비스와 무관한 질문(인사말 등)이 칩으로 뜨지 않게 한다. */
+async function filterRelevantQuestions(questions: string[]): Promise<string[]> {
+  if (questions.length === 0) return [];
+
+  try {
+    const raw = await askGemini(buildQuestionRelevanceFilterPrompt(questions));
+    const cleaned = raw.replace(/```json|```/g, "").trim();
+    const parsed = JSON.parse(cleaned);
+    if (!Array.isArray(parsed)) return [];
+    // Gemini가 목록에 없는 문장을 지어내거나 바꿔 쓰는 경우를 방지하기 위해 원본과 대조한다.
+    return parsed.filter((q): q is string => typeof q === "string" && questions.includes(q));
+  } catch (err) {
+    console.error("[filterRelevantQuestions] 관련성 필터링 실패:", err);
+    // 필터링 자체가 실패하면, 걸러지지 않은 질문을 보여주는 대신 빈 배열을 반환해
+    // 프론트가 문맥에 맞는 대체 질문으로 넘어가게 한다.
+    return [];
+  }
 }
 
 function parseGeminiResponse(raw: string) {
@@ -463,10 +497,13 @@ router.get("/suggested-questions", async (req, res) => {
       prevWasConditionMatch = isConditionMatch;
     }
 
-    const questions = [...counts.entries()]
+    // 필터링 과정에서 일부가 걸러질 수 있으니 필요한 개수(4개)보다 넉넉히 뽑아둔다.
+    const candidateQuestions = [...counts.entries()]
       .sort((a, b) => b[1] - a[1])
-      .slice(0, 4)
+      .slice(0, 8)
       .map(([question]) => question);
+
+    const questions = (await filterRelevantQuestions(candidateQuestions)).slice(0, 4);
 
     res.json({ questions });
   } catch (err) {
@@ -515,15 +552,17 @@ router.get("/popular-questions", async (req, res) => {
     // persona가 붙은 질문은 조건 패널이 자동 생성한 문장("당일치기 · 친구 · ... 조건으로
     // 섬 추천해줘")이라 사용자가 직접 입력한 질문이 아니다. 예시 칩으로 노출되면 클릭 시
     // 조건 문구가 그대로 채팅에 뜨고 TOP3도 안 나오는 것처럼 보이므로 랭킹에서 제외한다.
+    // 필터링 과정에서 일부가 걸러질 수 있으니 필요한 개수(4개)보다 넉넉히 뽑아둔다.
     const grouped = await prisma.recommendation.groupBy({
       by: ["question"],
       where: { persona: { equals: Prisma.JsonNull } },
       _count: { question: true },
       orderBy: { _count: { question: "desc" } },
-      take: 4,
+      take: 8,
     });
 
-    const questions = grouped.map((g) => g.question);
+    const candidateQuestions = grouped.map((g) => g.question);
+    const questions = (await filterRelevantQuestions(candidateQuestions)).slice(0, 4);
     res.json({ questions });
   } catch (err) {
     console.error("인기 질문 조회 실패:", err);

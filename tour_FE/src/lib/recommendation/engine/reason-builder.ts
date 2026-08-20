@@ -23,15 +23,15 @@ function buildWeatherReason(weather: WeatherContext): string {
     return "여행 예정일에 폭풍 특보가 있어요. 일정 변경이나 실내 위주 코스를 고려하세요.";
   }
   if (weather.weatherAlert === "wind") {
-    return `강풍 특보로 파고가 높아질 수 있어요(예상 파고 약 ${waveHeightLabel}m). 배편 지연·결항에 대비하세요.`;
+    return `강풍 특보로 파도가 높아질 수 있어요(파고 약 ${waveHeightLabel}m 예상). 배편 지연·결항에 대비하세요.`;
   }
   if (weather.waveHeightM > 2) {
-    return `파고가 높은 편이에요(약 ${waveHeightLabel}m). 뱃멀미가 걱정되면 멀미약을 챙기세요.`;
+    return `파도가 높은 편이에요(파고 약 ${waveHeightLabel}m). 뱃멀미가 걱정되면 멀미약을 챙기세요.`;
   }
   if (weather.waveHeightM > 1.5) {
-    return `파고가 다소 있는 편이에요(약 ${waveHeightLabel}m). 배편 이용 시 참고하세요.`;
+    return `파도가 다소 있는 편이에요(파고 약 ${waveHeightLabel}m). 배편 이용 시 참고하세요.`;
   }
-  return `예보상 파고가 잔잔해요(약 ${waveHeightLabel}m). 배편 이용하기 좋은 날씨예요.`;
+  return `예보상 파도가 잔잔해요(파고 약 ${waveHeightLabel}m). 배편 이용하기 좋은 날씨예요.`;
 }
 
 export function buildRecommendationReasons(

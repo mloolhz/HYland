@@ -1,4 +1,5 @@
 import type { AiResponse } from "@/types/ai-recommend";
+import { renderBoldText } from "@/lib/render-bold-text";
 import { AiCourseTimeline } from "./AiCourseTimeline";
 import { AiRecCard } from "./AiRecCard";
 
@@ -29,7 +30,7 @@ export function AiResponseContent({ response, onFollowup }: AiResponseContentPro
         </div>
       )}
 
-      <p className="ai-response-text" style={{ whiteSpace: "pre-line" }}>{response.text}</p>
+      <p className="ai-response-text" style={{ whiteSpace: "pre-line" }}>{renderBoldText(response.text)}</p>
 
       {response.recommendations.length > 0 && (
         <div className="ai-rec-list ai-fade-up ai-fade-up-1">
