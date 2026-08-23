@@ -252,8 +252,9 @@ html.site-menu-open{overflow:hidden;overscroll-behavior:none}
 .passport-exp{font-size:11.5px;font-weight:700;color:var(--muted)}
 .passport-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .passport-metric{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:58px;padding:12px 6px;border-radius:10px;background:var(--alt);border:1px solid var(--line)}
-.passport-metric .passport-metric__value{display:block;font-size:20px;font-weight:800;color:var(--navy);line-height:1.1;text-align:center;font-variant-numeric:tabular-nums}
-.passport-metric span{font-size:12px;font-weight:700;color:var(--muted);white-space:nowrap}
+.passport-metric .passport-metric__value{display:flex;align-items:baseline;justify-content:center;gap:1px;font-size:20px;font-weight:800;color:var(--navy);line-height:1.1;text-align:center;font-variant-numeric:tabular-nums}
+.passport-metric .passport-metric__total{font-size:.6em;font-weight:700;color:var(--muted)}
+.passport-metric > span:last-child{font-size:12px;font-weight:700;color:var(--muted);white-space:nowrap}
 .pc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
 .pc-head h3{font-size:16.5px;font-weight:800;color:var(--navy);display:flex;align-items:center;gap:8px}
 .pc-login-link{flex:none;font-size:13px;font-weight:700;color:var(--blue);text-decoration:none;transition:color .15s}

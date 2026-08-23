@@ -4,7 +4,7 @@ import { AuthorAvatar } from "@/components/community/AuthorAvatar";
 import { AnimatedWidthBar } from "@/components/mypage/AnimatedWidthBar";
 import { CountUpNumber } from "@/components/mypage/CountUpNumber";
 import { formatNumber } from "@/lib/landing-data";
-import { getCurrentUserProfile, getPassportExpPercent } from "@/lib/user-profile";
+import { getBadgeStats, getCurrentUserProfile, getPassportExpPercent } from "@/lib/user-profile";
 import { demoProps } from "./ToastProvider";
 import {
   HERO_SLIDE_DURATION_MS,
@@ -27,6 +27,7 @@ const CATEGORIES = [
 
 export function HeroSection() {
   const profile = getCurrentUserProfile();
+  const badgeStats = getBadgeStats();
   const expPercent = getPassportExpPercent(profile);
   const [activeSlide, setActiveSlide] = useState(0);
   const [showScrollHint, setShowScrollHint] = useState(true);
@@ -183,16 +184,22 @@ export function HeroSection() {
 
                 <div className="passport-metrics" aria-label="탐험 현황">
                   <div className="passport-metric">
-                    <CountUpNumber value={profile.visitedIslandCount} delay={320} className="passport-metric__value" />
+                    <span className="passport-metric__value">
+                      <CountUpNumber value={badgeStats.visited} delay={320} />
+                      <span className="passport-metric__total">/{badgeStats.islandTotal}</span>
+                    </span>
                     <span>방문 섬</span>
                   </div>
                   <div className="passport-metric">
-                    <CountUpNumber value={profile.completedMissions} delay={400} className="passport-metric__value" />
-                    <span>완료 미션</span>
+                    <span className="passport-metric__value">
+                      <CountUpNumber value={badgeStats.earned} delay={400} />
+                      <span className="passport-metric__total">/{badgeStats.total}</span>
+                    </span>
+                    <span>획득 배지</span>
                   </div>
                   <div className="passport-metric">
-                    <CountUpNumber value={profile.earnedBadgeCount} delay={480} className="passport-metric__value" />
-                    <span>획득 배지</span>
+                    <CountUpNumber value={badgeStats.unearned} delay={480} className="passport-metric__value" />
+                    <span>미획득 배지</span>
                   </div>
                 </div>
               </div>

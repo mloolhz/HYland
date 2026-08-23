@@ -67,10 +67,19 @@ export function getCurrentUserProfile(): UserProfile {
   };
 }
 
-/** 배지 현황 — 미션창과 동일 출처 (획득 / 미획득 / 전체) */
+/** 배지 현황 — 미션창과 동일 출처 (획득 / 미획득 / 전체 + 섬 방문) */
 export function getBadgeStats() {
   const { earned, total } = getMissionStampStats();
-  return { earned, total, unearned: Math.max(0, total - earned) };
+  const visited = MISSION_QUESTS.filter(
+    (q) => q.category === "섬" && missionQuestState(q) === "earned",
+  ).length;
+  return {
+    earned,
+    total,
+    unearned: Math.max(0, total - earned),
+    visited,
+    islandTotal: ISLANDS.length,
+  };
 }
 
 export function getVisitedIslands(): IslandInfo[] {
