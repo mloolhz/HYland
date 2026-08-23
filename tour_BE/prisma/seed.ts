@@ -4,7 +4,9 @@
 import { prisma } from "../src/prisma";
 import { ISLANDS } from "@/lib/island-data";
 import { SPORTS_CATEGORIES, SPORTS_DATA } from "@/data/sports";
-import { BOOKING_BY_SPORT_ID } from "@/data/sport-booking";
+// 예약/안내처 정보는 예전 data/sport-booking.ts에서 data/sport-info.ts로 옮겨졌다.
+// 종목의 reservationType도 SPORTS_DATA가 아니라 이쪽에 있다(Omit으로 빠져 있음).
+import { SPORT_INFO_BY_ID, getSportInfo, type InfoSource, type ReservationType } from "@/data/sport-info";
 import { CATEGORY_META, MISSION_CATEGORIES, MISSION_QUESTS } from "@/mocks/missions";
 import { ISLAND_BTI_QUESTIONS } from "@/data/island-bti/questions";
 import { ISLAND_BTI_RESULTS } from "@/data/island-bti/results";
@@ -85,7 +87,7 @@ async function main() {
         difficulty: s.diff,
         price: s.price,
         season: s.season,
-        reservationType: RES[s.reservationType] ?? "INFO",
+        reservationType: RES[getSportInfo(s.id).reservationType] ?? "INFO",
       });
       for (const isl of s.islands) {
         sportIslandRows.push({
@@ -101,15 +103,24 @@ async function main() {
   await prisma.sportIsland.createMany({ data: sportIslandRows });
 
   // ── 예약/안내처 링크 ──
-  const bookingRows = Object.entries(BOOKING_BY_SPORT_ID)
+  // sport-info의 sources[]를 DB의 BookingType(OFFICIAL/PHONE/INFO)으로 환산한다.
+  // reservationType이 mixed면 출처별 linkType이 예약/정보를 가른다.
+  const bookingTypeOf = (reservationType: ReservationType, source: InfoSource) => {
+    const kind = source.linkType ?? (reservationType === "mixed" ? "info" : reservationType);
+    if (kind === "reservable") return BK.official;
+    if (source.tel && !source.url) return BK.phone;
+    return BK.info;
+  };
+
+  const bookingRows = Object.entries(SPORT_INFO_BY_ID)
     .filter(([sportId]) => seenSport.has(sportId))
-    .flatMap(([sportId, methods]) =>
-      (methods as any[]).map((m) => ({
+    .flatMap(([sportId, info]) =>
+      info.sources.map((source) => ({
         sportId,
-        type: BK[m.type] ?? "INFO",
-        label: m.label,
-        url: m.url ?? null,
-        tel: m.tel ?? null,
+        type: bookingTypeOf(info.reservationType, source),
+        label: source.provider,
+        url: source.url || null,
+        tel: source.tel ?? null,
       })),
     );
   await prisma.sportBookingMethod.createMany({ data: bookingRows });
