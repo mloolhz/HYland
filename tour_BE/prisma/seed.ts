@@ -7,6 +7,8 @@ import { BOOKING_BY_SPORT_ID } from "@/data/sport-booking";
 import { CATEGORY_META, MISSION_CATEGORIES, MISSION_QUESTS } from "@/mocks/missions";
 import { ISLAND_BTI_QUESTIONS } from "@/data/island-bti/questions";
 import { ISLAND_BTI_RESULTS } from "@/data/island-bti/results";
+import { ISLAND_COLLECTIBLE_BADGES } from "@/lib/island-badges";
+import { PASSPORT_BADGES } from "@/components/landing/passport-book-data";
 
 const prisma = new PrismaClient();
 
@@ -27,6 +29,12 @@ const TIER: Record<string, string> = { 일반: "COMMON", 희귀: "RARE", 전설:
 
 async function main() {
   console.log("🌱 시드 시작...");
+
+  // dev 리셋: 유저 활동 데이터 먼저 정리 (마스터 재시드를 위한 FK 해제)
+  // ⚠️ 개발용 — 마스터 카탈로그를 다시 심기 위해 테스트 유저 진행데이터를 비움
+  await prisma.userMissionProgress.deleteMany();
+  await prisma.userIslandVisit.deleteMany();
+  await prisma.userIslandBtiResult.deleteMany();
 
   // 재실행 가능하도록 기존 마스터 데이터 삭제 (FK 역순)
   await prisma.sportBookingMethod.deleteMany();
@@ -172,7 +180,43 @@ async function main() {
     })),
   });
 
+  // ── 배지 정의 (여권 + 섬 수집) — upsert로 재실행 안전 (user_badges FK 보존) ──
+  const badgeRows: any[] = [];
+  for (const [islandKey, defs] of Object.entries(ISLAND_COLLECTIBLE_BADGES)) {
+    for (const d of defs as any[]) {
+      badgeRows.push({
+        id: d.id,
+        type: "ISLAND",
+        name: d.name,
+        description: d.hint,
+        icon: d.icon,
+        color: null,
+        islandId: islandIds.has(islandKey) ? islandKey : null,
+        condition: d.hint,
+      });
+    }
+  }
+  for (const b of PASSPORT_BADGES as any[]) {
+    badgeRows.push({
+      id: `passport-${b.id}`,
+      type: "PASSPORT",
+      name: b.name,
+      description: `${b.island} · ${b.activity}`,
+      icon: b.icon,
+      color: b.color ?? null,
+      islandId: null,
+      condition: b.activity,
+    });
+  }
+  const seenBadge = new Set<string>();
+  for (const b of badgeRows) {
+    if (seenBadge.has(b.id)) continue;
+    seenBadge.add(b.id);
+    await prisma.badgeDefinition.upsert({ where: { id: b.id }, create: b, update: b });
+  }
+
   // 결과 카운트
+  const badges = await prisma.badgeDefinition.count();
   const [islands, courses, sports, sportIslands, bookings2, quests, cats, btiQ, btiR] =
     await Promise.all([
       prisma.island.count(),
@@ -196,6 +240,7 @@ async function main() {
     미션퀘스트: quests,
     BTI문항: btiQ,
     BTI유형: btiR,
+    배지: badges,
   });
 }
 
