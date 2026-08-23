@@ -25,6 +25,21 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+/** 토큰이 있으면 req.userId 세팅, 없거나 틀려도 통과 (로그인 선택 기능용) */
+export function optionalAuth(req: Request, _res: Response, next: NextFunction) {
+  const header = req.headers.authorization;
+  const token = header?.startsWith("Bearer ") ? header.slice(7) : null;
+  if (token) {
+    try {
+      const payload = jwt.verify(token, JWT_SECRET) as { sub: string };
+      (req as any).userId = payload.sub;
+    } catch {
+      /* 무시하고 비로그인으로 진행 */
+    }
+  }
+  next();
+}
+
 // ── 회원가입 ──
 router.post("/signup", async (req: Request, res: Response) => {
   const { email, password, nickname, phone } = req.body ?? {};

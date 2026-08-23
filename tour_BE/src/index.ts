@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import { prisma } from "./prisma";
 import authRouter from "./auth";
+import btiRouter from "./bti";
 
 const app = express();
 app.use(cors()); // 프론트(다른 포트)에서 호출 허용
@@ -16,6 +17,9 @@ app.get("/health", (_req, res) => {
 
 // 인증 (회원가입/로그인/내정보/휴대폰인증)
 app.use("/auth", authRouter);
+
+// 섬BTI (문항/결과/제출/이력)
+app.use("/bti", btiRouter);
 
 // ── 섬 목록 ──
 app.get("/islands", async (_req, res) => {
