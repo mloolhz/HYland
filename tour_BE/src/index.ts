@@ -8,6 +8,7 @@ import missionsRouter from "./missions";
 import visitsRouter from "./visits";
 import profileRouter from "./profile";
 import leaderboardRouter from "./leaderboard";
+import weatherRouter from "./weather";
 
 const app = express();
 app.use(cors()); // 프론트(다른 포트)에서 호출 허용
@@ -36,6 +37,9 @@ app.use("/profile", profileRouter);
 
 // 리더보드 (랭킹)
 app.use("/leaderboard", leaderboardRouter);
+
+// 해양 날씨 (기상청 해양관측 → 섬별 파고·수온·바람)
+app.use("/weather", weatherRouter);
 
 // ── 섬 목록 ──
 app.get("/islands", async (_req, res) => {
