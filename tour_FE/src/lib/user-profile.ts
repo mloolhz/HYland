@@ -2,7 +2,8 @@ import { CURRENT_USER_ID } from "@/constants/auth";
 import type { IslandBti } from "@/constants/island";
 import { ISLANDS, type IslandInfo } from "@/lib/island-data";
 import { CATEGORY_LEADERBOARD, LEADERBOARD, type LeaderboardPeriod } from "@/lib/landing-data";
-import { MISSION_CATEGORIES, type MissionCategory } from "@/mocks/missions";
+import { MISSION_CATEGORIES, MISSION_QUESTS, missionQuestState, type MissionCategory } from "@/mocks/missions";
+import { getMissionStampStats } from "@/lib/passport/passport-mission-stamps";
 import { DEMO_USER_PASSPORT, type UserPassportStats } from "@/mocks/userPassport";
 import { MOCK_POSTS } from "@/mocks/posts";
 
@@ -47,13 +48,22 @@ export function getCurrentUserProfile(): UserProfile {
   const author = MOCK_POSTS.find((p) => p.author.id === CURRENT_USER_ID)?.author;
   const passport = getCurrentUserPassportStats();
 
+  // 미션창과 동기화 — 카운트를 MISSION_QUESTS에서 실시간 산출
+  const stampStats = getMissionStampStats(); // { earned, total, ... }
+  const visitedIslandCount = MISSION_QUESTS.filter(
+    (q) => q.category === "섬" && missionQuestState(q) === "earned",
+  ).length;
+
   return {
     id: CURRENT_USER_ID,
     nickname: author?.nickname ?? "이파도",
     bti: author?.bti ?? "파도형",
     joinedAt: "2024-06-15",
     ...passport,
-    stamps: { current: passport.stampCount, total: passport.stampTotal },
+    visitedIslandCount,
+    completedMissions: stampStats.earned, // 완료 미션 = 획득 배지
+    earnedBadgeCount: stampStats.earned,
+    stamps: { current: stampStats.earned, total: stampStats.total },
   };
 }
 
@@ -66,13 +76,14 @@ export function getUnvisitedIslands(): IslandInfo[] {
 }
 
 export function getIslandVisitStats() {
-  const passport = getCurrentUserPassportStats();
+  // 미션창과 동일 출처 — 섬 방문 미션 획득 수
+  const visited = getCurrentUserProfile().visitedIslandCount;
   const total = ISLANDS.length;
 
   return {
-    visited: passport.visitedIslandCount,
+    visited,
     total,
-    percent: Math.round((passport.visitedIslandCount / total) * 100),
+    percent: total > 0 ? Math.round((visited / total) * 100) : 0,
   };
 }
 

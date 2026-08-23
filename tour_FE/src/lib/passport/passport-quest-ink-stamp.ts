@@ -51,10 +51,13 @@ const FEATURED_PLACES: Record<number, { place: string; activity: string }> = {
   20: { place: "섬BTI", activity: "참여 완료" },
 };
 
-/** 첫 장 — 최근 기록 15 + 숨겨진 슬롯 1 */
+/** 첫 장 — 실제 획득한 배지(earned) 우선, 부족하면 진행 중(doing)으로 채움 */
+const FEATURED_SLOTS = 7;
+
 export function getRecentStampQuests(): MissionQuest[] {
-  const ids = [1, 2, 3, 4, 5, 7, 8, 9, 11, 13, 16, 18, 20, 14, 10];
-  return ids.map((id) => MISSION_QUESTS.find((q) => q.id === id)!).filter(Boolean);
+  const earned = MISSION_QUESTS.filter((q) => missionQuestState(q) === "earned");
+  const doing = MISSION_QUESTS.filter((q) => missionQuestState(q) === "doing");
+  return [...earned, ...doing].slice(0, FEATURED_SLOTS);
 }
 
 export function getFeaturedMissionQuests(): MissionQuest[] {
