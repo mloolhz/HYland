@@ -1,4 +1,4 @@
-import { BOOKING_BY_SPORT_ID } from "@/data/sport-booking";
+import { getSportInfo, sourceButtonLabel } from "@/data/sport-info";
 import { SPORTS_CATEGORIES, SPORTS_DATA, type CategoryKey } from "@/data/sports";
 import { getIslandColors } from "@/constants/island";
 import type { AiResponse, RecItem } from "@/types/ai-recommend";
@@ -23,16 +23,25 @@ function findSportMeta(sportId: string): { name: string; categoryKey: CategoryKe
   return null;
 }
 
-function toBooking(sportId: string) {
-  const method = BOOKING_BY_SPORT_ID[sportId]?.[0];
-  if (!method) return undefined;
-  return { label: method.label, url: method.url, tel: method.tel };
+function toSources(sportId: string) {
+  const { reservationType, sources } = getSportInfo(sportId);
+  if (reservationType === "community" || sources.length === 0) {
+    return { reservationType, sources: undefined };
+  }
+  const mapped = sources.map((source) => ({
+    label: sourceButtonLabel(source, reservationType),
+    url: source.url,
+    tel: source.tel,
+    note: source.note,
+  }));
+  return { reservationType, sources: mapped };
 }
 
-function buildRec(sportId: string, islandName: string): RecItem | null {
+export function buildRec(sportId: string, islandName: string): RecItem | null {
   const meta = findSportMeta(sportId);
   if (!meta) return null;
   const colors = getIslandColors(islandName);
+  const { reservationType, sources } = toSources(sportId);
   return {
     islandId: ISLAND_ID[islandName] ?? islandName,
     islandName,
@@ -41,15 +50,16 @@ function buildRec(sportId: string, islandName: string): RecItem | null {
     categoryKey: meta.categoryKey,
     sportId,
     name: meta.name,
-    booking: toBooking(sportId),
+    reservationType,
+    sources,
+    booking: sources?.[0],
   };
 }
 
 const FAMILY_DAY: AiResponse = {
-  text: "가족 당일치기라면 무의도가 딱이에요! 하나개 유원지에서 짚라인·ATV를 즐기고, 잔잔한 물살에서 카약까지 — 아이와 함께 하루 종일 볼거리가 가득해요.",
+  text: "가족 당일치기라면 무의도가 딱이에요! 하나개 유원지에서 짚라인을 즐기고, 잔잔한 물살에서 카약까지 — 아이와 함께 하루 종일 볼거리가 가득해요.",
   recommendations: [
     buildRec("zip", "무의도"),
-    buildRec("atv", "무의도"),
     buildRec("kayak", "무의도"),
   ].filter((r): r is RecItem => r !== null),
   course: {
@@ -58,7 +68,6 @@ const FAMILY_DAY: AiResponse = {
       { time: "09:00", activity: "인천항 출발 · 무의도 도착", desc: "배편 시간을 미리 확인하고 여유 있게 이동해요." },
       { time: "10:30", activity: "하나개 유원지 · 짚라인", desc: "가족이 함께 즐기기 좋은 스릴 체험으로 하루를 시작해요." },
       { time: "12:30", activity: "점심 · 하나개 해변 산책", desc: "해변 근처 식당에서 식사 후 가벼운 산책을 즐겨요." },
-      { time: "14:00", activity: "ATV 체험", desc: "숲길과 해변 코스를 사륜바이크로 달려보세요." },
       { time: "16:00", activity: "카약 · 투명 카약", desc: "잔잔한 바다 위에서 가족 사진도 남겨요." },
       { time: "18:00", activity: "일몰 감상 후 귀항", desc: "서해 노을을 보며 하루를 마무리해요." },
     ],
@@ -147,18 +156,19 @@ const OVERNIGHT: AiResponse = {
 };
 
 const ACTIVE_DAY: AiResponse = {
-  text: "활동적인 하루를 원하신다면 강화도 루지와 무의도 짚라인·ATV 조합을 추천해요!",
+  text: "활동적인 하루를 원하신다면 강화도 루지·모노레일과 무의도 짚라인 조합을 추천해요!",
   recommendations: [
     buildRec("luge", "강화도"),
+    buildRec("monorail", "강화도"),
     buildRec("zip", "무의도"),
-    buildRec("atv", "무의도"),
   ].filter((r): r is RecItem => r !== null),
   course: {
     title: "강화도 · 무의도 액티브 코스",
     steps: [
-      { time: "10:00", activity: "강화씨사이드리조트 · 루지", desc: "경사로를 달리는 스릴을 먼저 즐겨요." },
+      { time: "10:00", activity: "강화도 · 루지", desc: "경사로를 달리는 스릴을 먼저 즐겨요." },
+      { time: "12:00", activity: "강화도 · 모노레일", desc: "해변 위 모노레일을 타며 바다 전망을 감상해요." },
       { time: "13:00", activity: "무의도 이동 · 점심", desc: "배편 시간에 맞춰 무의도로 이동해요." },
-      { time: "15:00", activity: "하나개 짚라인 · ATV", desc: "유원지에서 액티비티를 이어가요." },
+      { time: "15:00", activity: "하나개 짚라인", desc: "유원지에서 액티비티를 이어가요." },
     ],
   },
   tips: ["루지와 유원지는 성수기 대기가 있을 수 있어요.", "편한 복장과 운동화를 착용하세요."],
@@ -195,7 +205,7 @@ function pickScenario(message: string, history?: { role: string; text: string }[
   if (/1박|숙박|박|이틀|overnight/.test(combined)) return { ...OVERNIGHT };
   if (/커플|연인|로맨|데이트/.test(combined)) return { ...COUPLE_DAY };
   if (/힐링|쉬|휴식|힐|spa|온천|산림/.test(combined)) return { ...HEALING_DAY };
-  if (/활동|액티|짚|atv|루지|스릴/.test(combined)) return { ...ACTIVE_DAY };
+  if (/활동|액티|짚|모노레일|루지|스릴/.test(combined)) return { ...ACTIVE_DAY };
   if (/가족|아이|당일|어린이|유아/.test(combined)) return { ...FAMILY_DAY };
   if (/카약|수상|서핑|패들/.test(combined)) {
     return {

@@ -14,11 +14,6 @@ export function validateNickname(nickname: string): string | null {
   return null;
 }
 
-export function validateNicknameOptional(nickname: string): string | null {
-  if (!nickname.trim()) return null;
-  return validateNickname(nickname);
-}
-
 export function validateEmailOptional(email: string): string | null {
   if (!email) return null;
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {

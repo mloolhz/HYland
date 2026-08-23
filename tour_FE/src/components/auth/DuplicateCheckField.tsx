@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { TextField } from "./TextField";
 
 type DuplicateCheckFieldProps = {
   id: string;
@@ -49,9 +50,6 @@ export function DuplicateCheckField({
   const displayError = error ?? localError;
   const formatError = validateFormat(value);
   const canCheck = !formatError && value.trim().length > 0 && !checked;
-  const errorId = displayError ? `${id}-error` : undefined;
-  const guideId = hint ? `${id}-hint` : undefined;
-  const describedBy = [errorId, guideId].filter(Boolean).join(" ") || undefined;
 
   const handleBlur = () => {
     const fmtErr = validateFormat(value);
@@ -80,28 +78,22 @@ export function DuplicateCheckField({
   };
 
   return (
-    <div className="auth-field auth-dup-field">
-      <label htmlFor={id} className="sr-only">
-        {label}
-      </label>
-      <div className="auth-dup-row">
-        <div className={`auth-input-wrap${displayError ? " has-error" : ""}`}>
-          {icon && <span className="auth-input-icon" aria-hidden="true">{icon}</span>}
-          <input
-            id={id}
-            type={type}
-            inputMode={inputMode}
-            autoComplete={autoComplete}
-            placeholder={placeholder}
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            onBlur={handleBlur}
-            className="auth-input"
-            aria-invalid={displayError ? true : undefined}
-            aria-describedby={describedBy}
-          />
-        </div>
-        {checked ? (
+    <TextField
+      id={id}
+      label={label}
+      type={type}
+      inputMode={inputMode}
+      autoComplete={autoComplete}
+      placeholder={placeholder}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      onBlur={handleBlur}
+      error={displayError}
+      hint={hint}
+      icon={icon}
+      disabled={checked}
+      rightSlot={
+        checked ? (
           <span className="auth-dup-done">
             <i className="ti ti-check" aria-hidden="true" />
             확인 완료
@@ -115,19 +107,9 @@ export function DuplicateCheckField({
           >
             {checking ? "…" : "중복 확인"}
           </button>
-        )}
-      </div>
-      {hint && !displayError && (
-        <p id={guideId} className="auth-hint">
-          {hint}
-        </p>
-      )}
-      {displayError && (
-        <p id={errorId} className="auth-error" role="alert">
-          {displayError}
-        </p>
-      )}
-    </div>
+        )
+      }
+    />
   );
 }
 

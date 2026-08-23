@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { CommunityHeader } from "@/components/community/CommunityHeader";
 import { FilterBar, type FilterValue, type ViewKey } from "@/components/community/FilterBar";
 import { GalleryGrid } from "@/components/community/GalleryGrid";
 import { Lightbox } from "@/components/community/Lightbox";
+import { PopularIslands } from "@/components/community/PopularIslands";
 import { PostList } from "@/components/community/PostList";
 import { ProfileCard } from "@/components/community/ProfileCard";
 import { SelectedIslands } from "@/components/community/SelectedIslands";
@@ -24,6 +25,7 @@ import {
 } from "@/lib/posts";
 import { parseActivitiesQuery, parseIslandsQuery, parsePageQuery, serializeActivitiesQuery, serializeIslandsQuery } from "@/lib/query";
 import { saveCommunityListSearch } from "@/lib/community-list-state";
+import { clearRouteFadeOut, fadeInRouteRoot, prefersReducedMotion, type CommunityEnterFadeState } from "@/lib/route-fade";
 
 function parseView(value: string | null): ViewKey {
   return value === "gallery" ? "gallery" : "list";
@@ -45,9 +47,12 @@ type LightboxState = {
 
 export function Community() {
   const posts = usePosts();
+  const location = useLocation();
+  const enterFade = Boolean((location.state as CommunityEnterFadeState | null)?.communityEnterFade);
   const [searchParams, setSearchParams] = useSearchParams();
   const [lightbox, setLightbox] = useState<LightboxState | null>(null);
   const lightboxFocusRef = useRef<HTMLButtonElement | null>(null);
+  const enterFadeStarted = useRef(false);
 
   const view = parseView(searchParams.get("view"));
   const sort = parseSort(searchParams.get("sort"));
@@ -60,6 +65,21 @@ export function Community() {
   useEffect(() => {
     saveCommunityListSearch(searchParams.toString() ? `?${searchParams.toString()}` : "");
   }, [searchParams]);
+
+  useEffect(() => {
+    if (prefersReducedMotion()) {
+      clearRouteFadeOut();
+      return;
+    }
+    if (enterFade) {
+      if (enterFadeStarted.current) return;
+      enterFadeStarted.current = true;
+      fadeInRouteRoot();
+      return;
+    }
+    enterFadeStarted.current = false;
+    clearRouteFadeOut();
+  }, [enterFade]);
 
   const counts = useMemo(() => islandPostCounts(posts), [posts]);
   const activityCounts = useMemo(() => activityPostCounts(posts), [posts]);
@@ -244,12 +264,18 @@ export function Community() {
 
         <div className="cm-layout">
           <section className="cm-feed" aria-label="커뮤니티 피드">
-            {feedContent}
+            <div
+              key={`${view}-${category}-${sort}-${[...islands].join(",")}-${query}-${safePage}`}
+              className="cm-results-fade"
+            >
+              {feedContent}
+            </div>
           </section>
 
           <aside className="cm-sidebar">
             <div className="cm-sidebar-sticky">
               <ProfileCard />
+              <PopularIslands />
             </div>
           </aside>
         </div>
@@ -270,8 +296,6 @@ export function Community() {
           onImageNavigate={(imageIndex) => setLightbox((prev) => (prev ? { ...prev, imageIndex } : prev))}
         />
       )}
-
-      <WritePostFab />
     </main>
   );
 }

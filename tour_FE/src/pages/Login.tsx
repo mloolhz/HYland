@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthBrand, AuthCard } from "@/components/auth/AuthCard";
 import { CitizenBanner } from "@/components/auth/CitizenBanner";
 import { PasswordField } from "@/components/auth/PasswordField";
@@ -8,11 +8,13 @@ import { TextField } from "@/components/auth/TextField";
 import {
   SAVED_USERNAME_KEY,
   setDemoLoggedIn,
+  setGuest,
 } from "@/constants/auth";
 import { useAuthRedirect } from "@/hooks/useAuthRedirect";
 
 export function Login() {
-  const { goAfterAuth, authSearch } = useAuthRedirect();
+  const navigate = useNavigate();
+  const { redirect, goAfterAuth, authSearch } = useAuthRedirect();
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
@@ -99,12 +101,17 @@ export function Login() {
     goAfterAuth();
   };
 
+  const handleGuest = () => {
+    setGuest();
+    navigate(redirect, { replace: true });
+  };
+
   return (
     <div className="auth-page">
-      <AuthBrand title="로그인" />
+      <AuthBrand title="로그인" subtitle="168개 섬의 탐험 기록이 기다리고 있어요" />
 
-      <AuthCard activeTab="login" showTabs={false}>
-        <form className="auth-form auth-form-login" onSubmit={handleSubmit} noValidate>
+      <AuthCard activeTab="login">
+        <form className="auth-form" onSubmit={handleSubmit} noValidate>
           <TextField
             id="login-userId"
             label="아이디"
@@ -115,7 +122,7 @@ export function Login() {
             value={userId}
             onChange={handleUserIdChange}
             onBlur={() => handleBlur("userId")}
-            error={touched.userId ? errors.userId : undefined}
+            error={errors.userId}
             icon={<i className="ti ti-user" />}
             ref={userIdRef}
           />
@@ -127,32 +134,49 @@ export function Login() {
             value={password}
             onChange={handlePasswordChange}
             onBlur={() => handleBlur("password")}
-            error={touched.password ? errors.password : undefined}
+            error={errors.password}
           />
+
+          <label htmlFor="remember-me" className="auth-check-label auth-remember-only">
+            <input
+              id="remember-me"
+              type="checkbox"
+              className="auth-check-input"
+              checked={remember}
+              onChange={(e) => setRemember(e.target.checked)}
+            />
+            <span className="auth-check-box" aria-hidden="true">
+              {remember && <i className="ti ti-check" />}
+            </span>
+            <span className="auth-check-text">아이디 저장</span>
+          </label>
+
+          <nav className="auth-find-links" aria-label="계정 찾기">
+            <Link to="/find-account">아이디 찾기</Link>
+            <span className="auth-find-divider" aria-hidden="true" />
+            <Link to="/find-account?tab=password">비밀번호 찾기</Link>
+          </nav>
 
           <button type="submit" className="auth-submit" disabled={loading}>
             {loading ? <span className="auth-spinner" aria-label="로그인 중" /> : "로그인"}
           </button>
 
-          <div className="auth-find-row">
-            <Link to="/find-account" className="auth-text-btn">
-              아이디·비밀번호 찾기
-            </Link>
-          </div>
-
           <AuthDivider />
           <SocialButtons />
 
-          <p className="auth-signup-cta">
-            회원가입 후 다양한 콘텐츠를 즐겨보세요!
-            <Link to={`/signup${authSearch}`} className="auth-signup-link">
-              회원가입
-            </Link>
-          </p>
+          <button type="button" className="auth-guest-btn" onClick={handleGuest}>
+            <i className="ti ti-eye" aria-hidden="true" />
+            비회원으로 둘러보기
+          </button>
         </form>
       </AuthCard>
 
       <CitizenBanner />
+
+      <p className="auth-footer-link">
+        아직 계정이 없으신가요?{" "}
+        <Link to={`/signup${authSearch}`}>회원가입</Link>
+      </p>
     </div>
   );
 }

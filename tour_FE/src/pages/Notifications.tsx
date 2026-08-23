@@ -79,7 +79,6 @@ export function Notifications() {
       <div className={`${CONTAINER} noti-page-inner`}>
         <header className="noti-page-head">
           <h1>알림</h1>
-          <p>탐험과 커뮤니티에서 도착한 소식을 모아 볼 수 있어요.</p>
         </header>
 
         <div className="noti-filters" role="tablist" aria-label="알림 필터">

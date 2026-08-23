@@ -12,8 +12,27 @@
   flex-direction: column;
 }
 
+/* 채팅 화면은 .ai-chat이 자체 스크롤 컨테이너라 페이지 자체는 100vh로 고정해도
+   된다. intro 화면은 그런 내부 스크롤 컨테이너가 없으므로, 조건 패널이 열려
+   콘텐츠가 뷰포트보다 커지면 "페이지(문서) 자체"가 스크롤되도록 높이 고정과
+   overflow:hidden을 풀어준다 — 브라우저 기본 스크롤바가 창 오른쪽 끝에 뜬다.
+   justify-content:center는 일부러 안 쓴다 — overflow 상태에서 auto-height
+   flex 컨테이너의 중앙 정렬은 브라우저마다 계산이 불안정해(콘텐츠가 위아래로
+   반씩 잘리는 등) 정적 안정성이 떨어진다. 대신 JS(AiRecommend.tsx)가 항상
+   상단 여백(padding-top)을 계산해 넣어 flex-start로 고정한다. */
+.ai-page--intro {
+  height: auto;
+  max-height: none;
+  min-height: 100vh;
+  overflow: visible;
+}
+
 body:has(.ai-page) {
   overflow: hidden;
+}
+
+body:has(.ai-page--intro) {
+  overflow: auto;
 }
 
 .ai-page ~ footer {
@@ -23,27 +42,46 @@ body:has(.ai-page) {
 .ai-page-inner {
   flex: 1;
   min-height: 0;
-  max-width: 720px;
+  max-width: 680px;
   width: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  padding: 0;
+  padding: 0 16px;
   box-sizing: border-box;
+  font-family: var(--font-header, "Pretendard Variable", Pretendard, sans-serif);
+}
+
+.ai-page--intro .ai-page-inner {
+  /* .ai-page-inner의 기본 flex:1(=flex-basis:0%)은 부모(.ai-page)가 고정
+     높이가 아니라 min-height일 때 "남는 공간 채우기" 계산이 꼬여 부모가
+     콘텐츠만큼 자라지 못하는 경우가 있다. 중앙 정렬은 .ai-page 쪽으로 옮겼으니
+     .ai-page-inner는 그냥 콘텐츠 크기만큼만 차지하면 된다. */
+  flex: none;
+}
+
+.ai-intro {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  /* justify-content:center on the parent centers this block; a much larger
+     bottom padding than top biases that centered position upward. */
+  padding: 0 0 22vh;
+}
+
+.ai-intro__title {
+  margin: 0;
+  font-size: clamp(24px, 4vw, 32px);
+  font-weight: 800;
+  color: #1e293b;
+  letter-spacing: -0.03em;
+  text-align: center;
 }
 
 .ai-page-head {
-  flex-shrink: 0;
-  margin-bottom: 20px;
-  padding-top: 4px;
-}
-
-.ai-page-head h1 {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 800;
-  color: var(--navy, #0e2b52);
-  letter-spacing: -0.02em;
+  display: none;
 }
 
 .ai-chat {
@@ -75,17 +113,6 @@ body:has(.ai-page) {
   min-height: calc(100vh - var(--head-h, 74px) - 40px - var(--ai-chat-offset, 14rem));
 }
 
-.ai-empty {
-  text-align: center;
-  padding: 48px 16px 24px;
-}
-
-.ai-empty > p {
-  margin: 0 0 16px;
-  font-size: 15px;
-  color: #5f6b7c;
-}
-
 .ai-example-chips {
   display: flex;
   flex-wrap: wrap;
@@ -110,19 +137,125 @@ body:has(.ai-page) {
   border-color: #a8c0ef;
 }
 
+/* 섬BTI별 섬 선호도 버튼 (intro 화면, 입력창 아래) */
+.ai-bti-pref {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 페이지 배경 톤을 따르되 명암을 살짝 더 줘서 구분되는 버튼 */
+.ai-bti-pref-btn {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a3a6b;
+  background: #e9eef6;
+  border: 1px solid #c7d3e6;
+  border-radius: 8px;
+  padding: 11px 18px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.ai-bti-pref-btn:hover {
+  background: #dbe4f1;
+  border-color: #b3c3dd;
+}
+
+.ai-bti-pref-btn:active {
+  background: #cfdaeb;
+}
+
+.ai-bti-pref-btn__label {
+  text-align: left;
+}
+
+.ai-bti-pref-btn__arrow {
+  flex-shrink: 0;
+  font-size: 11px;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.ai-bti-pref-btn[aria-expanded="true"] .ai-bti-pref-btn__arrow {
+  transform: rotate(180deg);
+}
+
+.ai-bti-pref-panel {
+  width: 100%;
+  max-width: 420px;
+  padding: 12px 14px;
+  background: #f4f7fc;
+  border: 1px solid #dbe4ef;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.ai-bti-pref-panel__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.ai-bti-pref-panel__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a3a6b;
+  background: #fff;
+  border: 1px solid #dbe4ef;
+  border-radius: 4px;
+  padding: 5px 10px 5px 6px;
+}
+
+.ai-bti-pref-panel__rank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  background: #2563eb;
+  border-radius: 3px;
+}
+
+.ai-bti-pref-panel__loading,
+.ai-bti-pref-panel__empty {
+  font-size: 14px;
+  color: #5a6b82;
+}
+
 .ai-bubble {
   max-width: 92%;
   border-radius: 16px;
   padding: 14px 16px;
   font-size: 14px;
   line-height: 1.6;
+  font-family: inherit;
 }
 
 .ai-bubble--user {
   align-self: flex-end;
-  background: #1f4fb8;
+  background: #2563eb;
   color: #fff;
-  border-bottom-right-radius: 4px;
+  border-bottom-right-radius: 6px;
+  max-width: 78%;
 }
 
 .ai-bubble--user p {
@@ -133,8 +266,26 @@ body:has(.ai-page) {
   align-self: flex-start;
   background: #fff;
   color: #2d3748;
-  border: 1px solid #e8edf3;
-  border-bottom-left-radius: 4px;
+  border: 1px solid #e5eaf0;
+  border-bottom-left-radius: 6px;
+  max-width: 100%;
+  width: 100%;
+}
+
+.ai-bubble--recommendation {
+  padding: 16px;
+}
+
+.ai-bubble--recommendation .ai-rec-island-card {
+  border: none;
+  padding: 0;
+  background: transparent;
+}
+
+.ai-bubble--recommendation .ai-rec-island-card + .ai-rec-island-card {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #eef2f7;
 }
 
 .ai-bubble--loading p {
@@ -147,6 +298,66 @@ body:has(.ai-page) {
   font-size: 15px;
   line-height: 1.65;
   color: #1a2332;
+}
+
+.ai-response-text strong {
+  font-weight: 700;
+  color: #1a3a6b;
+}
+
+/* Weather card (Gemini 검색 기반 날씨 · 활동 추천도) */
+.ai-weather-card {
+  margin: 0 0 14px;
+  padding: 12px 14px;
+  background: #f4f7fc;
+  border: 1px solid #1a3a6b;
+  border-radius: 4px;
+}
+
+.ai-weather-card__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.ai-weather-card__badge {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  background: #1a3a6b;
+  border-radius: 3px;
+  padding: 2px 8px;
+  letter-spacing: 0.02em;
+}
+
+.ai-weather-card__date {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1a3a6b;
+}
+
+.ai-weather-card__summary {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a3a6b;
+}
+
+.ai-weather-card__recommendation {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #2563eb;
+}
+
+/* TOP3 카드 위에 붙는 축약 버전 (여백만 살짝 다름) */
+.ai-weather-card--compact {
+  margin: 0 0 16px;
+}
+
+.ai-response-text--streaming {
+  margin: 0;
 }
 
 .ai-rec-list {
@@ -226,17 +437,22 @@ body:has(.ai-page) {
 .ai-rec-btn--external {
   background: #fff;
   color: #1a1a1a;
-  border-color: #2563eb;
+  border-color: #cbd5e1;
   font-weight: 500;
 }
 
 .ai-rec-btn--external:hover {
-  background: #2563eb;
-  color: #fff;
+  background: #bfdbfe;
+  color: #1e40af;
+  border-color: #60a5fa;
 }
 
 .ai-rec-btn--external:hover .ai-rec-external {
-  color: #fff;
+  color: #1e40af;
+}
+
+.ai-rec-btn--external:hover .ai-rec-phone {
+  color: #2563eb;
 }
 
 .ai-rec-btn--primary {
@@ -410,33 +626,91 @@ body:has(.ai-page) {
 }
 
 /* Composer */
-.ai-composer {
-  display: flex;
-  gap: 10px;
-  align-items: flex-end;
+.ai-composer-wrap {
   flex-shrink: 0;
-  padding: 12px 0 8px;
-  border-top: 1px solid #e4eaf2;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 12px 0 16px;
   background: #f7f9fc;
+}
+
+.ai-composer-wrap--intro {
+  max-width: 560px;
+  padding-bottom: 0;
+}
+
+.ai-composer-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.ai-settings-panel-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.28s ease, margin-top 0.28s ease, opacity 0.2s ease;
+  margin-top: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ai-settings-panel-wrap--open {
+  grid-template-rows: 1fr;
+  margin-top: 10px;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ai-settings-panel-wrap--open .ai-settings-panel-wrap__inner {
+  overflow: visible;
+}
+
+.ai-settings-panel-wrap__inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.ai-composer-filter {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #dbeafe;
+  border-radius: 10px;
+  background: #eff6ff;
+  color: #2563eb;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.ai-composer-filter--active {
+  background: #dbeafe;
+  border-color: #93c5fd;
 }
 
 .ai-composer-input {
   flex: 1;
-  resize: none;
+  min-width: 0;
+  height: 44px;
   font-size: 14px;
-  line-height: 1.5;
-  padding: 10px 12px;
-  border: 1px solid #d4dce8;
-  border-radius: 12px;
+  line-height: 1.4;
+  padding: 0 14px;
+  border: 1px solid #d8e0ea;
+  border-radius: 10px;
   background: #fff;
   color: #1a2332;
-  font-family: inherit;
+  font-family: var(--font-header, "Pretendard Variable", Pretendard, sans-serif);
 }
 
 .ai-composer-input:focus {
   outline: none;
-  border-color: #1f4fb8;
-  box-shadow: 0 0 0 3px rgba(31, 79, 184, 0.12);
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
 .ai-composer-input:disabled {
@@ -448,16 +722,16 @@ body:has(.ai-page) {
   font-size: 14px;
   font-weight: 700;
   color: #fff;
-  background: #1f4fb8;
+  background: #2563eb;
   border: none;
   border-radius: 10px;
-  padding: 10px 18px;
+  padding: 0 18px;
+  height: 44px;
   cursor: pointer;
-  min-height: 44px;
 }
 
 .ai-composer-send:hover:not(:disabled) {
-  background: #1a4399;
+  background: #1d4ed8;
 }
 
 .ai-composer-send:disabled {
@@ -465,14 +739,139 @@ body:has(.ai-page) {
   cursor: not-allowed;
 }
 
-.ai-demo-note {
-  flex-shrink: 0;
-  margin: 0;
-  padding-top: 4px;
-  padding-bottom: 4px;
+/* Settings panel */
+.ai-settings-panel {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ai-settings-panel__bti {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #f0f9ff;
   font-size: 12px;
-  color: #9aa4b2;
-  text-align: center;
+  color: #0369a1;
+}
+
+.ai-settings-panel__bti a {
+  font-weight: 700;
+  color: #0c4a6e;
+  text-decoration: none;
+}
+
+.ai-settings-panel__bti a:hover {
+  text-decoration: underline;
+}
+
+.ai-settings-panel__row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.ai-settings-panel__apply {
+  width: 100%;
+  margin-top: 4px;
+  border: none;
+  border-radius: 10px;
+  background: #2563eb;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 11px 16px;
+  cursor: pointer;
+}
+
+.ai-settings-panel__apply:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.ai-settings-panel__apply:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Conditions summary bar */
+.ai-conditions-bar {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.ai-conditions-bar__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.ai-conditions-bar__title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+  cursor: pointer;
+}
+
+.ai-conditions-bar__close {
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.ai-conditions-bar__close:hover {
+  background: #f1f5f9;
+}
+
+.ai-conditions-bar__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ai-conditions-chip {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: #2563eb;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 999px;
+  padding: 5px 10px;
+}
+
+.ai-conditions-chip--add {
+  cursor: pointer;
+  background: #fff;
+  color: #64748b;
+  border-color: #cbd5e1;
+}
+
+.ai-conditions-chip--add:hover {
+  background: #f8fafc;
 }
 
 @media (max-width: 640px) {
@@ -481,8 +880,21 @@ body:has(.ai-page) {
     padding-bottom: 0;
   }
 
+  .ai-page-inner {
+    padding: 0 12px;
+  }
+
   .ai-bubble {
     max-width: 100%;
+  }
+
+  .ai-bubble--user {
+    max-width: 88%;
+  }
+
+  .ai-settings-panel__row,
+  .ai-rec-score-list {
+    grid-template-columns: 1fr;
   }
 
   .ai-rec-actions {
@@ -492,4 +904,467 @@ body:has(.ai-page) {
   .ai-rec-btn {
     justify-content: center;
   }
+
+  .ai-intro {
+    padding: 0 0 16vh;
+  }
+}
+
+.ai-bubble--loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ai-typing-dots {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.ai-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #2563EB;
+  display: inline-block;
+  animation: ai-bounce 1.4s infinite ease-in-out both;
+}
+
+.ai-dot:nth-child(1) { animation-delay: -0.32s; }
+.ai-dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes ai-bounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+  40% { transform: translateY(-6px); opacity: 1; }
+}
+
+.ai-retry-btn {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #2563EB;
+  background: transparent;
+  border: 1px solid #2563EB;
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-dot { animation: none; opacity: 0.7; }
+}
+
+/* 추천 블록 두둥실 등장 애니메이션 */
+@keyframes ai-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ai-fade-up {
+  animation: ai-fade-up 380ms ease-out both;
+}
+
+/* 여러 요소에 시간차(stagger) — 순서대로 살짝 늦게 */
+.ai-fade-up-1 { animation-delay: 0ms; }
+.ai-fade-up-2 { animation-delay: 80ms; }
+.ai-fade-up-3 { animation-delay: 160ms; }
+.ai-fade-up-4 { animation-delay: 240ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-fade-up {
+    animation: none;
+  }
+}
+
+/* Structured recommendation (섬BTI + trip intent) */
+
+.ai-page-head__sub {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: #5a6b82;
+}
+
+.ai-trip-form {
+  display: none;
+}
+
+.ai-trip-date-range {
+  position: relative;
+}
+
+.ai-trip-date-trigger {
+  width: 100%;
+  border: 1px solid #d7e0ec;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 13px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+  text-align: left;
+  color: #1e293b;
+}
+
+.ai-trip-date-trigger__icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.ai-trip-date-popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  width: min(100%, 268px);
+  z-index: 20;
+  background: #fff;
+  border: 1px solid #dbe4ef;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(15, 43, 82, 0.1);
+  padding: 10px;
+}
+
+.ai-trip-date-popover--portal {
+  position: fixed;
+  top: auto;
+  left: auto;
+  width: 268px;
+  box-shadow: 0 12px 32px rgba(15, 43, 82, 0.16);
+}
+
+.ai-trip-date-popover__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.ai-trip-date-popover__head strong {
+  font-size: 13px;
+  color: var(--navy, #0e2b52);
+}
+
+.ai-trip-date-nav {
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 6px;
+  background: #f1f5f9;
+  color: #334155;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.ai-trip-date-popover__hint {
+  margin: 0 0 8px;
+  font-size: 11px;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.ai-trip-date-weekdays,
+.ai-trip-date-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 2px;
+}
+
+.ai-trip-date-weekdays {
+  margin-bottom: 4px;
+}
+
+.ai-trip-date-weekdays span {
+  text-align: center;
+  font-size: 10px;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.ai-trip-date-cell {
+  height: 28px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  font-size: 11px;
+  color: #334155;
+  cursor: pointer;
+  padding: 0;
+}
+
+.ai-trip-date-cell--empty {
+  visibility: hidden;
+}
+
+.ai-trip-date-cell--in-range {
+  background: #e8f4ff;
+}
+
+.ai-trip-date-cell--start,
+.ai-trip-date-cell--end {
+  background: var(--navy, #0e2b52);
+  color: #fff;
+  font-weight: 700;
+}
+
+.ai-trip-date-cell--disabled {
+  color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+.ai-trip-date-popover__footer {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  font-size: 11px;
+  color: #475569;
+}
+
+.ai-trip-bti-nudge {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+}
+
+.ai-trip-bti-nudge p {
+  margin: 0;
+  font-size: 12px;
+  color: #0369a1;
+  line-height: 1.45;
+}
+
+.ai-trip-bti-nudge__link {
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: #0c4a6e;
+  text-decoration: none;
+}
+
+.ai-trip-bti-nudge__link:hover {
+  text-decoration: underline;
+}
+
+.ai-trip-date-popover__limit {
+  color: #94a3b8;
+}
+
+.ai-trip-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: #334155;
+}
+
+.ai-trip-field input,
+.ai-trip-field select {
+  border: 1px solid #d7e0ec;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font: inherit;
+  background: #fff;
+}
+
+.ai-trip-fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ai-trip-fieldset legend {
+  font-size: 13px;
+  color: #334155;
+  margin-bottom: 8px;
+}
+
+.ai-trip-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ai-trip-chip {
+  border: 1px solid #d7e0ec;
+  background: #fff;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.ai-trip-chip--active {
+  background: #eff6ff;
+  border-color: #93c5fd;
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.ai-rec-results {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ai-rec-results__lead {
+  margin: 0 0 12px;
+  font-size: 14px;
+  color: #334155;
+  font-weight: 600;
+}
+
+.ai-rec-results--empty {
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.ai-rec-island-card {
+  background: #fff;
+  border: 1px solid #e3e9f2;
+  border-radius: 16px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ai-rec-island-card__head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.ai-rec-island-card__rank {
+  display: inline-block;
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 4px;
+}
+
+.ai-rec-island-card__head h3 {
+  margin: 0;
+  font-size: 20px;
+  color: var(--navy, #0e2b52);
+}
+
+.ai-rec-island-card__score {
+  text-align: right;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.ai-rec-island-card__score strong {
+  display: block;
+  font-size: 24px;
+  color: #0e7490;
+}
+
+.ai-rec-island-card__bti-note {
+  margin: 0;
+  font-size: 13px;
+  color: #0e7490;
+  font-weight: 600;
+}
+
+.ai-rec-score-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.ai-rec-score-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 13px;
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+.ai-rec-reasons {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: #334155;
+}
+
+.ai-rec-island-card__description {
+  margin: 0;
+  white-space: pre-line;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #1e293b;
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.ai-rec-itinerary {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ai-rec-itinerary li {
+  display: flex;
+  gap: 8px;
+  font-size: 13px;
+  color: #334155;
+}
+
+.ai-rec-itinerary li span {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: #e8f4ff;
+  color: #0e2b52;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.ai-rec-island-card__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.ai-rec-island-card__link {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0e7490;
+  text-decoration: none;
 }

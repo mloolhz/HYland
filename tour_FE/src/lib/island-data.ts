@@ -20,7 +20,7 @@ export const ISLANDS: IslandInfo[] = [
     leisureCourses: ["두무진 해안 트레킹", "사곶해안 사이클", "등대 전망 포인트"],
     ferryRoute: "인천항 ↔ 백령도",
     travelTime: "약 4시간 30분",
-    bookingLabel: "레저 예약하기",
+    bookingLabel: "레저스포츠 보기",
   },
   {
     id: "daech",
@@ -51,7 +51,7 @@ export const ISLANDS: IslandInfo[] = [
     leisureCourses: ["강화 해안 사이클", "갯벌 체험", "전등사·길상사 문화 탐방"],
     ferryRoute: "인천항 ↔ 강화도",
     travelTime: "약 1시간 10분",
-    bookingLabel: "레저 예약하기",
+    bookingLabel: "레저스포츠 보기",
   },
   {
     id: "gyo",
@@ -92,7 +92,7 @@ export const ISLANDS: IslandInfo[] = [
     leisureCourses: ["신도-시도-모도 사이클", "해안 산책", "섬 마을 탐방"],
     ferryRoute: "인천항 ↔ 신도",
     travelTime: "약 1시간 20분",
-    bookingLabel: "레저 예약하기",
+    bookingLabel: "레저스포츠 보기",
   },
   {
     id: "yeongj",
@@ -103,7 +103,7 @@ export const ISLANDS: IslandInfo[] = [
     leisureCourses: ["왕산 해수욕장", "해안 사이클", "을왕리 노을 코스"],
     ferryRoute: "인천항 ↔ 영종도",
     travelTime: "약 40분",
-    bookingLabel: "레저 예약하기",
+    bookingLabel: "레저스포츠 보기",
   },
   {
     id: "muui",
@@ -114,7 +114,7 @@ export const ISLANDS: IslandInfo[] = [
     leisureCourses: ["카약 · SUP", "무의바다누리길 러닝", "하나개 해수욕장"],
     ferryRoute: "영종도 ↔ 무의도",
     travelTime: "약 15분",
-    bookingLabel: "레저 예약하기",
+    bookingLabel: "레저스포츠 보기",
   },
   {
     id: "yheung",
@@ -145,7 +145,7 @@ export const ISLANDS: IslandInfo[] = [
     leisureCourses: ["캠핑", "일몰 감상", "해안 트레킹"],
     ferryRoute: "자월도 ↔ 승봉도",
     travelTime: "약 20분",
-    bookingLabel: "레저 예약하기",
+    bookingLabel: "레저스포츠 보기",
   },
   {
     id: "ijak",
@@ -166,7 +166,7 @@ export const ISLANDS: IslandInfo[] = [
     leisureCourses: ["SUP 체험", "카약", "덕적 해안 트레킹"],
     ferryRoute: "인천항 ↔ 덕적도",
     travelTime: "약 1시간 30분",
-    bookingLabel: "레저 예약하기",
+    bookingLabel: "레저스포츠 보기",
   },
   {
     id: "soya",

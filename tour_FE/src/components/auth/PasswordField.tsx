@@ -11,7 +11,7 @@ type PasswordFieldProps = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   placeholder?: string;
-  icon?: ReactNode | null;
+  icon?: ReactNode;
 };
 
 export function PasswordField({

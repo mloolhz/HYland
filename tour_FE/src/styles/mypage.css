@@ -1175,6 +1175,365 @@
   }
 }
 
+/* ── Reservation history (마이페이지 예약 내역) ── */
+.mp-rsv-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 16px;
+}
+
+.mp-rsv-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mp-rsv-filter.is-active {
+  border-color: #2563eb;
+  color: #2563eb;
+  background: #eff6ff;
+}
+
+.mp-rsv-filter-count {
+  min-width: 18px;
+  padding: 1px 6px;
+  border: 1px solid currentColor;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.mp-rsv-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mp-rsv-card {
+  display: flex;
+  gap: 14px;
+  padding: 14px;
+  border: 1.5px solid #1a3a6b;
+  background: #fff;
+}
+
+.mp-rsv-thumb {
+  flex: none;
+  width: 96px;
+  height: 72px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.mp-rsv-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mp-rsv-thumb-fallback {
+  font-size: 12px;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.mp-rsv-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mp-rsv-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.mp-rsv-meta-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.mp-rsv-island {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mp-rsv-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.mp-rsv-sep {
+  color: #cbd5e1;
+}
+
+.mp-rsv-badge {
+  flex: none;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border: 1px solid transparent;
+}
+
+.mp-rsv-badge--upcoming {
+  color: #2563eb;
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+.mp-rsv-badge--completed {
+  color: #64748b;
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+}
+
+.mp-rsv-badge--cancelled {
+  color: #dc2626;
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+.mp-rsv-name {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a3a6b;
+  line-height: 1.35;
+  word-break: keep-all;
+}
+
+.mp-rsv-info {
+  margin: 0;
+  font-size: 13px;
+  color: #4a5567;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+
+.mp-rsv-foot {
+  margin-top: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.mp-rsv-price {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a3a6b;
+}
+
+.mp-rsv-note {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.mp-rsv-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mp-rsv-btn {
+  padding: 8px 12px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #1a3a6b;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mp-rsv-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mp-rsv-btn--primary {
+  border-color: #2563eb;
+  background: #2563eb;
+  color: #fff;
+}
+
+.mp-rsv-btn--danger {
+  border-color: #dc2626;
+  color: #dc2626;
+}
+
+.mp-rsv-empty {
+  margin: 0;
+  padding: 28px 12px;
+  text-align: center;
+  color: #64748b;
+  font-size: 14px;
+  border: 1px dashed #cbd5e1;
+}
+
+.mp-rsv-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.mp-rsv-modal {
+  width: min(440px, 100%);
+  max-height: min(90vh, 640px);
+  overflow-y: auto;
+  background: #fff;
+  border: 1.5px solid #1a3a6b;
+  padding: 18px 18px 16px;
+}
+
+.mp-rsv-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.mp-rsv-modal-head h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #1a3a6b;
+}
+
+.mp-rsv-modal-close {
+  border: 0;
+  background: none;
+  font-size: 22px;
+  line-height: 1;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.mp-rsv-modal-product {
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a3a6b;
+}
+
+.mp-rsv-modal-sub {
+  margin: 0 0 14px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.mp-rsv-fee-box {
+  border: 1px solid #e2e8f0;
+  padding: 12px;
+  margin-bottom: 12px;
+  background: #f8fafc;
+}
+
+.mp-rsv-fee-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+  color: #4a5567;
+  padding: 4px 0;
+}
+
+.mp-rsv-fee-row--total {
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px solid #e2e8f0;
+  color: #1a3a6b;
+  font-weight: 700;
+}
+
+.mp-rsv-modal-warn {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: #b45309;
+  line-height: 1.5;
+}
+
+.mp-rsv-modal-error {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: #dc2626;
+}
+
+.mp-rsv-modal-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.mp-rsv-demo-note {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: #94a3b8;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .mp-rsv-card {
+    flex-direction: column;
+  }
+
+  .mp-rsv-thumb {
+    width: 100%;
+    height: 120px;
+  }
+
+  .mp-rsv-foot {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mp-rsv-actions {
+    width: 100%;
+  }
+
+  .mp-rsv-btn {
+    flex: 1;
+  }
+
+  .mp-tab-btn {
+    padding: 9px 8px;
+    font-size: 12px;
+  }
+}
+
 /* ── Settings ── */
 .mp-settings-head {
   margin-bottom: 16px;

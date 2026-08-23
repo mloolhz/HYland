@@ -329,6 +329,34 @@
   box-shadow: 0 2px 6px rgba(45, 46, 107, 0.18);
 }
 
+.sp-detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.sp-community-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 0;
+  background: #f8fafc;
+  color: #4a5567;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-decoration: none;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+
+.sp-community-btn:hover {
+  border-color: #94a3b8;
+  background: #f1f5f9;
+  color: #1a3a6b;
+}
+
 /* ⑥⑦ Independent sections */
 .sp-section {
   margin-top: 40px;
@@ -497,12 +525,6 @@
 
 .sp-booking-btn--external:hover .sp-booking-btn-sub {
   color: #2563eb;
-}
-
-.sp-booking-btn--primary {
-  border-color: #2563eb;
-  background: #eff6ff;
-  font-weight: 700;
 }
 
 .sp-booking-btn--secondary {

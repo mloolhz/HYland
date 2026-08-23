@@ -6,14 +6,13 @@ const SITE_LOGO_SRC = "/incheon-island-leisure-nuri-logo.png";
 
 type AuthCardProps = {
   activeTab: "login" | "signup";
-  showTabs?: boolean;
   children: ReactNode;
 };
 
-export function AuthCard({ activeTab, children, showTabs = true }: AuthCardProps) {
+export function AuthCard({ activeTab, children }: AuthCardProps) {
   return (
     <div className="auth-card">
-      {showTabs && <AuthTabs active={activeTab} />}
+      <AuthTabs active={activeTab} />
       {children}
     </div>
   );
@@ -24,7 +23,7 @@ export function AuthBrand({
   subtitle,
 }: {
   title: string;
-  subtitle?: string;
+  subtitle: string;
 }) {
   return (
     <div className="auth-brand">
@@ -32,7 +31,7 @@ export function AuthBrand({
         <img className="auth-logo-img" src={SITE_LOGO_SRC} alt="인천섬 레저누리" width={180} height={39} />
       </Link>
       <h1 className="auth-title">{title}</h1>
-      {subtitle && <p className="auth-subtitle">{subtitle}</p>}
+      <p className="auth-subtitle">{subtitle}</p>
     </div>
   );
 }

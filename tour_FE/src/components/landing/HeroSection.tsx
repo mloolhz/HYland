@@ -5,6 +5,7 @@ import { AnimatedWidthBar } from "@/components/mypage/AnimatedWidthBar";
 import { CountUpNumber } from "@/components/mypage/CountUpNumber";
 import { formatNumber } from "@/lib/landing-data";
 import { getBadgeStats, getCurrentUserProfile, getPassportExpPercent } from "@/lib/user-profile";
+import { scrollToSection } from "@/utils/layout";
 import { demoProps } from "./ToastProvider";
 import {
   HERO_SLIDE_DURATION_MS,
@@ -60,16 +61,20 @@ export function HeroSection() {
   }, [startHero]);
 
   useEffect(() => {
-    const onScroll = () => setShowScrollHint(window.scrollY < 48);
+    const onScroll = () => setShowScrollHint(window.scrollY < 120);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const scrollToMap = () => {
+    scrollToSection("map");
+  };
+
   return (
     <section
       className="hero"
-      id="home"
+      id="hero"
       onMouseEnter={() => timerRef.current && clearInterval(timerRef.current)}
       onMouseLeave={startHero}
     >
@@ -222,7 +227,12 @@ export function HeroSection() {
         </div>
       </div>
 
-      <div className={`hero-scroll-hint${showScrollHint ? "" : " is-hidden"}`}>
+      <button
+        type="button"
+        className={`hero-scroll-hint${showScrollHint ? "" : " is-hidden"}`}
+        onClick={scrollToMap}
+        aria-label="섬 지도 섹션으로 이동"
+      >
         <span className="hero-scroll-label">스크롤하여 더 알아보기</span>
         <a href="#map" className="hero-scroll-chevron" aria-label="아래로 스크롤하여 더 알아보기">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -235,7 +245,7 @@ export function HeroSection() {
             />
           </svg>
         </a>
-      </div>
+      </button>
 
       <PassportBookModal
         open={passportModalOpen}

@@ -1,6 +1,7 @@
 import {
   getPasswordRuleStatus,
   isPasswordAllowedChars,
+  PASSWORD_RULES,
 } from "@/constants/validation";
 
 export function PasswordRules({ password }: { password: string }) {
@@ -15,6 +16,7 @@ export function PasswordRules({ password }: { password: string }) {
 
   return (
     <div className="auth-pw-rules">
+      <p className="auth-pw-rules-title">비밀번호 조건</p>
       <ul className="auth-pw-rules-list">
         {items.map((item) => (
           <li
@@ -29,6 +31,9 @@ export function PasswordRules({ password }: { password: string }) {
           </li>
         ))}
       </ul>
+      <p className="auth-pw-rules-chars">
+        사용 가능: <span className="auth-pw-rules-chars-mono">{PASSWORD_RULES.specialChars}</span>
+      </p>
       {password && !allowed && (
         <p className="auth-error" role="alert">
           사용할 수 없는 문자가 포함되어 있어요

@@ -1,6 +1,6 @@
 
-import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import { avaColor, REVIEWS, type Review } from "@/lib/landing-data";
 
 function ReviewItem({ review }: { review: Review }) {

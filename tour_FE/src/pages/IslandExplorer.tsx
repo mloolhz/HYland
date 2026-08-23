@@ -11,6 +11,10 @@ function readIslandId(param: string | null): string | null {
   return param;
 }
 
+type IslandsLocationState = {
+  islandId?: string;
+};
+
 export function IslandExplorer() {
   const [searchParams, setSearchParams] = useSearchParams();
   const islandParam = searchParams.get("island");

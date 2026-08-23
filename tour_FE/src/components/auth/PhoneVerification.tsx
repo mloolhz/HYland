@@ -72,32 +72,22 @@ export function PhoneVerification({
         </p>
       )}
 
-      <div className="auth-field auth-phone-field">
-        <label htmlFor={`${idPrefix}-phone`} className="sr-only">
-          전화번호
-        </label>
-        <div className="auth-dup-row">
-          <div
-            className={`auth-input-wrap${errors.phone ? " has-error" : ""}${step === "verified" ? " is-disabled" : ""}`}
-          >
-            {phoneIcon && <span className="auth-input-icon" aria-hidden="true">{phoneIcon}</span>}
-            <input
-              id={`${idPrefix}-phone`}
-              type="tel"
-              autoComplete="tel"
-              inputMode="numeric"
-              maxLength={13}
-              placeholder="010-0000-0000"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              disabled={step === "verified"}
-              className="auth-input"
-              aria-invalid={errors.phone ? true : undefined}
-              aria-describedby={errors.phone ? `${idPrefix}-phone-error` : undefined}
-            />
-          </div>
-          {step === "verified" ? (
-            <span className="auth-dup-done">
+      <TextField
+        id={`${idPrefix}-phone`}
+        label="전화번호"
+        type="tel"
+        autoComplete="tel"
+        inputMode="numeric"
+        maxLength={13}
+        placeholder="010-0000-0000"
+        value={phone}
+        onChange={(e) => setPhone(e.target.value)}
+        error={errors.phone}
+        disabled={step === "verified"}
+        icon={phoneIcon}
+        rightSlot={
+          step === "verified" ? (
+            <span className="auth-dup-done auth-dup-done-icon">
               <i className="ti ti-check" aria-hidden="true" />
               인증 완료
             </span>
@@ -110,14 +100,9 @@ export function PhoneVerification({
             >
               {sendLabel}
             </button>
-          )}
-        </div>
-        {errors.phone && (
-          <p id={`${idPrefix}-phone-error`} className="auth-error" role="alert">
-            {errors.phone}
-          </p>
-        )}
-      </div>
+          )
+        }
+      />
 
       {(step === "sent" || step === "verified") && (
         <div className="auth-code-row">

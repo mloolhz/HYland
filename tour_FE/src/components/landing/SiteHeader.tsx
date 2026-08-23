@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { resolveCommunityHref } from "@/lib/community-list-state";
 import { NotificationBell } from "@/components/notification/NotificationBell";
 import { ISLAND_REGION_SUB_ITEMS } from "@/lib/island-data";
 
@@ -62,6 +63,7 @@ function buildNavItems(
   onAiRecommend: boolean,
   onMissionsHub: boolean,
   onCommunity: boolean,
+  communityHref: string,
 ): NavItem[] {
   return [
     {
@@ -107,7 +109,7 @@ function buildNavItems(
     {
       id: "community",
       label: "커뮤니티",
-      href: "/community",
+      href: communityHref,
       isRoute: true,
       active: onCommunity,
       subItems: [

@@ -14,7 +14,7 @@ import {
   isPasswordFullyValid,
 } from "@/constants/validation";
 import { usePhoneVerification } from "@/hooks/usePhoneVerification";
-import { useAuthRedirect } from "@/hooks/useAuthRedirect";
+import { useTabIndicator } from "@/hooks/useTabIndicator";
 import {
   findAccountByCredentials,
   findAccountsByNameAndPhone,
@@ -31,8 +31,8 @@ function parseTab(value: string | null): Tab {
 
 export function FindAccount() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { authSearch } = useAuthRedirect();
   const tab = parseTab(searchParams.get("tab"));
+  const { listRef, setTabRef, ind } = useTabIndicator(tab);
   const phoneVerify = usePhoneVerification();
   const resetPhone = phoneVerify.reset;
 
@@ -145,14 +145,15 @@ export function FindAccount() {
 
   return (
     <div className="auth-page">
-      <AuthBrand title="아이디 · 비밀번호 찾기" />
+      <AuthBrand title="계정 찾기" subtitle="가입할 때 등록한 전화번호로 확인해요" />
 
       <div className="auth-card">
-        <div className="auth-tabs" role="tablist" aria-label="계정 찾기 메뉴">
+        <div className="auth-tabs" role="tablist" aria-label="계정 찾기 메뉴" ref={listRef}>
           <button
             type="button"
             role="tab"
             aria-selected={tab === "id"}
+            ref={setTabRef("id")}
             className={`auth-tab${tab === "id" ? " is-active" : ""}`}
             onClick={() => setTab("id")}
           >
@@ -162,11 +163,20 @@ export function FindAccount() {
             type="button"
             role="tab"
             aria-selected={tab === "password"}
+            ref={setTabRef("password")}
             className={`auth-tab${tab === "password" ? " is-active" : ""}`}
             onClick={() => setTab("password")}
           >
             비밀번호 찾기
           </button>
+          <span
+            className="auth-tab-indicator"
+            aria-hidden="true"
+            style={{
+              width: ind.width,
+              transform: `translateX(${ind.left}px)`,
+            }}
+          />
         </div>
 
         <StepIndicator step={step} step2Label={step2Label} />
@@ -183,6 +193,7 @@ export function FindAccount() {
                 placeholder="아이디"
                 value={userId}
                 onChange={(e) => setUserId(e.target.value)}
+                icon={<i className="ti ti-user" />}
               />
             )}
 
@@ -194,10 +205,12 @@ export function FindAccount() {
               placeholder="이름"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              icon={<i className="ti ti-user" />}
             />
 
             <PhoneVerification
               idPrefix="find"
+              phoneIcon={<i className="ti ti-phone" />}
               phone={phoneVerify.phone}
               setPhone={phoneVerify.setPhone}
               code={phoneVerify.code}
@@ -219,6 +232,11 @@ export function FindAccount() {
             >
               {loading ? <span className="auth-spinner" aria-label="확인 중" /> : "다음"}
             </button>
+            {!verified && (
+              <p className="auth-submit-hint" role="status">
+                전화번호 인증이 필요해요
+              </p>
+            )}
           </div>
         )}
 
@@ -394,9 +412,7 @@ export function FindAccount() {
       {step === 1 && <SnsHintBanner />}
 
       <p className="auth-footer-link">
-        <Link to={`/login${authSearch}`}>로그인</Link>
-        {" | "}
-        <Link to={`/signup${authSearch}`}>회원가입</Link>
+        <Link to="/login">로그인</Link>
       </p>
     </div>
   );

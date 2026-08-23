@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthBrand, AuthCard } from "@/components/auth/AuthCard";
 import { DuplicateCheckField } from "@/components/auth/DuplicateCheckField";
@@ -15,7 +15,7 @@ import { useAuthRedirect } from "@/hooks/useAuthRedirect";
 import { usePhoneVerification } from "@/hooks/usePhoneVerification";
 import {
   validateEmailOptional,
-  validateNicknameOptional,
+  validateNickname,
   validateUserId,
 } from "@/lib/authValidation";
 
@@ -39,15 +39,30 @@ export function Signup() {
   const passwordValid = isPasswordFullyValid(password) && isPasswordAllowedChars(password);
   const confirmMatch = password === confirm && confirm.length > 0;
 
-  const nicknameFilled = nickname.trim().length > 0;
-  const nicknameValid = !nicknameFilled || nicknameChecked;
+  const submitHint = useMemo(() => {
+    if (!userIdChecked) return "아이디 중복 확인이 필요해요";
+    if (!passwordValid) return "비밀번호 조건을 확인해주세요";
+    if (!confirmMatch) return "비밀번호 확인이 필요해요";
+    if (phoneVerify.step !== "verified") return "전화번호 인증이 필요해요";
+    if (!nicknameChecked) return "닉네임 중복 확인이 필요해요";
+    if (!isTermsValid(terms.terms, terms.privacy)) return "필수 약관에 동의해주세요";
+    return null;
+  }, [
+    userIdChecked,
+    passwordValid,
+    confirmMatch,
+    phoneVerify.step,
+    nicknameChecked,
+    terms.terms,
+    terms.privacy,
+  ]);
 
   const canSubmit =
     userIdChecked &&
     passwordValid &&
     confirmMatch &&
     phoneVerify.step === "verified" &&
-    nicknameValid &&
+    nicknameChecked &&
     isTermsValid(terms.terms, terms.privacy) &&
     !loading;
 
@@ -142,7 +157,7 @@ export function Signup() {
       userId,
       phone: phoneVerify.phoneDigits,
       email: email || undefined,
-      nickname: nickname.trim() || undefined,
+      nickname,
       ...terms,
     };
     // TODO: POST /api/signup
@@ -154,17 +169,18 @@ export function Signup() {
 
   return (
     <div className="auth-page auth-page-signup">
-      <AuthBrand title="회원가입" />
+      <AuthBrand title="회원가입" subtitle="168개 섬의 탐험 기록을 남겨보세요" />
 
-      <AuthCard activeTab="signup" showTabs={false}>
+      <AuthCard activeTab="signup">
         <form className="auth-form auth-form-signup" onSubmit={handleSubmit} noValidate>
-          <FormSection title="계정 정보" first required>
+          <FormSection title="계정 정보" first>
             <DuplicateCheckField
               id="signup-userId"
               label="아이디"
               value={userId}
               onChange={setUserId}
               hint="영문 소문자로 시작, 4~16자"
+              icon={<i className="ti ti-user" />}
               placeholder="아이디"
               autoComplete="username"
               validateFormat={validateUserId}
@@ -181,7 +197,6 @@ export function Signup() {
                 onChange={handlePasswordChange}
                 onBlur={() => handleBlur("password")}
                 error={errors.password}
-                icon={null}
               />
               <PasswordStrengthBar password={password} />
               <PasswordRules password={password} />
@@ -196,11 +211,10 @@ export function Signup() {
               onChange={handleConfirmChange}
               onBlur={() => handleBlur("confirm")}
               error={errors.confirm}
-              icon={null}
             />
           </FormSection>
 
-          <FormSection title="본인 확인" required>
+          <FormSection title="본인 확인">
             <PhoneVerification
               phone={phoneVerify.phone}
               setPhone={phoneVerify.setPhone}
@@ -219,29 +233,31 @@ export function Signup() {
           <FormSection title="프로필">
             <DuplicateCheckField
               id="signup-nickname"
-              label="닉네임 (선택)"
+              label="닉네임"
               value={nickname}
               onChange={setNickname}
               hint="커뮤니티에 표시되는 이름이에요. 나중에 변경할 수 있어요."
+              icon={<i className="ti ti-user" />}
               placeholder="닉네임 (2~10자)"
               autoComplete="nickname"
-              validateFormat={validateNicknameOptional}
+              validateFormat={validateNickname}
               checkDuplicate={mockCheckNickname}
               onCheckedChange={setNicknameChecked}
             />
 
             <TextField
               id="signup-email"
-              label="이메일"
+              label="이메일 (선택)"
               type="email"
               autoComplete="email"
               inputMode="email"
-              placeholder="이메일"
+              placeholder="이메일 (선택)"
               value={email}
               onChange={handleEmailChange}
               onBlur={() => handleBlur("email")}
               error={errors.email}
               hint="예약 확인과 소식을 받아볼 수 있어요"
+              icon={<i className="ti ti-mail" />}
             />
           </FormSection>
 
@@ -258,9 +274,14 @@ export function Signup() {
             {loading ? (
               <span className="auth-spinner" aria-label="가입 중" />
             ) : (
-              "회원가입"
+              "가입하고 탐험 시작하기"
             )}
           </button>
+          {submitHint && !canSubmit && (
+            <p className="auth-submit-hint" role="status">
+              {submitHint}
+            </p>
+          )}
         </form>
       </AuthCard>
 

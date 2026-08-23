@@ -41,7 +41,7 @@
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: #E53935;
+  background: #1D9E75;
   border: 2px solid #fff;
   pointer-events: none;
 }
@@ -230,7 +230,7 @@
   cursor: pointer;
   border-bottom: 0.5px solid #F1F5F9;
   outline: none;
-  transition: background 0.12s;
+  transition: background-color 120ms ease-out, transform 100ms ease-out;
 }
 
 .noti-item:last-child {
@@ -239,15 +239,22 @@
 
 .noti-item.is-unread {
   background: #F5FAFF;
+  transition: background-color 300ms ease-out;
 }
 
 .noti-item.is-read {
-  background: #fff;
+  background: #FFFFFF;
+  transition: background-color 300ms ease-out;
 }
 
 .noti-item:hover,
 .noti-item:focus-visible {
-  background: #EEF4FB;
+  background: #F1F5F9;
+}
+
+.noti-item:active {
+  background: #E2E8F0;
+  transform: scale(0.995);
 }
 
 .noti-item-dot {
@@ -258,6 +265,11 @@
   height: 5px;
   border-radius: 50%;
   background: #1D9E75;
+  transition: opacity 300ms ease-out;
+}
+
+.noti-item.is-read .noti-item-dot {
+  opacity: 0;
 }
 
 .noti-item-icon {
@@ -419,8 +431,8 @@
 /* ---------- page ---------- */
 .noti-page {
   background: #F7F9FC;
-  min-height: calc(100vh - var(--head-h));
-  padding: calc(var(--head-h) + 36px) 0 72px;
+  min-height: calc(100vh - 110px);
+  padding: 36px 0 72px;
 }
 
 .noti-page-inner {
@@ -428,7 +440,8 @@
 }
 
 .noti-page-head {
-  margin-bottom: 22px;
+  margin-bottom: 20px;
+  padding-top: 4px;
 }
 
 .noti-page-head h1 {
