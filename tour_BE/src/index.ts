@@ -5,6 +5,9 @@ import { prisma } from "./prisma";
 import authRouter from "./auth";
 import btiRouter from "./bti";
 import missionsRouter from "./missions";
+import visitsRouter from "./visits";
+import profileRouter from "./profile";
+import leaderboardRouter from "./leaderboard";
 
 const app = express();
 app.use(cors()); // 프론트(다른 포트)에서 호출 허용
@@ -24,6 +27,15 @@ app.use("/bti", btiRouter);
 
 // 미션 (목록/상세/진행도)
 app.use("/missions", missionsRouter);
+
+// 섬 방문/스탬프
+app.use("/visits", visitsRouter);
+
+// 프로필 (조회/수정 + 활동 요약)
+app.use("/profile", profileRouter);
+
+// 리더보드 (랭킹)
+app.use("/leaderboard", leaderboardRouter);
 
 // ── 섬 목록 ──
 app.get("/islands", async (_req, res) => {
