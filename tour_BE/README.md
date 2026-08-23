@@ -1,22 +1,24 @@
-# tour_BE — 인천 섬 레저누리 AI 추천 백엔드
+# tour_BE — HYland 백엔드
 
-인천 섬 레저 활동을 추천하는 API 서버입니다. 사용자 질문을 Google Gemini로 처리해 종목·코스·팁을 반환하고, 추천 이력을 MySQL에 저장합니다. 프론트(`tour_FE`, `localhost:5173`)와 연동됩니다.
+인천 섬 레저누리 백엔드. 스택: **Node + TypeScript + Express + Prisma 7 + MySQL**
+
+회원/섬/종목 카탈로그 API와 AI 추천(Gemini) API가 한 서버에 함께 올라갑니다. 프론트(`tour_FE`, `localhost:5173`)와 연동됩니다.
 
 ---
 
 ## 기술 스택
 
-- **런타임**: Node.js 18+
-- **서버**: Express 5 + TypeScript
+- **런타임**: Node.js 20+ (ESM, `"type": "module"`)
+- **서버**: Express 5 + TypeScript, 개발 실행은 `tsx` (핫 리로드)
+- **DB**: MySQL + **Prisma 7** — driver adapter `@prisma/adapter-mariadb` + `mariadb` 드라이버
+- **인증**: bcryptjs + jsonwebtoken
 - **AI**: Google Gemini (`@google/generative-ai`), 모델 `gemini-flash-lite-latest`, Google Search grounding 활성화
-- **DB**: MySQL + Prisma 7 (driver adapter `@prisma/adapter-mariadb` + `mariadb` 드라이버)
-- **개발 실행**: `tsx` (핫 리로드)
+
+> **Prisma 7 주의**: `new PrismaClient()`만으로는 연결되지 않습니다. 반드시 driver adapter를 넘겨야 하며, 이 프로젝트는 `src/prisma.ts`에서 한 번만 구성해 앱 전체가 공유합니다. 또 datasource의 `url`은 스키마가 아니라 `prisma.config.ts`에 둡니다.
 
 ---
 
-## 처음 세팅 (팀원 필독)
-
-레포를 clone한 뒤, 아래 순서대로 진행하면 로컬에서 서버가 뜹니다.
+## 처음 세팅
 
 ### 1. 의존성 설치
 
@@ -27,65 +29,61 @@ npm install
 
 ### 2. MySQL 준비
 
-로컬에 MySQL(8.0+) 또는 MariaDB(10.2+)가 설치돼 있어야 합니다. (없으면 https://dev.mysql.com/downloads/mysql/ 에서 설치, 설치 시 정한 root 비밀번호를 꼭 기억하세요.)
+MySQL(8.0+) 또는 MariaDB(10.2+)에 DB를 하나 만듭니다. 한글을 저장하므로 `utf8mb4`가 중요합니다.
 
-설치 후, 이 프로젝트가 쓸 DB를 하나 만듭니다:
+```sql
+CREATE DATABASE hyland CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+### 3. `.env` 생성
 
 ```bash
-mysql -u root -p
+cp .env.example .env
 ```
-비밀번호 입력 후:
-```sql
-CREATE DATABASE tour_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-exit
-```
-> DB 이름(`tour_db`)은 자유롭게 정해도 됩니다. 아래 `.env`의 `DATABASE_URL`과 일치시키기만 하면 됩니다. 한글 질문·답변을 저장하므로 `utf8mb4`로 만드는 게 중요합니다.
 
-### 3. `.env` 파일 생성
-
-`tour_BE/` 폴더 바로 아래에 `.env` 파일을 만들고 아래 내용을 채웁니다. **이 파일은 git에 올라가지 않으니 각자 만들어야 합니다.**
+`.env`를 본인 환경에 맞게 채웁니다. **이 파일은 git에 올라가지 않습니다.**
 
 ```
+DATABASE_URL="mysql://root:본인_비밀번호@localhost:3306/hyland"
+JWT_SECRET="아무-긴-랜덤-문자열"
 GEMINI_API_KEY=여기에_본인_Gemini_키
-DATABASE_URL=mysql://root:본인_DB_비밀번호@localhost:3306/tour_db
+TOUR_API_KEY=""
 PORT=4000
 ```
 
-- `GEMINI_API_KEY` — Google AI Studio(https://aistudio.google.com/apikey)에서 각자 발급. **`AIza`로 시작하는 키 전체**를 따옴표 없이 붙여넣습니다.
-- `DATABASE_URL` — 위에서 만든 DB 정보로. `mysql://유저명:비밀번호@호스트:포트/DB이름` 형식이며 기본 포트는 `3306`입니다.
-- `PORT` — 선택. 없으면 자동으로 4000.
+- `DATABASE_URL` — `mysql://유저:비밀번호@호스트:포트/DB이름` 형식, 기본 포트 3306
+- `GEMINI_API_KEY` — [Google AI Studio](https://aistudio.google.com/apikey)에서 각자 발급. `AIza`로 시작하는 키 전체를 따옴표 없이. **키는 각자 발급하세요** — 공유하면 할당량도 공유됩니다.
+- `TOUR_API_KEY` — 공공데이터포털 TourAPI 4.0 서비스키 (관광공사 데이터 수집용, 선택)
 
-### 4. Prisma 마이그레이션 + 클라이언트 생성 (PostgreSQL → MySQL 전환 시 필독)
-
-이 프로젝트는 PostgreSQL에서 MySQL로 DBMS를 변경했습니다. `prisma/migrations/` 아래 기존 마이그레이션은 PostgreSQL 전용 SQL(`migration_lock.toml`의 `provider = "postgresql"` 포함)이라 MySQL에서 재사용할 수 없습니다. **처음 한 번, 아래 순서로 새로 만들어야 합니다.**
+### 4. 마이그레이션 + 클라이언트 생성
 
 ```bash
-# 1) 기존 postgres 마이그레이션 폴더를 통째로 삭제
-rm -rf prisma/migrations
-
-# 2) MySQL 기준으로 새 초기 마이그레이션 생성 + 적용
-npx prisma migrate dev --name init_mysql
-
-# 3) Prisma 클라이언트 생성
+npx prisma migrate dev
 npx prisma generate
 ```
 
-`migrate dev`가 DB에 `Recommendation` 테이블을 만들고, `generate`가 Prisma 클라이언트를 생성합니다. (DB 연결이 돼야 성공하므로 MySQL이 켜져 있어야 합니다.) 이미 마이그레이션을 새로 만든 팀원이라면 2번 대신 `npx prisma migrate dev`만 실행해 최신 마이그레이션을 받으면 됩니다.
+`prisma/migrations/`에는 두 개의 이력이 순서대로 있습니다.
 
-### 5. 개발 서버 실행
+| 마이그레이션 | 내용 |
+|---|---|
+| `20260814121610_init` | 회원·카탈로그·관광공사 등 25개 테이블 |
+| `20260820003013_init` | AI 추천 이력 `Recommendation` 테이블 |
+
+> **이미 한쪽만 적용해 둔 로컬 DB가 있다면** 마이그레이션 순서가 어긋나 드리프트 오류(P3005 등)가 납니다. 로컬 개발 데이터는 버려도 되므로 `npx prisma migrate reset`으로 초기화한 뒤 다시 적용하는 게 가장 빠릅니다.
+
+### 5. 시드 (카탈로그 정적 데이터)
+
+```bash
+npm run db:seed
+```
+
+### 6. 개발 서버 실행
 
 ```bash
 npm run dev
 ```
 
-터미널에 `서버 실행 중: http://localhost:4000`이 뜨면 성공입니다.
-
-### 6. 동작 확인
-
-브라우저에서 `http://localhost:4000/health` 접속 → 아래가 나오면 정상:
-```json
-{ "status": "ok", "message": "tour_BE 서버 정상 동작 중" }
-```
+`http://localhost:4000/health` 접속 시 `{ "ok": true, "service": "tour_BE" }`가 나오면 정상입니다.
 
 ---
 
@@ -94,8 +92,12 @@ npm run dev
 | 명령 | 설명 |
 |------|------|
 | `npm run dev` | 개발 서버 (핫 리로드) |
-| `npm run build` | TypeScript → `dist/` 컴파일 |
-| `npm start` | 빌드 결과물로 실행 (`npm run build` 먼저 필요) |
+| `npm start` | 서버 실행 |
+| `npm run db:migrate` | `prisma migrate dev` |
+| `npm run db:generate` | `prisma generate` |
+| `npm run db:studio` | Prisma Studio (DB를 눈으로 확인) |
+| `npm run db:seed` | 정적 카탈로그 시드 |
+| `npm run tour:inspect` | 관광공사 레포츠 데이터 조회 |
 
 ---
 
@@ -104,18 +106,35 @@ npm run dev
 ```
 tour_BE/
 ├── src/
-│   ├── index.ts            # Express 진입점, CORS·JSON 미들웨어, 라우터 마운트
+│   ├── index.ts            # Express 진입점, 라우터 마운트, 섬/종목 API
+│   ├── prisma.ts           # 공용 Prisma 클라이언트 (driver adapter 구성)
+│   ├── auth.ts             # 회원가입/로그인/내정보/휴대폰인증
 │   ├── routes/
-│   │   └── recommend.ts    # AI 추천·스트리밍·인기질문 API, DB 저장
+│   │   └── recommend.ts    # AI 추천·스트리밍·날씨·집계 API
 │   └── services/
 │       └── gemini.ts       # Gemini 호출 (논스트리밍/스트리밍)
 ├── prisma/
-│   ├── schema.prisma       # DB 스키마 (Recommendation 모델)
-│   └── migrations/         # 마이그레이션 이력
+│   ├── schema.prisma       # DB 스키마 (26개 모델)
+│   ├── migrations/         # 마이그레이션 이력
+│   └── seed.ts             # 정적 카탈로그 시드
 ├── prisma.config.ts        # Prisma CLI 설정 (DATABASE_URL)
-├── .env                    # 로컬 환경변수 (git 제외, 각자 생성)
-└── package.json
+├── public/                 # 인증 테스트 콘솔
+└── .env                    # 로컬 환경변수 (git 제외, 각자 생성)
 ```
+
+---
+
+## 스키마 구조
+
+| Phase | 테이블 | 설명 |
+|---|---|---|
+| **0 회원** | users, oauth_accounts, phone_verifications, user_profiles, user_settings | 로그인·회원가입·프로필 |
+| **1 마스터** | islands, island_regions, island_leisure_courses, sport_categories, sports, sport_islands, sport_booking_methods, mission_categories, mission_quests, badge_definitions, island_stamp_meta, profile_characters, island_bti_questions, island_bti_results | FE 정적 카탈로그 (시드) |
+| **2 유저상태** | user_island_visits, user_mission_progress, user_badges, user_island_bti_results | 로그인 후 "내 데이터" |
+| **관광공사** | tour_spots, tour_spot_sports | TourAPI 섬별 관광/레저 정보 |
+| **AI 추천** | Recommendation | 추천 이력 (인기질문·섬BTI 선호도·예상 질문 집계 원천) |
+
+> `Recommendation`만 테이블명이 camelCase인데, 기존 마이그레이션이 그 이름으로 이미 생성돼 있어 맞춘 것입니다. 팀 컨벤션(snake_case)으로 통일하려면 별도 rename 마이그레이션이 필요합니다.
 
 ---
 
@@ -123,16 +142,31 @@ tour_BE/
 
 기본 URL: `http://localhost:4000`
 
-### `GET /health`
-헬스체크. 응답: `{ "status": "ok", "message": "..." }`
+### 공통
 
-### `POST /api/recommend`
+| 메서드 | 경로 | 설명 |
+|---|---|---|
+| `GET` | `/health` | 헬스체크 → `{ ok: true, service: "tour_BE" }` |
+
+### 인증 (`/auth`)
+
+회원가입·로그인·내정보·휴대폰 인증. 브라우저에서 `http://localhost:4000` 접속 시 테스트 콘솔이 뜹니다.
+
+### 카탈로그
+
+| 메서드 | 경로 | 설명 |
+|---|---|---|
+| `GET` | `/islands` | 섬 목록 (권역·레저코스 포함) |
+| `GET` | `/islands/:id` | 섬 상세 (종목·관광지 포함) |
+| `GET` | `/sports` | 레저 종목 목록 (`?category=water\|land\|exp\|heal`) |
+| `GET` | `/sports/:id` | 레저 종목 상세 |
+
+### AI 추천 (`/api`)
+
+#### `POST /api/recommend`
 AI 추천 1회 응답 (논스트리밍).
 
-요청 body:
-```json
-{ "question": "커플이 즐길 힐링 코스 추천해줘" }
-```
+요청 body: `{ "question": "커플이 즐길 힐링 코스 추천해줘", "history": [], "persona": {}, "sessionId": "..." }`
 
 응답:
 ```json
@@ -142,124 +176,64 @@ AI 추천 1회 응답 (논스트리밍).
   "course": { "title": "...", "steps": [{ "time": "10:00", "activity": "...", "desc": "..." }] },
   "tips": ["..."],
   "followups": ["..."],
-  "weather": { "date": "2026-08-20", "summary": "맑음, 최고 28도", "recommendation": "수상 레저 활동을 즐기기 좋은 날씨예요." }
+  "weather": { "date": "2026-08-20", "summary": "맑음, 최고 28도", "recommendation": "수상 레저를 즐기기 좋아요." }
 }
 ```
 - 레저와 무관한 질문도 회피하지 않고 `text`로 답변합니다(이 경우 `recommendations`는 빈 배열, `course`는 `null`).
-- `persona.travelDate`가 있으면 Gemini가 Google Search로 해당 날짜의 실제 날씨를 검색해 `weather` 필드를 채웁니다. 검색에 실패하거나 날짜가 없으면 `weather` 필드 자체가 생략됩니다(폴백).
+- `persona.travelDate`가 있으면 Gemini가 Google Search로 그 날짜의 실제 날씨를 검색해 `weather`를 채웁니다. 실패하거나 날짜가 없으면 필드 자체가 생략됩니다(폴백).
 - 응답 후 백그라운드로 DB에 저장됩니다.
 
-### `POST /api/recommend/stream`
-스트리밍 응답 (SSE). 요청 body는 위와 동일.
-- `Content-Type: text/event-stream`
-- 이벤트: `chunk`(생성 중 조각) → `done`(완성 JSON) / 오류 시 `error`
-- `done` 이후 백그라운드 DB 저장.
+#### `POST /api/recommend/stream`
+SSE 스트리밍 응답. body는 위와 동일. 이벤트: `chunk` → `done`, 오류 시 `error`.
 
-### `GET /api/popular-questions`
-DB에 저장된 질문 중 빈도 상위 4개 반환.
+#### `POST /api/weather`
+답변 본문 없이 날짜 기준 날씨만 조회. body: `{ "travelDate": "2026-08-25", "travelEndDate": "..." }`
+실패해도 500이 아니라 `{ "weather": null }`로 응답합니다(FE가 조용히 생략).
+
+#### `POST /api/top3/save`
+조건 패널(TOP3) 결과를 Gemini 호출 없이 그대로 저장합니다. FE 로컬 추천 엔진 결과를 섬BTI 선호도·예상 질문 집계에 쓰기 위한 것입니다. 응답: `{ "ok": true }`
+
+#### `GET /api/popular-questions`
+저장된 질문 중 빈도 상위 4개. → `{ "questions": ["질문1", ...] }`
+
+#### `GET /api/bti-preferences`
+섬BTI 유형별로 가장 많이 추천된 섬 TOP3. `?code=AWCP`로 특정 유형만 조회 가능.
 ```json
-{ "questions": ["질문1", "질문2", "질문3", "질문4"] }
+{ "preferences": [{ "islandBti": "AWCP", "sampleCount": 12, "topIslands": [{ "islandName": "대무의도", "count": 7 }] }] }
 ```
 
-### `GET /api/bti-preferences`
-섬BTI 유형별로 그 유형 사용자들이 가장 많이 추천받은 섬 TOP3를 반환합니다. `?code=AWCP`처럼 특정 유형만 조회할 수도 있습니다.
-```json
-{
-  "preferences": [
-    {
-      "islandBti": "AWCP",
-      "sampleCount": 12,
-      "topIslands": [
-        { "islandName": "대무의도", "count": 7 },
-        { "islandName": "덕적도", "count": 4 }
-      ]
-    }
-  ]
-}
-```
-- `persona.islandBti`가 함께 저장된 추천 기록의 `response.recommendations[].islandName`을 유형별로 집계합니다.
-- 조건 패널을 적용해 섬BTI가 함께 전달된 기록이 아직 없으면 해당 유형은 목록에서 빠집니다.
-
-### `POST /api/top3/save`
-조건 패널(TOP3) 결과를 Gemini 호출 없이 그대로 저장합니다. FE의 구조화 추천 엔진(로컬 계산) 결과를 저장해 섬BTI 선호도·예상 질문 집계에 씁니다.
-
-요청 body:
-```json
-{
-  "question": "당일치기 · 친구 · 힐링 · 바다,산책 조건으로 섬 추천해줘",
-  "persona": { "companion": "friend", "travelMood": "healing", "islandBti": "AWCP" },
-  "response": { "recommendations": [{ "islandName": "대무의도", "rank": 1, "finalScore": 92 }] },
-  "sessionId": "브라우저 세션 UUID"
-}
-```
-응답: `{ "ok": true }` (저장은 백그라운드, 실패해도 화면에는 영향 없음)
-
-### `GET /api/suggested-questions`
-비슷한 조건(동행·분위기)으로 TOP3를 받은 다른 세션들이 그 직후 이어서 물어본 질문을 빈도순으로 최대 4개 반환합니다. `?companion=friend&travelMood=healing`처럼 조건을 지정합니다. 조건 매칭 턴 바로 다음에 온 "일반 질문"(persona 없는 질문)만 집계 대상입니다.
-```json
-{ "questions": ["카약 예약은 어떻게 해?", "비 오면 어떻게 해?"] }
-```
+#### `GET /api/suggested-questions`
+비슷한 조건(`?companion=friend&travelMood=healing`)으로 TOP3를 받은 다른 세션들이 그 직후 이어서 물어본 질문을 빈도순 최대 4개. → `{ "questions": ["카약 예약은 어떻게 해?"] }`
 
 ---
 
-## DB 모델 (`Recommendation`)
-
-| 필드 | 타입 | 설명 |
-|------|------|------|
-| `id` | Int | PK, 자동 증가 |
-| `question` | String | 사용자 질문 |
-| `persona` | Json? | 조건(날짜·동행·분위기·관심활동) + `islandBti` 스냅샷 |
-| `response` | Json | AI 응답 전체 |
-| `islandBti` | String? | `persona.islandBti` 스냅샷 (섬BTI별 섬 선호도 집계용 인덱스) |
-| `sessionId` | String? | 브라우저 세션(탭) 단위 식별자 — 예상 질문 집계용 |
-| `createdAt` | DateTime | 저장 시각 |
-
-`persona`·`response`는 MySQL 5.7+/MariaDB 10.2+의 네이티브 `JSON` 컬럼으로 저장되며, Prisma가 읽기/쓰기·`Prisma.JsonNull` 처리를 PostgreSQL 때와 동일하게 지원합니다(코드 변경 불필요).
-
-DB 내용을 눈으로 보려면:
-```bash
-npx prisma studio
-```
-
----
-
-## CORS
-
-프론트 주소 `http://localhost:5173`, `http://localhost:5174`를 허용합니다. 프론트가 다른 포트로 뜨면 `src/index.ts`의 `cors` 설정에 추가해야 합니다.
-
----
-
-## 트러블슈팅 (실제로 자주 막히는 지점)
-
-**`mysql` 명령을 못 찾음 (Windows)**
-MySQL 설치했는데 `mysql`이 인식 안 되면 PATH 문제입니다. `C:\Program Files\MySQL\MySQL Server <버전>\bin`을 시스템 환경변수 Path에 추가하고 터미널을 새로 여세요.
-
-**`P3005`/드리프트 오류 (Prisma migrate)**
-PostgreSQL에서 MySQL로 옮기면서 기존 `prisma/migrations/`가 남아있으면 발생합니다. `rm -rf prisma/migrations` 후 `npx prisma migrate dev --name init_mysql`로 새로 만드세요.
-
-**`API key not valid` (400)**
-`.env`의 `GEMINI_API_KEY`가 잘못됐거나 일부만 복사된 경우. Google AI Studio에서 복사 아이콘으로 키 전체를 다시 복사해 따옴표·공백 없이 붙여넣으세요. `.env` 수정 후 서버 재시작 필수.
-
-**`This model ... is no longer available` (404)**
-Gemini 모델 이름이 안 맞을 때. `src/services/gemini.ts`의 모델명을 `gemini-flash-lite-latest` 등 현재 사용 가능한 이름으로. 사용 가능 모델은 https://aistudio.google.com 에서 확인.
+## 트러블슈팅
 
 **`A driver adapter is required` (Prisma)**
-Prisma 7은 `new PrismaClient()`만으로는 연결이 안 됩니다. 이 프로젝트는 이미 `@prisma/adapter-mariadb`를 쓰도록 돼 있으니, `npm install`이 제대로 됐는지 확인하세요.
+Prisma 7은 `new PrismaClient()`만으로 연결되지 않습니다. `src/prisma.ts`의 공용 클라이언트를 import해서 쓰세요. 새 PrismaClient를 직접 만들지 마세요.
+
+**`The datasource property 'url' is no longer supported`**
+Prisma 7에서는 `schema.prisma`의 datasource에 `url`을 쓸 수 없습니다. `prisma.config.ts`에서 지정합니다.
+
+**`P3005` / 드리프트 오류 (Prisma migrate)**
+로컬 DB에 한쪽 마이그레이션만 적용돼 있을 때 납니다. `npx prisma migrate reset` 후 다시 적용하세요.
+
+**`mysql` 명령을 못 찾음 (Windows)**
+`C:\Program Files\MySQL\MySQL Server <버전>\bin`을 시스템 환경변수 Path에 추가하고 터미널을 새로 여세요.
 
 **`ER_NOT_SUPPORTED_AUTH_MODE` / 접속 오류**
-MySQL 8 기본 인증 방식(`caching_sha2_password`)을 일부 클라이언트가 지원하지 못해 생깁니다. 필요하면 계정 인증 방식을 바꾸세요:
+MySQL 8 기본 인증 방식(`caching_sha2_password`) 문제입니다.
 ```sql
 ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '본인_비밀번호';
 ```
 
-**`Cannot find module '.prisma/client/...'`**
-Prisma 클라이언트 미생성. `npx prisma generate` 실행하세요.
+**`API key not valid` (400)**
+`.env`의 `GEMINI_API_KEY`가 잘못됐거나 일부만 복사된 경우. 키 전체를 따옴표·공백 없이 붙여넣고 서버를 재시작하세요.
 
 **429 (할당량 초과)**
-Gemini 무료 tier는 일일/분당 요청 한도가 있습니다. 테스트를 많이 하면 걸립니다. 잠시 기다리거나(분당 한도) 다음 날 리셋(일일 한도)을 기다리세요. 팀이 같은 키를 공유하면 한도도 공유되니, 각자 키를 발급받는 걸 권장합니다.
+Gemini 무료 tier는 일일/분당 요청 한도가 있습니다. 테스트를 많이 하면 걸립니다. 잠시 기다리거나(분당) 다음 날 리셋(일일)을 기다리세요.
 
 **4000 포트 이미 사용 중**
-이전 서버가 안 꺼졌을 수 있습니다. 터미널에서 `Ctrl+C`로 끄고 다시 `npm run dev`. 그래도 안 되면(Windows):
 ```bash
 netstat -ano | findstr ":4000"
 taskkill /PID <나온_PID> /F
@@ -269,7 +243,6 @@ taskkill /PID <나온_PID> /F
 
 ## 주의사항
 
-- **`.env`는 절대 커밋하지 마세요.** API 키·DB 비밀번호가 유출됩니다. (`.gitignore`에 이미 포함돼 있음)
-- **API 키는 각자 발급**하세요. 공유하면 할당량도 공유됩니다.
-- `dist/`, `node_modules/`, `generated/`도 git에서 제외됩니다. clone 후 `npm install`·`npm run build`로 로컬 생성.
-- DB 없이도 AI 응답 자체는 되지만, **추천 저장·인기질문 API는 DB가 있어야** 동작합니다.
+- **`.env`는 절대 커밋하지 마세요.** API 키·DB 비밀번호가 유출됩니다.
+- `node_modules/`, `dist/`, `generated/`는 git에서 제외됩니다. clone 후 `npm install`로 로컬 생성.
+- DB 없이도 Gemini 응답 자체는 되지만, **추천 저장·인기질문·섬BTI 선호도·예상 질문 API는 DB가 있어야** 동작합니다.

@@ -1,27 +1,11 @@
 import { Router, Response } from "express";
-import { PrismaClient, Prisma } from "@prisma/client";
-import { PrismaMariaDb } from "@prisma/adapter-mariadb";
-import dotenv from "dotenv";
+import { Prisma } from "@prisma/client";
+import { prisma } from "../prisma";
 import { askGemini, askGeminiStream } from "../services/gemini";
 
-dotenv.config();
-
-// mariadb 드라이버의 문자열 생성자는 "mariadb://" 스킴을 요구해 관례적인
-// "mysql://" DATABASE_URL과 맞지 않는다. URL을 직접 파싱해 객체 형태로 넘긴다.
-function parseMysqlConnectionOptions(databaseUrl: string) {
-  const url = new URL(databaseUrl);
-  return {
-    host: url.hostname,
-    port: url.port ? Number(url.port) : 3306,
-    user: decodeURIComponent(url.username),
-    password: decodeURIComponent(url.password),
-    database: url.pathname.replace(/^\//, ""),
-  };
-}
-
+// 커넥션 풀을 하나만 쓰도록 앱 공용 Prisma 클라이언트(../prisma)를 재사용한다.
+// DATABASE_URL 파싱과 driver adapter 구성은 그쪽에 모여 있다.
 const router = Router();
-const adapter = new PrismaMariaDb(parseMysqlConnectionOptions(process.env.DATABASE_URL!));
-const prisma = new PrismaClient({ adapter });
 
 const SPORTS = [
   { sportId: "kayak", name: "카약", islands: ["무의도"] },

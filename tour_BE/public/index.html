@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>tour_BE API 테스트 콘솔</title>
+  <style>
+    :root { --navy:#2d2e6b; --blue:#2f6fe0; --line:#e2e8f1; --muted:#5a6b84; --ok:#2e9e68; --err:#c0503a; --bg:#f4f7fc; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:#17233a; font-family:"Malgun Gothic",-apple-system,"Segoe UI",sans-serif; line-height:1.5; }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 28px 18px 60px; }
+    h1 { font-size: 22px; margin:0 0 2px; }
+    .sub { color:var(--muted); font-size:13.5px; margin:0 0 20px; }
+    .badge { display:inline-block; font-size:12px; font-weight:700; padding:3px 10px; border-radius:99px; background:#eef3fb; color:var(--navy); }
+    .badge.on { background:#e4f6ec; color:var(--ok); }
+    .card { background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px; margin-bottom:16px; }
+    .card h2 { font-size:15px; margin:0 0 12px; display:flex; align-items:center; gap:8px; }
+    .card h2 .n { width:22px;height:22px;border-radius:50%;background:var(--navy);color:#fff;font-size:12px;display:grid;place-items:center; }
+    .row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+    input { flex:1; min-width:140px; height:40px; padding:0 12px; border:1px solid var(--line); border-radius:9px; font-size:14px; }
+    button { height:40px; padding:0 18px; border:0; border-radius:9px; background:var(--blue); color:#fff; font-weight:700; font-size:14px; cursor:pointer; }
+    button.ghost { background:#fff; border:1px solid var(--line); color:var(--navy); }
+    button:hover { filter:brightness(0.96); }
+    .who { font-size:13.5px; color:var(--muted); margin-top:6px; }
+    pre { background:#0f1522; color:#d6e2f5; padding:14px; border-radius:10px; font-size:12.5px; overflow:auto; max-height:320px; margin:10px 0 0; }
+    .out-title { font-size:12px; font-weight:800; letter-spacing:.08em; color:var(--muted); text-transform:uppercase; margin-top:14px; }
+    .pill { font-size:12px; padding:2px 8px; border-radius:6px; font-weight:700; }
+    .pill.ok { background:#e4f6ec; color:var(--ok); } .pill.err { background:#fce9e5; color:var(--err); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>🛠️ tour_BE API 테스트 콘솔</h1>
+    <p class="sub">버튼을 눌러 백엔드가 실제로 응답하는지 직접 확인해보세요. (localhost:4000)</p>
+    <p>상태: <span id="authState" class="badge">로그아웃</span></p>
+
+    <div class="card">
+      <h2><span class="n">1</span> 회원가입</h2>
+      <div class="row">
+        <input id="su-email" placeholder="이메일" value="me@hyland.kr" />
+        <input id="su-nick" placeholder="닉네임" value="바다탐험가" />
+      </div>
+      <div class="row">
+        <input id="su-pw" placeholder="비밀번호" value="test1234" />
+        <button onclick="signup()">회원가입</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="n">2</span> 로그인</h2>
+      <div class="row">
+        <input id="li-email" placeholder="이메일" value="me@hyland.kr" />
+        <input id="li-pw" placeholder="비밀번호" value="test1234" />
+        <button onclick="login()">로그인</button>
+      </div>
+      <div class="who" id="who"></div>
+    </div>
+
+    <div class="card">
+      <h2><span class="n">3</span> 데이터 조회</h2>
+      <div class="row">
+        <button class="ghost" onclick="me()">내 정보 (토큰)</button>
+        <button class="ghost" onclick="get('/islands')">섬 목록</button>
+        <button class="ghost" onclick="get('/sports')">종목 목록</button>
+        <button class="ghost" onclick="get('/sports?category=water')">해상 레저</button>
+      </div>
+    </div>
+
+    <div class="out-title">응답 <span id="status"></span></div>
+    <pre id="out">여기에 백엔드 응답이 표시됩니다.</pre>
+  </div>
+
+  <script>
+    let token = localStorage.getItem("token") || "";
+    let nick = localStorage.getItem("nick") || "";
+    refreshAuth();
+
+    function refreshAuth() {
+      const el = document.getElementById("authState");
+      if (token) { el.textContent = "로그인됨" + (nick ? " · " + nick : ""); el.className = "badge on"; }
+      else { el.textContent = "로그아웃"; el.className = "badge"; }
+    }
+    function show(res, data) {
+      document.getElementById("out").textContent = JSON.stringify(data, null, 2);
+      const s = document.getElementById("status");
+      s.className = "pill " + (res.ok ? "ok" : "err");
+      s.textContent = res.status + (res.ok ? " OK" : " 오류");
+    }
+    async function signup() {
+      const body = { email: v("su-email"), password: v("su-pw"), nickname: v("su-nick") };
+      const res = await fetch("/auth/signup", { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify(body) });
+      const data = await res.json(); show(res, data);
+      if (data.token) { token = data.token; nick = data.user.nickname; save(); }
+    }
+    async function login() {
+      const body = { email: v("li-email"), password: v("li-pw") };
+      const res = await fetch("/auth/login", { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify(body) });
+      const data = await res.json(); show(res, data);
+      if (data.token) { token = data.token; nick = data.user.nickname; save(); document.getElementById("who").textContent = "환영합니다, " + nick + "님!"; }
+    }
+    async function me() {
+      const res = await fetch("/auth/me", { headers: token ? { Authorization: "Bearer " + token } : {} });
+      show(res, await res.json());
+    }
+    async function get(path) {
+      const res = await fetch(path);
+      show(res, await res.json());
+    }
+    function v(id){ return document.getElementById(id).value; }
+    function save(){ localStorage.setItem("token", token); localStorage.setItem("nick", nick); refreshAuth(); }
+  </script>
+</body>
+</html>
