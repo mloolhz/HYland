@@ -131,8 +131,8 @@ async function main() {
     })),
   });
 
-  // FE MISSION_QUESTS는 생성 로직상 id 40·41·42가 중복(서로 다른 미션 6개) →
-  // 중복분에 새 id를 부여해 51개 모두 보존
+  // 안전장치: FE에서 id가 중복되면 새 id를 부여해 미션을 잃지 않도록 함
+  // (현재 FE는 중복 없음 — 기타 미션이 60~62를 쓰도록 정리됨)
   const nextIdStart = Math.max(...MISSION_QUESTS.map((q) => q.id)) + 1;
   let nextQuestId = nextIdStart;
   const seenQuest = new Set<number>();

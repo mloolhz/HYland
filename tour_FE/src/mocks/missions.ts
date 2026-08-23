@@ -242,10 +242,10 @@ export const MISSION_QUESTS: MissionQuest[] = [
   ...HEALING_SPORT_QUESTS,
   GRAND_SLAM_QUESTS.힐링,
 
-  // ── 기타 (8) ──
-  { id: 40, category: "기타", icon: "✍️", title: "첫 후기", desc: "섬 여행 후기를 처음 남겨요", current: 1, target: 1, unit: "개", reward: "첫 후기 배지", tier: "일반" },
-  { id: 41, category: "기타", icon: "💬", title: "댓글 요정", desc: "커뮤니티에 댓글 5개를 남겨요", current: 5, target: 5, unit: "개", reward: "댓글 요정 배지", tier: "일반" },
-  { id: 42, category: "기타", icon: "🧩", title: "섬BTI 참여", desc: "나의 섬BTI 테스트에 참여해요", current: 1, target: 1, unit: "회", reward: "섬BTI 배지", tier: "일반" },
+  // ── 기타 (8) ── ※ id 60~62: 체험(40~42)과 충돌하지 않도록 분리 (백엔드 mission_quests와 일치)
+  { id: 60, category: "기타", icon: "✍️", title: "첫 후기", desc: "섬 여행 후기를 처음 남겨요", current: 1, target: 1, unit: "개", reward: "첫 후기 배지", tier: "일반" },
+  { id: 61, category: "기타", icon: "💬", title: "댓글 요정", desc: "커뮤니티에 댓글 5개를 남겨요", current: 5, target: 5, unit: "개", reward: "댓글 요정 배지", tier: "일반" },
+  { id: 62, category: "기타", icon: "🧩", title: "섬BTI 참여", desc: "나의 섬BTI 테스트에 참여해요", current: 1, target: 1, unit: "회", reward: "섬BTI 배지", tier: "일반" },
   { id: 43, category: "기타", icon: "❤️", title: "인싸 탐험가", desc: "내 글이 좋아요 10개를 받아요", current: 10, target: 10, unit: "개", reward: "인싸 탐험가 배지", tier: "희귀" },
   { id: 44, category: "기타", icon: "📸", title: "이야기꾼", desc: "섬 여행 후기를 10개 남겨요", current: 4, target: 10, unit: "개", reward: "이야기꾼 배지", tier: "희귀" },
 
