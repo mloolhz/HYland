@@ -4,7 +4,7 @@ import {
   missionQuestState,
 } from "@/mocks/missions";
 
-export const PASSPORT_STAMPS_PER_PAGE = 8;
+export const PASSPORT_STAMPS_PER_PAGE = 12;
 
 export function getMissionStampStats() {
   const earned = MISSION_QUESTS.filter((q) => missionQuestState(q) === "earned").length;
