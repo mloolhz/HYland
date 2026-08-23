@@ -4,6 +4,7 @@ import cors from "cors";
 import { prisma } from "./prisma";
 import authRouter from "./auth";
 import btiRouter from "./bti";
+import missionsRouter from "./missions";
 
 const app = express();
 app.use(cors()); // 프론트(다른 포트)에서 호출 허용
@@ -20,6 +21,9 @@ app.use("/auth", authRouter);
 
 // 섬BTI (문항/결과/제출/이력)
 app.use("/bti", btiRouter);
+
+// 미션 (목록/상세/진행도)
+app.use("/missions", missionsRouter);
 
 // ── 섬 목록 ──
 app.get("/islands", async (_req, res) => {
