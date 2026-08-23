@@ -1,4 +1,9 @@
-import { missionQuestState, type MissionQuest } from "@/mocks/missions";
+import {
+  CATEGORY_META,
+  missionQuestState,
+  type MissionCategory,
+  type MissionQuest,
+} from "@/mocks/missions";
 import { MissionBadge } from "./MissionBadge";
 
 type PassportMissionStampPageProps = {
@@ -6,7 +11,11 @@ type PassportMissionStampPageProps = {
   spreadIndex: number;
   totalSpreads: number;
   side: "left" | "right";
-  showCategorySummary?: boolean;
+  /** 이 페이지가 담당하는 미션 카테고리 (목차 제목) */
+  category?: MissionCategory;
+  /** 카테고리가 여러 장일 때 (1/3) 표기 */
+  pageInCategory?: number;
+  totalPagesInCategory?: number;
 };
 
 /** 미션창과 동일한 배지 — MissionBadge + 제목/상태 (mb-item 레이아웃 재사용) */
@@ -33,9 +42,18 @@ export function PassportMissionStampPage({
   spreadIndex,
   totalSpreads,
   side,
+  category,
+  pageInCategory,
+  totalPagesInCategory,
 }: PassportMissionStampPageProps) {
   const showBanner = side === "right" && spreadIndex === 0;
-  const title = spreadIndex === 0 && side === "right" ? "최근 기록" : "획득한 배지";
+
+  // 목차 = 카테고리 이름 (섬 → 해상 → 육상 → 체험 → 힐링 → 기타)
+  const meta = category ? CATEGORY_META[category] : null;
+  const earnedInPage = quests.filter((q) => missionQuestState(q) === "earned").length;
+  const showCategoryPart = Boolean(
+    category && totalPagesInCategory && totalPagesInCategory > 1 && pageInCategory,
+  );
 
   return (
     <div className={`passport-page passport-page--mission-stamps passport-page--${side}`}>
@@ -47,12 +65,31 @@ export function PassportMissionStampPage({
 
       <div className="passport-mstamp-layout">
         <header className="passport-mstamp-layout__head">
-          <h3 className="passport-mstamp-layout__title">{title}</h3>
-          {side === "right" && (
-            <p className="passport-page__page-count">
-              {spreadIndex + 1} / {totalSpreads}
-            </p>
-          )}
+          <h3 className="passport-mstamp-layout__title">
+            {meta && (
+              <span className="passport-mstamp-layout__emoji" aria-hidden="true">
+                {meta.emoji}
+              </span>
+            )}
+            <span style={meta ? { color: meta.color } : undefined}>{category ?? "획득한 배지"}</span>
+            {showCategoryPart && (
+              <span className="passport-mstamp-layout__part">
+                ({pageInCategory}/{totalPagesInCategory})
+              </span>
+            )}
+          </h3>
+          <div className="passport-mstamp-layout__meta">
+            {category && (
+              <span className="passport-mstamp-layout__count">
+                배지 {earnedInPage}/{quests.length}
+              </span>
+            )}
+            {side === "right" && (
+              <p className="passport-page__page-count">
+                {spreadIndex + 1} / {totalSpreads}
+              </p>
+            )}
+          </div>
         </header>
 
         <div className="passport-mstamp-grid passport-mstamp-grid--badges" role="list">

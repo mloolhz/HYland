@@ -265,7 +265,11 @@
 .passport-page--mission-stamps{padding:22px 20px 16px}
 .passport-mstamp-layout{display:flex;flex-direction:column;gap:10px;height:100%;min-height:0;position:relative;z-index:1}
 .passport-mstamp-layout__head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:2px}
-.passport-mstamp-layout__title{margin:0;font-size:15px;font-weight:900;color:var(--passport-navy);letter-spacing:-.01em}
+.passport-mstamp-layout__title{margin:0;font-size:15px;font-weight:900;color:var(--passport-navy);letter-spacing:-.01em;display:flex;align-items:center;gap:5px}
+.passport-mstamp-layout__emoji{font-size:14px;line-height:1}
+.passport-mstamp-layout__part{font-size:10px;font-weight:700;color:var(--passport-text-muted)}
+.passport-mstamp-layout__meta{display:flex;align-items:center;gap:8px;flex:none}
+.passport-mstamp-layout__count{font-size:9.5px;font-weight:800;color:var(--passport-text-muted);letter-spacing:.02em;font-variant-numeric:tabular-nums}
 .passport-mstamp-layout__spacer{flex:1;min-height:8px}
 .passport-page__page-count{margin:0;font-size:9px;font-weight:700;color:var(--passport-text-muted);letter-spacing:.04em}
 

@@ -7,7 +7,7 @@ import {
   type StampTheme,
 } from "@/lib/passport/stamp-themes";
 import type { StampVariant } from "@/components/landing/PassportInkStampArt";
-import { MISSION_QUESTS, missionQuestState, type MissionQuest } from "@/mocks/missions";
+import { missionQuestState, type MissionQuest } from "@/mocks/missions";
 
 export type InkStampDisplay = {
   questId: number;
@@ -50,24 +50,6 @@ const FEATURED_PLACES: Record<number, { place: string; activity: string }> = {
   18: { place: "섬BTI", activity: "첫 후기" },
   20: { place: "섬BTI", activity: "참여 완료" },
 };
-
-/** 첫 장 — 실제 획득한 배지(earned) 우선, 부족하면 진행 중(doing)으로 채움 */
-const FEATURED_SLOTS = 7;
-
-export function getRecentStampQuests(): MissionQuest[] {
-  const earned = MISSION_QUESTS.filter((q) => missionQuestState(q) === "earned");
-  const doing = MISSION_QUESTS.filter((q) => missionQuestState(q) === "doing");
-  return [...earned, ...doing].slice(0, FEATURED_SLOTS);
-}
-
-export function getFeaturedMissionQuests(): MissionQuest[] {
-  return getRecentStampQuests();
-}
-
-export function getRemainingMissionQuests(): MissionQuest[] {
-  const shown = new Set(getRecentStampQuests().map((q) => q.id));
-  return MISSION_QUESTS.filter((q) => !shown.has(q.id));
-}
 
 export function questToInkStampDisplay(quest: MissionQuest): InkStampDisplay {
   const variant = getQuestStampVariant(quest.id, quest.category);

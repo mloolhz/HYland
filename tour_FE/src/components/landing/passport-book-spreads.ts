@@ -1,21 +1,27 @@
-import type { MissionQuest } from "@/mocks/missions";
 import {
-  getFeaturedMissionQuests,
-  getRemainingMissionQuests,
-} from "@/lib/passport/passport-quest-ink-stamp";
+  MISSION_CATEGORIES,
+  MISSION_QUESTS,
+  type MissionCategory,
+  type MissionQuest,
+} from "@/mocks/missions";
 import { PASSPORT_STAMPS_PER_PAGE } from "@/lib/passport/passport-mission-stamps";
+
+/** 카테고리 페이지 — 여러 장으로 나뉘면 (1/3) 표기 */
+export type PassportCategoryPage = {
+  type: "mission-stamps";
+  quests: MissionQuest[];
+  category: MissionCategory;
+  /** 해당 카테고리 안에서 몇 번째 장인지 (1부터) */
+  pageInCategory: number;
+  totalPagesInCategory: number;
+};
 
 export type PassportBookLeftPage =
   | { type: "profile" }
-  | { type: "mission-stamps"; quests: MissionQuest[] };
+  | { type: "blank" }
+  | PassportCategoryPage;
 
-export type PassportBookRightPage =
-  | {
-      type: "mission-stamps";
-      quests: MissionQuest[];
-      showCategorySummary?: boolean;
-    }
-  | { type: "island-story" };
+export type PassportBookRightPage = PassportCategoryPage | { type: "island-story" };
 
 export type PassportBookSpread = {
   index: number;
@@ -23,39 +29,48 @@ export type PassportBookSpread = {
   right: PassportBookRightPage;
 };
 
-/** 여권 펼침 — 0: 프로필+대표배지, 이후: 미션 배지 페이지 */
-export function buildMissionBookSpreads(): PassportBookSpread[] {
-  const featured = getFeaturedMissionQuests();
-  const spreads: PassportBookSpread[] = [
-    {
-      index: 0,
-      left: { type: "profile" },
-      right: {
+/** 카테고리 순서(섬→해상→육상→체험→힐링→기타)대로 페이지 구성 — 카테고리는 새 장에서 시작 */
+function buildCategoryPages(): PassportCategoryPage[] {
+  const pages: PassportCategoryPage[] = [];
+
+  for (const category of MISSION_CATEGORIES) {
+    const quests = MISSION_QUESTS.filter((q) => q.category === category);
+    if (quests.length === 0) continue;
+
+    const totalPagesInCategory = Math.ceil(quests.length / PASSPORT_STAMPS_PER_PAGE);
+    for (let i = 0; i < totalPagesInCategory; i += 1) {
+      pages.push({
         type: "mission-stamps",
-        quests: featured,
-      },
-    },
-  ];
+        category,
+        quests: quests.slice(i * PASSPORT_STAMPS_PER_PAGE, (i + 1) * PASSPORT_STAMPS_PER_PAGE),
+        pageInCategory: i + 1,
+        totalPagesInCategory,
+      });
+    }
+  }
 
-  const remaining = getRemainingMissionQuests();
-  let cursor = 0;
-  let spreadIndex = 1;
+  return pages;
+}
 
-  while (cursor < remaining.length) {
-    const leftQuests = remaining.slice(cursor, cursor + PASSPORT_STAMPS_PER_PAGE);
-    const rightQuests = remaining.slice(
-      cursor + PASSPORT_STAMPS_PER_PAGE,
-      cursor + PASSPORT_STAMPS_PER_PAGE * 2,
-    );
-    if (leftQuests.length === 0 && rightQuests.length === 0) break;
+/** 여권 펼침 — 0: 프로필 + 첫 카테고리, 이후: 카테고리 페이지 2장씩 */
+export function buildMissionBookSpreads(): PassportBookSpread[] {
+  const pages = buildCategoryPages();
+  const spreads: PassportBookSpread[] = [];
 
+  // 첫 펼침: 좌측 프로필 + 우측 첫 카테고리 페이지
+  spreads.push({
+    index: 0,
+    left: { type: "profile" },
+    right: pages[0] ?? { type: "island-story" },
+  });
+
+  // 이후: 남은 페이지를 좌우 2장씩
+  for (let i = 1; i < pages.length; i += 2) {
     spreads.push({
-      index: spreadIndex,
-      left: { type: "mission-stamps", quests: leftQuests },
-      right: { type: "mission-stamps", quests: rightQuests },
+      index: spreads.length,
+      left: pages[i],
+      right: pages[i + 1] ?? { type: "island-story" },
     });
-    cursor += PASSPORT_STAMPS_PER_PAGE * 2;
-    spreadIndex += 1;
   }
 
   appendIslandStorySpread(spreads);
@@ -63,42 +78,16 @@ export function buildMissionBookSpreads(): PassportBookSpread[] {
   return spreads;
 }
 
-/** 마지막 페이지 — 나의 섬 이야기 (우측) */
+/** 마지막 페이지 — 나의 섬 이야기 (우측). 이미 배치됐으면 그대로 둠 */
 function appendIslandStorySpread(spreads: PassportBookSpread[]) {
   if (spreads.length === 0) return;
+  if (spreads[spreads.length - 1].right.type === "island-story") return;
 
-  const lastIndex = spreads.length - 1;
-  const last = spreads[lastIndex];
-
-  // 프로필+대표 도장만 있는 경우 — featured 도장은 유지하고 새 spread 추가
-  if (spreads.length === 1) {
-    spreads.push({
-      index: 1,
-      left: { type: "mission-stamps", quests: [] },
-      right: { type: "island-story" },
-    });
-    return;
-  }
-
-  if (last.right.type === "mission-stamps" && last.right.quests.length === 0) {
-    spreads[lastIndex] = {
-      ...last,
-      right: { type: "island-story" },
-    };
-    return;
-  }
-
-  if (last.right.type === "mission-stamps" && last.right.quests.length > 0) {
-    spreads.push({
-      index: lastIndex + 1,
-      left: { type: "mission-stamps", quests: last.right.quests },
-      right: { type: "island-story" },
-    });
-    spreads[lastIndex] = {
-      ...last,
-      right: { type: "mission-stamps", quests: [] },
-    };
-  }
+  spreads.push({
+    index: spreads.length,
+    left: { type: "blank" },
+    right: { type: "island-story" },
+  });
 }
 
 export type BookNavState = {

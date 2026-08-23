@@ -51,12 +51,20 @@ function LeftPage({
     <div className="passport-book__page passport-book__page--left">
       {spread.left.type === "profile" ? (
         <ProfilePage profile={profile} titleId={titleId} />
+      ) : spread.left.type === "blank" ? (
+        <div className="passport-page passport-page--blank" aria-hidden="true">
+          <div className="passport-page__paper-texture" />
+          <div className="passport-page__paper-edge passport-page__paper-edge--left" />
+        </div>
       ) : (
         <PassportMissionStampPage
           quests={spread.left.quests}
           spreadIndex={spread.index}
           totalSpreads={totalSpreads}
           side="left"
+          category={spread.left.category}
+          pageInCategory={spread.left.pageInCategory}
+          totalPagesInCategory={spread.left.totalPagesInCategory}
         />
       )}
     </div>
@@ -80,7 +88,9 @@ function RightPage({
           spreadIndex={spread.index}
           totalSpreads={totalSpreads}
           side="right"
-          showCategorySummary={spread.right.showCategorySummary}
+          category={spread.right.category}
+          pageInCategory={spread.right.pageInCategory}
+          totalPagesInCategory={spread.right.totalPagesInCategory}
         />
       )}
     </div>
