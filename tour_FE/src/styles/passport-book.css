@@ -111,7 +111,8 @@
 .passport-page__stat-icon--mission{background:rgba(15,95,204,.12);color:var(--blue)}
 .passport-page__stat-icon--badge{background:rgba(139,92,246,.12);color:#7c3aed}
 .passport-page__stat-label{flex:1;font-size:12px;font-weight:700;color:#64748b}
-.passport-page__stat-value{font-size:16px;font-weight:900;color:var(--navy)}
+.passport-page__stat-value{font-size:16px;font-weight:900;color:var(--navy);font-variant-numeric:tabular-nums}
+.passport-page__stat-total{font-size:.68em;font-weight:700;color:var(--passport-text-muted)}
 
 .passport-page__meta{margin-top:auto;display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding-top:14px;border-top:1px dashed rgba(45,46,107,.18);font-size:9px;font-weight:700;letter-spacing:.06em;line-height:1.7;color:#5a6880;position:relative;z-index:1}
 .passport-page__seal{width:44px;height:44px;border-radius:50%;border:2px solid rgba(45,46,107,.15);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:rgba(45,46,107,.35);background:rgba(255,255,255,.35);flex:none}

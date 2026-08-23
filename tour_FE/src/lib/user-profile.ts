@@ -67,6 +67,12 @@ export function getCurrentUserProfile(): UserProfile {
   };
 }
 
+/** 배지 현황 — 미션창과 동일 출처 (획득 / 미획득 / 전체) */
+export function getBadgeStats() {
+  const { earned, total } = getMissionStampStats();
+  return { earned, total, unearned: Math.max(0, total - earned) };
+}
+
 export function getVisitedIslands(): IslandInfo[] {
   return ISLANDS.filter((i) => i.visited);
 }

@@ -8,6 +8,7 @@ import { MyPageSpiritGrowthSection } from "@/components/mypage/MyPageSpiritGrowt
 import { ISLAND_BTI } from "@/constants/island";
 import { CONTAINER } from "@/constants/layout";
 import {
+  getBadgeStats,
   getCurrentUserProfile,
   getIslandVisitStats,
   getPassportExpPercent,
@@ -17,6 +18,7 @@ import { formatNumber } from "@/lib/landing-data";
 export function MyPage() {
   const profile = getCurrentUserProfile();
   const islandStats = getIslandVisitStats();
+  const badgeStats = getBadgeStats();
   const btiColors = ISLAND_BTI[profile.bti];
   const expPercent = getPassportExpPercent(profile);
 
@@ -46,22 +48,30 @@ export function MyPage() {
 
               <div className="mp-profile-stats" aria-label="탐험 요약">
                 <div className="mp-stat-chip mp-stat-chip--accent">
-                  <span className="mp-stat-value" aria-label={`방문 섬 ${islandStats.visited}개`}>
+                  <span
+                    className="mp-stat-value"
+                    aria-label={`방문 섬 ${islandStats.visited}개 (전체 ${islandStats.total}개)`}
+                  >
                     <RollingNumber value={islandStats.visited} delay={0} />
+                    <span className="mp-stat-total">/{islandStats.total}</span>
                   </span>
                   <span>방문 섬</span>
                 </div>
                 <div className="mp-stat-chip">
-                  <span className="mp-stat-value" aria-label={`완료 미션 ${profile.completedMissions}개`}>
-                    <RollingNumber value={profile.completedMissions} delay={80} />
-                  </span>
-                  <span>완료 미션</span>
-                </div>
-                <div className="mp-stat-chip">
-                  <span className="mp-stat-value" aria-label={`획득 배지 ${profile.earnedBadgeCount}개`}>
-                    <RollingNumber value={profile.earnedBadgeCount} delay={160} />
+                  <span
+                    className="mp-stat-value"
+                    aria-label={`획득 배지 ${badgeStats.earned}개 (전체 ${badgeStats.total}개)`}
+                  >
+                    <RollingNumber value={badgeStats.earned} delay={80} />
+                    <span className="mp-stat-total">/{badgeStats.total}</span>
                   </span>
                   <span>획득 배지</span>
+                </div>
+                <div className="mp-stat-chip">
+                  <span className="mp-stat-value" aria-label={`미획득 배지 ${badgeStats.unearned}개`}>
+                    <RollingNumber value={badgeStats.unearned} delay={160} />
+                  </span>
+                  <span>미획득 배지</span>
                 </div>
               </div>
             </div>
