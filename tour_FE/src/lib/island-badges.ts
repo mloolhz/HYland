@@ -39,7 +39,7 @@ const ICON_ACTIVITY: Record<IslandBadgeIcon, string> = {
   sun: "일출",
   cliff: "절벽",
 };
-export const ISLAND_COLLECTIBLE_BADGES: Record<string, IslandCollectibleBadgeDef[]> = {
+const ISLAND_COLLECTIBLE_BADGES: Record<string, IslandCollectibleBadgeDef[]> = {
   baek: [
     { id: "baek-visit", name: "백령 개척자", hint: "백령도에 처음 도착하면 획득", icon: "compass", visitBadge: true, passportLink: { island: "백령도", keyword: "탐험" } },
     { id: "baek-hike", name: "두무진 트레커", hint: "두무진 해안 트레킹 코스 완주", icon: "hike" },

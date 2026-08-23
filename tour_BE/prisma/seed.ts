@@ -7,8 +7,6 @@ import { BOOKING_BY_SPORT_ID } from "@/data/sport-booking";
 import { CATEGORY_META, MISSION_CATEGORIES, MISSION_QUESTS } from "@/mocks/missions";
 import { ISLAND_BTI_QUESTIONS } from "@/data/island-bti/questions";
 import { ISLAND_BTI_RESULTS } from "@/data/island-bti/results";
-import { ISLAND_COLLECTIBLE_BADGES } from "@/lib/island-badges";
-import { PASSPORT_BADGES } from "@/components/landing/passport-book-data";
 
 const prisma = new PrismaClient();
 
@@ -133,15 +131,18 @@ async function main() {
     })),
   });
 
+  // FE MISSION_QUESTS는 생성 로직상 id 40·41·42가 중복(서로 다른 미션 6개) →
+  // 중복분에 새 id를 부여해 51개 모두 보존
+  const nextIdStart = Math.max(...MISSION_QUESTS.map((q) => q.id)) + 1;
+  let nextQuestId = nextIdStart;
   const seenQuest = new Set<number>();
-  const questRows = MISSION_QUESTS.filter((q) => {
-    if (seenQuest.has(q.id)) return false;
-    seenQuest.add(q.id);
-    return true;
-  }).map((q) => {
+  const questRows = MISSION_QUESTS.map((q) => {
+    let id = q.id;
+    if (seenQuest.has(id)) id = nextQuestId++;
+    seenQuest.add(id);
     const anyQ = q as any;
     return {
-      id: q.id,
+      id,
       categoryId: q.category,
       icon: q.icon,
       title: q.title,
@@ -180,43 +181,7 @@ async function main() {
     })),
   });
 
-  // ── 배지 정의 (여권 + 섬 수집) — upsert로 재실행 안전 (user_badges FK 보존) ──
-  const badgeRows: any[] = [];
-  for (const [islandKey, defs] of Object.entries(ISLAND_COLLECTIBLE_BADGES)) {
-    for (const d of defs as any[]) {
-      badgeRows.push({
-        id: d.id,
-        type: "ISLAND",
-        name: d.name,
-        description: d.hint,
-        icon: d.icon,
-        color: null,
-        islandId: islandIds.has(islandKey) ? islandKey : null,
-        condition: d.hint,
-      });
-    }
-  }
-  for (const b of PASSPORT_BADGES as any[]) {
-    badgeRows.push({
-      id: `passport-${b.id}`,
-      type: "PASSPORT",
-      name: b.name,
-      description: `${b.island} · ${b.activity}`,
-      icon: b.icon,
-      color: b.color ?? null,
-      islandId: null,
-      condition: b.activity,
-    });
-  }
-  const seenBadge = new Set<string>();
-  for (const b of badgeRows) {
-    if (seenBadge.has(b.id)) continue;
-    seenBadge.add(b.id);
-    await prisma.badgeDefinition.upsert({ where: { id: b.id }, create: b, update: b });
-  }
-
   // 결과 카운트
-  const badges = await prisma.badgeDefinition.count();
   const [islands, courses, sports, sportIslands, bookings2, quests, cats, btiQ, btiR] =
     await Promise.all([
       prisma.island.count(),
@@ -240,7 +205,6 @@ async function main() {
     미션퀘스트: quests,
     BTI문항: btiQ,
     BTI유형: btiR,
-    배지: badges,
   });
 }
 
