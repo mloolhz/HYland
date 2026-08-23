@@ -184,17 +184,11 @@ export function HeroSection() {
 
                 <div className="passport-metrics" aria-label="탐험 현황">
                   <div className="passport-metric">
-                    <span className="passport-metric__value">
-                      <CountUpNumber value={badgeStats.visited} delay={320} />
-                      <span className="passport-metric__total">/{badgeStats.islandTotal}</span>
-                    </span>
+                    <CountUpNumber value={badgeStats.visited} delay={320} className="passport-metric__value" />
                     <span>방문 섬</span>
                   </div>
                   <div className="passport-metric">
-                    <span className="passport-metric__value">
-                      <CountUpNumber value={badgeStats.earned} delay={400} />
-                      <span className="passport-metric__total">/{badgeStats.total}</span>
-                    </span>
+                    <CountUpNumber value={badgeStats.earned} delay={400} className="passport-metric__value" />
                     <span>획득 배지</span>
                   </div>
                   <div className="passport-metric">

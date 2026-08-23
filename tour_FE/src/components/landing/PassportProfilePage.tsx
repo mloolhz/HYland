@@ -114,10 +114,7 @@ export function PassportProfilePage({ profile, titleId }: PassportProfilePagePro
 
           <span className="passport-page__stat-label">획득한 배지</span>
 
-          <span className="passport-page__stat-value">
-            {badgeStats.earned}
-            <span className="passport-page__stat-total">/{badgeStats.total}</span>
-          </span>
+          <span className="passport-page__stat-value">{badgeStats.earned}</span>
 
         </li>
 

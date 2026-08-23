@@ -251,16 +251,6 @@
   color: #0f6e56;
 }
 
-/* 전체 대비 표기 (12/51) — 분모는 작고 옅게 */
-.mp-stat-total {
-  flex: none;
-  font-size: 0.62em;
-  font-weight: 700;
-  color: var(--muted);
-  line-height: 1.1;
-  font-variant-numeric: tabular-nums;
-}
-
 .mp-stat-value .isl-stat-number {
   display: block;
   height: 1.1em;
