@@ -14,6 +14,7 @@ import {
 } from "@/lib/landing-images";
 import { PassportBookModal } from "./PassportBookModal";
 import { PassportCoverVisual } from "./PassportCoverVisual";
+import { IncheonWeatherBar } from "./IncheonWeatherBar";
 
 /** 패스포트 카드가 로그인 상태로 노출되는 동안 프로필 표시 */
 const SHOW_LANDING_PROFILE = true;
@@ -130,6 +131,7 @@ export function HeroSection() {
         </div>
 
         <div className="pass-card-wrap">
+          <IncheonWeatherBar />
           <aside className="pass-card" aria-label="나의 섬 여권">
             <div className="pc-head">
               <h3>나의 섬 여권</h3>

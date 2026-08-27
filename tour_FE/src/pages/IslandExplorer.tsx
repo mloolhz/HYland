@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { IslandDetailPanel } from "@/components/island/IslandDetailPanel";
+import { IslandWeatherPanel } from "@/components/island/IslandWeatherPanel";
 import { IslandExplorerHeader } from "@/components/island/IslandExplorerHeader";
 import { IslandExplorerMap } from "@/components/island/IslandExplorerMap";
 import { IslandRegionDropdown } from "@/components/island/IslandRegionDropdown";
@@ -128,6 +129,8 @@ export function IslandExplorer() {
               onBackgroundClick={() => handleRegionChange(null)}
             />
           </div>
+
+          {selectedId && <IslandWeatherPanel islandId={selectedId} />}
         </div>
 
         <div className="isl-detail-slot">
