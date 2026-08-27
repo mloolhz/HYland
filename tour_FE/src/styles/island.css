@@ -323,7 +323,7 @@
 /* ── Main layout ── */
 .isl-main {
   display: flex;
-  align-items: flex-start;
+  align-items: stretch;
   gap: 20px;
 }
 
@@ -339,6 +339,12 @@
   flex: 0 0 300px;
   width: 300px;
   min-width: 300px;
+  display: flex;
+}
+
+/* 상세 패널이 왼쪽(지도+날씨 카드) 높이에 맞춰 늘어나도록 */
+.isl-detail-slot .isl-detail {
+  flex: 1;
 }
 
 .isl-detail-slot .isl-detail-backdrop {

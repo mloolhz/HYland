@@ -18,7 +18,7 @@ export const ISLAND_BUOY: Record<string, { stnId: string; stnName: string }> = {
   seok: { stnId: "22525", stnName: "볼음도" },
   jang: { stnId: "22496", stnName: "장봉도" },
   sinsi: { stnId: "22496", stnName: "장봉도" },
-  yeongj: { stnId: "22496", stnName: "장봉도" },
+  yeongj: { stnId: "22185", stnName: "인천" }, // 인천 앞바다 대표 부이 (파고·바람·수온 완비)
   muui: { stnId: "22496", stnName: "장봉도" },
   yheung: { stnId: "22303", stnName: "풍도" },
   jawol: { stnId: "22472", stnName: "자월도" },
@@ -104,41 +104,6 @@ router.get("/", async (_req: Request, res: Response) => {
     const obs = await getSeaObs();
     const list = Object.entries(ISLAND_BUOY).map(([islandId, meta]) => shape(islandId, obs[meta.stnId], meta));
     res.json({ updatedAt: cache?.at ? new Date(cache.at).toISOString() : null, islands: list });
-  } catch (e: any) {
-    res.status(502).json({ error: "해양 관측 데이터를 불러오지 못했어요", detail: e.message });
-  }
-});
-
-// ── 인천 전체 요약 (모든 관측지점 평균 + 종합 판정) ──
-router.get("/summary", async (_req: Request, res: Response) => {
-  try {
-    const obs = await getSeaObs();
-    // 지점 중복 제거 (여러 섬이 같은 지점을 공유하므로)
-    const seen = new Set<string>();
-    const rows: Obs[] = [];
-    for (const meta of Object.values(ISLAND_BUOY)) {
-      if (seen.has(meta.stnId)) continue;
-      seen.add(meta.stnId);
-      const o = obs[meta.stnId];
-      if (o) rows.push(o);
-    }
-    const avg = (pick: (o: Obs) => number | null): number | null => {
-      const vals = rows.map(pick).filter((v): v is number => v != null);
-      if (!vals.length) return null;
-      return Math.round((vals.reduce((a, b) => a + b, 0) / vals.length) * 10) / 10;
-    };
-    const wh = avg((o) => o.wh);
-    const ws = avg((o) => o.ws);
-    res.json({
-      updatedAt: cache?.at ? new Date(cache.at).toISOString() : null,
-      observedAt: rows.find((o) => o.tm)?.tm ?? null,
-      waveHeight: wh,
-      windSpeed: ws,
-      waterTemp: avg((o) => o.tw),
-      airTemp: avg((o) => o.ta),
-      activity: verdict(wh, ws),
-      stationCount: rows.length,
-    });
   } catch (e: any) {
     res.status(502).json({ error: "해양 관측 데이터를 불러오지 못했어요", detail: e.message });
   }

@@ -11,13 +11,13 @@ type Summary = {
   activity: { level: "good" | "caution" | "bad" | "unknown"; label: string; emoji: string };
 };
 
-/** 모든 섬을 포괄하는 인천 앞바다 요약 — 여권 카드 위에 노출 */
+/** 인천 앞바다 요약 — 인천과 가장 가까운 섬(영종도) 기준. 여권 카드 위에 노출 */
 export function IncheonWeatherBar() {
   const [s, setS] = useState<Summary | null>(null);
 
   useEffect(() => {
     let alive = true;
-    fetch(`${API_BASE}/weather/summary`)
+    fetch(`${API_BASE}/weather/yeongj`)
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
       .then((d: Summary) => alive && setS(d))
       .catch(() => {
