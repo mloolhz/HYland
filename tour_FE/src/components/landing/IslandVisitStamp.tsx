@@ -59,7 +59,6 @@ export function IslandVisitStamp({
   }
 
   const inkId = `ivink-${uid}`;
-  const arcId = `ivarc-${uid}`;
 
   return (
     <div className="ivstamp-wrap" style={{ ["--iv-size" as string]: `${stampSize}px` }}>
@@ -74,7 +73,6 @@ export function IslandVisitStamp({
               <feTurbulence type="fractalNoise" baseFrequency="0.78" numOctaves="1" seed={questIndex + 3} result="n" />
               <feDisplacementMap in="SourceGraphic" in2="n" scale="0.8" xChannelSelector="R" yChannelSelector="G" />
             </filter>
-            <path id={arcId} d="M 96 92 A 47 47 0 0 1 24 92" fill="none" />
           </defs>
 
           <g filter={`url(#${inkId})`}>
@@ -87,12 +85,6 @@ export function IslandVisitStamp({
             </text>
             <text className="ivstamp__star" x="109.5" y="70">
               ✦
-            </text>
-
-            <text className="ivstamp__arc-text">
-              <textPath href={`#${arcId}`} startOffset="50%">
-                REPUBLIC OF KOREA
-              </textPath>
             </text>
           </g>
         </svg>
