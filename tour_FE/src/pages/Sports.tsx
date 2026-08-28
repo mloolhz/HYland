@@ -22,6 +22,7 @@ import {
 import { CONTAINER } from "@/constants/layout";
 import { LEISURE_SPORTS_HERO } from "@/lib/landing-images";
 import { SportCommunityLink } from "@/components/sports/SportCommunityLink";
+import { FacilityList } from "@/components/sports/FacilityList";
 
 const HERO_IMAGE = LEISURE_SPORTS_HERO;
 
@@ -286,6 +287,8 @@ export function Sports() {
             </section>
 
             <SportBookingSection sport={selected} />
+
+            <FacilityList category={category} />
           </div>
         </>
       )}

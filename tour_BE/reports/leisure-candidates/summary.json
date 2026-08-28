@@ -1,6 +1,6 @@
 {
   "baseYm": "202607",
-  "generatedAt": "2026-08-28T08:26:57.536Z",
+  "generatedAt": "2026-08-28T08:40:29.509Z",
   "rawCounts": {
     "tourContent": 79,
     "localHub": 300,
@@ -17,10 +17,10 @@
   "mergeCandidates": 10,
   "byCategory": {
     "해상레저": 27,
-    "육상레저": 39,
+    "육상레저": 41,
     "이색": 32,
     "체험": 7,
-    "힐링": 7
+    "힐링": 5
   },
   "byIslandStatus": {
     "MAINLAND": 21,

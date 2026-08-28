@@ -1,0 +1,170 @@
+/* ── 레저스포츠: 관광공사 API 기반 섬 시설 목록 ── */
+.fc-section {
+  margin-top: 8px;
+}
+
+.fc-head {
+  margin-bottom: 14px;
+}
+
+.fc-sub {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* 섬 필터 칩 */
+.fc-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.fc-filter {
+  padding: 7px 14px;
+  border-radius: 99px;
+  border: 1px solid var(--line);
+  background: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy);
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+}
+
+.fc-filter:hover {
+  border-color: var(--blue2);
+  color: var(--blue);
+}
+
+.fc-filter.is-active {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+
+/* 시설 카드 그리드 */
+.fc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(268px, 1fr));
+  gap: 14px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.fc-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+  overflow: hidden;
+  transition:
+    box-shadow 0.18s,
+    transform 0.18s;
+}
+
+.fc-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.fc-card-img {
+  width: 100%;
+  height: 132px;
+  object-fit: cover;
+  background: var(--sky);
+}
+
+.fc-card-img--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  color: var(--blue2);
+  background: linear-gradient(135deg, var(--sky) 0%, var(--sky2) 100%);
+}
+
+.fc-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 13px 14px 14px;
+  flex: 1;
+}
+
+.fc-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.fc-card-name {
+  margin: 0;
+  font-size: 14.5px;
+  font-weight: 800;
+  color: var(--navy);
+  line-height: 1.35;
+  word-break: keep-all;
+}
+
+.fc-card-island {
+  flex: none;
+  padding: 3px 9px;
+  border-radius: 99px;
+  background: var(--sky);
+  border: 1px solid var(--sky2);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--blue-d);
+  white-space: nowrap;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.fc-card-island:hover {
+  background: var(--blue);
+  color: #fff;
+}
+
+.fc-card-addr {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.5;
+  word-break: keep-all;
+}
+
+.fc-card-foot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px dashed var(--line);
+  font-size: 11.5px;
+}
+
+.fc-card-tel {
+  font-weight: 700;
+  color: var(--navy);
+  font-variant-numeric: tabular-nums;
+}
+
+.fc-card-sources {
+  margin-left: auto;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .fc-grid {
+    grid-template-columns: 1fr;
+  }
+}

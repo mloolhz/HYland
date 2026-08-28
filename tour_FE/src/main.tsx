@@ -37,6 +37,7 @@ import "./styles/mypage.css";
 import "./styles/passport-book.css";
 import "./styles/notification.css";
 import "./styles/sports.css";
+import "./styles/facility-list.css";
 import "./styles/missions.css";
 import "./styles/ocean-weather.css";
 import "./styles/island-stamp.css";
