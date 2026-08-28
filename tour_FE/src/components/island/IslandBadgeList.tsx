@@ -1,31 +1,40 @@
-import { PassportStamp } from "@/components/landing/PassportStamp";
-import { toPassportBadgeView, type IslandCollectibleBadge } from "@/lib/island-badges";
+import { IslandVisitStamp } from "@/components/landing/IslandVisitStamp";
+import type { IslandInfo } from "@/lib/island-data";
+import { MISSION_QUESTS, missionQuestState } from "@/mocks/missions";
 
 type IslandBadgeListProps = {
-  islandName: string;
-  badges: IslandCollectibleBadge[];
+  island: IslandInfo;
 };
 
-export function IslandBadgeList({ islandName, badges }: IslandBadgeListProps) {
-  if (badges.length === 0) return null;
+/** 섬 방문 배지 — 미션·여권과 같은 스탬프를 그대로 사용 */
+export function IslandBadgeList({ island }: IslandBadgeListProps) {
+  const quest = MISSION_QUESTS.find(
+    (q) => q.category === "섬" && q.title === `${island.name} 방문`,
+  );
+  if (!quest) return null;
 
-  const earnedCount = badges.filter((badge) => badge.earned).length;
+  const state = missionQuestState(quest);
+  const earned = state === "earned";
+  const doing = state === "doing";
 
   return (
     <section className="isl-detail-block isl-badge-section">
       <div className="isl-badge-section-head">
-        <h4>수집 배지</h4>
-        <span className="isl-badge-count">
-          {earnedCount}/{badges.length}
-        </span>
+        <h4>섬 배지</h4>
+        <span className="isl-badge-count">{earned ? "획득" : "미획득"}</span>
       </div>
-      <div className="isl-badge-stamps" role="list">
-        {badges.map((badge, index) => (
-          <PassportStamp
-            key={badge.id}
-            badge={toPassportBadgeView(badge, islandName, index)}
-          />
-        ))}
+      <div className="isl-badge-single">
+        <IslandVisitStamp
+          islandId={island.id}
+          islandName={island.name}
+          earned={earned}
+          doing={doing}
+          questIndex={quest.id}
+          size={104}
+        />
+        <p className="isl-badge-hint">
+          {earned ? `${island.name}에 방문해 배지를 획득했어요` : `${island.name}에 방문하면 획득해요`}
+        </p>
       </div>
     </section>
   );

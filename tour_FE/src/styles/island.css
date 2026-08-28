@@ -1374,27 +1374,22 @@
   padding: 3px 8px;
 }
 
-.isl-badge-stamps {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px 6px;
+/* 섬 배지 — 미션·여권과 동일한 스탬프 1개 */
+.isl-badge-single {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0 2px;
 }
 
-.isl-badge-stamps .passport-stamp-wrap {
-  width: 100%;
-}
-
-.isl-badge-stamps .passport-stamp {
-  max-height: 84px;
-  padding: 5px 4px;
-}
-
-.isl-badge-stamps .passport-stamp__island {
-  font-size: 8.5px;
-}
-
-.isl-badge-stamps .passport-stamp__activity {
-  font-size: 7px;
+.isl-badge-hint {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  text-align: center;
+  word-break: keep-all;
 }
 
 .isl-ferry-grid {

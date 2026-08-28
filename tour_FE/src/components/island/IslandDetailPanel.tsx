@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import type { IslandInfo } from "@/lib/island-data";
-import { getCollectibleBadgesForIsland } from "@/lib/island-badges";
 import { getIslandPortalUrl } from "@/lib/island-portal-links";
 import { serializeIslandsQuery } from "@/lib/query";
 import { IslandBadgeList } from "./IslandBadgeList";
@@ -25,7 +24,6 @@ export function IslandDetailPanel({ island, onClose }: IslandDetailPanelProps) {
     );
   }
 
-  const collectibleBadges = getCollectibleBadgesForIsland(island);
   const portalUrl = getIslandPortalUrl(island.id);
 
   return (
@@ -57,7 +55,7 @@ export function IslandDetailPanel({ island, onClose }: IslandDetailPanelProps) {
         </div>
 
         <div className="isl-detail-body">
-          <IslandBadgeList islandName={island.name} badges={collectibleBadges} />
+          <IslandBadgeList island={island} />
 
           <section className="isl-detail-block">
             <h4>추천 코스</h4>
