@@ -1,0 +1,4764 @@
+[
+  {
+    "name": "갈매기배낚시",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "낚시",
+    "nonLeisure": false,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "MAINLAND",
+    "islandReason": "인천 본토 행정구역: 제물포구",
+    "islandCandidates": [],
+    "address": "인천광역시 제물포구 보세로 6-1",
+    "lat": 37.4876876432,
+    "lng": 126.6229917663,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/43/3477043_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "131845",
+        "rawCategory": "LS/LS02/LS020600",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "EXCLUDED",
+    "verdictReason": "인천 본토 — 섬 서비스 대상 아님",
+    "verificationStatus": "EXCLUDED",
+    "mergeWith": []
+  },
+  {
+    "name": "강화 자전거 관광코스",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "자전거",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 강화읍",
+    "lat": 37.7464579051,
+    "lng": 126.4880330099,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/96/3350596_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "1074812",
+        "rawCategory": "LS/LS01/LS010200",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "강화고인돌캠핑장",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "캠핑",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 하점면 강화대로 994-40",
+    "lat": 37.776228512,
+    "lng": 126.4358508522,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/94/2734694_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2733991",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "강화도 황청낚시터",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "낚시",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 내가면 황청포구로443번길 82",
+    "lat": 37.7141928345,
+    "lng": 126.3647035503,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/76/3042376_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "1516091",
+        "rawCategory": "LS/LS02/LS020500",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "강화레포츠파크",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "레포츠",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 불은면 중앙로 546-34",
+    "lat": 37.7148582113,
+    "lng": 126.4538675793,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/66/2961566_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2597317",
+        "rawCategory": "LS/LS04/LS040100",
+        "district": null
+      },
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "4c47984c80f62d66b504856de10f6bb6",
+        "rawCategory": "관광지/레저스포츠",
+        "district": "강화군"
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT",
+      "LOCAL_HUB"
+    ],
+    "isDuplicate": true,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "강화카라반해변",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "해변",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 화도면 해안남로 2669",
+    "lat": 37.6359187923,
+    "lng": 126.3740437533,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/90/2799490_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2792634",
+        "rawCategory": "AC/AC05/AC050300",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "검단수로",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "수로",
+    "nonLeisure": false,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "MAINLAND",
+    "islandReason": "인천 본토 행정구역: 검단구",
+    "islandCandidates": [],
+    "address": "인천광역시 검단구 오류동 1460 (오류동)",
+    "lat": 37.5904168234,
+    "lng": 126.592627792,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/70/3565470_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2768226",
+        "rawCategory": "LS/LS02/LS020500",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "EXCLUDED",
+    "verdictReason": "인천 본토 — 섬 서비스 대상 아님",
+    "verificationStatus": "EXCLUDED",
+    "mergeWith": []
+  },
+  {
+    "name": "검디관광농원캠핑장",
+    "category": "EXPERIENCE",
+    "categoryLabel": "체험",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "관광농원",
+    "nonLeisure": false,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "OUT_OF_SCOPE",
+    "islandReason": "동검도는 18개 서비스 섬 대상에서 제외",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 길상면 동검길 159-47",
+    "lat": 37.5869797053,
+    "lng": 126.5127740779,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/35/2734735_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2734025",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "EXCLUDED",
+    "verdictReason": "동검도는 18개 서비스 섬 대상에서 제외",
+    "verificationStatus": "EXCLUDED",
+    "mergeWith": []
+  },
+  {
+    "name": "계산국민체육센터",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "FALLBACK",
+    "categoryMatched": "국민체육센터",
+    "nonLeisure": true,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "MAINLAND",
+    "islandReason": "인천 본토 행정구역: 계양구",
+    "islandCandidates": [],
+    "address": "인천광역시 계양구 주부토로 580",
+    "lat": 37.5461382805,
+    "lng": 126.7291748899,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/33/3393633_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2465040",
+        "rawCategory": "VE/VE10/VE100200",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "EXCLUDED",
+    "verdictReason": "인천 본토 — 섬 서비스 대상 아님",
+    "verificationStatus": "EXCLUDED",
+    "mergeWith": []
+  },
+  {
+    "name": "계양경기장",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "FALLBACK",
+    "categoryMatched": "경기장",
+    "nonLeisure": true,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "MAINLAND",
+    "islandReason": "인천 본토 행정구역: 계양구",
+    "islandCandidates": [],
+    "address": "인천광역시 계양구 봉오대로 855",
+    "lat": 37.5325151261,
+    "lng": 126.743898928,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/25/3395525_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2463896",
+        "rawCategory": "VE/VE10/VE100100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "EXCLUDED",
+    "verdictReason": "인천 본토 — 섬 서비스 대상 아님",
+    "verificationStatus": "EXCLUDED",
+    "mergeWith": [
+      "계양경기장 계양체육관"
+    ],
+    "mergeReason": "동일 주소"
+  },
+  {
+    "name": "계양경기장 계양체육관",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "FALLBACK",
+    "categoryMatched": "체육관",
+    "nonLeisure": true,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "MAINLAND",
+    "islandReason": "인천 본토 행정구역: 계양구",
+    "islandCandidates": [],
+    "address": "인천광역시 계양구 봉오대로 855",
+    "lat": 37.5325151261,
+    "lng": 126.743898928,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/49/3393649_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2463875",
+        "rawCategory": "VE/VE10/VE100100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "EXCLUDED",
+    "verdictReason": "인천 본토 — 섬 서비스 대상 아님",
+    "verificationStatus": "EXCLUDED",
+    "mergeWith": [
+      "계양경기장"
+    ],
+    "mergeReason": "동일 주소"
+  },
+  {
+    "name": "계양경기장 아시아드양궁장",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "양궁",
+    "nonLeisure": false,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "MAINLAND",
+    "islandReason": "인천 본토 행정구역: 계양구",
+    "islandCandidates": [],
+    "address": "인천광역시 계양구 봉오대로 855 (서운동)",
+    "lat": 37.5311014098,
+    "lng": 126.7443683688,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/63/3393663_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2463889",
+        "rawCategory": "VE/VE10/VE100100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "EXCLUDED",
+    "verdictReason": "인천 본토 — 섬 서비스 대상 아님",
+    "verificationStatus": "EXCLUDED",
+    "mergeWith": []
+  },
+  {
+    "name": "계양산 둘레길",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "둘레길",
+    "nonLeisure": false,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "MAINLAND",
+    "islandReason": "인천 본토 행정구역: 계양구",
+    "islandCandidates": [],
+    "address": "인천광역시 계양구 계양산로 101 (계산동)",
+    "lat": 37.548071351,
+    "lng": 126.7270444752,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/58/3039058_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2661787",
+        "rawCategory": "LS/LS01/LS011900",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "EXCLUDED",
+    "verdictReason": "인천 본토 — 섬 서비스 대상 아님",
+    "verificationStatus": "EXCLUDED",
+    "mergeWith": []
+  },
+  {
+    "name": "교동아일랜드",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "FALLBACK",
+    "categoryMatched": null,
+    "nonLeisure": false,
+    "islandId": "gyo",
+    "islandName": "교동도",
+    "islandStatus": "MATCHED",
+    "islandReason": "섬·면·장소 별칭 일치: 교동도",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 교동면 교동남로 275",
+    "lat": 37.7729098632,
+    "lng": 126.300855001,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/68/2753368_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2753104",
+        "rawCategory": "AC/AC05/AC050300",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "국화지낚시터",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "낚시",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 강화읍 국화길 51",
+    "lat": 37.747374113,
+    "lng": 126.4680820355,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/61/1575661_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "1615657",
+        "rawCategory": "LS/LS02/LS020500",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "글램조이",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "글램",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 해안서로 689",
+    "lat": 37.6888351221,
+    "lng": 126.3898602814,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/79/2847179_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2847197",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "MERGE",
+    "verdictReason": "좌표 150m 이내 — 노을캠핑장 와 통합 검토",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": [
+      "노을캠핑장"
+    ],
+    "mergeReason": "좌표 150m 이내"
+  },
+  {
+    "name": "길상가족낚시터",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "낚시",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 길상면 초지로 453",
+    "lat": 37.6245528757,
+    "lng": 126.4996186818,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/23/3588423_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2755854",
+        "rawCategory": "LS/LS02/LS020500",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "길정 낚시터",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "낚시",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 양도면 고려왕릉로 209",
+    "lat": 37.6638171566,
+    "lng": 126.4661845393,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/41/3566241_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2757130",
+        "rawCategory": "LS/LS02/LS020500",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "노을캠핑장",
+    "category": "HEALING",
+    "categoryLabel": "힐링",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "노을",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 양도면 해안서로 695",
+    "lat": 37.6893628284,
+    "lng": 126.3892880966,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/86/2740286_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2740108",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "MERGE",
+    "verdictReason": "좌표 150m 이내 — 글램조이 와 통합 검토",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": [
+      "글램조이"
+    ],
+    "mergeReason": "좌표 150m 이내"
+  },
+  {
+    "name": "농어바위캠핑장",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "캠핑",
+    "nonLeisure": false,
+    "islandId": "yheung",
+    "islandName": "영흥도",
+    "islandStatus": "MATCHED",
+    "islandReason": "선재도 예외를 제외한 영흥면",
+    "islandCandidates": [],
+    "address": "인천광역시 옹진군 영흥면 영흥서로 420-19",
+    "lat": 37.2818503398,
+    "lng": 126.4587846299,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/14/2735714_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2734162",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "더숲캠핑장",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "캠핑",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 길상면 보리고개로 187-5",
+    "lat": 37.6275411986,
+    "lng": 126.487228066,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/18/2756518_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2755743",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "돌담캠핑가든",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "캠핑",
+    "nonLeisure": false,
+    "islandId": "seok",
+    "islandName": "석모도",
+    "islandStatus": "MATCHED",
+    "islandReason": "섬·면·장소 별칭 일치: 석모도",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 삼산북로 397-1",
+    "lat": 37.7012575941,
+    "lng": 126.3282433636,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/18/2908218_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2908228",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "동검도노을캠핑장",
+    "category": "HEALING",
+    "categoryLabel": "힐링",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "노을",
+    "nonLeisure": false,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "OUT_OF_SCOPE",
+    "islandReason": "동검도는 18개 서비스 섬 대상에서 제외",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 길상면 동검길 159-13",
+    "lat": 37.5873157243,
+    "lng": 126.5097632328,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/83/2757683_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2757627",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "EXCLUDED",
+    "verdictReason": "동검도는 18개 서비스 섬 대상에서 제외",
+    "verificationStatus": "EXCLUDED",
+    "mergeWith": []
+  },
+  {
+    "name": "디스커버리 클라이밍스퀘어ICN",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "클라이밍",
+    "nonLeisure": false,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "MAINLAND",
+    "islandReason": "인천 본토 행정구역: 검단구",
+    "islandCandidates": [],
+    "address": "인천광역시 검단구 완정로 70 (마전동)",
+    "lat": 37.598064476,
+    "lng": 126.6673290848,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/36/3569536_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2779988",
+        "rawCategory": "LS/LS01/LS011300",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "EXCLUDED",
+    "verdictReason": "인천 본토 — 섬 서비스 대상 아님",
+    "verificationStatus": "EXCLUDED",
+    "mergeWith": []
+  },
+  {
+    "name": "락인뜰",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "FALLBACK",
+    "categoryMatched": null,
+    "nonLeisure": false,
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "islandStatus": "MATCHED",
+    "islandReason": "무의·소무의도 예외를 제외한 영종구",
+    "islandCandidates": [],
+    "address": "인천광역시 영종구 늘목로 38 (을왕동)",
+    "lat": 37.4542097734,
+    "lng": 126.3958189907,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/65/2734265_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2733992",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "렛츠고 강화캠핑",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "캠핑",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 화도면 동녘말길 238-13",
+    "lat": 37.62009344,
+    "lng": 126.4072411501,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/70/2758570_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2758006",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "만정바다좌대낚시터",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "낚시",
+    "nonLeisure": false,
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "islandStatus": "MATCHED",
+    "islandReason": "무의·소무의도 예외를 제외한 영종구",
+    "islandCandidates": [],
+    "address": "인천광역시 영종구 영종순환로 279-20 (중산동)",
+    "lat": 37.5158969367,
+    "lng": 126.5483200237,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/25/2790225_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2768151",
+        "rawCategory": "LS/LS02/LS020600",
+        "district": null
+      },
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "db958bac74a48b2d656c9f41844275ff",
+        "rawCategory": "관광지/레저스포츠",
+        "district": "영종구"
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT",
+      "LOCAL_HUB"
+    ],
+    "isDuplicate": true,
+    "verdict": "MERGE",
+    "verdictReason": "동일 주소 — 만정사계절바다낚시터 와 통합 검토",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": [
+      "만정사계절바다낚시터"
+    ],
+    "mergeReason": "동일 주소"
+  },
+  {
+    "name": "만정사계절바다낚시터",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "낚시",
+    "nonLeisure": false,
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "islandStatus": "MATCHED",
+    "islandReason": "무의·소무의도 예외를 제외한 영종구",
+    "islandCandidates": [],
+    "address": "인천광역시 영종구 영종순환로 279-20 (중산동)",
+    "lat": 37.5150026654,
+    "lng": 126.5522724652,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/48/3565648_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2768158",
+        "rawCategory": "LS/LS02/LS020600",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "MERGE",
+    "verdictReason": "동일 주소 — 만정바다좌대낚시터 와 통합 검토",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": [
+      "만정바다좌대낚시터"
+    ],
+    "mergeReason": "동일 주소"
+  },
+  {
+    "name": "명성가족캠핑촌",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "캠핑",
+    "nonLeisure": false,
+    "islandId": "yheung",
+    "islandName": "영흥도",
+    "islandStatus": "MATCHED",
+    "islandReason": "선재도 예외를 제외한 영흥면",
+    "islandCandidates": [],
+    "address": "인천광역시 옹진군 영흥면 영흥로722번길 43",
+    "lat": 37.273095758,
+    "lng": 126.4563739778,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/29/2756529_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2755756",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "모모카라반",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "카라반",
+    "nonLeisure": false,
+    "islandId": "yheung",
+    "islandName": "영흥도",
+    "islandStatus": "MATCHED",
+    "islandReason": "선재도 예외를 제외한 영흥면",
+    "islandCandidates": [],
+    "address": "인천광역시 옹진군 영흥면 영흥로757번길 176",
+    "lat": 37.2670602097,
+    "lng": 126.4484748618,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/30/2799530_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2792621",
+        "rawCategory": "AC/AC05/AC050300",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "민머루잼머",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "FALLBACK",
+    "categoryMatched": null,
+    "nonLeisure": false,
+    "islandId": "seok",
+    "islandName": "석모도",
+    "islandStatus": "MATCHED",
+    "islandReason": "섬·면·장소 별칭 일치: 석모도",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 삼산면 어류정길198번길 6",
+    "lat": 37.653741057,
+    "lng": 126.3364439275,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/95/2948595_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2758228",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "MERGE",
+    "verdictReason": "좌표 150m 이내 — 헬로 카라반 와 통합 검토",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": [
+      "헬로 카라반"
+    ],
+    "mergeReason": "좌표 150m 이내"
+  },
+  {
+    "name": "바다다 캠핑장",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "캠핑",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 화도면 내리 2146-2",
+    "lat": 37.6363855057,
+    "lng": 126.379829321,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/05/2908205_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2908217",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "바다로글램핑",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "글램",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 화도면 해안남로 2421-228",
+    "lat": 37.6218232624,
+    "lng": 126.3768772162,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/29/2747429_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2747245",
+        "rawCategory": "AC/AC05/AC050400",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "바다캠핑장",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "캠핑",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 화도면 해안남로 2355-7",
+    "lat": 37.6133882279,
+    "lng": 126.3822130724,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/35/2740335_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2740138",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "베어즈베스트청라GC",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "gc",
+    "nonLeisure": false,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "MAINLAND",
+    "islandReason": "인천 본토 행정구역: 서해구",
+    "islandCandidates": [],
+    "address": "인천광역시 서해구 청라대로316번길 45 (청라동)",
+    "lat": 37.5486780015,
+    "lng": 126.6359444422,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/09/2781709_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2781467",
+        "rawCategory": "LS/LS01/LS010400",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "EXCLUDED",
+    "verdictReason": "인천 본토 — 섬 서비스 대상 아님",
+    "verificationStatus": "EXCLUDED",
+    "mergeWith": []
+  },
+  {
+    "name": "블랙트리캠핑",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "캠핑",
+    "nonLeisure": false,
+    "islandId": "yheung",
+    "islandName": "영흥도",
+    "islandStatus": "MATCHED",
+    "islandReason": "선재도 예외를 제외한 영흥면",
+    "islandCandidates": [],
+    "address": "인천광역시 옹진군 영흥면 영흥로757번길 234-13",
+    "lat": 37.2642771882,
+    "lng": 126.4478444395,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/77/2735977_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2734307",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "서포리웰빙삼림욕산책로",
+    "category": "HEALING",
+    "categoryLabel": "힐링",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "삼림욕",
+    "nonLeisure": false,
+    "islandId": "deokj",
+    "islandName": "덕적도",
+    "islandStatus": "MATCHED",
+    "islandReason": "섬·면·장소 별칭 일치: 덕적도",
+    "islandCandidates": [],
+    "address": "인천광역시 옹진군 덕적면 덕적남로606번길 6",
+    "lat": 37.2230790346,
+    "lng": 126.1171673725,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/52/2786852_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2782235",
+        "rawCategory": "LS/LS01/LS011900",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "서해캠핑장",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "캠핑",
+    "nonLeisure": false,
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "islandStatus": "MATCHED",
+    "islandReason": "무의·소무의도 예외를 제외한 영종구",
+    "islandCandidates": [],
+    "address": "인천광역시 영종구 용유서로423번길 41 (을왕동)",
+    "lat": 37.4576977742,
+    "lng": 126.3681519792,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/65/2744865_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2744549",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "선두바다낚시터",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "낚시",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 길상면 해안남로 673-15",
+    "lat": 37.6000472647,
+    "lng": 126.4921061611,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/34/3563634_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2768057",
+        "rawCategory": "LS/LS02/LS020600",
+        "district": null
+      },
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "5698de6c2cef06a7f20c1b40e4ebdfb8",
+        "rawCategory": "관광지/레저스포츠",
+        "district": "강화군"
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT",
+      "LOCAL_HUB"
+    ],
+    "isDuplicate": true,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "선두포저수지",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "저수지",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 길상면 보리고개로 13",
+    "lat": 37.6215055124,
+    "lng": 126.4714046821,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/22/3477022_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2013518",
+        "rawCategory": "LS/LS02/LS020500",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "선재낚시공원",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "낚시",
+    "nonLeisure": false,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "OUT_OF_SCOPE",
+    "islandReason": "선재도는 18개 서비스 섬 대상에서 제외",
+    "islandCandidates": [],
+    "address": "인천광역시 옹진군 영흥면 선재로226번길 164",
+    "lat": 37.2542685314,
+    "lng": 126.5220129578,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/14/2791214_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2768107",
+        "rawCategory": "LS/LS02/LS020600",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "EXCLUDED",
+    "verdictReason": "선재도는 18개 서비스 섬 대상에서 제외",
+    "verificationStatus": "EXCLUDED",
+    "mergeWith": [
+      "선재바다낚시공원"
+    ],
+    "mergeReason": "좌표 150m 이내"
+  },
+  {
+    "name": "선재오토캠핑장",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "캠핑",
+    "nonLeisure": false,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "OUT_OF_SCOPE",
+    "islandReason": "선재도는 18개 서비스 섬 대상에서 제외",
+    "islandCandidates": [],
+    "address": "인천광역시 옹진군 영흥면 선재로186번길 86-37",
+    "lat": 37.2498191272,
+    "lng": 126.5265932179,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/82/2735982_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2734732",
+        "rawCategory": "AC/AC05/AC050200",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "EXCLUDED",
+    "verdictReason": "선재도는 18개 서비스 섬 대상에서 제외",
+    "verificationStatus": "EXCLUDED",
+    "mergeWith": []
+  },
+  {
+    "name": "소래바다낚시터",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "낚시",
+    "nonLeisure": false,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "MAINLAND",
+    "islandReason": "인천 본토 행정구역: 남동구",
+    "islandCandidates": [],
+    "address": "인천광역시 남동구 소래로154번길 25-40",
+    "lat": 37.4069546535,
+    "lng": 126.7404721864,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/58/3533358_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2768102",
+        "rawCategory": "LS/LS02/LS020600",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "EXCLUDED",
+    "verdictReason": "인천 본토 — 섬 서비스 대상 아님",
+    "verificationStatus": "EXCLUDED",
+    "mergeWith": []
+  },
+  {
+    "name": "솔바다캠핑장",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "캠핑",
+    "nonLeisure": false,
+    "islandId": "yheung",
+    "islandName": "영흥도",
+    "islandStatus": "MATCHED",
+    "islandReason": "선재도 예외를 제외한 영흥면",
+    "islandCandidates": [],
+    "address": "인천광역시 옹진군 영흥면 영흥서로 527-14",
+    "lat": 37.2746816309,
+    "lng": 126.453276994,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/89/2735989_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2734755",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "송도골프클럽",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "골프",
+    "nonLeisure": false,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "MAINLAND",
+    "islandReason": "인천 본토 행정구역: 연수구",
+    "islandCandidates": [],
+    "address": "인천광역시 연수구 능허대로 236 (옥련동)",
+    "lat": 37.4148632677,
+    "lng": 126.6510828905,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/89/2781389_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2767803",
+        "rawCategory": "LS/LS01/LS010400",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "EXCLUDED",
+    "verdictReason": "인천 본토 — 섬 서비스 대상 아님",
+    "verificationStatus": "EXCLUDED",
+    "mergeWith": []
+  },
+  {
+    "name": "스톤캠핑장",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "캠핑",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 하점면 고려산로377번길 31",
+    "lat": 37.7546972188,
+    "lng": 126.4089844729,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/47/2908147_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2908169",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "신선낚시터",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "낚시",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 내가면 고비고개로741번길 37-48",
+    "lat": 37.719923613,
+    "lng": 126.4155126209,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/50/3566750_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "1615829",
+        "rawCategory": "LS/LS02/LS020500",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "씨사이드힐캠핑장",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "캠핑",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 화도면 해안남로 2680-12",
+    "lat": 37.634752281,
+    "lng": 126.3751686824,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/65/2728965_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2728912",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "아르보리아 캠핑장",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "캠핑",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 길상면 장흥로101번길 65",
+    "lat": 37.6104713201,
+    "lng": 126.5074461346,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/64/2740164_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2740055",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "연평평화안보수련원",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "FALLBACK",
+    "categoryMatched": "수련원",
+    "nonLeisure": true,
+    "islandId": "yeonp",
+    "islandName": "연평도",
+    "islandStatus": "MATCHED",
+    "islandReason": "섬·면·장소 별칭 일치: 연평도",
+    "islandCandidates": [],
+    "address": "인천광역시 옹진군 연평면 연평중앙로24번길 25",
+    "lat": 37.6654510122,
+    "lng": 125.7040350309,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/50/2710950_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2710985",
+        "rawCategory": "VE/VE10/VE100200",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "레저 시설 여부 불명확(수련원) — 수동 검수 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "영흥도어울림캠핑장",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "캠핑",
+    "nonLeisure": false,
+    "islandId": "yheung",
+    "islandName": "영흥도",
+    "islandStatus": "MATCHED",
+    "islandReason": "섬·면·장소 별칭 일치: 영흥도",
+    "islandCandidates": [],
+    "address": "인천광역시 옹진군 영흥면 영흥서로 452-67",
+    "lat": 37.2827640609,
+    "lng": 126.4552293736,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/19/2908019_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2908042",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "영흥바다낚시터",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "낚시",
+    "nonLeisure": false,
+    "islandId": "yheung",
+    "islandName": "영흥도",
+    "islandStatus": "MATCHED",
+    "islandReason": "선재도 예외를 제외한 영흥면",
+    "islandCandidates": [],
+    "address": "인천광역시 옹진군 영흥면 영흥로176번길 21",
+    "lat": 37.2608061423,
+    "lng": 126.492234935,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/12/2780912_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2767615",
+        "rawCategory": "LS/LS02/LS020600",
+        "district": null
+      },
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "adf3078abaf9e577fa166e12d01174a0",
+        "rawCategory": "관광지/레저스포츠",
+        "district": "옹진군"
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT",
+      "LOCAL_HUB"
+    ],
+    "isDuplicate": true,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "오렌지듄스 GC",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "gc",
+    "nonLeisure": false,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "MAINLAND",
+    "islandReason": "인천 본토 행정구역: 연수구",
+    "islandCandidates": [],
+    "address": "인천광역시 연수구 인천신항대로 1120 (송도동)",
+    "lat": 37.3540498453,
+    "lng": 126.5920010669,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/79/2790179_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2767812",
+        "rawCategory": "LS/LS01/LS010400",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "EXCLUDED",
+    "verdictReason": "인천 본토 — 섬 서비스 대상 아님",
+    "verificationStatus": "EXCLUDED",
+    "mergeWith": []
+  },
+  {
+    "name": "오크힐글램핑",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "글램",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 화도면 해안남로1998번길 8-28",
+    "lat": 37.6042953393,
+    "lng": 126.410588504,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/72/2730772_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2730787",
+        "rawCategory": "AC/AC05/AC050400",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "왕산가족오토캠핑장",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "캠핑",
+    "nonLeisure": false,
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "islandStatus": "MATCHED",
+    "islandReason": "무의·소무의도 예외를 제외한 영종구",
+    "islandCandidates": [],
+    "address": "인천광역시 영종구 용유서로423번길 60 (을왕동)",
+    "lat": 37.4582032371,
+    "lng": 126.3662160311,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/00/2731500_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2731145",
+        "rawCategory": "AC/AC05/AC050200",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "용담바다낚시터",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "낚시",
+    "nonLeisure": false,
+    "islandId": "yheung",
+    "islandName": "영흥도",
+    "islandStatus": "MATCHED",
+    "islandReason": "선재도 예외를 제외한 영흥면",
+    "islandCandidates": [],
+    "address": "인천광역시 옹진군 영흥면 외리 21",
+    "lat": 37.2415525238,
+    "lng": 126.475237008,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/86/2790486_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2767616",
+        "rawCategory": "LS/LS02/LS020600",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "원스캠핑장",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "캠핑",
+    "nonLeisure": false,
+    "islandId": "seok",
+    "islandName": "석모도",
+    "islandStatus": "MATCHED",
+    "islandReason": "섬·면·장소 별칭 일치: 석모도",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 삼산면 삼산남로604번길 37",
+    "lat": 37.6769411696,
+    "lng": 126.3387291872,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/93/2744393_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2743847",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "인산낚시터",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "낚시",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 양도면 중앙로787번길 8-1",
+    "lat": 37.6989596685,
+    "lng": 126.4312617608,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/10/3350610_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "1615967",
+        "rawCategory": "LS/LS02/LS020500",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "인천그랜드CC",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "cc",
+    "nonLeisure": false,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "MAINLAND",
+    "islandReason": "인천 본토 행정구역: 서해구",
+    "islandCandidates": [],
+    "address": "인천광역시 서해구 원석로 195 (원창동)",
+    "lat": 37.5130294669,
+    "lng": 126.6414671533,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/70/2790470_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2781611",
+        "rawCategory": "LS/LS01/LS010400",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "EXCLUDED",
+    "verdictReason": "인천 본토 — 섬 서비스 대상 아님",
+    "verificationStatus": "EXCLUDED",
+    "mergeWith": []
+  },
+  {
+    "name": "인천시송도국제캠핑장",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "캠핑",
+    "nonLeisure": false,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "MAINLAND",
+    "islandReason": "인천 본토 행정구역: 연수구",
+    "islandCandidates": [],
+    "address": "인천광역시 연수구 지식기반로 60 (송도동)",
+    "lat": 37.361633246,
+    "lng": 126.6458903923,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/20/2735820_image2_1.png",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2734234",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "EXCLUDED",
+    "verdictReason": "인천 본토 — 섬 서비스 대상 아님",
+    "verificationStatus": "EXCLUDED",
+    "mergeWith": []
+  },
+  {
+    "name": "장경리해변야영장",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "해변",
+    "nonLeisure": false,
+    "islandId": "yheung",
+    "islandName": "영흥도",
+    "islandStatus": "MATCHED",
+    "islandReason": "선재도 예외를 제외한 영흥면",
+    "islandCandidates": [],
+    "address": "인천광역시 옹진군 영흥면 영흥로757번길 6",
+    "lat": 37.2727206897,
+    "lng": 126.4499606833,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/89/2741689_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2741533",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "잭니클라우스GC코리아",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "gc",
+    "nonLeisure": false,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "MAINLAND",
+    "islandReason": "인천 본토 행정구역: 연수구",
+    "islandCandidates": [],
+    "address": "인천광역시 연수구 아카데미로 209 (송도동)",
+    "lat": 37.3816109903,
+    "lng": 126.617964607,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/98/2790598_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2778089",
+        "rawCategory": "LS/LS01/LS010400",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "EXCLUDED",
+    "verdictReason": "인천 본토 — 섬 서비스 대상 아님",
+    "verificationStatus": "EXCLUDED",
+    "mergeWith": []
+  },
+  {
+    "name": "쥬라기카라반",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "카라반",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 길상면 해안남로 627-5",
+    "lat": 37.6003250674,
+    "lng": 126.4953669667,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/91/2734791_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2734080",
+        "rawCategory": "AC/AC05/AC050300",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "청라호수공원 환상의 숲 놀이터",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "FALLBACK",
+    "categoryMatched": "놀이터",
+    "nonLeisure": true,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "MAINLAND",
+    "islandReason": "인천 본토 행정구역: 서해구",
+    "islandCandidates": [],
+    "address": "인천광역시 서해구 청라동 106-2",
+    "lat": 37.532890947,
+    "lng": 126.6358337811,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/70/3524570_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2768196",
+        "rawCategory": "LS/LS04/LS040100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "EXCLUDED",
+    "verdictReason": "인천 본토 — 섬 서비스 대상 아님",
+    "verificationStatus": "EXCLUDED",
+    "mergeWith": []
+  },
+  {
+    "name": "크로바캠핑장",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "캠핑",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 길상면 해안남로 497-4",
+    "lat": 37.5969423739,
+    "lng": 126.509351892,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/92/2799392_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2791856",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "태그하우스풀빌라",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "FALLBACK",
+    "categoryMatched": "풀빌라",
+    "nonLeisure": true,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "OUT_OF_SCOPE",
+    "islandReason": "동검도는 18개 서비스 섬 대상에서 제외",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 길상면 동검길154번길 24-19",
+    "lat": 37.5915040724,
+    "lng": 126.5067439485,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/98/2908098_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2908110",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "EXCLUDED",
+    "verdictReason": "동검도는 18개 서비스 섬 대상에서 제외",
+    "verificationStatus": "EXCLUDED",
+    "mergeWith": []
+  },
+  {
+    "name": "트리캠핑장",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "캠핑",
+    "nonLeisure": false,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "OUT_OF_SCOPE",
+    "islandReason": "선재도는 18개 서비스 섬 대상에서 제외",
+    "islandCandidates": [],
+    "address": "인천광역시 옹진군 영흥면 선재로306번길 27-55",
+    "lat": 37.2568736623,
+    "lng": 126.5150051912,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/46/2730546_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2730013",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "EXCLUDED",
+    "verdictReason": "선재도는 18개 서비스 섬 대상에서 제외",
+    "verificationStatus": "EXCLUDED",
+    "mergeWith": []
+  },
+  {
+    "name": "프랭클리 글램핑",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "글램",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 선원면 시리미로237번길 32",
+    "lat": 37.728517678,
+    "lng": 126.4509535767,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/64/2755264_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2754977",
+        "rawCategory": "AC/AC05/AC050400",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "하늘정원캠핑장",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "캠핑",
+    "nonLeisure": false,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "OUT_OF_SCOPE",
+    "islandReason": "동검도는 18개 서비스 섬 대상에서 제외",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 길상면 동검길 21-1",
+    "lat": 37.5961620255,
+    "lng": 126.5159874181,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/48/2729948_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2729986",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "EXCLUDED",
+    "verdictReason": "동검도는 18개 서비스 섬 대상에서 제외",
+    "verificationStatus": "EXCLUDED",
+    "mergeWith": []
+  },
+  {
+    "name": "하랑캠핑장",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "캠핑",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 내가면 고천리 1259-14번지",
+    "lat": 37.711388047,
+    "lng": 126.3898540998,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/68/2756268_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2755488",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "함허동천야영장",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "야영",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 화도면 해안남로1196번길 38",
+    "lat": 37.6115119045,
+    "lng": 126.4527594435,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/81/3535281_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "131489",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "항포낚시터",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "낚시",
+    "nonLeisure": false,
+    "islandId": "seok",
+    "islandName": "석모도",
+    "islandStatus": "MATCHED",
+    "islandReason": "섬·면·장소 별칭 일치: 석모도",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 삼산면 삼산서로310번길 21",
+    "lat": 37.7060813071,
+    "lng": 126.2868053649,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/74/3395374_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2768065",
+        "rawCategory": "LS/LS02/LS020500",
+        "district": null
+      },
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "261c6067d0d2c6f7413b3b74b19d57d9",
+        "rawCategory": "관광지/레저스포츠",
+        "district": "강화군"
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT",
+      "LOCAL_HUB"
+    ],
+    "isDuplicate": true,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "행복한 소풍캠핑장",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "캠핑",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 화도면 마니산로 902-15",
+    "lat": 37.6387967037,
+    "lng": 126.4008328859,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/98/2734798_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2734083",
+        "rawCategory": "AC/AC05/AC050100",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "헬로 카라반",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "카라반",
+    "nonLeisure": false,
+    "islandId": "seok",
+    "islandName": "석모도",
+    "islandStatus": "MATCHED",
+    "islandReason": "섬·면·장소 별칭 일치: 석모도",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 삼산면 어류정길198번길 8",
+    "lat": 37.6533522146,
+    "lng": 126.3365133764,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/51/2756451_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2755691",
+        "rawCategory": "AC/AC05/AC050300",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "MERGE",
+    "verdictReason": "좌표 150m 이내 — 민머루잼머 와 통합 검토",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": [
+      "민머루잼머"
+    ],
+    "mergeReason": "좌표 150m 이내"
+  },
+  {
+    "name": "황산지(장흥지)",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "FALLBACK",
+    "categoryMatched": null,
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 길상면 장흥로 96-1",
+    "lat": 37.6151208658,
+    "lng": 126.5123788879,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/09/3388709_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "131033",
+        "rawCategory": "LS/LS02/LS020500",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "[강화 나들길 제2코스] 호국돈대길",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "나들길",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 강화읍 해안동로1366번길 18",
+    "lat": 37.7336321177,
+    "lng": 126.5160613555,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/05/1895205_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "1028474",
+        "rawCategory": "LS/LS01/LS011900",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "[강화 나들길 제3코스] 고려왕릉 가는 길",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "나들길",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 강화읍 청하동길 24",
+    "lat": 37.7458245442,
+    "lng": 126.4822613345,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/11/1895211_image2_1.jpg",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "1028544",
+        "rawCategory": "LS/LS01/LS011900",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "[강화 나들길 제4코스] 해가 지는 마을 길",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "나들길",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 강화읍 청하동길 24",
+    "lat": 37.7458245442,
+    "lng": 126.4822613345,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/98/3393698_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "1028565",
+        "rawCategory": "LS/LS01/LS011900",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "[강화 나들길 제8코스] 철새 보러 가는 길",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "나들길",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "인천광역시 강화군 강화읍 청하동길 24",
+    "lat": 37.7458245442,
+    "lng": 126.4822613345,
+    "tel": null,
+    "imageUrl": "http://tong.visitkorea.or.kr/cms/resource/27/3393727_image2_1.JPG",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "1075972",
+        "rawCategory": "LS/LS01/LS011900",
+        "district": null
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "TOUR_CONTENT"
+    ],
+    "isDuplicate": false,
+    "verdict": "REGISTER",
+    "verdictReason": "국문관광정보 기반 — 등록 후보",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "클럽72CC/바다코스",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "cc",
+    "nonLeisure": false,
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "islandStatus": "MATCHED",
+    "islandReason": "무의·소무의도 예외를 제외한 영종구",
+    "islandCandidates": [],
+    "address": "",
+    "lat": 37.483441596862,
+    "lng": 126.468835644143,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "04bdb27729c4b7841aabe7665b964ad2",
+        "rawCategory": "관광지/레저스포츠",
+        "district": "영종구"
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "LOCAL_HUB"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "영종씨사이드레일바이크",
+    "category": "EXPERIENCE",
+    "categoryLabel": "체험",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "레일바이크",
+    "nonLeisure": false,
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "islandStatus": "MATCHED",
+    "islandReason": "무의·소무의도 예외를 제외한 영종구",
+    "islandCandidates": [],
+    "address": "",
+    "lat": 37.4883583174538,
+    "lng": 126.57660361673,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "a820025a35df9b48118470edc219f622",
+        "rawCategory": "관광지/레저스포츠",
+        "district": "영종구"
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "LOCAL_HUB"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "클럽72CC/하늘코스",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "cc",
+    "nonLeisure": false,
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "islandStatus": "MATCHED",
+    "islandReason": "무의·소무의도 예외를 제외한 영종구",
+    "islandCandidates": [],
+    "address": "",
+    "lat": 37.4470570002769,
+    "lng": 126.482973581004,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "3963b252b8609f35383805076af8a634",
+        "rawCategory": "관광지/레저스포츠",
+        "district": "영종구"
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "LOCAL_HUB"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "파라다이스시티/씨메르",
+    "category": "HEALING",
+    "categoryLabel": "힐링",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "씨메르",
+    "nonLeisure": false,
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "islandStatus": "MATCHED",
+    "islandReason": "무의·소무의도 예외를 제외한 영종구",
+    "islandCandidates": [],
+    "address": "",
+    "lat": 37.435669279858,
+    "lng": 126.456892711471,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "7ca706eda3e5a6f2c6b063aef77a7cc1",
+        "rawCategory": "관광지/체험관광",
+        "district": "영종구"
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "LOCAL_HUB"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "베르힐컨트리클럽/영종",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "컨트리클럽",
+    "nonLeisure": false,
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "islandStatus": "MATCHED",
+    "islandReason": "무의·소무의도 예외를 제외한 영종구",
+    "islandCandidates": [],
+    "address": "",
+    "lat": 37.52581334756877,
+    "lng": 126.56279424562064,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "48316cd2819d17d5a464e3eb5fdc5b88",
+        "rawCategory": "관광지/레저스포츠",
+        "district": "영종구"
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "LOCAL_HUB"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "오렌지듄스영종골프클럽",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "골프",
+    "nonLeisure": false,
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "islandStatus": "MATCHED",
+    "islandReason": "무의·소무의도 예외를 제외한 영종구",
+    "islandCandidates": [],
+    "address": "",
+    "lat": 37.434283,
+    "lng": 126.4552032,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "4f1a8e07596db2c9e46f1ba8e00980a8",
+        "rawCategory": "관광지/레저스포츠",
+        "district": "영종구"
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "LOCAL_HUB"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "클럽72CC/레이크코스",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "cc",
+    "nonLeisure": false,
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "islandStatus": "MATCHED",
+    "islandReason": "무의·소무의도 예외를 제외한 영종구",
+    "islandCandidates": [],
+    "address": "",
+    "lat": 37.47477599185,
+    "lng": 126.479029243505,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "f6c9979a8f880e865656bdac19e19544",
+        "rawCategory": "관광지/레저스포츠",
+        "district": "영종구"
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "LOCAL_HUB"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "클럽72CC/클래식코스",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "cc",
+    "nonLeisure": false,
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "islandStatus": "MATCHED",
+    "islandReason": "무의·소무의도 예외를 제외한 영종구",
+    "islandCandidates": [],
+    "address": "",
+    "lat": 37.47752563784576,
+    "lng": 126.47280755999705,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "f8c8c69118aa4e589af66ac9f98e8434",
+        "rawCategory": "관광지/레저스포츠",
+        "district": "영종구"
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "LOCAL_HUB"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "클럽72CC/오션코스",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "cc",
+    "nonLeisure": false,
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "islandStatus": "MATCHED",
+    "islandReason": "무의·소무의도 예외를 제외한 영종구",
+    "islandCandidates": [],
+    "address": "",
+    "lat": 37.48991303909735,
+    "lng": 126.46347496024373,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "42fd1174288dd242e7b853a2317ff01a",
+        "rawCategory": "관광지/레저스포츠",
+        "district": "영종구"
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "LOCAL_HUB"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "씨사이드파크해수족욕장",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "FALLBACK",
+    "categoryMatched": null,
+    "nonLeisure": false,
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "islandStatus": "MATCHED",
+    "islandReason": "무의·소무의도 예외를 제외한 영종구",
+    "islandCandidates": [],
+    "address": "",
+    "lat": 37.47045437406631,
+    "lng": 126.51950895416206,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "61cc7feaa89c5b97b077e74dbb0f961a",
+        "rawCategory": "관광지/레저스포츠",
+        "district": "영종구"
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "LOCAL_HUB"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "천혜바다낚시터",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "낚시",
+    "nonLeisure": false,
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "islandStatus": "MATCHED",
+    "islandReason": "무의·소무의도 예외를 제외한 영종구",
+    "islandCandidates": [],
+    "address": "",
+    "lat": 37.508744790179,
+    "lng": 126.56690986312,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "d1d66c921b64bde22bff57ccc4b82518",
+        "rawCategory": "관광지/레저스포츠",
+        "district": "영종구"
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "LOCAL_HUB"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "인천광역시교육청교직원수련원",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "FALLBACK",
+    "categoryMatched": "수련원",
+    "nonLeisure": true,
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "islandStatus": "MATCHED",
+    "islandReason": "무의·소무의도 예외를 제외한 영종구",
+    "islandCandidates": [],
+    "address": "",
+    "lat": 37.450278229205,
+    "lng": 126.373955648,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "5e712ece3128d613157c0a99e219f92e",
+        "rawCategory": "관광지/레저스포츠",
+        "district": "영종구"
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "LOCAL_HUB"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "레저 시설 여부 불명확(수련원) — 수동 검수 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "강화루지",
+    "category": "EXPERIENCE",
+    "categoryLabel": "체험",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "루지",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "",
+    "lat": 37.6168259959393,
+    "lng": 126.497949211366,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "1cb08f34acaa7cbb018cb7da8fbe4d5b",
+        "rawCategory": "관광지/레저스포츠",
+        "district": "강화군"
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "LOCAL_HUB"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "석모도미네랄스파",
+    "category": "HEALING",
+    "categoryLabel": "힐링",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "스파",
+    "nonLeisure": false,
+    "islandId": "seok",
+    "islandName": "석모도",
+    "islandStatus": "MATCHED",
+    "islandReason": "섬·면·장소 별칭 일치: 석모도",
+    "islandCandidates": [],
+    "address": "",
+    "lat": 37.685614772500486,
+    "lng": 126.31188401213183,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "d7e358e84284921cb594b68bf618698e",
+        "rawCategory": "관광지/체험관광",
+        "district": "강화군"
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "LOCAL_HUB"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "강화화개산모노레일",
+    "category": "EXPERIENCE",
+    "categoryLabel": "체험",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "모노레일",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "",
+    "lat": 37.7836214191138,
+    "lng": 126.290224138038,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "cbfad777f6f23a8823b843d6d21537e3",
+        "rawCategory": "관광지/레저스포츠",
+        "district": "강화군"
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "LOCAL_HUB"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "유니아일랜드골프앤스파리조트",
+    "category": "HEALING",
+    "categoryLabel": "힐링",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "스파",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "",
+    "lat": 37.6550598904551,
+    "lng": 126.346123005315,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "1e672d4e864e03808a7792520635d260",
+        "rawCategory": "관광지/레저스포츠",
+        "district": "강화군"
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "LOCAL_HUB"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "강화경찰수련원",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "FALLBACK",
+    "categoryMatched": "수련원",
+    "nonLeisure": true,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "",
+    "lat": 37.624092349352,
+    "lng": 126.534550623264,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "1eb15f227e3e0c777a89f37393242229",
+        "rawCategory": "관광지/레저스포츠",
+        "district": "강화군"
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "LOCAL_HUB"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "레저 시설 여부 불명확(수련원) — 수동 검수 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "인천광역시교육청난정평화교육원",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "FALLBACK",
+    "categoryMatched": "교육원",
+    "nonLeisure": true,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "",
+    "lat": 37.77044706674366,
+    "lng": 126.2394832445824,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "f5b20b7edc2af4955771a003c6fa961c",
+        "rawCategory": "관광지/체험관광",
+        "district": "강화군"
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "LOCAL_HUB"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "레저 시설 여부 불명확(교육원) — 수동 검수 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "인천광역시교육청교직원수련원/선재전당",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "FALLBACK",
+    "categoryMatched": "수련원",
+    "nonLeisure": true,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "REVIEW_REQUIRED",
+    "islandReason": "18개 섬 또는 인천 본토로 안전하게 판정할 근거가 부족함",
+    "islandCandidates": [],
+    "address": "",
+    "lat": 37.238442510123,
+    "lng": 126.534026389997,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "c138b99108618f738650279314b0dae4",
+        "rawCategory": "관광지/레저스포츠",
+        "district": "옹진군"
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "LOCAL_HUB"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "레저 시설 여부 불명확(수련원) — 수동 검수 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "선재바다낚시공원",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "낚시",
+    "nonLeisure": false,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "REVIEW_REQUIRED",
+    "islandReason": "18개 섬 또는 인천 본토로 안전하게 판정할 근거가 부족함",
+    "islandCandidates": [],
+    "address": "",
+    "lat": 37.254157297916855,
+    "lng": 126.52208637282487,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "e7380ebf98c749bf1dafb3f3edd3dd24",
+        "rawCategory": "관광지/레저스포츠",
+        "district": "옹진군"
+      }
+    ],
+    "linkedFrom": [],
+    "sourceTypes": [
+      "LOCAL_HUB"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "18개 섬 또는 인천 본토로 안전하게 판정할 근거가 부족함",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": [
+      "선재낚시공원"
+    ],
+    "mergeReason": "좌표 150m 이내"
+  },
+  {
+    "name": "영종씨사이드레일바이크",
+    "category": "EXPERIENCE",
+    "categoryLabel": "체험",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "레일바이크",
+    "nonLeisure": false,
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "islandStatus": "MATCHED",
+    "islandReason": "무의·소무의도 예외를 제외한 영종구",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "a820025a35df9b48118470edc219f622",
+        "rawCategory": "관광지/레저스포츠/기타레저스포츠",
+        "district": "영종구"
+      }
+    ],
+    "linkedFrom": [
+      "거잠포선착장",
+      "예단포선착장",
+      "파라다이스시티호텔",
+      "해상관광탐방로",
+      "강화씨사이드리조트"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "만정바다좌대낚시터",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "낚시",
+    "nonLeisure": false,
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "islandStatus": "MATCHED",
+    "islandReason": "무의·소무의도 예외를 제외한 영종구",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "db958bac74a48b2d656c9f41844275ff",
+        "rawCategory": "관광지/레저스포츠/수상레저스포츠",
+        "district": "영종구"
+      }
+    ],
+    "linkedFrom": [
+      "거잠포선착장",
+      "잠진도선착장"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "파라다이스시티/씨메르",
+    "category": "HEALING",
+    "categoryLabel": "힐링",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "씨메르",
+    "nonLeisure": false,
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "islandStatus": "MATCHED",
+    "islandReason": "무의·소무의도 예외를 제외한 영종구",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "7ca706eda3e5a6f2c6b063aef77a7cc1",
+        "rawCategory": "관광지/체험관광/웰니스관광",
+        "district": "영종구"
+      }
+    ],
+    "linkedFrom": [
+      "거잠포해변",
+      "용궁사",
+      "용유도해변",
+      "파라다이스시티호텔"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "클럽72CC/레이크코스",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "cc",
+    "nonLeisure": false,
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "islandStatus": "MATCHED",
+    "islandReason": "무의·소무의도 예외를 제외한 영종구",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "f6c9979a8f880e865656bdac19e19544",
+        "rawCategory": "관광지/레저스포츠/육상레저스포츠",
+        "district": "영종구"
+      }
+    ],
+    "linkedFrom": [
+      "삼목선착장"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "클럽72CC/바다코스",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "cc",
+    "nonLeisure": false,
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "islandStatus": "MATCHED",
+    "islandReason": "무의·소무의도 예외를 제외한 영종구",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "04bdb27729c4b7841aabe7665b964ad2",
+        "rawCategory": "관광지/레저스포츠/육상레저스포츠",
+        "district": "영종구"
+      }
+    ],
+    "linkedFrom": [
+      "삼목선착장"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "클럽72CC/클래식코스",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "cc",
+    "nonLeisure": false,
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "islandStatus": "MATCHED",
+    "islandReason": "무의·소무의도 예외를 제외한 영종구",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "f8c8c69118aa4e589af66ac9f98e8434",
+        "rawCategory": "관광지/레저스포츠/육상레저스포츠",
+        "district": "영종구"
+      }
+    ],
+    "linkedFrom": [
+      "삼목선착장",
+      "영종도"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "인천청소년수련관",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "API_SUBCATEGORY",
+    "categoryMatched": "육상레저스포츠",
+    "nonLeisure": false,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "MAINLAND",
+    "islandReason": "인천 본토 행정구역: 남동구",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "1dd5ee98db9854f0105cc82de70dfb1a",
+        "rawCategory": "관광지/레저스포츠/육상레저스포츠",
+        "district": "남동구"
+      }
+    ],
+    "linkedFrom": [
+      "영종도"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "EXCLUDED",
+    "verdictReason": "인천 본토 — 섬 서비스 대상 아님",
+    "verificationStatus": "EXCLUDED",
+    "mergeWith": []
+  },
+  {
+    "name": "영종구평생학습관",
+    "category": "EXPERIENCE",
+    "categoryLabel": "체험",
+    "categoryMethod": "API_SUBCATEGORY",
+    "categoryMatched": "체험관광기타",
+    "nonLeisure": false,
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "islandStatus": "MATCHED",
+    "islandReason": "무의·소무의도 예외를 제외한 영종구",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "2e5f670b16be8f604ed3fd69eb886ef2",
+        "rawCategory": "관광지/체험관광/체험관광기타",
+        "district": "영종구"
+      }
+    ],
+    "linkedFrom": [
+      "영종역사관",
+      "장봉선착장"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "천혜사랑바다낚시터",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "낚시",
+    "nonLeisure": false,
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "islandStatus": "MATCHED",
+    "islandReason": "무의·소무의도 예외를 제외한 영종구",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "f5dd2fca738179175e39ef0d3de49032",
+        "rawCategory": "관광지/레저스포츠/수상레저스포츠",
+        "district": "영종구"
+      }
+    ],
+    "linkedFrom": [
+      "잠진도선착장"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "강화루지",
+    "category": "EXPERIENCE",
+    "categoryLabel": "체험",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "루지",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "1cb08f34acaa7cbb018cb7da8fbe4d5b",
+        "rawCategory": "관광지/레저스포츠/기타레저스포츠",
+        "district": "강화군"
+      }
+    ],
+    "linkedFrom": [
+      "강화고려궁지",
+      "강화고인돌",
+      "강화광성보",
+      "강화도",
+      "강화씨사이드리조트",
+      "강화역사박물관",
+      "강화자연휴양림",
+      "강화평화전망대",
+      "강화풍물시장",
+      "대룡시장",
+      "동막해수욕장",
+      "보문사",
+      "분오리돈대",
+      "석모도미네랄스파",
+      "석모도수목원",
+      "소창체험관",
+      "옥토끼우주센터",
+      "용흥궁",
+      "전등사",
+      "정수사",
+      "초지진",
+      "프렌쥬랜드",
+      "해든뮤지움"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "강화화개산모노레일",
+    "category": "EXPERIENCE",
+    "categoryLabel": "체험",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "모노레일",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "cbfad777f6f23a8823b843d6d21537e3",
+        "rawCategory": "관광지/레저스포츠/기타레저스포츠",
+        "district": "강화군"
+      }
+    ],
+    "linkedFrom": [
+      "강화고인돌",
+      "강화도",
+      "강화씨사이드리조트",
+      "강화역사박물관",
+      "강화평화전망대",
+      "강화풍물시장",
+      "교동도",
+      "교동읍성",
+      "대룡시장",
+      "망향대",
+      "보문사",
+      "석모도미네랄스파",
+      "석모도수목원",
+      "연미정",
+      "외포리선착장",
+      "초지진"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "강화경찰수련원",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "API_SUBCATEGORY",
+    "categoryMatched": "육상레저스포츠",
+    "nonLeisure": true,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "1eb15f227e3e0c777a89f37393242229",
+        "rawCategory": "관광지/레저스포츠/육상레저스포츠",
+        "district": "강화군"
+      }
+    ],
+    "linkedFrom": [
+      "강화광성보",
+      "강화평화전망대",
+      "덕진진",
+      "동검선착장",
+      "동막해수욕장",
+      "민머루해수욕장",
+      "석모도미네랄스파",
+      "옥토끼우주센터",
+      "장화리일몰조망지",
+      "프렌쥬랜드"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "레저 시설 여부 불명확(육상레저스포츠) — 수동 검수 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "선두바다낚시터",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "낚시",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "5698de6c2cef06a7f20c1b40e4ebdfb8",
+        "rawCategory": "관광지/레저스포츠/수상레저스포츠",
+        "district": "강화군"
+      }
+    ],
+    "linkedFrom": [
+      "강화도"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "강화레포츠파크",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "레포츠",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "4c47984c80f62d66b504856de10f6bb6",
+        "rawCategory": "관광지/레저스포츠/기타레저스포츠",
+        "district": "강화군"
+      }
+    ],
+    "linkedFrom": [
+      "강화씨사이드리조트"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "석모도미네랄스파",
+    "category": "HEALING",
+    "categoryLabel": "힐링",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "스파",
+    "nonLeisure": false,
+    "islandId": "seok",
+    "islandName": "석모도",
+    "islandStatus": "MATCHED",
+    "islandReason": "섬·면·장소 별칭 일치: 석모도",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "d7e358e84284921cb594b68bf618698e",
+        "rawCategory": "관광지/체험관광/웰니스관광",
+        "district": "강화군"
+      }
+    ],
+    "linkedFrom": [
+      "강화풍물시장",
+      "교동도",
+      "대룡시장",
+      "동막해수욕장",
+      "마니산",
+      "민머루해수욕장",
+      "백련사",
+      "보문사",
+      "석모도",
+      "석모도수목원",
+      "석모도자연휴양림/1차",
+      "석모도칠면초군락지",
+      "소창체험관",
+      "어류정항",
+      "외포리선착장",
+      "외포항수산물직판장"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "연경산배드민턴장",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "API_SUBCATEGORY",
+    "categoryMatched": "기타레저스포츠",
+    "nonLeisure": false,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "MAINLAND",
+    "islandReason": "인천 본토 행정구역: 미추홀구",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "92485a43a7674f056512a0805a2d8a28",
+        "rawCategory": "관광지/레저스포츠/기타레저스포츠",
+        "district": "미추홀구"
+      }
+    ],
+    "linkedFrom": [
+      "건평항"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "EXCLUDED",
+    "verdictReason": "인천 본토 — 섬 서비스 대상 아님",
+    "verificationStatus": "EXCLUDED",
+    "mergeWith": []
+  },
+  {
+    "name": "인천광역시교육청난정평화교육원",
+    "category": "EXPERIENCE",
+    "categoryLabel": "체험",
+    "categoryMethod": "API_SUBCATEGORY",
+    "categoryMatched": "체험관광기타",
+    "nonLeisure": true,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "f5b20b7edc2af4955771a003c6fa961c",
+        "rawCategory": "관광지/체험관광/체험관광기타",
+        "district": "강화군"
+      }
+    ],
+    "linkedFrom": [
+      "교동향교",
+      "대룡시장",
+      "망향대"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "레저 시설 여부 불명확(체험관광기타) — 수동 검수 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "유니아일랜드골프앤스파리조트",
+    "category": "HEALING",
+    "categoryLabel": "힐링",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "스파",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "1e672d4e864e03808a7792520635d260",
+        "rawCategory": "관광지/레저스포츠/육상레저스포츠",
+        "district": "강화군"
+      }
+    ],
+    "linkedFrom": [
+      "민머루해수욕장",
+      "보문사",
+      "어류정항",
+      "외포리선착장",
+      "외포항수산물직판장",
+      "초지진"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "항포낚시터",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "낚시",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "261c6067d0d2c6f7413b3b74b19d57d9",
+        "rawCategory": "관광지/레저스포츠/수상레저스포츠",
+        "district": "강화군"
+      }
+    ],
+    "linkedFrom": [
+      "석모도미네랄스파",
+      "석모도수목원",
+      "황청포구"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "강화도자연체험농장",
+    "category": "EXPERIENCE",
+    "categoryLabel": "체험",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "어촌체험",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "5136ed5c50dc1afba4f5cc296a28b6dd",
+        "rawCategory": "관광지/체험관광/농/산/어촌체험",
+        "district": "강화군"
+      }
+    ],
+    "linkedFrom": [
+      "석모도수목원"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "강화바다낚시터",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "낚시",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "a0ec80fc79e61284a6034c11c6245f6b",
+        "rawCategory": "관광지/레저스포츠/수상레저스포츠",
+        "district": "강화군"
+      }
+    ],
+    "linkedFrom": [
+      "어류정항"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "황청낚시터",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "낚시",
+    "nonLeisure": false,
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "islandStatus": "MATCHED",
+    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "f5fd2936ecf9208bc6c8716102f97679",
+        "rawCategory": "관광지/레저스포츠/수상레저스포츠",
+        "district": "강화군"
+      }
+    ],
+    "linkedFrom": [
+      "외포리선착장"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "건설기술교육원/인천본원",
+    "category": "EXPERIENCE",
+    "categoryLabel": "체험",
+    "categoryMethod": "API_SUBCATEGORY",
+    "categoryMatched": "체험관광기타",
+    "nonLeisure": true,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "MAINLAND",
+    "islandReason": "인천 본토 행정구역: 남동구",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "67ca2aced92688fac9fd366755f42594",
+        "rawCategory": "관광지/체험관광/체험관광기타",
+        "district": "남동구"
+      }
+    ],
+    "linkedFrom": [
+      "외포리선착장"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "EXCLUDED",
+    "verdictReason": "인천 본토 — 섬 서비스 대상 아님",
+    "verificationStatus": "EXCLUDED",
+    "mergeWith": []
+  },
+  {
+    "name": "키위스파랜드",
+    "category": "HEALING",
+    "categoryLabel": "힐링",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "스파",
+    "nonLeisure": false,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "MAINLAND",
+    "islandReason": "인천 본토 행정구역: 계양구",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "0f394342dc7c3a980dd089dd26e538d7",
+        "rawCategory": "관광지/체험관광/웰니스관광",
+        "district": "계양구"
+      }
+    ],
+    "linkedFrom": [
+      "초지진"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "EXCLUDED",
+    "verdictReason": "인천 본토 — 섬 서비스 대상 아님",
+    "verificationStatus": "EXCLUDED",
+    "mergeWith": []
+  },
+  {
+    "name": "계양승마클럽",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "승마",
+    "nonLeisure": false,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "MAINLAND",
+    "islandReason": "인천 본토 행정구역: 계양구",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "8a85fc7321e561484197febffb77eb4d",
+        "rawCategory": "관광지/레저스포츠/육상레저스포츠",
+        "district": "계양구"
+      }
+    ],
+    "linkedFrom": [
+      "노가리해수욕장"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "EXCLUDED",
+    "verdictReason": "인천 본토 — 섬 서비스 대상 아님",
+    "verificationStatus": "EXCLUDED",
+    "mergeWith": []
+  },
+  {
+    "name": "인천광역시교육청교직원수련원/선재전당",
+    "category": "LAND",
+    "categoryLabel": "육상레저",
+    "categoryMethod": "API_SUBCATEGORY",
+    "categoryMatched": "육상레저스포츠",
+    "nonLeisure": true,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "REVIEW_REQUIRED",
+    "islandReason": "18개 섬 또는 인천 본토로 안전하게 판정할 근거가 부족함",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "c138b99108618f738650279314b0dae4",
+        "rawCategory": "관광지/레저스포츠/육상레저스포츠",
+        "district": "옹진군"
+      }
+    ],
+    "linkedFrom": [
+      "목섬",
+      "십리포해변",
+      "장경리해변"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "레저 시설 여부 불명확(육상레저스포츠) — 수동 검수 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "선재바다낚시공원",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "낚시",
+    "nonLeisure": false,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "REVIEW_REQUIRED",
+    "islandReason": "18개 섬 또는 인천 본토로 안전하게 판정할 근거가 부족함",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "e7380ebf98c749bf1dafb3f3edd3dd24",
+        "rawCategory": "관광지/레저스포츠/수상레저스포츠",
+        "district": "옹진군"
+      }
+    ],
+    "linkedFrom": [
+      "선재도",
+      "영흥도",
+      "장경리해변",
+      "진두선착장"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "18개 섬 또는 인천 본토로 안전하게 판정할 근거가 부족함",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "삼성호낚시슈퍼",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "낚시",
+    "nonLeisure": false,
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "islandStatus": "MATCHED",
+    "islandReason": "무의·소무의도 예외를 제외한 영종구",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "675c60f451bdd0140886221781a909ce",
+        "rawCategory": "관광지/레저스포츠/수상레저스포츠",
+        "district": "영종구"
+      }
+    ],
+    "linkedFrom": [
+      "신도선착장"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "팀만수",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "수상레저",
+    "nonLeisure": false,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "REVIEW_REQUIRED",
+    "islandReason": "18개 섬 또는 인천 본토로 안전하게 판정할 근거가 부족함",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "4945deafd82b28c13c1b6b5c90e47e6e",
+        "rawCategory": "관광지/레저스포츠/수상레저스포츠",
+        "district": "옹진군"
+      }
+    ],
+    "linkedFrom": [
+      "장경리해변"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "18개 섬 또는 인천 본토로 안전하게 판정할 근거가 부족함",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "만정바다낚시터",
+    "category": "SEA",
+    "categoryLabel": "해상레저",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "낚시",
+    "nonLeisure": false,
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "islandStatus": "MATCHED",
+    "islandReason": "무의·소무의도 예외를 제외한 영종구",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "952a98d2a8955a6f09bd0d45f810ca9a",
+        "rawCategory": "관광지/레저스포츠/수상레저스포츠",
+        "district": "영종구"
+      }
+    ],
+    "linkedFrom": [
+      "장봉선착장"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "REVIEW",
+    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
+    "verificationStatus": "UNVERIFIED",
+    "mergeWith": []
+  },
+  {
+    "name": "송도골프클럽",
+    "category": "UNIQUE",
+    "categoryLabel": "이색",
+    "categoryMethod": "KEYWORD",
+    "categoryMatched": "골프",
+    "nonLeisure": false,
+    "islandId": null,
+    "islandName": null,
+    "islandStatus": "MAINLAND",
+    "islandReason": "인천 본토 행정구역: 연수구",
+    "islandCandidates": [],
+    "address": "",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "imageUrl": null,
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "cb8875384c215d89fcc1ec74c81c1364",
+        "rawCategory": "관광지/레저스포츠/육상레저스포츠",
+        "district": "연수구"
+      }
+    ],
+    "linkedFrom": [
+      "진두선착장"
+    ],
+    "sourceTypes": [
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": false,
+    "verdict": "EXCLUDED",
+    "verdictReason": "인천 본토 — 섬 서비스 대상 아님",
+    "verificationStatus": "EXCLUDED",
+    "mergeWith": []
+  }
+]

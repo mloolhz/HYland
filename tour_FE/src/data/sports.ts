@@ -25,7 +25,7 @@ export type Sport = {
   sources: InfoSource[];
 };
 
-export type CategoryKey = "water" | "land" | "exp" | "heal";
+export type CategoryKey = "water" | "land" | "exp" | "heal" | "unique";
 
 function island(id: string, name: string): SportIsland {
   return { id, n: name, c: getIslandColors(name).accent };
@@ -54,6 +54,7 @@ export const SPORTS_CATEGORIES: { key: CategoryKey; label: string }[] = [
   { key: "land", label: "육상 레저" },
   { key: "exp", label: "체험" },
   { key: "heal", label: "힐링" },
+  { key: "unique", label: "이색" },
 ];
 
 /**
@@ -389,6 +390,31 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
       season: "연중",
       desc: "석모도 미네랄 온천에서 바다를 바라보며 온천욕을 즐깁니다.",
       islands: [{ id: "seok", n: "석모도 (강화)", c: "#F59E0B" }],
+    },
+  ],
+  // 해상·육상·체험·힐링 어디에도 딱 맞지 않는 이색 시설 (골프·수련원 등)
+  unique: [
+    {
+      id: "golf",
+      name: "골프",
+      pay: true,
+      photo: "/sports/golf.jpg",
+      diff: "경험자",
+      price: "10만원 이상",
+      season: "3~11월",
+      desc: "바다를 끼고 라운딩하는 해안 골프장에서 이색적인 경관을 즐깁니다.",
+      islands: [{ id: "yeongj", n: "영종도 (클럽72)", c: "#0EA5E9" }],
+    },
+    {
+      id: "retreat",
+      name: "수련·단체 활동",
+      pay: true,
+      photo: "/sports/retreat.jpg",
+      diff: "누구나",
+      price: "문의",
+      season: "연중",
+      desc: "청소년수련원·연수시설에서 단체 프로그램과 야외 활동을 진행합니다.",
+      islands: [{ id: "gangh", n: "강화도", c: "#22C55E" }],
     },
   ],
 };
