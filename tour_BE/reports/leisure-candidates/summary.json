@@ -1,45 +1,45 @@
 {
   "baseYm": "202607",
-  "generatedAt": "2026-08-28T08:22:13.841Z",
+  "generatedAt": "2026-08-28T08:26:57.536Z",
   "rawCounts": {
     "tourContent": 79,
     "localHub": 300,
     "relatedRelations": 3911
   },
   "leisureCandidatesBeforeDedup": 135,
-  "facilitiesAfterDedup": 130,
+  "facilitiesAfterDedup": 112,
   "bySourceType": {
     "TOUR_CONTENT": 79,
     "LOCAL_HUB": 25,
     "RELATED_TOURISM": 31
   },
-  "multiSourceFacilities": 5,
+  "multiSourceFacilities": 19,
   "mergeCandidates": 10,
   "byCategory": {
-    "해상레저": 31,
-    "육상레저": 41,
-    "이색": 37,
-    "체험": 11,
-    "힐링": 10
+    "해상레저": 27,
+    "육상레저": 39,
+    "이색": 32,
+    "체험": 7,
+    "힐링": 7
   },
   "byIslandStatus": {
-    "MAINLAND": 22,
-    "MATCHED": 96,
+    "MAINLAND": 21,
+    "MATCHED": 81,
     "OUT_OF_SCOPE": 7,
-    "REVIEW_REQUIRED": 5
+    "REVIEW_REQUIRED": 3
   },
   "byVerdict": {
-    "EXCLUDED": 29,
+    "EXCLUDED": 28,
     "REGISTER": 49,
     "MERGE": 6,
-    "REVIEW": 46
+    "REVIEW": 29
   },
   "byIsland": {
-    "강화도": 50,
+    "강화도": 42,
     "교동도": 1,
     "영흥도": 9,
-    "석모도": 7,
-    "영종도": 27,
+    "석모도": 6,
+    "영종도": 21,
     "덕적도": 1,
     "연평도": 1
   }

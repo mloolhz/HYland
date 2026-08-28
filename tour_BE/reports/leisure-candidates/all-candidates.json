@@ -168,12 +168,21 @@
         "externalId": "4c47984c80f62d66b504856de10f6bb6",
         "rawCategory": "관광지/레저스포츠",
         "district": "강화군"
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "4c47984c80f62d66b504856de10f6bb6",
+        "rawCategory": "관광지/레저스포츠/기타레저스포츠",
+        "district": "강화군"
       }
     ],
-    "linkedFrom": [],
+    "linkedFrom": [
+      "강화씨사이드리조트"
+    ],
     "sourceTypes": [
       "TOUR_CONTENT",
-      "LOCAL_HUB"
+      "LOCAL_HUB",
+      "RELATED_TOURISM"
     ],
     "isDuplicate": true,
     "verdict": "REGISTER",
@@ -957,12 +966,22 @@
         "externalId": "db958bac74a48b2d656c9f41844275ff",
         "rawCategory": "관광지/레저스포츠",
         "district": "영종구"
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "db958bac74a48b2d656c9f41844275ff",
+        "rawCategory": "관광지/레저스포츠/수상레저스포츠",
+        "district": "영종구"
       }
     ],
-    "linkedFrom": [],
+    "linkedFrom": [
+      "거잠포선착장",
+      "잠진도선착장"
+    ],
     "sourceTypes": [
       "TOUR_CONTENT",
-      "LOCAL_HUB"
+      "LOCAL_HUB",
+      "RELATED_TOURISM"
     ],
     "isDuplicate": true,
     "verdict": "MERGE",
@@ -1393,12 +1412,21 @@
         "externalId": "5698de6c2cef06a7f20c1b40e4ebdfb8",
         "rawCategory": "관광지/레저스포츠",
         "district": "강화군"
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "5698de6c2cef06a7f20c1b40e4ebdfb8",
+        "rawCategory": "관광지/레저스포츠/수상레저스포츠",
+        "district": "강화군"
       }
     ],
-    "linkedFrom": [],
+    "linkedFrom": [
+      "강화도"
+    ],
     "sourceTypes": [
       "TOUR_CONTENT",
-      "LOCAL_HUB"
+      "LOCAL_HUB",
+      "RELATED_TOURISM"
     ],
     "isDuplicate": true,
     "verdict": "REGISTER",
@@ -1607,13 +1635,22 @@
         "externalId": "2767803",
         "rawCategory": "LS/LS01/LS010400",
         "district": null
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "cb8875384c215d89fcc1ec74c81c1364",
+        "rawCategory": "관광지/레저스포츠/육상레저스포츠",
+        "district": "연수구"
       }
     ],
-    "linkedFrom": [],
-    "sourceTypes": [
-      "TOUR_CONTENT"
+    "linkedFrom": [
+      "진두선착장"
     ],
-    "isDuplicate": false,
+    "sourceTypes": [
+      "TOUR_CONTENT",
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": true,
     "verdict": "EXCLUDED",
     "verdictReason": "인천 본토 — 섬 서비스 대상 아님",
     "verificationStatus": "EXCLUDED",
@@ -2565,12 +2602,23 @@
         "externalId": "261c6067d0d2c6f7413b3b74b19d57d9",
         "rawCategory": "관광지/레저스포츠",
         "district": "강화군"
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "261c6067d0d2c6f7413b3b74b19d57d9",
+        "rawCategory": "관광지/레저스포츠/수상레저스포츠",
+        "district": "강화군"
       }
     ],
-    "linkedFrom": [],
+    "linkedFrom": [
+      "석모도미네랄스파",
+      "석모도수목원",
+      "황청포구"
+    ],
     "sourceTypes": [
       "TOUR_CONTENT",
-      "LOCAL_HUB"
+      "LOCAL_HUB",
+      "RELATED_TOURISM"
     ],
     "isDuplicate": true,
     "verdict": "REGISTER",
@@ -2849,13 +2897,22 @@
         "externalId": "04bdb27729c4b7841aabe7665b964ad2",
         "rawCategory": "관광지/레저스포츠",
         "district": "영종구"
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "04bdb27729c4b7841aabe7665b964ad2",
+        "rawCategory": "관광지/레저스포츠/육상레저스포츠",
+        "district": "영종구"
       }
     ],
-    "linkedFrom": [],
-    "sourceTypes": [
-      "LOCAL_HUB"
+    "linkedFrom": [
+      "삼목선착장"
     ],
-    "isDuplicate": false,
+    "sourceTypes": [
+      "LOCAL_HUB",
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": true,
     "verdict": "REVIEW",
     "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
     "verificationStatus": "UNVERIFIED",
@@ -2884,13 +2941,26 @@
         "externalId": "a820025a35df9b48118470edc219f622",
         "rawCategory": "관광지/레저스포츠",
         "district": "영종구"
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "a820025a35df9b48118470edc219f622",
+        "rawCategory": "관광지/레저스포츠/기타레저스포츠",
+        "district": "영종구"
       }
     ],
-    "linkedFrom": [],
-    "sourceTypes": [
-      "LOCAL_HUB"
+    "linkedFrom": [
+      "거잠포선착장",
+      "예단포선착장",
+      "파라다이스시티호텔",
+      "해상관광탐방로",
+      "강화씨사이드리조트"
     ],
-    "isDuplicate": false,
+    "sourceTypes": [
+      "LOCAL_HUB",
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": true,
     "verdict": "REVIEW",
     "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
     "verificationStatus": "UNVERIFIED",
@@ -2954,13 +3024,25 @@
         "externalId": "7ca706eda3e5a6f2c6b063aef77a7cc1",
         "rawCategory": "관광지/체험관광",
         "district": "영종구"
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "7ca706eda3e5a6f2c6b063aef77a7cc1",
+        "rawCategory": "관광지/체험관광/웰니스관광",
+        "district": "영종구"
       }
     ],
-    "linkedFrom": [],
-    "sourceTypes": [
-      "LOCAL_HUB"
+    "linkedFrom": [
+      "거잠포해변",
+      "용궁사",
+      "용유도해변",
+      "파라다이스시티호텔"
     ],
-    "isDuplicate": false,
+    "sourceTypes": [
+      "LOCAL_HUB",
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": true,
     "verdict": "REVIEW",
     "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
     "verificationStatus": "UNVERIFIED",
@@ -3059,13 +3141,22 @@
         "externalId": "f6c9979a8f880e865656bdac19e19544",
         "rawCategory": "관광지/레저스포츠",
         "district": "영종구"
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "f6c9979a8f880e865656bdac19e19544",
+        "rawCategory": "관광지/레저스포츠/육상레저스포츠",
+        "district": "영종구"
       }
     ],
-    "linkedFrom": [],
-    "sourceTypes": [
-      "LOCAL_HUB"
+    "linkedFrom": [
+      "삼목선착장"
     ],
-    "isDuplicate": false,
+    "sourceTypes": [
+      "LOCAL_HUB",
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": true,
     "verdict": "REVIEW",
     "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
     "verificationStatus": "UNVERIFIED",
@@ -3094,13 +3185,23 @@
         "externalId": "f8c8c69118aa4e589af66ac9f98e8434",
         "rawCategory": "관광지/레저스포츠",
         "district": "영종구"
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "f8c8c69118aa4e589af66ac9f98e8434",
+        "rawCategory": "관광지/레저스포츠/육상레저스포츠",
+        "district": "영종구"
       }
     ],
-    "linkedFrom": [],
-    "sourceTypes": [
-      "LOCAL_HUB"
+    "linkedFrom": [
+      "삼목선착장",
+      "영종도"
     ],
-    "isDuplicate": false,
+    "sourceTypes": [
+      "LOCAL_HUB",
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": true,
     "verdict": "REVIEW",
     "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
     "verificationStatus": "UNVERIFIED",
@@ -3269,13 +3370,44 @@
         "externalId": "1cb08f34acaa7cbb018cb7da8fbe4d5b",
         "rawCategory": "관광지/레저스포츠",
         "district": "강화군"
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "1cb08f34acaa7cbb018cb7da8fbe4d5b",
+        "rawCategory": "관광지/레저스포츠/기타레저스포츠",
+        "district": "강화군"
       }
     ],
-    "linkedFrom": [],
-    "sourceTypes": [
-      "LOCAL_HUB"
+    "linkedFrom": [
+      "강화고려궁지",
+      "강화고인돌",
+      "강화광성보",
+      "강화도",
+      "강화씨사이드리조트",
+      "강화역사박물관",
+      "강화자연휴양림",
+      "강화평화전망대",
+      "강화풍물시장",
+      "대룡시장",
+      "동막해수욕장",
+      "보문사",
+      "분오리돈대",
+      "석모도미네랄스파",
+      "석모도수목원",
+      "소창체험관",
+      "옥토끼우주센터",
+      "용흥궁",
+      "전등사",
+      "정수사",
+      "초지진",
+      "프렌쥬랜드",
+      "해든뮤지움"
     ],
-    "isDuplicate": false,
+    "sourceTypes": [
+      "LOCAL_HUB",
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": true,
     "verdict": "REVIEW",
     "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
     "verificationStatus": "UNVERIFIED",
@@ -3304,13 +3436,37 @@
         "externalId": "d7e358e84284921cb594b68bf618698e",
         "rawCategory": "관광지/체험관광",
         "district": "강화군"
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "d7e358e84284921cb594b68bf618698e",
+        "rawCategory": "관광지/체험관광/웰니스관광",
+        "district": "강화군"
       }
     ],
-    "linkedFrom": [],
-    "sourceTypes": [
-      "LOCAL_HUB"
+    "linkedFrom": [
+      "강화풍물시장",
+      "교동도",
+      "대룡시장",
+      "동막해수욕장",
+      "마니산",
+      "민머루해수욕장",
+      "백련사",
+      "보문사",
+      "석모도",
+      "석모도수목원",
+      "석모도자연휴양림/1차",
+      "석모도칠면초군락지",
+      "소창체험관",
+      "어류정항",
+      "외포리선착장",
+      "외포항수산물직판장"
     ],
-    "isDuplicate": false,
+    "sourceTypes": [
+      "LOCAL_HUB",
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": true,
     "verdict": "REVIEW",
     "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
     "verificationStatus": "UNVERIFIED",
@@ -3339,13 +3495,37 @@
         "externalId": "cbfad777f6f23a8823b843d6d21537e3",
         "rawCategory": "관광지/레저스포츠",
         "district": "강화군"
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "cbfad777f6f23a8823b843d6d21537e3",
+        "rawCategory": "관광지/레저스포츠/기타레저스포츠",
+        "district": "강화군"
       }
     ],
-    "linkedFrom": [],
-    "sourceTypes": [
-      "LOCAL_HUB"
+    "linkedFrom": [
+      "강화고인돌",
+      "강화도",
+      "강화씨사이드리조트",
+      "강화역사박물관",
+      "강화평화전망대",
+      "강화풍물시장",
+      "교동도",
+      "교동읍성",
+      "대룡시장",
+      "망향대",
+      "보문사",
+      "석모도미네랄스파",
+      "석모도수목원",
+      "연미정",
+      "외포리선착장",
+      "초지진"
     ],
-    "isDuplicate": false,
+    "sourceTypes": [
+      "LOCAL_HUB",
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": true,
     "verdict": "REVIEW",
     "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
     "verificationStatus": "UNVERIFIED",
@@ -3374,13 +3554,27 @@
         "externalId": "1e672d4e864e03808a7792520635d260",
         "rawCategory": "관광지/레저스포츠",
         "district": "강화군"
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "1e672d4e864e03808a7792520635d260",
+        "rawCategory": "관광지/레저스포츠/육상레저스포츠",
+        "district": "강화군"
       }
     ],
-    "linkedFrom": [],
-    "sourceTypes": [
-      "LOCAL_HUB"
+    "linkedFrom": [
+      "민머루해수욕장",
+      "보문사",
+      "어류정항",
+      "외포리선착장",
+      "외포항수산물직판장",
+      "초지진"
     ],
-    "isDuplicate": false,
+    "sourceTypes": [
+      "LOCAL_HUB",
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": true,
     "verdict": "REVIEW",
     "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
     "verificationStatus": "UNVERIFIED",
@@ -3409,13 +3603,31 @@
         "externalId": "1eb15f227e3e0c777a89f37393242229",
         "rawCategory": "관광지/레저스포츠",
         "district": "강화군"
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "1eb15f227e3e0c777a89f37393242229",
+        "rawCategory": "관광지/레저스포츠/육상레저스포츠",
+        "district": "강화군"
       }
     ],
-    "linkedFrom": [],
-    "sourceTypes": [
-      "LOCAL_HUB"
+    "linkedFrom": [
+      "강화광성보",
+      "강화평화전망대",
+      "덕진진",
+      "동검선착장",
+      "동막해수욕장",
+      "민머루해수욕장",
+      "석모도미네랄스파",
+      "옥토끼우주센터",
+      "장화리일몰조망지",
+      "프렌쥬랜드"
     ],
-    "isDuplicate": false,
+    "sourceTypes": [
+      "LOCAL_HUB",
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": true,
     "verdict": "REVIEW",
     "verdictReason": "레저 시설 여부 불명확(수련원) — 수동 검수 필요",
     "verificationStatus": "UNVERIFIED",
@@ -3444,13 +3656,24 @@
         "externalId": "f5b20b7edc2af4955771a003c6fa961c",
         "rawCategory": "관광지/체험관광",
         "district": "강화군"
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "f5b20b7edc2af4955771a003c6fa961c",
+        "rawCategory": "관광지/체험관광/체험관광기타",
+        "district": "강화군"
       }
     ],
-    "linkedFrom": [],
-    "sourceTypes": [
-      "LOCAL_HUB"
+    "linkedFrom": [
+      "교동향교",
+      "대룡시장",
+      "망향대"
     ],
-    "isDuplicate": false,
+    "sourceTypes": [
+      "LOCAL_HUB",
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": true,
     "verdict": "REVIEW",
     "verdictReason": "레저 시설 여부 불명확(교육원) — 수동 검수 필요",
     "verificationStatus": "UNVERIFIED",
@@ -3479,13 +3702,24 @@
         "externalId": "c138b99108618f738650279314b0dae4",
         "rawCategory": "관광지/레저스포츠",
         "district": "옹진군"
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "c138b99108618f738650279314b0dae4",
+        "rawCategory": "관광지/레저스포츠/육상레저스포츠",
+        "district": "옹진군"
       }
     ],
-    "linkedFrom": [],
-    "sourceTypes": [
-      "LOCAL_HUB"
+    "linkedFrom": [
+      "목섬",
+      "십리포해변",
+      "장경리해변"
     ],
-    "isDuplicate": false,
+    "sourceTypes": [
+      "LOCAL_HUB",
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": true,
     "verdict": "REVIEW",
     "verdictReason": "레저 시설 여부 불명확(수련원) — 수동 검수 필요",
     "verificationStatus": "UNVERIFIED",
@@ -3514,13 +3748,25 @@
         "externalId": "e7380ebf98c749bf1dafb3f3edd3dd24",
         "rawCategory": "관광지/레저스포츠",
         "district": "옹진군"
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "e7380ebf98c749bf1dafb3f3edd3dd24",
+        "rawCategory": "관광지/레저스포츠/수상레저스포츠",
+        "district": "옹진군"
       }
     ],
-    "linkedFrom": [],
-    "sourceTypes": [
-      "LOCAL_HUB"
+    "linkedFrom": [
+      "선재도",
+      "영흥도",
+      "장경리해변",
+      "진두선착장"
     ],
-    "isDuplicate": false,
+    "sourceTypes": [
+      "LOCAL_HUB",
+      "RELATED_TOURISM"
+    ],
+    "isDuplicate": true,
     "verdict": "REVIEW",
     "verdictReason": "18개 섬 또는 인천 본토로 안전하게 판정할 근거가 부족함",
     "verificationStatus": "UNVERIFIED",
@@ -3528,237 +3774,6 @@
       "선재낚시공원"
     ],
     "mergeReason": "좌표 150m 이내"
-  },
-  {
-    "name": "영종씨사이드레일바이크",
-    "category": "EXPERIENCE",
-    "categoryLabel": "체험",
-    "categoryMethod": "KEYWORD",
-    "categoryMatched": "레일바이크",
-    "nonLeisure": false,
-    "islandId": "yeongj",
-    "islandName": "영종도",
-    "islandStatus": "MATCHED",
-    "islandReason": "무의·소무의도 예외를 제외한 영종구",
-    "islandCandidates": [],
-    "address": "",
-    "lat": null,
-    "lng": null,
-    "tel": null,
-    "imageUrl": null,
-    "sources": [
-      {
-        "sourceType": "RELATED_TOURISM",
-        "externalId": "a820025a35df9b48118470edc219f622",
-        "rawCategory": "관광지/레저스포츠/기타레저스포츠",
-        "district": "영종구"
-      }
-    ],
-    "linkedFrom": [
-      "거잠포선착장",
-      "예단포선착장",
-      "파라다이스시티호텔",
-      "해상관광탐방로",
-      "강화씨사이드리조트"
-    ],
-    "sourceTypes": [
-      "RELATED_TOURISM"
-    ],
-    "isDuplicate": false,
-    "verdict": "REVIEW",
-    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
-    "verificationStatus": "UNVERIFIED",
-    "mergeWith": []
-  },
-  {
-    "name": "만정바다좌대낚시터",
-    "category": "SEA",
-    "categoryLabel": "해상레저",
-    "categoryMethod": "KEYWORD",
-    "categoryMatched": "낚시",
-    "nonLeisure": false,
-    "islandId": "yeongj",
-    "islandName": "영종도",
-    "islandStatus": "MATCHED",
-    "islandReason": "무의·소무의도 예외를 제외한 영종구",
-    "islandCandidates": [],
-    "address": "",
-    "lat": null,
-    "lng": null,
-    "tel": null,
-    "imageUrl": null,
-    "sources": [
-      {
-        "sourceType": "RELATED_TOURISM",
-        "externalId": "db958bac74a48b2d656c9f41844275ff",
-        "rawCategory": "관광지/레저스포츠/수상레저스포츠",
-        "district": "영종구"
-      }
-    ],
-    "linkedFrom": [
-      "거잠포선착장",
-      "잠진도선착장"
-    ],
-    "sourceTypes": [
-      "RELATED_TOURISM"
-    ],
-    "isDuplicate": false,
-    "verdict": "REVIEW",
-    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
-    "verificationStatus": "UNVERIFIED",
-    "mergeWith": []
-  },
-  {
-    "name": "파라다이스시티/씨메르",
-    "category": "HEALING",
-    "categoryLabel": "힐링",
-    "categoryMethod": "KEYWORD",
-    "categoryMatched": "씨메르",
-    "nonLeisure": false,
-    "islandId": "yeongj",
-    "islandName": "영종도",
-    "islandStatus": "MATCHED",
-    "islandReason": "무의·소무의도 예외를 제외한 영종구",
-    "islandCandidates": [],
-    "address": "",
-    "lat": null,
-    "lng": null,
-    "tel": null,
-    "imageUrl": null,
-    "sources": [
-      {
-        "sourceType": "RELATED_TOURISM",
-        "externalId": "7ca706eda3e5a6f2c6b063aef77a7cc1",
-        "rawCategory": "관광지/체험관광/웰니스관광",
-        "district": "영종구"
-      }
-    ],
-    "linkedFrom": [
-      "거잠포해변",
-      "용궁사",
-      "용유도해변",
-      "파라다이스시티호텔"
-    ],
-    "sourceTypes": [
-      "RELATED_TOURISM"
-    ],
-    "isDuplicate": false,
-    "verdict": "REVIEW",
-    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
-    "verificationStatus": "UNVERIFIED",
-    "mergeWith": []
-  },
-  {
-    "name": "클럽72CC/레이크코스",
-    "category": "UNIQUE",
-    "categoryLabel": "이색",
-    "categoryMethod": "KEYWORD",
-    "categoryMatched": "cc",
-    "nonLeisure": false,
-    "islandId": "yeongj",
-    "islandName": "영종도",
-    "islandStatus": "MATCHED",
-    "islandReason": "무의·소무의도 예외를 제외한 영종구",
-    "islandCandidates": [],
-    "address": "",
-    "lat": null,
-    "lng": null,
-    "tel": null,
-    "imageUrl": null,
-    "sources": [
-      {
-        "sourceType": "RELATED_TOURISM",
-        "externalId": "f6c9979a8f880e865656bdac19e19544",
-        "rawCategory": "관광지/레저스포츠/육상레저스포츠",
-        "district": "영종구"
-      }
-    ],
-    "linkedFrom": [
-      "삼목선착장"
-    ],
-    "sourceTypes": [
-      "RELATED_TOURISM"
-    ],
-    "isDuplicate": false,
-    "verdict": "REVIEW",
-    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
-    "verificationStatus": "UNVERIFIED",
-    "mergeWith": []
-  },
-  {
-    "name": "클럽72CC/바다코스",
-    "category": "UNIQUE",
-    "categoryLabel": "이색",
-    "categoryMethod": "KEYWORD",
-    "categoryMatched": "cc",
-    "nonLeisure": false,
-    "islandId": "yeongj",
-    "islandName": "영종도",
-    "islandStatus": "MATCHED",
-    "islandReason": "무의·소무의도 예외를 제외한 영종구",
-    "islandCandidates": [],
-    "address": "",
-    "lat": null,
-    "lng": null,
-    "tel": null,
-    "imageUrl": null,
-    "sources": [
-      {
-        "sourceType": "RELATED_TOURISM",
-        "externalId": "04bdb27729c4b7841aabe7665b964ad2",
-        "rawCategory": "관광지/레저스포츠/육상레저스포츠",
-        "district": "영종구"
-      }
-    ],
-    "linkedFrom": [
-      "삼목선착장"
-    ],
-    "sourceTypes": [
-      "RELATED_TOURISM"
-    ],
-    "isDuplicate": false,
-    "verdict": "REVIEW",
-    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
-    "verificationStatus": "UNVERIFIED",
-    "mergeWith": []
-  },
-  {
-    "name": "클럽72CC/클래식코스",
-    "category": "UNIQUE",
-    "categoryLabel": "이색",
-    "categoryMethod": "KEYWORD",
-    "categoryMatched": "cc",
-    "nonLeisure": false,
-    "islandId": "yeongj",
-    "islandName": "영종도",
-    "islandStatus": "MATCHED",
-    "islandReason": "무의·소무의도 예외를 제외한 영종구",
-    "islandCandidates": [],
-    "address": "",
-    "lat": null,
-    "lng": null,
-    "tel": null,
-    "imageUrl": null,
-    "sources": [
-      {
-        "sourceType": "RELATED_TOURISM",
-        "externalId": "f8c8c69118aa4e589af66ac9f98e8434",
-        "rawCategory": "관광지/레저스포츠/육상레저스포츠",
-        "district": "영종구"
-      }
-    ],
-    "linkedFrom": [
-      "삼목선착장",
-      "영종도"
-    ],
-    "sourceTypes": [
-      "RELATED_TOURISM"
-    ],
-    "isDuplicate": false,
-    "verdict": "REVIEW",
-    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
-    "verificationStatus": "UNVERIFIED",
-    "mergeWith": []
   },
   {
     "name": "인천청소년수련관",
@@ -3873,289 +3888,6 @@
     "mergeWith": []
   },
   {
-    "name": "강화루지",
-    "category": "EXPERIENCE",
-    "categoryLabel": "체험",
-    "categoryMethod": "KEYWORD",
-    "categoryMatched": "루지",
-    "nonLeisure": false,
-    "islandId": "gangh",
-    "islandName": "강화도",
-    "islandStatus": "MATCHED",
-    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
-    "islandCandidates": [],
-    "address": "",
-    "lat": null,
-    "lng": null,
-    "tel": null,
-    "imageUrl": null,
-    "sources": [
-      {
-        "sourceType": "RELATED_TOURISM",
-        "externalId": "1cb08f34acaa7cbb018cb7da8fbe4d5b",
-        "rawCategory": "관광지/레저스포츠/기타레저스포츠",
-        "district": "강화군"
-      }
-    ],
-    "linkedFrom": [
-      "강화고려궁지",
-      "강화고인돌",
-      "강화광성보",
-      "강화도",
-      "강화씨사이드리조트",
-      "강화역사박물관",
-      "강화자연휴양림",
-      "강화평화전망대",
-      "강화풍물시장",
-      "대룡시장",
-      "동막해수욕장",
-      "보문사",
-      "분오리돈대",
-      "석모도미네랄스파",
-      "석모도수목원",
-      "소창체험관",
-      "옥토끼우주센터",
-      "용흥궁",
-      "전등사",
-      "정수사",
-      "초지진",
-      "프렌쥬랜드",
-      "해든뮤지움"
-    ],
-    "sourceTypes": [
-      "RELATED_TOURISM"
-    ],
-    "isDuplicate": false,
-    "verdict": "REVIEW",
-    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
-    "verificationStatus": "UNVERIFIED",
-    "mergeWith": []
-  },
-  {
-    "name": "강화화개산모노레일",
-    "category": "EXPERIENCE",
-    "categoryLabel": "체험",
-    "categoryMethod": "KEYWORD",
-    "categoryMatched": "모노레일",
-    "nonLeisure": false,
-    "islandId": "gangh",
-    "islandName": "강화도",
-    "islandStatus": "MATCHED",
-    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
-    "islandCandidates": [],
-    "address": "",
-    "lat": null,
-    "lng": null,
-    "tel": null,
-    "imageUrl": null,
-    "sources": [
-      {
-        "sourceType": "RELATED_TOURISM",
-        "externalId": "cbfad777f6f23a8823b843d6d21537e3",
-        "rawCategory": "관광지/레저스포츠/기타레저스포츠",
-        "district": "강화군"
-      }
-    ],
-    "linkedFrom": [
-      "강화고인돌",
-      "강화도",
-      "강화씨사이드리조트",
-      "강화역사박물관",
-      "강화평화전망대",
-      "강화풍물시장",
-      "교동도",
-      "교동읍성",
-      "대룡시장",
-      "망향대",
-      "보문사",
-      "석모도미네랄스파",
-      "석모도수목원",
-      "연미정",
-      "외포리선착장",
-      "초지진"
-    ],
-    "sourceTypes": [
-      "RELATED_TOURISM"
-    ],
-    "isDuplicate": false,
-    "verdict": "REVIEW",
-    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
-    "verificationStatus": "UNVERIFIED",
-    "mergeWith": []
-  },
-  {
-    "name": "강화경찰수련원",
-    "category": "LAND",
-    "categoryLabel": "육상레저",
-    "categoryMethod": "API_SUBCATEGORY",
-    "categoryMatched": "육상레저스포츠",
-    "nonLeisure": true,
-    "islandId": "gangh",
-    "islandName": "강화도",
-    "islandStatus": "MATCHED",
-    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
-    "islandCandidates": [],
-    "address": "",
-    "lat": null,
-    "lng": null,
-    "tel": null,
-    "imageUrl": null,
-    "sources": [
-      {
-        "sourceType": "RELATED_TOURISM",
-        "externalId": "1eb15f227e3e0c777a89f37393242229",
-        "rawCategory": "관광지/레저스포츠/육상레저스포츠",
-        "district": "강화군"
-      }
-    ],
-    "linkedFrom": [
-      "강화광성보",
-      "강화평화전망대",
-      "덕진진",
-      "동검선착장",
-      "동막해수욕장",
-      "민머루해수욕장",
-      "석모도미네랄스파",
-      "옥토끼우주센터",
-      "장화리일몰조망지",
-      "프렌쥬랜드"
-    ],
-    "sourceTypes": [
-      "RELATED_TOURISM"
-    ],
-    "isDuplicate": false,
-    "verdict": "REVIEW",
-    "verdictReason": "레저 시설 여부 불명확(육상레저스포츠) — 수동 검수 필요",
-    "verificationStatus": "UNVERIFIED",
-    "mergeWith": []
-  },
-  {
-    "name": "선두바다낚시터",
-    "category": "SEA",
-    "categoryLabel": "해상레저",
-    "categoryMethod": "KEYWORD",
-    "categoryMatched": "낚시",
-    "nonLeisure": false,
-    "islandId": "gangh",
-    "islandName": "강화도",
-    "islandStatus": "MATCHED",
-    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
-    "islandCandidates": [],
-    "address": "",
-    "lat": null,
-    "lng": null,
-    "tel": null,
-    "imageUrl": null,
-    "sources": [
-      {
-        "sourceType": "RELATED_TOURISM",
-        "externalId": "5698de6c2cef06a7f20c1b40e4ebdfb8",
-        "rawCategory": "관광지/레저스포츠/수상레저스포츠",
-        "district": "강화군"
-      }
-    ],
-    "linkedFrom": [
-      "강화도"
-    ],
-    "sourceTypes": [
-      "RELATED_TOURISM"
-    ],
-    "isDuplicate": false,
-    "verdict": "REVIEW",
-    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
-    "verificationStatus": "UNVERIFIED",
-    "mergeWith": []
-  },
-  {
-    "name": "강화레포츠파크",
-    "category": "UNIQUE",
-    "categoryLabel": "이색",
-    "categoryMethod": "KEYWORD",
-    "categoryMatched": "레포츠",
-    "nonLeisure": false,
-    "islandId": "gangh",
-    "islandName": "강화도",
-    "islandStatus": "MATCHED",
-    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
-    "islandCandidates": [],
-    "address": "",
-    "lat": null,
-    "lng": null,
-    "tel": null,
-    "imageUrl": null,
-    "sources": [
-      {
-        "sourceType": "RELATED_TOURISM",
-        "externalId": "4c47984c80f62d66b504856de10f6bb6",
-        "rawCategory": "관광지/레저스포츠/기타레저스포츠",
-        "district": "강화군"
-      }
-    ],
-    "linkedFrom": [
-      "강화씨사이드리조트"
-    ],
-    "sourceTypes": [
-      "RELATED_TOURISM"
-    ],
-    "isDuplicate": false,
-    "verdict": "REVIEW",
-    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
-    "verificationStatus": "UNVERIFIED",
-    "mergeWith": []
-  },
-  {
-    "name": "석모도미네랄스파",
-    "category": "HEALING",
-    "categoryLabel": "힐링",
-    "categoryMethod": "KEYWORD",
-    "categoryMatched": "스파",
-    "nonLeisure": false,
-    "islandId": "seok",
-    "islandName": "석모도",
-    "islandStatus": "MATCHED",
-    "islandReason": "섬·면·장소 별칭 일치: 석모도",
-    "islandCandidates": [],
-    "address": "",
-    "lat": null,
-    "lng": null,
-    "tel": null,
-    "imageUrl": null,
-    "sources": [
-      {
-        "sourceType": "RELATED_TOURISM",
-        "externalId": "d7e358e84284921cb594b68bf618698e",
-        "rawCategory": "관광지/체험관광/웰니스관광",
-        "district": "강화군"
-      }
-    ],
-    "linkedFrom": [
-      "강화풍물시장",
-      "교동도",
-      "대룡시장",
-      "동막해수욕장",
-      "마니산",
-      "민머루해수욕장",
-      "백련사",
-      "보문사",
-      "석모도",
-      "석모도수목원",
-      "석모도자연휴양림/1차",
-      "석모도칠면초군락지",
-      "소창체험관",
-      "어류정항",
-      "외포리선착장",
-      "외포항수산물직판장"
-    ],
-    "sourceTypes": [
-      "RELATED_TOURISM"
-    ],
-    "isDuplicate": false,
-    "verdict": "REVIEW",
-    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
-    "verificationStatus": "UNVERIFIED",
-    "mergeWith": []
-  },
-  {
     "name": "연경산배드민턴장",
     "category": "UNIQUE",
     "categoryLabel": "이색",
@@ -4190,126 +3922,6 @@
     "verdict": "EXCLUDED",
     "verdictReason": "인천 본토 — 섬 서비스 대상 아님",
     "verificationStatus": "EXCLUDED",
-    "mergeWith": []
-  },
-  {
-    "name": "인천광역시교육청난정평화교육원",
-    "category": "EXPERIENCE",
-    "categoryLabel": "체험",
-    "categoryMethod": "API_SUBCATEGORY",
-    "categoryMatched": "체험관광기타",
-    "nonLeisure": true,
-    "islandId": "gangh",
-    "islandName": "강화도",
-    "islandStatus": "MATCHED",
-    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
-    "islandCandidates": [],
-    "address": "",
-    "lat": null,
-    "lng": null,
-    "tel": null,
-    "imageUrl": null,
-    "sources": [
-      {
-        "sourceType": "RELATED_TOURISM",
-        "externalId": "f5b20b7edc2af4955771a003c6fa961c",
-        "rawCategory": "관광지/체험관광/체험관광기타",
-        "district": "강화군"
-      }
-    ],
-    "linkedFrom": [
-      "교동향교",
-      "대룡시장",
-      "망향대"
-    ],
-    "sourceTypes": [
-      "RELATED_TOURISM"
-    ],
-    "isDuplicate": false,
-    "verdict": "REVIEW",
-    "verdictReason": "레저 시설 여부 불명확(체험관광기타) — 수동 검수 필요",
-    "verificationStatus": "UNVERIFIED",
-    "mergeWith": []
-  },
-  {
-    "name": "유니아일랜드골프앤스파리조트",
-    "category": "HEALING",
-    "categoryLabel": "힐링",
-    "categoryMethod": "KEYWORD",
-    "categoryMatched": "스파",
-    "nonLeisure": false,
-    "islandId": "gangh",
-    "islandName": "강화도",
-    "islandStatus": "MATCHED",
-    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
-    "islandCandidates": [],
-    "address": "",
-    "lat": null,
-    "lng": null,
-    "tel": null,
-    "imageUrl": null,
-    "sources": [
-      {
-        "sourceType": "RELATED_TOURISM",
-        "externalId": "1e672d4e864e03808a7792520635d260",
-        "rawCategory": "관광지/레저스포츠/육상레저스포츠",
-        "district": "강화군"
-      }
-    ],
-    "linkedFrom": [
-      "민머루해수욕장",
-      "보문사",
-      "어류정항",
-      "외포리선착장",
-      "외포항수산물직판장",
-      "초지진"
-    ],
-    "sourceTypes": [
-      "RELATED_TOURISM"
-    ],
-    "isDuplicate": false,
-    "verdict": "REVIEW",
-    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
-    "verificationStatus": "UNVERIFIED",
-    "mergeWith": []
-  },
-  {
-    "name": "항포낚시터",
-    "category": "SEA",
-    "categoryLabel": "해상레저",
-    "categoryMethod": "KEYWORD",
-    "categoryMatched": "낚시",
-    "nonLeisure": false,
-    "islandId": "gangh",
-    "islandName": "강화도",
-    "islandStatus": "MATCHED",
-    "islandReason": "교동·석모·동검도 예외를 제외한 강화군",
-    "islandCandidates": [],
-    "address": "",
-    "lat": null,
-    "lng": null,
-    "tel": null,
-    "imageUrl": null,
-    "sources": [
-      {
-        "sourceType": "RELATED_TOURISM",
-        "externalId": "261c6067d0d2c6f7413b3b74b19d57d9",
-        "rawCategory": "관광지/레저스포츠/수상레저스포츠",
-        "district": "강화군"
-      }
-    ],
-    "linkedFrom": [
-      "석모도미네랄스파",
-      "석모도수목원",
-      "황청포구"
-    ],
-    "sourceTypes": [
-      "RELATED_TOURISM"
-    ],
-    "isDuplicate": false,
-    "verdict": "REVIEW",
-    "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
-    "verificationStatus": "UNVERIFIED",
     "mergeWith": []
   },
   {
@@ -4535,85 +4147,6 @@
     "mergeWith": []
   },
   {
-    "name": "인천광역시교육청교직원수련원/선재전당",
-    "category": "LAND",
-    "categoryLabel": "육상레저",
-    "categoryMethod": "API_SUBCATEGORY",
-    "categoryMatched": "육상레저스포츠",
-    "nonLeisure": true,
-    "islandId": null,
-    "islandName": null,
-    "islandStatus": "REVIEW_REQUIRED",
-    "islandReason": "18개 섬 또는 인천 본토로 안전하게 판정할 근거가 부족함",
-    "islandCandidates": [],
-    "address": "",
-    "lat": null,
-    "lng": null,
-    "tel": null,
-    "imageUrl": null,
-    "sources": [
-      {
-        "sourceType": "RELATED_TOURISM",
-        "externalId": "c138b99108618f738650279314b0dae4",
-        "rawCategory": "관광지/레저스포츠/육상레저스포츠",
-        "district": "옹진군"
-      }
-    ],
-    "linkedFrom": [
-      "목섬",
-      "십리포해변",
-      "장경리해변"
-    ],
-    "sourceTypes": [
-      "RELATED_TOURISM"
-    ],
-    "isDuplicate": false,
-    "verdict": "REVIEW",
-    "verdictReason": "레저 시설 여부 불명확(육상레저스포츠) — 수동 검수 필요",
-    "verificationStatus": "UNVERIFIED",
-    "mergeWith": []
-  },
-  {
-    "name": "선재바다낚시공원",
-    "category": "SEA",
-    "categoryLabel": "해상레저",
-    "categoryMethod": "KEYWORD",
-    "categoryMatched": "낚시",
-    "nonLeisure": false,
-    "islandId": null,
-    "islandName": null,
-    "islandStatus": "REVIEW_REQUIRED",
-    "islandReason": "18개 섬 또는 인천 본토로 안전하게 판정할 근거가 부족함",
-    "islandCandidates": [],
-    "address": "",
-    "lat": null,
-    "lng": null,
-    "tel": null,
-    "imageUrl": null,
-    "sources": [
-      {
-        "sourceType": "RELATED_TOURISM",
-        "externalId": "e7380ebf98c749bf1dafb3f3edd3dd24",
-        "rawCategory": "관광지/레저스포츠/수상레저스포츠",
-        "district": "옹진군"
-      }
-    ],
-    "linkedFrom": [
-      "선재도",
-      "영흥도",
-      "장경리해변",
-      "진두선착장"
-    ],
-    "sourceTypes": [
-      "RELATED_TOURISM"
-    ],
-    "isDuplicate": false,
-    "verdict": "REVIEW",
-    "verdictReason": "18개 섬 또는 인천 본토로 안전하게 판정할 근거가 부족함",
-    "verificationStatus": "UNVERIFIED",
-    "mergeWith": []
-  },
-  {
     "name": "삼성호낚시슈퍼",
     "category": "SEA",
     "categoryLabel": "해상레저",
@@ -4722,43 +4255,6 @@
     "verdict": "REVIEW",
     "verdictReason": "보조 출처에서만 발견 — 실운영 확인 필요",
     "verificationStatus": "UNVERIFIED",
-    "mergeWith": []
-  },
-  {
-    "name": "송도골프클럽",
-    "category": "UNIQUE",
-    "categoryLabel": "이색",
-    "categoryMethod": "KEYWORD",
-    "categoryMatched": "골프",
-    "nonLeisure": false,
-    "islandId": null,
-    "islandName": null,
-    "islandStatus": "MAINLAND",
-    "islandReason": "인천 본토 행정구역: 연수구",
-    "islandCandidates": [],
-    "address": "",
-    "lat": null,
-    "lng": null,
-    "tel": null,
-    "imageUrl": null,
-    "sources": [
-      {
-        "sourceType": "RELATED_TOURISM",
-        "externalId": "cb8875384c215d89fcc1ec74c81c1364",
-        "rawCategory": "관광지/레저스포츠/육상레저스포츠",
-        "district": "연수구"
-      }
-    ],
-    "linkedFrom": [
-      "진두선착장"
-    ],
-    "sourceTypes": [
-      "RELATED_TOURISM"
-    ],
-    "isDuplicate": false,
-    "verdict": "EXCLUDED",
-    "verdictReason": "인천 본토 — 섬 서비스 대상 아님",
-    "verificationStatus": "EXCLUDED",
     "mergeWith": []
   }
 ]

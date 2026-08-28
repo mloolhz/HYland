@@ -119,8 +119,13 @@ for (const c of candidates) {
   const nkey = norm(c.name);
   let target = byName.get(nkey);
 
-  // 이름이 같아도 좌표가 1km 넘게 떨어지면 다른 시설로 본다
-  if (target && distM(target, c) > 1000) target = null;
+  // 이름이 같아도 좌표가 1km 넘게 떨어지면 다른 시설로 본다.
+  // 단 한쪽이라도 좌표가 없으면(연관관광지 API는 좌표 미제공) 거리를 알 수 없으므로
+  // 이름 일치를 신뢰해 같은 시설로 묶는다.
+  if (target) {
+    const d = distM(target, c);
+    if (Number.isFinite(d) && d > 1000) target = null;
+  }
 
   if (!target) {
     target = {
