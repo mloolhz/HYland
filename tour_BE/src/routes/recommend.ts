@@ -271,10 +271,13 @@ function saveRecommendation(
   response: unknown,
   persona?: PersonaInput,
   sessionId?: string,
+  questionSource?: string,
 ) {
   // Json? 필드는 일반 null이 아니라 Prisma.JsonNull 센티널로 SQL NULL을 표현해야 한다.
   const personaValue = persona ? (persona as Prisma.InputJsonValue) : Prisma.JsonNull;
   const islandBti = typeof persona?.islandBti === "string" ? persona.islandBti : null;
+  // "chip"만 집계에서 제외하면 되므로, 알 수 없는 값은 저장하지 않는다.
+  const source = questionSource === "chip" || questionSource === "user" ? questionSource : null;
 
   prisma.recommendation
     .create({
@@ -284,6 +287,7 @@ function saveRecommendation(
         response: response as object,
         islandBti,
         sessionId: typeof sessionId === "string" ? sessionId : null,
+        questionSource: source,
       },
     })
     .catch((err) => {
@@ -309,7 +313,7 @@ function streamErrorMessage(err: unknown): string {
 router.post("/recommend/stream", async (req, res) => {
   console.log("[stream] 라우트 진입");
 
-  const { question, history, persona, sessionId } = req.body;
+  const { question, history, persona, sessionId, questionSource } = req.body;
 
   if (!question || typeof question !== "string") {
     console.log("[stream] question 검증 실패:", req.body);
@@ -369,7 +373,7 @@ router.post("/recommend/stream", async (req, res) => {
     res.end();
 
     console.log("[stream] DB 저장 호출");
-    saveRecommendation(question, parsed, persona, sessionId);
+    saveRecommendation(question, parsed, persona, sessionId, questionSource);
   } catch (err) {
     console.error("[stream] 에러 발생:", err);
     if (err instanceof Error) {
@@ -383,7 +387,7 @@ router.post("/recommend/stream", async (req, res) => {
 
 router.post("/recommend", async (req, res) => {
   try {
-    const { question, history, persona, sessionId } = req.body;
+    const { question, history, persona, sessionId, questionSource } = req.body;
 
     if (!question || typeof question !== "string") {
       return res.status(400).json({ error: "question이 필요합니다." });
@@ -395,7 +399,7 @@ router.post("/recommend", async (req, res) => {
 
     res.json(parsed);
 
-    saveRecommendation(question, parsed, persona, sessionId);
+    saveRecommendation(question, parsed, persona, sessionId, questionSource);
   } catch (err) {
     console.error("추천 처리 오류:", err);
     res.status(500).json({ error: "추천 생성 중 오류가 발생했습니다." });
@@ -536,10 +540,21 @@ router.get("/popular-questions", async (req, res) => {
     // persona가 붙은 질문은 조건 패널이 자동 생성한 문장("당일치기 · 친구 · ... 조건으로
     // 섬 추천해줘")이라 사용자가 직접 입력한 질문이 아니다. 예시 칩으로 노출되면 클릭 시
     // 조건 문구가 그대로 채팅에 뜨고 TOP3도 안 나오는 것처럼 보이므로 랭킹에서 제외한다.
+    //
+    // questionSource가 "chip"인 것도 뺀다. AI followup 칩·인기질문 칩을 누르면 그 문구가
+    // 사용자 질문으로 저장되는데, 그대로 집계하면 AI가 만든 문장이 인기질문이 되고 그게
+    // 다시 첫 화면에 노출돼 스스로를 강화한다. 값이 없는 과거 기록은 분류할 수 없으므로
+    // 남겨둔다("chip"만 제외).
+    //
     // 필터링 과정에서 일부가 걸러질 수 있으니 필요한 개수(4개)보다 넉넉히 뽑아둔다.
     const grouped = await prisma.recommendation.groupBy({
       by: ["question"],
-      where: { persona: { equals: Prisma.JsonNull } },
+      where: {
+        persona: { equals: Prisma.JsonNull },
+        // NOT/not은 SQL 3값 논리 탓에 questionSource가 NULL인 행(이 필드가 생기기 전의
+        // 과거 기록 전부)까지 함께 빠질 수 있다. 포함할 대상을 명시적으로 나열한다.
+        OR: [{ questionSource: null }, { questionSource: "user" }],
+      },
       _count: { question: true },
       orderBy: { _count: { question: "desc" } },
       take: 8,

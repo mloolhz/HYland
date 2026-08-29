@@ -455,6 +455,13 @@ model Recommendation {
   /** 브라우저 세션 단위 식별자(FE sessionStorage) — 같은 대화 안의 턴 순서를
       추적해 "비슷한 조건 다음에 사람들이 무엇을 물었는지" 집계에 사용 */
   sessionId String?
+  /**
+   * 질문 출처: "user"(사용자가 직접 입력) | "chip"(AI 추천 칩·인기질문 클릭).
+   * 칩 클릭도 사용자 질문으로 저장되다 보니, AI가 만든 followup 문구가 인기질문에
+   * 올라가고 그게 다시 첫 화면에 노출되는 자기강화 루프가 있었다. 인기질문 집계에서
+   * "chip"을 제외하기 위한 필드. 값이 없는 과거 기록은 분류 불가라 집계에 남긴다.
+   */
+  questionSource String?
   createdAt DateTime @default(now())
 
   @@index([islandBti])

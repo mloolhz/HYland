@@ -62,12 +62,13 @@ npx prisma migrate dev
 npx prisma generate
 ```
 
-`prisma/migrations/`에는 두 개의 이력이 순서대로 있습니다.
+`prisma/migrations/`에는 세 개의 이력이 순서대로 있습니다.
 
 | 마이그레이션 | 내용 |
 |---|---|
 | `20260814121610_init` | 회원·카탈로그·관광공사 등 25개 테이블 |
 | `20260820003013_init` | AI 추천 이력 `Recommendation` 테이블 |
+| `20260823000000_add_question_source` | `Recommendation.questionSource` 컬럼 추가 |
 
 > **이미 한쪽만 적용해 둔 로컬 DB가 있다면** 마이그레이션 순서가 어긋나 드리프트 오류(P3005 등)가 납니다. 로컬 개발 데이터는 버려도 되므로 `npx prisma migrate reset`으로 초기화한 뒤 다시 적용하는 게 가장 빠릅니다.
 
@@ -135,6 +136,8 @@ tour_BE/
 | **AI 추천** | Recommendation | 추천 이력 (인기질문·섬BTI 선호도·예상 질문 집계 원천) |
 
 > `Recommendation`만 테이블명이 camelCase인데, 기존 마이그레이션이 그 이름으로 이미 생성돼 있어 맞춘 것입니다. 팀 컨벤션(snake_case)으로 통일하려면 별도 rename 마이그레이션이 필요합니다.
+
+`Recommendation.questionSource`는 질문이 어디서 왔는지 구분합니다 — `"user"`(직접 입력) / `"chip"`(인기질문·AI followup 칩 클릭). 칩 클릭까지 인기질문에 집계하면 AI가 만든 문구가 인기질문이 되고 그게 다시 첫 화면에 노출돼 스스로를 강화하기 때문에, `GET /api/popular-questions`는 `chip`을 제외합니다. 이 필드가 없던 시절의 기록은 `NULL`이라 분류할 수 없어 집계에 그대로 남지만, 카운트가 더 늘지 않으므로 시간이 지나면 실제 사용자 질문에 밀려납니다.
 
 ---
 

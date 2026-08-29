@@ -120,16 +120,20 @@ function handleSSEEvents(
 }
 
 /** 백엔드 AI 추천 호출 → 실제 종목 데이터로 채워서 반환 (논스트리밍 폴백) */
+/** 질문 출처 — "chip"은 인기질문·AI followup 칩 클릭, "user"는 직접 입력 */
+export type QuestionSource = "user" | "chip";
+
 export async function getAiRecommendation(
   userMessage: string,
   history?: ChatHistoryItem[],
   persona?: TripIntent,
   sessionId?: string,
+  questionSource?: QuestionSource,
 ): Promise<AiResponse> {
   const res = await fetch(`${API_BASE}/api/recommend`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ question: userMessage, history, persona, sessionId }),
+    body: JSON.stringify({ question: userMessage, history, persona, sessionId, questionSource }),
   });
 
   if (!res.ok) {
@@ -148,11 +152,12 @@ export async function getAiRecommendationStream(
   onTextChunk: (accumulatedText: string) => void,
   onDone: (response: AiResponse) => void,
   sessionId?: string,
+  questionSource?: QuestionSource,
 ): Promise<void> {
   const res = await fetch(`${API_BASE}/api/recommend/stream`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ question: userMessage, history, persona, sessionId }),
+    body: JSON.stringify({ question: userMessage, history, persona, sessionId, questionSource }),
   });
 
   if (!res.ok) {
