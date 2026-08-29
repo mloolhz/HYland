@@ -37,7 +37,7 @@ const rows = WEB_FACILITIES.sort(
     .join(","),
 );
 writeFileSync(
-  `${OUT}/web-research.csv`,
+  `${OUT}/web-research2.csv`,
   "﻿" + [header.map(esc).join(","), ...rows].join("\n"),
   "utf8",
 );
@@ -113,6 +113,6 @@ if (missing.length) {
 
 writeFileSync(`${OUT}/web-coverage.md`, lines.join("\n"), "utf8");
 
-console.log(`웹 조사 CSV: ${OUT}/web-research.csv (${WEB_FACILITIES.length}곳)`);
+console.log(`웹 조사 CSV: ${OUT}/web-research2.csv (${WEB_FACILITIES.length}곳)`);
 console.log(`커버리지 리포트: ${OUT}/web-coverage.md`);
 if (missing.length) console.log(`미확보 활동 ${missing.length}개: ${missing.join(", ")}`);
