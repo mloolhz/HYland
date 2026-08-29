@@ -1,6 +1,6 @@
 {
   "baseYm": "202607",
-  "generatedAt": "2026-08-29T07:22:09.854Z",
+  "generatedAt": "2026-08-29T12:08:45.881Z",
   "rawCounts": {
     "tourContent": 79,
     "localHub": 300,
@@ -16,11 +16,10 @@
   "multiSourceFacilities": 19,
   "mergeCandidates": 10,
   "byCategory": {
-    "체험": 29,
+    "체험": 59,
     "육상레저": 44,
-    "이색": 32,
-    "힐링": 6,
-    "해상레저": 1
+    "해상레저": 3,
+    "힐링": 6
   },
   "byActivity": {
     "낚시": 24,

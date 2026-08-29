@@ -25,7 +25,7 @@ export type Sport = {
   sources: InfoSource[];
 };
 
-export type CategoryKey = "water" | "land" | "exp" | "heal" | "unique";
+export type CategoryKey = "water" | "land" | "exp" | "heal";
 
 function island(id: string, name: string): SportIsland {
   return { id, n: name, c: getIslandColors(name).accent };
@@ -54,7 +54,6 @@ export const SPORTS_CATEGORIES: { key: CategoryKey; label: string }[] = [
   { key: "land", label: "육상 레저" },
   { key: "exp", label: "체험" },
   { key: "heal", label: "힐링" },
-  { key: "unique", label: "이색" },
 ];
 
 /**
@@ -65,31 +64,17 @@ export const SPORTS_CATEGORIES: { key: CategoryKey; label: string }[] = [
 const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sources">[]> = {
   water: [
     {
-      id: "kayak",
-      name: "카약",
+      id: "yacht",
+      name: "요트",
       pay: true,
-      photo: "/카약.png",
-      diff: "입문",
-      price: "2만원대~",
-      season: "5~10월",
-      desc: "투명 카약을 타고 잔잔한 서해 위를 미끄러지며 섬의 해안 지형을 가까이서 살펴봅니다. 발밑으로 비치는 맑은 바닷속이 매력입니다.",
-      islands: [
-        { id: "sinsi", n: "시도 (수기해변)", c: "#2563EB" },
-        { id: null, n: "소이작도", c: "#10B981" },
-      ],
+      photo: "/sports/yacht.jpg",
+      diff: "누구나",
+      price: "5만원~",
+      season: "3~11월",
+      desc: "왕산마리나에서 요트를 타고 서해 노을과 인천대교 전망을 감상하는 해양 레저.",
+      islands: [{ id: "yeongj", n: "영종도 (왕산마리나)", c: "#0EA5E9" }],
     },
-    {
-      id: "surf",
-      name: "서핑",
-      pay: true,
-      photo: "/sports/surf.jpg",
-      diff: "초급",
-      price: "3~5만원대",
-      season: "6~9월",
-      desc: "파도를 타고 균형을 잡으며 온몸으로 바다를 느끼는 액티비티. 보드 대여와 기초 강습이 함께 준비되어 있습니다.",
-      islands: [{ id: "sinsi", n: "시도 (수기해변)", c: "#2563EB" }],
-    },
-    {
+            {
       id: "cruise",
       name: "유람선",
       pay: true,
@@ -112,6 +97,43 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
       islands: [
         { id: null, n: "소이작도", c: "#10B981" },
         island("yheung", "영흥도"),
+      ],
+    },
+  {
+      id: "mud",
+      name: "갯벌체험",
+      pay: true,
+      photo: "/sports/mud.jpg",
+      diff: "누구나",
+      price: "무료~4천원",
+      season: "3~11월",
+      desc: "썰물 때 드러나는 갯벌에서 바지락·소라·동죽 등을 직접 캐보는 체험. 아이부터 어른까지 함께 즐깁니다.",
+      islands: [
+        { id: "gangh", n: "강화도", c: "#F59E0B" },
+        { id: "muui", n: "무의도", c: "#2563EB" },
+        { id: "sinsi", n: "신시모도", c: "#2563EB" },
+        { id: "yheung", n: "영흥도(+선재)", c: "#10B981" },
+        { id: "jawol", n: "자월도", c: "#10B981" },
+        { id: "ijak", n: "대이작도", c: "#10B981" },
+        { id: null, n: "소이작도", c: "#10B981" },
+        { id: "seungb", n: "승봉도", c: "#10B981" },
+        { id: "jang", n: "장봉도", c: "#2563EB" },
+        { id: null, n: "볼음도", c: "#F59E0B" },
+      ],
+    },
+{
+      id: "walk",
+      name: "해안 산책",
+      pay: false,
+      photo: "/sports/walk.jpg",
+      diff: "누구나",
+      price: "무료",
+      season: "연중",
+      desc: "해안 둘레길과 해상 탐방로를 걸으며 파도 소리와 바다 풍경을 즐기는 여유로운 산책.",
+      islands: [
+        { id: "yheung", n: "영흥도 (십리포)", c: "#10B981" },
+        { id: "muui", n: "무의도 (해상탐방로)", c: "#2563EB" },
+        { id: "gangh", n: "강화도", c: "#F59E0B" },
       ],
     },
   ],
@@ -188,28 +210,7 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
     },
   ],
   exp: [
-    {
-      id: "mud",
-      name: "갯벌체험",
-      pay: true,
-      photo: "/sports/mud.jpg",
-      diff: "누구나",
-      price: "무료~4천원",
-      season: "3~11월",
-      desc: "썰물 때 드러나는 갯벌에서 바지락·소라·동죽 등을 직접 캐보는 체험. 아이부터 어른까지 함께 즐깁니다.",
-      islands: [
-        { id: "gangh", n: "강화도", c: "#F59E0B" },
-        { id: "muui", n: "무의도", c: "#2563EB" },
-        { id: "sinsi", n: "신시모도", c: "#2563EB" },
-        { id: "yheung", n: "영흥도(+선재)", c: "#10B981" },
-        { id: "jawol", n: "자월도", c: "#10B981" },
-        { id: "ijak", n: "대이작도", c: "#10B981" },
-        { id: null, n: "소이작도", c: "#10B981" },
-        { id: "seungb", n: "승봉도", c: "#10B981" },
-        { id: "jang", n: "장봉도", c: "#2563EB" },
-        { id: null, n: "볼음도", c: "#F59E0B" },
-      ],
-    },
+    
     {
       id: "fish",
       name: "낚시",
@@ -293,6 +294,29 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
       desc: "무동력 카트를 타고 경사로를 달리는 스릴 있는 체험. 강화도에서 즐길 수 있습니다.",
       islands: [{ id: "gangh", n: "강화도", c: "#F59E0B" }],
     },
+  
+    {
+      id: "golf",
+      name: "골프",
+      pay: true,
+      photo: "/sports/golf.jpg",
+      diff: "경험자",
+      price: "10만원 이상",
+      season: "3~11월",
+      desc: "바다를 끼고 라운딩하는 해안 골프장에서 이색적인 경관을 즐깁니다.",
+      islands: [{ id: "yeongj", n: "영종도 (클럽72)", c: "#0EA5E9" }],
+    },
+    {
+      id: "retreat",
+      name: "수련·단체 활동",
+      pay: true,
+      photo: "/sports/retreat.jpg",
+      diff: "누구나",
+      price: "문의",
+      season: "연중",
+      desc: "청소년수련원·연수시설에서 단체 프로그램과 야외 활동을 진행합니다.",
+      islands: [{ id: "gangh", n: "강화도", c: "#22C55E" }],
+    },
   ],
   heal: [
     {
@@ -337,21 +361,7 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
       desc: "멸종위기 점박이물범이 서식하는 백령도 해역에서 유람선을 타고 야생 물범을 관찰합니다.",
       islands: [{ id: "baek", n: "백령도", c: "#EF4444" }],
     },
-    {
-      id: "walk",
-      name: "해안 산책",
-      pay: false,
-      photo: "/sports/walk.jpg",
-      diff: "누구나",
-      price: "무료",
-      season: "연중",
-      desc: "해안 둘레길과 해상 탐방로를 걸으며 파도 소리와 바다 풍경을 즐기는 여유로운 산책.",
-      islands: [
-        { id: "yheung", n: "영흥도 (십리포)", c: "#10B981" },
-        { id: "muui", n: "무의도 (해상탐방로)", c: "#2563EB" },
-        { id: "gangh", n: "강화도", c: "#F59E0B" },
-      ],
-    },
+    
     {
       id: "star",
       name: "은하수 체험",
@@ -393,30 +403,6 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
     },
   ],
   // 해상·육상·체험·힐링 어디에도 딱 맞지 않는 이색 시설 (골프·수련원 등)
-  unique: [
-    {
-      id: "golf",
-      name: "골프",
-      pay: true,
-      photo: "/sports/golf.jpg",
-      diff: "경험자",
-      price: "10만원 이상",
-      season: "3~11월",
-      desc: "바다를 끼고 라운딩하는 해안 골프장에서 이색적인 경관을 즐깁니다.",
-      islands: [{ id: "yeongj", n: "영종도 (클럽72)", c: "#0EA5E9" }],
-    },
-    {
-      id: "retreat",
-      name: "수련·단체 활동",
-      pay: true,
-      photo: "/sports/retreat.jpg",
-      diff: "누구나",
-      price: "문의",
-      season: "연중",
-      desc: "청소년수련원·연수시설에서 단체 프로그램과 야외 활동을 진행합니다.",
-      islands: [{ id: "gangh", n: "강화도", c: "#22C55E" }],
-    },
-  ],
 };
 
 export const SPORTS_DATA = attachInfo(RAW_SPORTS_DATA);

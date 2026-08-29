@@ -7,7 +7,6 @@ const CATEGORY_ICONS: Record<CategoryKey, string> = {
   land: "🥾",
   exp: "🎯",
   heal: "🌿",
-  unique: "✨",
 };
 
 function SportPreviewCard({ sport, category }: { sport: Sport; category: CategoryKey }) {

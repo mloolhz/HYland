@@ -1,6 +1,6 @@
 /**
  * HYland 레저스포츠 5개 카테고리 자동 분류
- * SEA(해상) · LAND(육상) · EXPERIENCE(체험) · HEALING(힐링) · UNIQUE(이색)
+ * SEA(해상) · LAND(육상) · EXPERIENCE(체험) · HEALING(힐링)
  * + 레저가 아닌 시설(숙박·일반체육 등)은 NON_LEISURE 로 표시해 검수 대상으로 뺀다.
  */
 export const CATEGORIES = {
@@ -8,7 +8,6 @@ export const CATEGORIES = {
   LAND: "육상레저",
   EXPERIENCE: "체험",
   HEALING: "힐링",
-  UNIQUE: "이색",
 };
 
 const norm = (v = "") => String(v).normalize("NFC").replace(/\s+/g, "").toLowerCase();
@@ -40,7 +39,7 @@ const RULES = [
   // 힐링(경관) — "노을캠핑장"처럼 시설 종류가 앞서면 그쪽이 이기도록 LAND 뒤에 둔다
   ["HEALING", ["일몰", "노을", "낙조", "천문", "별보기"]],
   [
-    "UNIQUE",
+    "EXPERIENCE",
     ["골프", "컨트리클럽", "gc", "cc", "승마", "서바이벌", "카트", "atv", "사격", "양궁",
      "패러", "번지", "클라이밍", "암벽", "레포츠", "빙상", "볼링", "테니스", "풋살"],
   ],
@@ -60,8 +59,8 @@ const SCLS_HINT = {
   캠핑: "LAND",
   "농/산/어촌체험": "EXPERIENCE",
   체험관광기타: "EXPERIENCE",
-  기타레저스포츠: "UNIQUE",
-  레저스포츠시설: "UNIQUE",
+  기타레저스포츠: "EXPERIENCE",
+  레저스포츠시설: "EXPERIENCE",
 };
 
 /**
@@ -91,7 +90,7 @@ export function classifyCategory(name, extra = "", scls = "") {
   }
 
   return {
-    category: "UNIQUE",
+    category: "EXPERIENCE",
     method: "FALLBACK",
     matched: nonLeisureHit ?? null,
     nonLeisure: !!nonLeisureHit,

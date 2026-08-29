@@ -15,7 +15,6 @@ const CATEGORY_KEY = {
   LAND: "land",
   EXPERIENCE: "exp",
   HEALING: "heal",
-  UNIQUE: "unique",
 };
 
 const SOURCE_LABEL = {

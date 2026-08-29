@@ -8,14 +8,14 @@
  *   EXACT   — 한국관광공사 관광정보 API에서 확인한 공식 주소
  *   VILLAGE — 리(里)·동 단위까지만 확인 (관광공사 미등록 시설, 상세 번지 미확인)
  *
- * 카테고리: SEA(해상레저) LAND(육상레저) EXPERIENCE(체험) HEALING(힐링) UNIQUE(이색)
+ * 카테고리: SEA(해상레저) LAND(육상레저) EXPERIENCE(체험) HEALING(힐링)
  */
 
 export const WEB_FACILITIES = [
   // ══════════════ 영종도 (yeongj) ══════════════
   {
     name: "왕산마리나",
-    activity: "유람선",
+    activity: "요트",
     category: "SEA",
     islandId: "yeongj",
     islandName: "영종도",
@@ -60,7 +60,7 @@ export const WEB_FACILITIES = [
   {
     name: "거잠포해변",
     activity: "해안 산책",
-    category: "HEALING",
+    category: "SEA",
     islandId: "yeongj",
     islandName: "영종도",
     address: "인천광역시 영종구 잠진도길 11",
@@ -71,7 +71,7 @@ export const WEB_FACILITIES = [
   {
     name: "마시안해변",
     activity: "갯벌체험",
-    category: "EXPERIENCE",
+    category: "SEA",
     islandId: "yeongj",
     islandName: "영종도",
     address: "인천광역시 영종구 덕교동",
@@ -95,7 +95,7 @@ export const WEB_FACILITIES = [
   {
     name: "하나개해수욕장 갯벌체험",
     activity: "갯벌체험",
-    category: "EXPERIENCE",
+    category: "SEA",
     islandId: "muui",
     islandName: "무의도",
     address: "인천광역시 영종구 무의동",
@@ -106,7 +106,7 @@ export const WEB_FACILITIES = [
   {
     name: "큰무리어촌체험마을",
     activity: "갯벌체험",
-    category: "EXPERIENCE",
+    category: "SEA",
     islandId: "muui",
     islandName: "무의도",
     address: "인천광역시 영종구 대무의로 26-9",
@@ -150,7 +150,7 @@ export const WEB_FACILITIES = [
   {
     name: "무의도 해상관광탐방로",
     activity: "해안 산책",
-    category: "HEALING",
+    category: "SEA",
     islandId: "muui",
     islandName: "무의도",
     address: "인천광역시 영종구 무의동",
@@ -242,7 +242,7 @@ export const WEB_FACILITIES = [
   {
     name: "큰말해변",
     activity: "갯벌체험",
-    category: "EXPERIENCE",
+    category: "SEA",
     islandId: "jawol",
     islandName: "자월도",
     address: "인천광역시 옹진군 자월면 자월리",
@@ -255,7 +255,7 @@ export const WEB_FACILITIES = [
   {
     name: "이일레해수욕장",
     activity: "해안 산책",
-    category: "HEALING",
+    category: "SEA",
     islandId: "seungb",
     islandName: "승봉도",
     address: "인천광역시 옹진군 자월면 승봉로116번길",
@@ -312,7 +312,7 @@ export const WEB_FACILITIES = [
   {
     name: "작은풀안해변",
     activity: "해안 산책",
-    category: "HEALING",
+    category: "SEA",
     islandId: "ijak",
     islandName: "대이작도",
     address: "인천광역시 옹진군 자월면 이작리",
@@ -370,7 +370,7 @@ export const WEB_FACILITIES = [
   {
     name: "밧지름해변",
     activity: "해안 산책",
-    category: "HEALING",
+    category: "SEA",
     islandId: "deokj",
     islandName: "덕적도",
     address: "인천광역시 옹진군 덕적면 덕적남로 209-1",
@@ -394,7 +394,7 @@ export const WEB_FACILITIES = [
   {
     name: "소야도 떼뿌리해변",
     activity: "갯벌체험",
-    category: "EXPERIENCE",
+    category: "SEA",
     islandId: "soya",
     islandName: "소야도",
     address: "인천광역시 옹진군 덕적면 소야리",
@@ -475,7 +475,7 @@ export const WEB_FACILITIES = [
   {
     name: "큰마을해변",
     activity: "해안 산책",
-    category: "HEALING",
+    category: "SEA",
     islandId: "gureop",
     islandName: "굴업도",
     address: "인천광역시 옹진군 덕적면 굴업리",
@@ -487,12 +487,11 @@ export const WEB_FACILITIES = [
 
 /** 요청받은 카테고리별 활동 목록 (커버리지 점검용) */
 export const REQUIRED_ACTIVITIES = {
-  SEA: ["카약", "서핑", "유람선", "패들보트"],
+  SEA: ["요트", "유람선", "패들보트", "갯벌체험", "해안 산책"],
   LAND: ["트레킹", "자전거", "캠핑", "백패킹"],
-  EXPERIENCE: ["갯벌체험", "낚시", "풀등 체험", "해루질", "짚라인", "모노레일", "루지"],
-  HEALING: ["산림욕", "일몰 감상", "물범 관찰", "해안 산책", "은하수 체험", "섬마을 투어", "온천-스파"],
-  UNIQUE: ["골프", "수련단체활동"],
-};
+  EXPERIENCE: ["낚시", "풀등 체험", "해루질", "짚라인", "모노레일", "루지", "골프", "수련단체활동"],
+  HEALING: ["산림욕", "일몰 감상", "물범 관찰", "은하수 체험", "섬마을 투어", "온천-스파"],
+  };
 
 /** 대상 10개 섬 */
 export const TARGET_ISLANDS = {
