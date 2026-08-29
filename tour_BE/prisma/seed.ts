@@ -10,6 +10,7 @@ import { SPORT_INFO_BY_ID, getSportInfo, type InfoSource, type ReservationType }
 import { CATEGORY_META, MISSION_CATEGORIES, MISSION_QUESTS } from "@/mocks/missions";
 import { ISLAND_BTI_QUESTIONS } from "@/data/island-bti/questions";
 import { ISLAND_BTI_RESULTS } from "@/data/island-bti/results";
+import { LEISURE_ACTIVITIES } from "./seed-data/leisure-activities";
 
 const RES: Record<string, string> = {
   reservable: "RESERVABLE",
@@ -43,6 +44,10 @@ async function main() {
   await prisma.sport.deleteMany();
   await prisma.island.deleteMany();
   await prisma.missionCategory.deleteMany();
+  await prisma.leisureSportSource.deleteMany();
+  await prisma.leisureSport.deleteMany();
+  await prisma.leisureCandidate.deleteMany();
+  await prisma.leisureActivityType.deleteMany();
   await prisma.sportCategory.deleteMany();
   await prisma.islandRegion.deleteMany();
   await prisma.islandBtiQuestion.deleteMany();
@@ -76,6 +81,11 @@ async function main() {
     data: SPORTS_CATEGORIES.map((c) => ({ id: c.key, label: c.label })),
   });
 
+  // 레저 활동 종류 — enum 대신 참조 테이블. 활동 추가는 seed-data 한 줄이면 된다.
+  await prisma.leisureActivityType.createMany({
+    data: LEISURE_ACTIVITIES.map((a, i) => ({ ...a, sortOrder: i })),
+  });
+
   const seenSport = new Set<string>();
   const sportRows: any[] = [];
   const sportIslandRows: any[] = [];
@@ -88,7 +98,9 @@ async function main() {
         categoryId: cat.key,
         name: s.name,
         description: s.desc,
-        pay: s.pay,
+        // FE의 sports.ts에서 pay 필드를 없앴다(화면에서 안 쓰게 됨).
+        // DB 컬럼과 /sports 응답은 그대로 두고 예약 유형에서 도출한다.
+        pay: ["reservable", "mixed"].includes(getSportInfo(s.id).reservationType),
         photo: s.photo ?? null,
         difficulty: s.diff,
         price: s.price,

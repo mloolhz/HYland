@@ -10,7 +10,7 @@
  *   3. 프론트 CategoryKey 와 BE 카테고리가 1:1 인지
  *   4. 수집한 활동이 전부 프론트 종목과 이어지는지 (고아 활동 = 화면에 안 나옴)
  *   5. 프론트 종목 중 시설이 하나도 없는 것
- *   6. 활동 ↔ Prisma LeisureActivity enum 이 1:1 인지 (시드가 깨지지 않도록)
+ *   6. 활동 ↔ 활동 종류 시드(leisure-activities.ts)가 1:1 인지
  *   7. 시설의 섬 이름이 프론트 섬 목록에 있는지 (없으면 색/권역이 회색 폴백)
  *
  * 실행: node scripts/tour/check-consistency.mjs
@@ -23,7 +23,7 @@ import { WEB_FACILITIES_G1 } from "./web-research1-data.mjs";
 const FE_SPORTS = "../tour_FE/src/data/sports.ts";
 const FE_ISLANDS = "../tour_FE/src/constants/island.ts";
 const CANDIDATES = "reports/leisure-candidates/all-candidates.json";
-const PRISMA_SCHEMA = "prisma/schema.prisma";
+const ACTIVITY_SEED = "prisma/seed-data/leisure-activities.ts";
 
 /** 활동명 대조 시 무시할 구분 문자 */
 const NOISE = [" ", "·", "・", "-", "–", "—"];
@@ -138,28 +138,46 @@ for (const [name, feCat] of feSports) {
   }
 }
 
-// ── 7. Prisma enum 과의 정합성 (시드가 깨지지 않도록) ──
+// ── 7. 활동 종류 시드와의 정합성 (시드가 깨지지 않도록) ──
+// 활동은 enum 이 아니라 leisure_activity_types 행이라, 시드 데이터가 기준이다.
 {
-  const schema = readFileSync(PRISMA_SCHEMA, "utf8");
-  const block = schema.match(/enum LeisureActivity \{([^]*?)^\}/m)?.[1] ?? "";
-  const dbEnum = new Set(
-    [...block.matchAll(/^ {2}([A-Z_]+)/gm)].map((m) => m[1]),
+  const seedSrc = readFileSync(ACTIVITY_SEED, "utf8");
+  const seed = [...seedSrc.matchAll(/\{ id: "([A-Z_]+)", label: "([^"]+)", categoryId: "(\w+)" \}/g)].map(
+    (m) => ({ id: m[1], label: m[2], categoryId: m[3] }),
   );
+  if (seed.length === 0) fail("[시드 파싱 실패] leisure-activities.ts 에서 활동을 읽지 못함");
 
+  const seedById = new Map(seed.map((a) => [a.id, a]));
   const taxonomy = [...Object.values(ACTIVITY_TAXONOMY).flat(), "기타"];
+
   for (const act of taxonomy) {
-    const value = ACTIVITY_ENUM[act];
-    if (!value) {
-      fail(`[enum 매핑 없음] 활동 "${act}" → activity.mjs 의 ACTIVITY_ENUM 에 추가 필요`);
-    } else if (!dbEnum.has(value)) {
-      fail(`[스키마에 없는 enum] "${act}" → ${value} 가 schema.prisma 의 LeisureActivity 에 없음`);
+    const id = ACTIVITY_ENUM[act];
+    if (!id) {
+      fail(`[활동 id 없음] "${act}" → activity.mjs 의 ACTIVITY_ENUM 에 추가 필요`);
+      continue;
+    }
+    const row = seedById.get(id);
+    if (!row) {
+      fail(`[시드에 없는 활동] "${act}" → ${id} 가 leisure-activities.ts 에 없음`);
+      continue;
+    }
+    if (row.label !== act) {
+      fail(`[라벨 불일치] ${id} — 분류기 "${act}" / 시드 "${row.label}"`);
+    }
+    // 기타(ETC)는 분류기의 폴백 카테고리를 그대로 쓰므로 대조 대상에서 뺀다
+    const beCat = activityCategory.get(key(act));
+    if (act !== "기타" && beCat && row.categoryId !== beCat) {
+      fail(`[시드 카테고리 어긋남] ${id} — 분류기 ${beCat} / 시드 ${row.categoryId}`);
     }
   }
 
   const used = new Set(taxonomy.map((a) => ACTIVITY_ENUM[a]).filter(Boolean));
-  for (const value of dbEnum) {
-    if (!used.has(value)) {
-      fail(`[쓰이지 않는 enum] LeisureActivity.${value} 에 대응하는 활동이 없음`);
+  for (const row of seed) {
+    if (!used.has(row.id)) {
+      fail(`[쓰이지 않는 활동] leisure-activities.ts 의 ${row.id} 에 대응하는 활동이 없음`);
+    }
+    if (!feCategoryKeys.includes(row.categoryId)) {
+      fail(`[없는 카테고리] ${row.id} 의 categoryId "${row.categoryId}" 가 sports.ts 에 없음`);
     }
   }
 }
