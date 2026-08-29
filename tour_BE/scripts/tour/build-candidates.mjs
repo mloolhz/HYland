@@ -7,6 +7,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { classifyTourSport, ISLANDS } from "../lib/tour-island-mapping.mjs";
 import { classifyCategory, CATEGORIES } from "./lib/category.mjs";
+import { resolveActivity } from "./lib/activity.mjs";
 
 const RAW = "reports/leisure-candidates/raw";
 const OUT = "reports/leisure-candidates";
@@ -87,11 +88,22 @@ for (const v of relatedSeen.values()) {
 // ────────────────────────── 2) 카테고리 + 섬 매핑 ──────────────────────────
 for (const c of candidates) {
   const cat = classifyCategory(c.name, `${c.address} ${c.rawCategory}`, c.scls);
-  c.category = cat.category;
-  c.categoryLabel = CATEGORIES[cat.category];
-  c.categoryMethod = cat.method;
-  c.categoryMatched = cat.matched;
   c.nonLeisure = cat.nonLeisure;
+
+  // 활동을 먼저 판정하고, 활동이 정해지면 그 활동이 속한 카테고리를 따른다.
+  // (예: 낚시터는 해상레저가 아니라 체험)
+  const act = resolveActivity(c.name, `${c.address} ${c.rawCategory}`);
+  c.activity = act.activity;
+  if (act.matched) {
+    c.category = act.category;
+    c.categoryMethod = "ACTIVITY";
+    c.categoryMatched = act.activity;
+  } else {
+    c.category = cat.category;
+    c.categoryMethod = cat.method;
+    c.categoryMatched = cat.matched;
+  }
+  c.categoryLabel = CATEGORIES[c.category];
 
   // 섬 매핑: 주소가 없으면 시군구명을 보조 텍스트로 사용
   const mapped = classifyTourSport({
@@ -134,6 +146,7 @@ for (const c of candidates) {
       categoryLabel: c.categoryLabel,
       categoryMethod: c.categoryMethod,
       categoryMatched: c.categoryMatched,
+      activity: c.activity,
       nonLeisure: c.nonLeisure,
       islandId: c.islandId,
       islandName: c.islandName,
@@ -280,6 +293,7 @@ const summary = {
   multiSourceFacilities: facilities.filter((f) => f.isDuplicate).length,
   mergeCandidates: facilities.filter((f) => f.mergeWith.length).length,
   byCategory: count(facilities, "categoryLabel"),
+  byActivity: count(facilities, "activity"),
   byIslandStatus: count(facilities, "islandStatus"),
   byVerdict: count(facilities, "verdict"),
   byIsland: count(facilities.filter((f) => f.islandName), "islandName"),
@@ -291,7 +305,7 @@ writeFileSync(`${OUT}/all-candidates.json`, JSON.stringify(facilities, null, 2),
 /** CSV (엑셀 한글 깨짐 방지 BOM) */
 const csvEsc = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`;
 const header = [
-  "시설명", "카테고리", "섬", "섬매핑상태", "주소", "위도", "경도",
+  "시설명", "카테고리", "활동", "섬", "섬매핑상태", "주소", "위도", "경도",
   "출처", "출처수", "중복여부", "통합후보", "검증상태", "판정", "판정사유", "연관관광지",
 ];
 const rows = facilities
@@ -303,7 +317,7 @@ const rows = facilities
   )
   .map((f) =>
     [
-      f.name, f.categoryLabel, f.islandName ?? "", f.islandStatus, f.address,
+      f.name, f.categoryLabel, f.activity, f.islandName ?? "", f.islandStatus, f.address,
       f.lat ?? "", f.lng ?? "", f.sourceTypes.join("+"), f.sources.length,
       f.isDuplicate ? "중복통합" : "단일", f.mergeWith.join(" / "), f.verificationStatus, f.verdict,
       f.verdictReason, f.linkedFrom.slice(0, 3).join(" / "),
