@@ -18,17 +18,16 @@ export function buildMockLlmDescription(input: LlmDescriptionInput): string {
   const islandInfo = ISLAND_MAP[input.item.islandId];
   // 성향 문구는 실제로 보여줄 게 있을 때만 쓴다. 예전에는 fallback("이번 여행 조건")까지
   // 만들어 `${traitLine}의 취향과`를 따로 문단으로 넣는 바람에, 문장이 "과"에서 끊긴 채
-  // 단독 문단으로 렌더됐다. 이제 아래 matchLine 안에 자연스럽게 합친다.
+  // 단독 문단으로 렌더됐다.
   const traitLine = input.userTraits.length > 0 ? input.userTraits.join(", ") : null;
 
   const btiLine = profile
     ? `${profile.code}(${profile.name}) 성향의 당신에게 ${input.item.islandName}를 추천해요.`
     : `이번 여행 조건에 맞춰 ${input.item.islandName}를 추천해요.`;
 
-  const traitPrefix = traitLine ? `${traitLine} 취향과 잘 맞아요. ` : "";
-  const matchLine = input.item.scores.islandBtiMatch
-    ? `${traitPrefix}섬BTI 성향 일치도는 ${input.item.scores.islandBtiMatch}%, 이번 여행 스타일 일치도는 ${input.item.scores.currentTripMatch}%예요.`
-    : `${traitPrefix}이번 여행 스타일과 ${input.item.scores.currentTripMatch}% 일치해요.`;
+  // 일치도 수치("...87% 일치해요")는 점수표·추천 근거와 같은 사실을 세 번째로 반복하던
+  // 문장이라 뺐다. 수치는 접이식 점수 상세 한 곳에서만 보여준다.
+  const traitLineSentence = traitLine ? `${traitLine} 취향과 잘 맞아요.` : null;
 
   const activityLine =
     input.item.recommendedActivities.length > 0
@@ -39,7 +38,7 @@ export function buildMockLlmDescription(input: LlmDescriptionInput): string {
     reason.includes("여권"),
   );
 
-  const parts = [btiLine, matchLine, activityLine];
+  const parts = [btiLine, traitLineSentence, activityLine];
   if (explorationReason) parts.push(explorationReason);
 
   return parts.filter(Boolean).join("\n\n");

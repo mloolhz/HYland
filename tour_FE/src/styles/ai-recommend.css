@@ -1368,3 +1368,83 @@ body:has(.ai-page--intro) {
   color: #0e7490;
   text-decoration: none;
 }
+
+/* ─────────────────────────────────────────────────────────────
+   추천 카드: 접이식 상세 + 모바일 가독성
+   ───────────────────────────────────────────────────────────── */
+
+.ai-rec-details {
+  margin-top: 12px;
+  border-top: 1px solid #e6ecf5;
+  padding-top: 10px;
+}
+
+.ai-rec-details__summary {
+  cursor: pointer;
+  list-style: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2563eb;
+  padding: 8px 0;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ai-rec-details__summary::-webkit-details-marker {
+  display: none;
+}
+
+.ai-rec-details__summary::after {
+  content: "▾";
+  font-size: 11px;
+  transition: transform 0.2s ease;
+}
+
+.ai-rec-details[open] .ai-rec-details__summary::after {
+  transform: rotate(180deg);
+}
+
+.ai-rec-details .ai-rec-score-list {
+  margin-top: 4px;
+}
+
+/* 접이식으로 옮기면서 점수표가 카드 안쪽으로 한 단계 들어갔다 */
+.ai-rec-details .ai-rec-itinerary {
+  margin-top: 12px;
+}
+
+@media (max-width: 640px) {
+  /* 위쪽 @media(877줄)에도 같은 규칙이 있지만, 그 뒤 1289줄의 기본 정의가
+     동일 명시도로 덮어써서 모바일에서도 2열로 남아 있었다. 파일 끝에서 다시 지정한다. */
+  .ai-rec-score-list {
+    grid-template-columns: 1fr;
+  }
+
+  /* 터치 대상 최소 44px (iOS/Android 접근성 권장) */
+  .ai-trip-chip,
+  .ai-example-chip,
+  .ai-followup-chip {
+    min-height: 44px;
+    font-size: 14px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .ai-composer-filter,
+  .ai-composer-send,
+  .ai-bti-pref-btn,
+  .ai-settings-panel__apply {
+    min-height: 44px;
+  }
+
+  .ai-trip-date-cell {
+    min-height: 40px;
+    font-size: 14px;
+  }
+
+  .ai-trip-date-weekdays span {
+    font-size: 12px;
+  }
+}

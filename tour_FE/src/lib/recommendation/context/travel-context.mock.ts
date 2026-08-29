@@ -30,6 +30,16 @@ function seededNoise(seed: string, index: number): number {
 }
 
 /**
+ * 이 모듈의 날씨·해상 데이터(파고·기상특보·결항)가 실제 값이 아니라
+ * seededNoise()로 만들어낸 가짜라는 표시.
+ *
+ * 실제 기상 API를 붙이면 false로 바꾼다. hard-filter가 이 값을 보고,
+ * 가짜 데이터로 섬을 후보에서 제외하지 않도록 막는다.
+ * (교통 소요시간은 island-data의 travelTime을 파싱한 실제 값이라 해당 없음)
+ */
+export const IS_MOCK_WEATHER_CONTEXT = true;
+
+/**
  * 날씨·교통 mock context.
  * 실제 API 연동 시 이 모듈만 교체한다.
  */

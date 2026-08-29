@@ -46,8 +46,22 @@ function clamp01(value: number): number {
   return Math.min(1, Math.max(0, value));
 }
 
-function buildTripIntentVector(trip: TripIntent): PreferenceVector {
-  const base: PreferenceVector = {
+/**
+ * 사용자가 실제로 표현한 축에 얼마나 무게를 둘지(salience).
+ * 예전에는 7축을 단순 평균해서, 고르지도 않은 축(음식·문화 등)이 점수를 희석시켰다.
+ * 그 탓에 어떤 섬을 넣어도 77~87점에 몰려 순위가 사실상 무의미했다.
+ */
+type TripIntentProfile = {
+  vector: PreferenceVector;
+  /** 축별 관심도 — 표현하지 않은 축은 0에 가깝다 */
+  salience: PreferenceVector;
+};
+
+/** 아무 축도 고르지 않았을 때도 완전히 0이 되지 않도록 하는 하한 */
+const SALIENCE_FLOOR = 0.15;
+
+function buildTripIntentProfile(trip: TripIntent): TripIntentProfile {
+  const vector: PreferenceVector = {
     activity: 0.5,
     healing: 0.5,
     nature: 0.5,
@@ -56,22 +70,31 @@ function buildTripIntentVector(trip: TripIntent): PreferenceVector {
     culture: 0.5,
     food: 0.5,
   };
+  const salience: PreferenceVector = {
+    activity: 0,
+    healing: 0,
+    nature: 0,
+    challenge: 0,
+    leisure: 0,
+    culture: 0,
+    food: 0,
+  };
 
-  if (trip.travelMood) {
-    const moodWeights = MOOD_TO_FEATURES[trip.travelMood];
+  // 이전보다 계수를 키워 의도 벡터가 실제로 0/1 쪽으로 벌어지게 한다.
+  const apply = (
+    weights: Partial<Record<PreferenceFeatureKey, number>>,
+    scale: number,
+  ) => {
     for (const key of PREFERENCE_FEATURE_KEYS) {
-      const delta = moodWeights[key] ?? 0;
-      base[key] = clamp01(base[key] + delta * 0.35);
+      const delta = weights[key] ?? 0;
+      if (delta === 0) continue;
+      vector[key] = clamp01(vector[key] + delta * scale);
+      salience[key] += Math.abs(delta);
     }
-  }
+  };
 
-  if (trip.intensity) {
-    const intensityWeights = INTENSITY_TO_FEATURES[trip.intensity];
-    for (const key of PREFERENCE_FEATURE_KEYS) {
-      const delta = intensityWeights[key] ?? 0;
-      base[key] = clamp01(base[key] + delta * 0.3);
-    }
-  }
+  if (trip.travelMood) apply(MOOD_TO_FEATURES[trip.travelMood], 0.5);
+  if (trip.intensity) apply(INTENSITY_TO_FEATURES[trip.intensity], 0.4);
 
   for (const activity of trip.activities ?? []) {
     const normalized = activity.trim();
@@ -79,25 +102,28 @@ function buildTripIntentVector(trip: TripIntent): PreferenceVector {
       normalized.includes(keyword),
     );
     if (!keywordMatch) continue;
-    const [, weights] = keywordMatch;
-    for (const key of PREFERENCE_FEATURE_KEYS) {
-      const boost = weights[key] ?? 0;
-      base[key] = clamp01(base[key] + boost * 0.25);
-    }
+    apply(keywordMatch[1], 0.35);
   }
 
-  return base;
+  return { vector, salience };
 }
 
-function featureMatchScore(
-  intent: PreferenceVector,
-  island: PreferenceVector,
-): number {
-  let sum = 0;
+/**
+ * 표현한 축을 무겁게 보는 가중 일치도.
+ * 관심 없는 축의 차이는 하한(SALIENCE_FLOOR)만큼만 반영된다.
+ */
+function featureMatchScore(profile: TripIntentProfile, island: PreferenceVector): number {
+  let weightedSum = 0;
+  let weightTotal = 0;
+
   for (const key of PREFERENCE_FEATURE_KEYS) {
-    sum += 1 - Math.abs(intent[key] - island[key]);
+    const weight = SALIENCE_FLOOR + profile.salience[key];
+    weightedSum += weight * (1 - Math.abs(profile.vector[key] - island[key]));
+    weightTotal += weight;
   }
-  return Math.round((sum / PREFERENCE_FEATURE_KEYS.length) * 100);
+
+  if (weightTotal === 0) return 50;
+  return Math.round((weightedSum / weightTotal) * 100);
 }
 
 function companionScore(
@@ -121,8 +147,8 @@ export function scoreCurrentTripMatch(
   trip: TripIntent,
   island: IslandRecommendationFeature,
 ): number {
-  const intentVector = buildTripIntentVector(trip);
-  const featurePart = featureMatchScore(intentVector, island.vector);
+  const profile = buildTripIntentProfile(trip);
+  const featurePart = featureMatchScore(profile, island.vector);
   const companionPart = companionScore(trip.companion, island);
   const durationPart = durationScore(trip.duration, island);
 
@@ -130,5 +156,5 @@ export function scoreCurrentTripMatch(
 }
 
 export function buildTripIntentVectorForDebug(trip: TripIntent): PreferenceVector {
-  return buildTripIntentVector(trip);
+  return buildTripIntentProfile(trip).vector;
 }
