@@ -8,10 +8,43 @@
 
 /** 카테고리별 활동 목록 — 프론트 레저스포츠 탭 기준 */
 export const ACTIVITY_TAXONOMY = {
-  SEA: ["요트", "유람선", "패들보트", "갯벌체험", "해안 산책"],
+  SEA: ["요트", "유람선", "패들보트", "갯벌체험", "해안 산책", "해수욕장"],
   LAND: ["트레킹", "자전거", "캠핑", "백패킹"],
   EXPERIENCE: ["낚시", "풀등 체험", "해루질", "짚라인", "모노레일", "루지", "골프", "수련단체활동"],
   HEALING: ["산림욕", "일몰 감상", "물범 관찰", "은하수 체험", "섬마을 투어", "온천-스파"],
+};
+
+/**
+ * 활동 → Prisma `LeisureActivity` enum 값.
+ * 시드(leisure_sports/leisure_candidates)에 넣을 때 쓴다.
+ * ACTIVITY_TAXONOMY 와 개수·항목이 항상 같아야 한다 (check-consistency.mjs 가 검사).
+ */
+export const ACTIVITY_ENUM = {
+  요트: "YACHT",
+  유람선: "CRUISE",
+  패들보트: "PADDLE_BOAT",
+  갯벌체험: "MUDFLAT",
+  "해안 산책": "COASTAL_WALK",
+  해수욕장: "BEACH",
+  트레킹: "TREKKING",
+  자전거: "CYCLING",
+  캠핑: "CAMPING",
+  백패킹: "BACKPACKING",
+  낚시: "FISHING",
+  "풀등 체험": "PULDEUNG",
+  해루질: "NIGHT_GATHERING",
+  짚라인: "ZIPLINE",
+  모노레일: "MONORAIL",
+  루지: "LUGE",
+  골프: "GOLF",
+  수련단체활동: "GROUP_TRAINING",
+  산림욕: "FOREST_BATH",
+  "일몰 감상": "SUNSET",
+  "물범 관찰": "SEAL_WATCHING",
+  "은하수 체험": "STARGAZING",
+  "섬마을 투어": "VILLAGE_TOUR",
+  "온천-스파": "SPA",
+  기타: "ETC",
 };
 
 const norm = (v = "") => String(v).normalize("NFC").replace(/\s+/g, "").toLowerCase();
@@ -35,6 +68,7 @@ const RULES = [
   ["모노레일", "EXPERIENCE", /모노레일|레일바이크/],
   ["풀등 체험", "EXPERIENCE", /풀등|해양생태관/],
   ["해루질", "EXPERIENCE", /해루질/],
+  ["해수욕장", "SEA", /해수욕장/],
   ["갯벌체험", "SEA", /갯벌|조개|어촌체험|어촌계|머드|생태체험|체험마을|관광농원|자연체험/],
   ["낚시", "EXPERIENCE", /낚시|좌대|조행|피싱|저수지|수로|낚시터/],
 
@@ -61,7 +95,7 @@ const RULES = [
   // ── 힐링 (경관성 — 시설 종류가 앞서도록 뒤에 둔다) ──
   ["일몰 감상", "HEALING", /일몰|노을|낙조/],
   ["섬마을 투어", "HEALING", /벽화|마을투어|약수터|사찰|절$|바위|등대|전적비|유적/],
-  ["해안 산책", "SEA", /산책|해변|해수욕장|해안|둘레|포구|선착장/],
+  ["해안 산책", "SEA", /산책|해변|해안|둘레|포구|선착장/],
 ];
 
 /**

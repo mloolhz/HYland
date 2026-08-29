@@ -70,7 +70,7 @@ export const WEB_FACILITIES = [
   },
   {
     name: "마시안해변",
-    activity: "갯벌체험",
+    activity: "해안 산책",
     category: "SEA",
     islandId: "yeongj",
     islandName: "영종도",
@@ -94,7 +94,7 @@ export const WEB_FACILITIES = [
   },
   {
     name: "하나개해수욕장 갯벌체험",
-    activity: "갯벌체험",
+    activity: "해수욕장",
     category: "SEA",
     islandId: "muui",
     islandName: "무의도",
@@ -105,7 +105,7 @@ export const WEB_FACILITIES = [
   },
   {
     name: "큰무리어촌체험마을",
-    activity: "갯벌체험",
+    activity: "해안 산책",
     category: "SEA",
     islandId: "muui",
     islandName: "무의도",
@@ -241,7 +241,7 @@ export const WEB_FACILITIES = [
   },
   {
     name: "큰말해변",
-    activity: "갯벌체험",
+    activity: "해수욕장",
     category: "SEA",
     islandId: "jawol",
     islandName: "자월도",
@@ -254,7 +254,7 @@ export const WEB_FACILITIES = [
   // ══════════════ 승봉도 (seungb) ══════════════
   {
     name: "이일레해수욕장",
-    activity: "해안 산책",
+    activity: "해수욕장",
     category: "SEA",
     islandId: "seungb",
     islandName: "승봉도",
@@ -311,7 +311,7 @@ export const WEB_FACILITIES = [
   },
   {
     name: "작은풀안해변",
-    activity: "해안 산책",
+    activity: "해수욕장",
     category: "SEA",
     islandId: "ijak",
     islandName: "대이작도",
@@ -369,7 +369,7 @@ export const WEB_FACILITIES = [
   },
   {
     name: "밧지름해변",
-    activity: "해안 산책",
+    activity: "해수욕장",
     category: "SEA",
     islandId: "deokj",
     islandName: "덕적도",
@@ -393,7 +393,7 @@ export const WEB_FACILITIES = [
   },
   {
     name: "소야도 떼뿌리해변",
-    activity: "갯벌체험",
+    activity: "해수욕장",
     category: "SEA",
     islandId: "soya",
     islandName: "소야도",
@@ -487,7 +487,7 @@ export const WEB_FACILITIES = [
 
 /** 요청받은 카테고리별 활동 목록 (커버리지 점검용) */
 export const REQUIRED_ACTIVITIES = {
-  SEA: ["요트", "유람선", "패들보트", "갯벌체험", "해안 산책"],
+  SEA: ["요트", "유람선", "패들보트", "갯벌체험", "해안 산책", "해수욕장"],
   LAND: ["트레킹", "자전거", "캠핑", "백패킹"],
   EXPERIENCE: ["낚시", "풀등 체험", "해루질", "짚라인", "모노레일", "루지", "골프", "수련단체활동"],
   HEALING: ["산림욕", "일몰 감상", "물범 관찰", "은하수 체험", "섬마을 투어", "온천-스파"],

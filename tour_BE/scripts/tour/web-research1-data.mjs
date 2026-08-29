@@ -38,7 +38,7 @@ export const WEB_FACILITIES_G1 = [
   },
   {
     name: "사곶해변",
-    activity: "해안 산책",
+    activity: "해수욕장",
     category: "SEA",
     islandId: "baek",
     islandName: "백령도",
@@ -213,7 +213,7 @@ export const WEB_FACILITIES_G1 = [
   // ══════════════ 석모도 (seok) — 기존 6곳 ══════════════
   {
     name: "민머루해변",
-    activity: "해안 산책",
+    activity: "해수욕장",
     category: "SEA",
     islandId: "seok",
     islandName: "석모도",
@@ -248,7 +248,7 @@ export const WEB_FACILITIES_G1 = [
   // ══════════════ 장봉도 (jang) — 기존 데이터 0곳 ══════════════
   {
     name: "옹암해변",
-    activity: "해안 산책",
+    activity: "해수욕장",
     category: "SEA",
     islandId: "jang",
     islandName: "장봉도",
@@ -294,7 +294,7 @@ export const WEB_FACILITIES_G1 = [
   },
   {
     name: "수기해변",
-    activity: "해안 산책",
+    activity: "해수욕장",
     category: "SEA",
     islandId: "sinsi",
     islandName: "신도·시도·모도",
