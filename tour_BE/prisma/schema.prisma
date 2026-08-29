@@ -168,6 +168,7 @@ model Island {
   sportLinks    SportIsland[]
   missionQuests MissionQuest[]
   visits        UserIslandVisit[]
+  leisureSports LeisureSport[]
 
   @@map("islands")
 }
@@ -188,6 +189,7 @@ model SportCategory {
   id      String  @id // "water" | "land" | "exp" | "heal"
   label   String
   sports  Sport[]
+  leisureSports LeisureSport[]
 
   @@map("sport_categories")
 }
@@ -459,4 +461,143 @@ model Recommendation {
 
   @@index([islandBti])
   @@index([sessionId, createdAt])
+}
+
+// ═══════════════ 레저스포츠 마스터 (관광공사 API + 웹 조사) ═══════════════
+// 외부 API 원본을 그대로 넣지 않고, 후보 수집 → 검수 → 마스터 등록 순서를 거친다.
+// 월별 순위(hubRank·rlteRank)는 서비스 데이터로 쓰지 않으므로 저장하지 않는다.
+
+/** 레저 활동 — 프론트 레저스포츠 탭의 활동 목록과 1:1 대응 */
+enum LeisureActivity {
+  // 해상레저
+  KAYAK // 카약
+  SURFING // 서핑
+  CRUISE // 유람선
+  PADDLE_BOAT // 패들보트
+  // 육상레저
+  TREKKING // 트레킹
+  CYCLING // 자전거
+  CAMPING // 캠핑
+  BACKPACKING // 백패킹
+  // 체험
+  MUDFLAT // 갯벌체험
+  FISHING // 낚시
+  PULDEUNG // 풀등 체험
+  NIGHT_GATHERING // 해루질
+  ZIPLINE // 짚라인
+  MONORAIL // 모노레일
+  LUGE // 루지
+  // 힐링
+  FOREST_BATH // 산림욕
+  SUNSET // 일몰 감상
+  SEAL_WATCHING // 물범 관찰
+  COASTAL_WALK // 해안 산책
+  STARGAZING // 은하수 체험
+  VILLAGE_TOUR // 섬마을 투어
+  SPA // 온천·스파
+  // 이색
+  GOLF // 골프
+  GROUP_TRAINING // 수련단체활동
+  ETC // 기타 (검수 대기)
+}
+
+/** 검증 상태 — 외부 API에서 사라져도 CLOSED로 바꾸지 않는다 */
+enum VerificationStatus {
+  UNVERIFIED // 외부 출처에서 발견했으나 미검증
+  VERIFIED // 실제 운영 확인
+  DUPLICATE // 기존 시설과 동일
+  MERGED // 다른 시설로 통합
+  EXCLUDED // 레저스포츠가 아니거나 일반 이용 불가
+  CLOSED // 폐업·운영 종료 (별도 출처로 확인된 경우만)
+}
+
+/** 외부 출처 구분 */
+enum LeisureSourceType {
+  TOUR_CONTENT // 국문 관광정보 (contentTypeId=28 등)
+  LOCAL_HUB // 기초지자체 중심 관광지
+  RELATED_TOURISM // 관광지별 연관 관광지
+  WEB_RESEARCH // 웹 조사
+  MANUAL // 직접 입력
+}
+
+/** 주소 정확도 */
+enum AddressLevel {
+  EXACT // 도로명·지번까지 확인
+  VILLAGE // 리·동 단위까지만 확인
+  UNKNOWN // 주소 미확보
+}
+
+/** 검수를 통과한 레저스포츠 시설 (서비스에 노출되는 마스터) */
+model LeisureSport {
+  id           Int                @id @default(autoincrement())
+  name         String
+  categoryId   String             @map("category_id") // sport_categories.id (water/land/exp/heal/unique)
+  activity     LeisureActivity
+  islandId     String?            @map("island_id")
+  address      String?
+  addressLevel AddressLevel       @default(UNKNOWN) @map("address_level")
+  latitude     Float?
+  longitude    Float?
+  description  String?            @db.Text
+  imageUrl     String?            @map("image_url")
+  phone        String?
+  reservationUrl String?          @map("reservation_url")
+  active       Boolean            @default(true)
+  verification VerificationStatus @default(UNVERIFIED)
+  createdAt    DateTime           @default(now()) @map("created_at")
+  updatedAt    DateTime           @updatedAt @map("updated_at")
+
+  category SportCategory        @relation(fields: [categoryId], references: [id])
+  island   Island?              @relation(fields: [islandId], references: [id])
+  sources  LeisureSportSource[]
+
+  @@index([islandId, activity])
+  @@index([categoryId])
+  @@map("leisure_sports")
+}
+
+/** 시설이 어느 출처에서 발견됐는지 (한 시설이 여러 출처에 걸칠 수 있음) */
+model LeisureSportSource {
+  id             Int               @id @default(autoincrement())
+  leisureSportId Int               @map("leisure_sport_id")
+  sourceType     LeisureSourceType @map("source_type")
+  /** 출처 내부 고유키 (contentid, hubTatsCd, rlteTatsCd 등) */
+  externalId     String?           @map("external_id")
+  sourceName     String?           @map("source_name")
+  sourceUrl      String?           @map("source_url") @db.Text
+  /** 출처가 붙인 원본 분류 (예: 레저스포츠/수상레저스포츠) */
+  rawCategory    String?           @map("raw_category")
+  firstSeenAt    DateTime          @default(now()) @map("first_seen_at")
+  lastSeenAt     DateTime          @updatedAt @map("last_seen_at")
+  rawData        Json?             @map("raw_data")
+
+  leisureSport LeisureSport @relation(fields: [leisureSportId], references: [id], onDelete: Cascade)
+
+  @@unique([sourceType, externalId])
+  @@index([leisureSportId])
+  @@map("leisure_sport_sources")
+}
+
+/** 아직 검수를 통과하지 못한 후보 (보고서 단계의 데이터) */
+model LeisureCandidate {
+  id                Int                @id @default(autoincrement())
+  sourceType        LeisureSourceType  @map("source_type")
+  externalId        String?            @map("external_id")
+  name              String
+  address           String?
+  addressLevel      AddressLevel       @default(UNKNOWN) @map("address_level")
+  latitude          Float?
+  longitude         Float?
+  suggestedActivity LeisureActivity?   @map("suggested_activity")
+  suggestedIslandId String?            @map("suggested_island_id")
+  verification      VerificationStatus @default(UNVERIFIED)
+  /** 검수 메모 (판정 사유·통합 대상 등) */
+  reviewNote        String?            @map("review_note") @db.Text
+  rawData           Json?              @map("raw_data")
+  createdAt         DateTime           @default(now()) @map("created_at")
+  updatedAt         DateTime           @updatedAt @map("updated_at")
+
+  @@unique([sourceType, externalId])
+  @@index([suggestedIslandId])
+  @@map("leisure_candidates")
 }
