@@ -182,50 +182,13 @@
 
 /* ⑤ Detail: photo | info */
 .sp-detail {
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 28px;
+  display: block;
   margin-top: 28px;
-  align-items: start;
 }
 
 /* Photo frame — large slot; images keep own aspect (no forced crop) */
-.sp-photo-frame {
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-height: 420px;
-  padding: 0;
-  border: 1px solid #cbd5e1;
-  border-radius: 0;
-  background: #dce6f0;
-  overflow: hidden;
-}
 
-.sp-photo-img {
-  display: block;
-  max-width: 100%;
-  max-height: 560px;
-  width: auto;
-  height: auto;
-  object-fit: contain;
-}
 
-.sp-photo-placeholder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  width: 100%;
-  min-height: 420px;
-  padding: 24px;
-  color: #64748b;
-  font-size: 14px;
-  text-align: center;
-}
 
 .sp-detail-info {
   min-width: 0;
@@ -253,52 +216,11 @@
   color: #4a5567;
 }
 
-.sp-meta {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 8px;
-  margin-bottom: 16px;
-  padding: 14px 0;
-  border-top: 1px solid #e2e8f0;
-  border-bottom: 1px solid #e2e8f0;
-}
 
-.sp-meta-row {
-  display: grid;
-  grid-template-columns: 88px 1fr;
-  gap: 8px;
-  align-items: baseline;
-}
 
-.sp-meta-label {
-  font-size: 13px;
-  font-weight: 500;
-  color: #8a94a3;
-}
 
-.sp-meta-value {
-  font-size: 14px;
-  color: #1a3a6b;
-  font-weight: 500;
-}
 
-.sp-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 5px 10px;
-  border: 1px solid #cbd5e1;
-  border-radius: 0;
-  background: #fff;
-  color: #4a5567;
-  font-size: 12px;
-  font-weight: 500;
-}
 
-.sp-badge--pay {
-  border-color: #2563eb;
-  color: #2563eb;
-  background: transparent;
-}
 
 .sp-detail-actions {
   display: flex;
@@ -596,22 +518,9 @@
     padding: 16px 8px;
   }
 
-  .sp-detail {
-    grid-template-columns: 1fr;
-    gap: 18px;
-  }
 
-  .sp-photo-frame {
-    min-height: 280px;
-  }
 
-  .sp-photo-img {
-    max-height: 360px;
-  }
 
-  .sp-photo-placeholder {
-    min-height: 280px;
-  }
 
   .sp-detail-name {
     font-size: 22px;

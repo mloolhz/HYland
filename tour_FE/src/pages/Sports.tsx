@@ -7,7 +7,6 @@ import {
   type InfoSource,
   type ReservationType,
   type Sport,
-  type SportIsland,
 } from "@/data/sports";
 import { ISLAND_MAP } from "@/lib/island-data";
 import {
@@ -15,49 +14,18 @@ import {
   resolveSportIslandRegion,
 } from "@/lib/sports-region";
 import {
-  bookingLeadText,
-  bookingSectionTitle,
+  BOOKING_EMPTY_TEXT,
+  BOOKING_LEAD_TEXT,
+  BOOKING_SECTION_TITLE,
   sourceButtonLabel,
 } from "@/lib/sport-booking-resolve";
 import { CONTAINER } from "@/constants/layout";
 import { LEISURE_SPORTS_HERO } from "@/lib/landing-images";
 import { SportCommunityLink } from "@/components/sports/SportCommunityLink";
+import { FacilityGrid } from "@/components/sports/FacilityGrid";
+import { getIslandsByActivity } from "@/data/leisure-facilities";
 
 const HERO_IMAGE = LEISURE_SPORTS_HERO;
-
-function MetaRow({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="sp-meta-row">
-      <span className="sp-meta-label">{label}</span>
-      <span className="sp-meta-value">{value}</span>
-    </div>
-  );
-}
-
-function SportPhoto({ sport }: { sport: Sport }) {
-  const src = sport.photo?.trim();
-
-  return (
-    <div className="sp-photo-frame">
-      {src ? (
-        <img
-          className="sp-photo-img"
-          src={src}
-          alt={`${sport.name} 대표 이미지`}
-        />
-      ) : (
-        <div className="sp-photo-placeholder" aria-label={`${sport.name} 대표 이미지 자리`}>
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <rect x="3" y="5" width="18" height="14" stroke="#64748B" strokeWidth="1.6" />
-            <circle cx="9" cy="10" r="1.6" fill="#64748B" />
-            <path d="M3 16l5-4 3 2 4-5 6 7" stroke="#64748B" strokeWidth="1.6" strokeLinejoin="round" />
-          </svg>
-          <span>《{sport.name}》 대표 이미지 (사진 삽입 영역)</span>
-        </div>
-      )}
-    </div>
-  );
-}
 
 function InfoSourceLink({
   source,
@@ -89,16 +57,15 @@ function InfoSourceLink({
 function SportBookingSection({ sport }: { sport: Sport }) {
   const { reservationType, sources } = sport;
   const hasSources = sources.length > 0;
-  const isCommunityOnly = reservationType === "community";
 
   return (
     <section className="sp-section" aria-labelledby="sp-booking-heading">
       <h3 id="sp-booking-heading" className="sp-section-title">
-        {bookingSectionTitle(reservationType)}
+        {BOOKING_SECTION_TITLE}
       </h3>
       {hasSources ? (
         <div className="sp-booking-box">
-          <p className="sp-booking-lead">{bookingLeadText(sport)}</p>
+          <p className="sp-booking-lead">{BOOKING_LEAD_TEXT}</p>
           <div className="sp-booking-actions">
             {sources.map((source) => (
               <InfoSourceLink
@@ -112,16 +79,9 @@ function SportBookingSection({ sport }: { sport: Sport }) {
             <p className="sp-booking-note">외부 예약처로 이동합니다. 결제·예약은 해당 사이트에서 진행됩니다.</p>
           )}
         </div>
-      ) : isCommunityOnly ? (
-        <div className="sp-booking-box sp-booking-box--free">
-          <p className="sp-booking-lead">{bookingLeadText(sport)}</p>
-        </div>
       ) : (
         <div className="sp-booking-box sp-booking-box--free">
-          <strong>별도 예약이 필요 없는 자유 활동입니다.</strong>
-          {sport.id === "backpack" && " 배편은 사전 예매가 필수입니다."}
-          {" · "}
-          각 섬의 코스·물때 정보를 확인하고 자유롭게 즐기세요.
+          <p className="sp-booking-lead">{BOOKING_EMPTY_TEXT}</p>
         </div>
       )}
     </section>
@@ -160,13 +120,19 @@ export function Sports() {
     setSelectedId(SPORTS_DATA[key][0].id);
   };
 
+  /** 이 종목의 시설이 실제로 있는 섬만 노출한다 */
+  const islands = useMemo(
+    () => (selected ? getIslandsByActivity(selected.name) : []),
+    [selected],
+  );
+
   const openIsland = useCallback(
-    (island: SportIsland) => {
-      if (island.id && ISLAND_MAP[island.id]) {
-        navigate("/islands", { state: { islandId: island.id } });
+    (id: string, name: string) => {
+      if (ISLAND_MAP[id]) {
+        navigate("/islands", { state: { islandId: id } });
         return;
       }
-      console.warn("[sports] IslandExplorer에 없는 섬 — 목록으로 이동:", island.n, island.id);
+      console.warn("[sports] IslandExplorer에 없는 섬 — 목록으로 이동:", name, id);
       navigate("/islands");
     },
     [navigate],
@@ -236,54 +202,51 @@ export function Sports() {
             </div>
 
             <section className="sp-detail" aria-label={`${selected.name} 상세`}>
-              <SportPhoto sport={selected} />
               <div className="sp-detail-info">
                 <p className="sp-detail-cat">{categoryLabel}</p>
                 <h3 className="sp-detail-name">{selected.name}</h3>
                 <p className="sp-detail-desc">{selected.desc}</p>
-                <div className="sp-meta" aria-label="종목 정보">
-                  <MetaRow label="난이도" value={selected.diff} />
-                  <MetaRow label="가격" value={selected.price} />
-                  <MetaRow label="가능 시기" value={selected.season} />
-                </div>
                 <div className="sp-detail-actions">
-                  <span className={`sp-badge${selected.pay ? " sp-badge--pay" : ""}`}>
-                    {selected.pay ? "예약/시설 이용" : "자유 활동"}
-                  </span>
                   <SportCommunityLink sportName={selected.name} />
                 </div>
               </div>
             </section>
 
-            <section className="sp-section" aria-labelledby="sp-islands-heading">
-              <h3 id="sp-islands-heading" className="sp-section-title">
-                이용 가능한 섬 ({selected.islands.length})
-              </h3>
-              <ul className="sp-island-cards">
-                {selected.islands.map((island) => (
-                  <li key={`${selected.id}-${island.n}`}>
-                    <button
-                      type="button"
-                      className="sp-island-card"
-                      onClick={() => openIsland(island)}
-                    >
-                      <span
-                        className="sp-island-bar"
-                        style={{ background: resolveSportIslandAccent(island.n) }}
-                        aria-hidden="true"
-                      />
-                      <span className="sp-island-text">
-                        <span className="sp-island-name">{island.n}</span>
-                        <span className="sp-island-region">{resolveSportIslandRegion(island.n)}</span>
-                      </span>
-                      <span className="sp-island-arrow" aria-hidden="true">
-                        ›
-                      </span>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </section>
+            {islands.length > 0 && (
+              <section className="sp-section" aria-labelledby="sp-islands-heading">
+                <h3 id="sp-islands-heading" className="sp-section-title">
+                  이용 가능한 섬 ({islands.length})
+                </h3>
+                <ul className="sp-island-cards">
+                  {islands.map((island) => (
+                    <li key={island.id}>
+                      <button
+                        type="button"
+                        className="sp-island-card"
+                        onClick={() => openIsland(island.id, island.name)}
+                      >
+                        <span
+                          className="sp-island-bar"
+                          style={{ background: resolveSportIslandAccent(island.name) }}
+                          aria-hidden="true"
+                        />
+                        <span className="sp-island-text">
+                          <span className="sp-island-name">{island.name}</span>
+                          <span className="sp-island-region">
+                            {resolveSportIslandRegion(island.name)}
+                          </span>
+                        </span>
+                        <span className="sp-island-arrow" aria-hidden="true">
+                          ›
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            <FacilityGrid sportName={selected.name} />
 
             <SportBookingSection sport={selected} />
           </div>

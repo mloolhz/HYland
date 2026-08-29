@@ -15,7 +15,6 @@ export type Sport = {
   id: string;
   name: string;
   desc: string;
-  pay: boolean;
   photo?: string;
   diff: string;
   price: string;
@@ -66,7 +65,6 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
     {
       id: "yacht",
       name: "요트",
-      pay: true,
       photo: "/sports/yacht.jpg",
       diff: "누구나",
       price: "5만원~",
@@ -77,7 +75,6 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
             {
       id: "cruise",
       name: "유람선",
-      pay: true,
       photo: "/sports/cruise.jpg",
       diff: "누구나",
       price: "2.1만원",
@@ -88,7 +85,6 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
     {
       id: "paddle",
       name: "패들보트",
-      pay: true,
       photo: "/sports/paddle.jpg",
       diff: "누구나",
       price: "1만원대~",
@@ -102,7 +98,6 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
   {
       id: "mud",
       name: "갯벌체험",
-      pay: true,
       photo: "/sports/mud.jpg",
       diff: "누구나",
       price: "무료~4천원",
@@ -124,16 +119,37 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
 {
       id: "walk",
       name: "해안 산책",
-      pay: false,
       photo: "/sports/walk.jpg",
       diff: "누구나",
       price: "무료",
       season: "연중",
       desc: "해안 둘레길과 해상 탐방로를 걸으며 파도 소리와 바다 풍경을 즐기는 여유로운 산책.",
       islands: [
-        { id: "yheung", n: "영흥도", c: "#10B981" },
-        { id: "muui", n: "무의도", c: "#2563EB" },
-        { id: "gangh", n: "강화도", c: "#F59E0B" },
+        island("baek", "백령도"),
+        island("daech", "대청도"),
+        island("muui", "무의도"),
+        island("yeongj", "영종도"),
+        island("gureop", "굴업도"),
+      ],
+    },
+    {
+      id: "beach",
+      name: "해수욕장",
+      diff: "누구나",
+      price: "무료",
+      season: "7~8월",
+      desc: "인천 섬마다 자리한 백사장에서 해수욕과 물놀이를 즐깁니다. 개장 기간과 편의시설은 섬별로 다릅니다.",
+      islands: [
+        island("baek", "백령도"),
+        island("seok", "석모도"),
+        island("sinsi", "신도·시도·모도"),
+        island("jang", "장봉도"),
+        island("muui", "무의도"),
+        island("jawol", "자월도"),
+        island("seungb", "승봉도"),
+        island("ijak", "대이작도"),
+        island("deokj", "덕적도"),
+        island("soya", "소야도"),
       ],
     },
   ],
@@ -141,7 +157,6 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
     {
       id: "trek",
       name: "트레킹",
-      pay: false,
       photo: "/sports/trek.jpg",
       diff: "입문~중급",
       price: "무료",
@@ -164,7 +179,6 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
     {
       id: "cycle",
       name: "자전거",
-      pay: true,
       photo: "/sports/cycle.jpg",
       diff: "입문",
       price: "대여 1만원대~",
@@ -182,7 +196,6 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
     {
       id: "camp",
       name: "캠핑",
-      pay: true,
       photo: "/sports/camp.jpg",
       diff: "초보 가능",
       price: "무료~3만원 (야영장별 상이)",
@@ -201,7 +214,6 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
     {
       id: "backpack",
       name: "백패킹",
-      pay: false,
       diff: "중급",
       price: "무료 (배편·식사비 별도)",
       season: "4~11월",
@@ -214,7 +226,6 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
     {
       id: "fish",
       name: "낚시",
-      pay: true,
       photo: "/sports/fish.jpg",
       diff: "입문~중급",
       price: "무료~5만원",
@@ -235,7 +246,6 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
     {
       id: "pool",
       name: "풀등 체험",
-      pay: false,
       photo: "/sports/pool.jpg",
       diff: "누구나",
       price: "무료",
@@ -246,7 +256,6 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
     {
       id: "night",
       name: "해루질",
-      pay: false,
       photo: "/sports/night.jpg",
       diff: "초급",
       price: "무료",
@@ -261,7 +270,6 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
     {
       id: "zip",
       name: "짚라인",
-      pay: true,
       photo: "/sports/zip.jpg",
       diff: "초급",
       price: "2만원대~",
@@ -275,7 +283,6 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
     {
       id: "monorail",
       name: "모노레일",
-      pay: true,
       photo: "/sports/monorail.jpg",
       diff: "초급",
       price: "2만원대~",
@@ -286,7 +293,6 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
     {
       id: "luge",
       name: "루지",
-      pay: true,
       photo: "/sports/luge.jpg",
       diff: "누구나",
       price: "1만원대~",
@@ -298,7 +304,6 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
     {
       id: "golf",
       name: "골프",
-      pay: true,
       photo: "/sports/golf.jpg",
       diff: "경험자",
       price: "10만원 이상",
@@ -309,7 +314,6 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
     {
       id: "retreat",
       name: "수련·단체 활동",
-      pay: true,
       photo: "/sports/retreat.jpg",
       diff: "누구나",
       price: "문의",
@@ -322,7 +326,6 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
     {
       id: "forest",
       name: "산림욕",
-      pay: false,
       photo: "/sports/forest.jpg",
       diff: "누구나",
       price: "무료",
@@ -336,7 +339,6 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
     {
       id: "sunset",
       name: "일몰 감상",
-      pay: false,
       photo: "/sports/sunset.jpg",
       diff: "누구나",
       price: "무료",
@@ -353,7 +355,6 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
     {
       id: "seal",
       name: "물범 관찰",
-      pay: true,
       photo: "/sports/seal.jpg",
       diff: "누구나",
       price: "유람선 포함",
@@ -365,7 +366,6 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
     {
       id: "star",
       name: "은하수 체험",
-      pay: true,
       photo: "/sports/star.jpg",
       diff: "누구나",
       price: "프로그램 포함",
@@ -379,7 +379,6 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
     {
       id: "village",
       name: "섬마을 투어",
-      pay: true,
       photo: "/sports/village.jpg",
       diff: "누구나",
       price: "프로그램 포함",
@@ -393,7 +392,6 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
     {
       id: "spa",
       name: "온천·스파",
-      pay: true,
       photo: "/sports/spa.jpg",
       diff: "누구나",
       price: "1만원대",

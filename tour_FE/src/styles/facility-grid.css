@@ -1,0 +1,135 @@
+/* 종목별 실제 레저스포츠 시설 카드 — 레저스포츠 상세(sports.css) 톤에 맞춘 각진 카드 */
+
+.fc-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fc-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  overflow: hidden;
+}
+
+.fc-photo {
+  display: block;
+  width: 100%;
+  height: 132px;
+  object-fit: cover;
+  background: #dce6f0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.fc-photo--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+}
+
+.fc-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px 14px;
+}
+
+.fc-name {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a3a6b;
+  line-height: 1.4;
+}
+
+.fc-island {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 12px;
+  color: #2563eb;
+}
+
+.fc-island-dot {
+  display: block;
+  width: 4px;
+  height: 12px;
+  flex: none;
+}
+
+.fc-line {
+  display: flex;
+  gap: 6px;
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #64748b;
+  word-break: keep-all;
+}
+
+.fc-icon {
+  flex: none;
+  color: #94a3b8;
+}
+
+.fc-tel {
+  color: #64748b;
+  text-decoration: none;
+}
+
+.fc-tel:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.fc-more {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  color: #1a3a6b;
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.fc-more:hover {
+  border-color: #2563eb;
+  background: #fff;
+}
+
+.fc-more:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 1px;
+}
+
+@media (max-width: 1024px) {
+  .fc-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .fc-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .fc-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fc-photo {
+    height: 160px;
+  }
+}
