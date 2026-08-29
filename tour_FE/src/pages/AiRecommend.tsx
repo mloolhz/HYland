@@ -8,6 +8,7 @@ import {
   getWeather,
   saveTop3Recommendation,
   type ChatHistoryItem,
+  type QuestionSource,
 } from "@/api/ai-recommend";
 import { postRecommendations } from "@/api/recommendation";
 import { AiRecommendComposer } from "@/components/ai-recommend/AiRecommendComposer";
@@ -55,6 +56,8 @@ type AiTurn = {
   streamText: string;
   /** TOP3 턴 전용: 비슷한 조건의 다른 세션이 이어서 물어본 예상 질문 (null이면 미조회) */
   suggestedQuestions: string[] | null;
+  /** 재시도 시 원래 출처를 그대로 다시 보내기 위해 보관 */
+  questionSource?: QuestionSource;
 };
 
 function createId() {
@@ -295,7 +298,7 @@ export function AiRecommend() {
     async (
       displayText: string,
       promptText: string,
-      options: { withRecommendation: boolean },
+      options: { withRecommendation: boolean; questionSource?: QuestionSource },
     ) => {
       if (loading) return;
 
@@ -318,6 +321,7 @@ export function AiRecommend() {
           assistant: null,
           streamText: "",
           suggestedQuestions: null,
+          questionSource: options.questionSource,
         },
       ]);
 
@@ -414,12 +418,19 @@ export function AiRecommend() {
               streamed = r;
             },
             sessionId,
+            options.questionSource,
           );
           if (!streamed) throw new Error("스트림 응답 없음");
           response = streamed;
         } catch (streamErr) {
           console.warn("[ai-recommend] 스트리밍 실패, 논스트리밍 폴백", streamErr);
-          response = await getAiRecommendation(promptText, history, persona, sessionId);
+          response = await getAiRecommendation(
+            promptText,
+            history,
+            persona,
+            sessionId,
+            options.questionSource,
+          );
         }
 
         setTurns((prev) => prev.map((t) => (t.id === turnId ? { ...t, phase: "detail-typing" } : t)));
@@ -441,11 +452,16 @@ export function AiRecommend() {
     [hasResult, islandBtiResultCode, loading, runStructuredRecommendation, sessionId, tripForm, turns, typeOutText],
   );
 
+  /**
+   * questionSource는 인기질문 집계에서 칩 클릭을 빼기 위한 것이다.
+   * 칩으로 들어온 질문까지 집계하면 AI가 만든 followup 문구가 인기질문이 되고
+   * 그게 다시 첫 화면 칩으로 노출돼 스스로를 강화한다.
+   */
   const sendMessage = useCallback(
-    async (text: string) => {
+    async (text: string, questionSource: QuestionSource = "user") => {
       const trimmed = text.trim();
       if (!trimmed) return;
-      await executeTurn(trimmed, trimmed, { withRecommendation: false });
+      await executeTurn(trimmed, trimmed, { withRecommendation: false, questionSource });
     },
     [executeTurn],
   );
@@ -458,7 +474,10 @@ export function AiRecommend() {
 
   const retryTurn = useCallback(
     (turn: AiTurn) => {
-      void executeTurn(turn.displayText, turn.promptText, { withRecommendation: turn.hasTop3 });
+      void executeTurn(turn.displayText, turn.promptText, {
+        withRecommendation: turn.hasTop3,
+        questionSource: turn.questionSource,
+      });
     },
     [executeTurn],
   );
@@ -540,7 +559,12 @@ export function AiRecommend() {
                 ? popularQuestions
                 : AI_RECOMMEND_COPY.exampleQuestions
               ).map((q) => (
-                <button key={q} type="button" className="ai-example-chip" onClick={() => void sendMessage(q)}>
+                <button
+                  key={q}
+                  type="button"
+                  className="ai-example-chip"
+                  onClick={() => void sendMessage(q, "chip")}
+                >
                   {q}
                 </button>
               ))}
@@ -597,7 +621,7 @@ export function AiRecommend() {
                                 key={q}
                                 type="button"
                                 className="ai-followup-chip"
-                                onClick={() => void sendMessage(q)}
+                                onClick={() => void sendMessage(q, "chip")}
                               >
                                 {q}
                               </button>
@@ -612,7 +636,7 @@ export function AiRecommend() {
                       <div className="ai-bubble ai-bubble--assistant">
                         <AiResponseContent
                           response={turn.assistant}
-                          onFollowup={(text) => void sendMessage(text)}
+                          onFollowup={(text) => void sendMessage(text, "chip")}
                         />
                       </div>
                     ) : turn.phase === "detail-typing" ? (
