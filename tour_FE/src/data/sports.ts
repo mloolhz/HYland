@@ -72,7 +72,7 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
       price: "5만원~",
       season: "3~11월",
       desc: "왕산마리나에서 요트를 타고 서해 노을과 인천대교 전망을 감상하는 해양 레저.",
-      islands: [{ id: "yeongj", n: "영종도 (왕산마리나)", c: "#0EA5E9" }],
+      islands: [{ id: "yeongj", n: "영종도", c: "#0EA5E9" }],
     },
             {
       id: "cruise",
@@ -83,7 +83,7 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
       price: "2.1만원",
       season: "연중",
       desc: "두무진 해상을 약 50분간 유람하며 코끼리바위·선대암 등 기암괴석과 점박이물범 서식지를 배 위에서 감상합니다.",
-      islands: [{ id: "baek", n: "백령도 (두무진)", c: "#EF4444" }],
+      islands: [{ id: "baek", n: "백령도", c: "#EF4444" }],
     },
     {
       id: "paddle",
@@ -112,7 +112,7 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
         { id: "gangh", n: "강화도", c: "#F59E0B" },
         { id: "muui", n: "무의도", c: "#2563EB" },
         { id: "sinsi", n: "신시모도", c: "#2563EB" },
-        { id: "yheung", n: "영흥도(+선재)", c: "#10B981" },
+        { id: "yheung", n: "영흥도", c: "#10B981" },
         { id: "jawol", n: "자월도", c: "#10B981" },
         { id: "ijak", n: "대이작도", c: "#10B981" },
         { id: null, n: "소이작도", c: "#10B981" },
@@ -131,8 +131,8 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
       season: "연중",
       desc: "해안 둘레길과 해상 탐방로를 걸으며 파도 소리와 바다 풍경을 즐기는 여유로운 산책.",
       islands: [
-        { id: "yheung", n: "영흥도 (십리포)", c: "#10B981" },
-        { id: "muui", n: "무의도 (해상탐방로)", c: "#2563EB" },
+        { id: "yheung", n: "영흥도", c: "#10B981" },
+        { id: "muui", n: "무의도", c: "#2563EB" },
         { id: "gangh", n: "강화도", c: "#F59E0B" },
       ],
     },
@@ -269,7 +269,7 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
       desc: "높은 곳에서 와이어를 타고 바다 위를 활강하는 짜릿한 체험.",
       islands: [
         { id: "gangh", n: "강화도", c: "#F59E0B" },
-        { id: "muui", n: "무의도 (하나개)", c: "#2563EB" },
+        { id: "muui", n: "무의도", c: "#2563EB" },
       ],
     },
     {
@@ -304,7 +304,7 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
       price: "10만원 이상",
       season: "3~11월",
       desc: "바다를 끼고 라운딩하는 해안 골프장에서 이색적인 경관을 즐깁니다.",
-      islands: [{ id: "yeongj", n: "영종도 (클럽72)", c: "#0EA5E9" }],
+      islands: [{ id: "yeongj", n: "영종도", c: "#0EA5E9" }],
     },
     {
       id: "retreat",
@@ -329,7 +329,7 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
       season: "연중",
       desc: "100년 넘은 해송 군락과 피톤치드 가득한 숲길을 거닐며 몸과 마음을 치유합니다.",
       islands: [
-        { id: "deokj", n: "덕적도 (서포리)", c: "#8B5CF6" },
+        { id: "deokj", n: "덕적도", c: "#8B5CF6" },
         { id: "gangh", n: "강화도", c: "#F59E0B" },
       ],
     },
@@ -399,7 +399,7 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
       price: "1만원대",
       season: "연중",
       desc: "석모도 미네랄 온천에서 바다를 바라보며 온천욕을 즐깁니다.",
-      islands: [{ id: "seok", n: "석모도 (강화)", c: "#F59E0B" }],
+      islands: [{ id: "seok", n: "석모도", c: "#F59E0B" }],
     },
   ],
   // 해상·육상·체험·힐링 어디에도 딱 맞지 않는 이색 시설 (골프·수련원 등)
