@@ -2,6 +2,7 @@ import {
   IS_MOCK_WEATHER_CONTEXT,
   type IslandTravelContext,
 } from "@/lib/recommendation/context/travel-context.mock";
+import type { FacilityMatchResult } from "@/lib/recommendation/facility/island-facility-index";
 import type {
   IslandRecommendationItem,
   RecommendationScoreBreakdown,
@@ -43,8 +44,17 @@ export function buildRecommendationReasons(
   scores: Omit<RecommendationScoreBreakdown, "finalScore">,
   ctx: ReasonContext,
   weather: WeatherContext,
+  facility?: FacilityMatchResult,
 ): string[] {
   const reasons: string[] = [];
+
+  // 실제 시설 데이터에 근거한 이유를 맨 앞에 둔다. 추천도(%)를 없앤 뒤로는
+  // 이유가 곧 근거이므로, 검증 가능한 사실("트레킹 시설 19곳")이 가장 앞에 와야 한다.
+  if (facility) {
+    for (const matched of facility.matchedActivities.slice(0, 2)) {
+      reasons.push(`선택하신 ${matched.tripActivity} 시설이 ${matched.count}곳 있어요.`);
+    }
+  }
 
   // 퍼센트 수치는 접이식 점수 상세에만 둔다. 여기서 또 쓰면 점수표·설명문과 함께
   // 같은 사실이 한 카드에 세 번 반복된다.
@@ -62,6 +72,11 @@ export function buildRecommendationReasons(
   // 서로 모순되는 문장이 한 화면에 같이 뜬다. 실제 기상 API를 붙이기 전까지는 생략한다.
   if (!IS_MOCK_WEATHER_CONTEXT) {
     reasons.push(buildWeatherReason(weather));
+  }
+
+  // 활동을 안 골랐거나 매칭된 게 없을 때도, 시설 규모는 말해줄 수 있다.
+  if (facility && facility.matchedActivities.length === 0 && facility.total >= 5) {
+    reasons.push(`섬 안에 레저 시설이 ${facility.total}곳 있어 즐길거리가 많아요.`);
   }
 
   if (scores.transport >= 75) {

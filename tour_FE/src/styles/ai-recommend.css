@@ -1448,3 +1448,33 @@ body:has(.ai-page--intro) {
     font-size: 12px;
   }
 }
+
+/* 추천 근거로 보여주는 실제 레저시설 (관광공사 API + 웹 조사) */
+.ai-rec-facilities {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ai-rec-facility {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: #1a3a6b;
+}
+
+.ai-rec-facility__tag {
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: #2563eb;
+  background: #eef3fc;
+  border: 1px solid #dbe4ef;
+  border-radius: 4px;
+  padding: 2px 7px;
+}

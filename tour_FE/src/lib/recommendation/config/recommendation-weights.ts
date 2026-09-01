@@ -1,11 +1,18 @@
-/** 추천 Final Score 가중치 — 하드코딩 금지, 여기서만 관리 */
+/**
+ * 추천 Final Score 가중치 — 하드코딩 금지, 여기서만 관리
+ *
+ * facilityMatch는 관광공사 API·웹 조사로 수집한 실제 레저시설 145곳을 근거로 하는
+ * 유일한 "검증 가능한" 신호라 비중을 크게 뒀다. 반대로 weather는 아직 mock이고
+ * 하드 필터에서도 빠져 있어(IS_MOCK_WEATHER_CONTEXT) 비중을 줄였다.
+ */
 export const RECOMMENDATION_WEIGHTS = {
-  islandBtiMatch: 0.35,
-  currentTripMatch: 0.3,
-  weather: 0.15,
-  transport: 0.1,
-  condition: 0.05,
-  exploration: 0.05,
+  islandBtiMatch: 0.3,
+  currentTripMatch: 0.22,
+  facilityMatch: 0.25,
+  weather: 0.08,
+  transport: 0.08,
+  condition: 0.04,
+  exploration: 0.03,
 } as const;
 
 /** Exploration bonus (0~100 scale) */

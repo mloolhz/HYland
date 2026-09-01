@@ -11,6 +11,7 @@ import {
   pickRecommendedActivities,
 } from "@/lib/recommendation/engine/reason-builder";
 import { scoreCurrentTripMatch } from "@/lib/recommendation/engine/trip-intent-scorer";
+import { scoreFacilityMatch } from "@/lib/recommendation/facility/island-facility-index";
 import { getUserTraitLabelsFromBti } from "@/lib/recommendation/preference/bti-preference.mapper";
 import { cosineSimilarityScore } from "@/lib/recommendation/preference/similarity";
 import { loadUserPreference } from "@/lib/recommendation/preference/user-preference-storage";
@@ -61,10 +62,12 @@ export function runRecommendationEngine(
 
     const currentTripMatch = scoreCurrentTripMatch(request.trip, island);
     const contextScores = scoreContextFactors(island, context, request.trip, visitedIslandIds);
+    const facility = scoreFacilityMatch(island.islandId, request.trip);
 
     const partialScores = {
       islandBtiMatch,
       currentTripMatch,
+      facilityMatch: facility.score,
       weather: contextScores.weather,
       transport: contextScores.transport,
       condition: contextScores.condition,
@@ -89,10 +92,15 @@ export function runRecommendationEngine(
           visitedIslandIds,
         },
         { weatherAlert: context.weatherAlert, waveHeightM: context.waveHeightM },
+        facility,
       ),
       tags: buildRecommendationTags(partialScores, visitedIslandIds.has(island.islandId)),
       estimatedBudget: island.averageBudget,
       recommendedActivities: pickRecommendedActivities(island.activities, request.trip.activities),
+      facilityHighlights: facility.matchedActivities
+        .flatMap((matched) => matched.samples)
+        .slice(0, 3)
+        .map((f) => ({ name: f.name, activity: f.activity })),
     });
   }
 

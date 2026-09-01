@@ -74,6 +74,18 @@ export function RecommendationResultsPanel({ response, weather }: Recommendation
             <p className="ai-rec-island-card__description">{item.aiDescription}</p>
           ) : null}
 
+          {/* 실제 존재하는 시설 이름 — 추천 이유를 눈으로 확인할 수 있게 한다 */}
+          {item.facilityHighlights && item.facilityHighlights.length > 0 ? (
+            <ul className="ai-rec-facilities">
+              {item.facilityHighlights.map((f) => (
+                <li key={`${f.activity}-${f.name}`} className="ai-rec-facility">
+                  <span className="ai-rec-facility__tag">{f.activity}</span>
+                  {f.name}
+                </li>
+              ))}
+            </ul>
+          ) : null}
+
           {item.itinerary && item.itinerary.length > 0 ? (
             <details className="ai-rec-details">
               <summary className="ai-rec-details__summary">코스 자세히 보기</summary>

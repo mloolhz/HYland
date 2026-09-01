@@ -71,6 +71,8 @@ export type RecommendationRequest = {
 export type RecommendationScoreBreakdown = {
   islandBtiMatch: number;
   currentTripMatch: number;
+  /** 실제 레저시설 데이터(관광공사 API + 웹 조사) 기반 일치도 */
+  facilityMatch: number;
   weather: number;
   transport: number;
   condition: number;
@@ -89,6 +91,11 @@ export type IslandRecommendationItem = {
   tags: string[];
   estimatedBudget: number;
   recommendedActivities: string[];
+  /**
+   * 선택한 활동에 실제로 대응하는 레저시설 (관광공사 API + 웹 조사).
+   * 추천도(%)를 없앤 뒤 "왜 이 섬인지"를 뒷받침하는 검증 가능한 근거로 쓴다.
+   */
+  facilityHighlights?: { name: string; activity: string }[];
   aiDescription?: string;
   itinerary?: { order: number; name: string }[];
 };
