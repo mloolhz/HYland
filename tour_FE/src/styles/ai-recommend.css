@@ -1478,3 +1478,40 @@ body:has(.ai-page--intro) {
   border-radius: 4px;
   padding: 2px 7px;
 }
+
+/* ─────────────────────────────────────────────────────────────
+   전환 부드럽게 — intro → 채팅 교체가 즉시 바뀌어 "툭" 끊겨 보이던 것 보완
+   ───────────────────────────────────────────────────────────── */
+
+@keyframes ai-chat-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ai-chat {
+  animation: ai-chat-enter 300ms ease-out both;
+}
+
+/* 로딩 점도 그냥 나타나지 않고 살짝 떠오르게 */
+.ai-bubble--loading {
+  animation: ai-fade-up 260ms ease-out both;
+}
+
+/* 예상 질문 칩이 답변 뒤에 붙을 때의 등장 */
+.ai-followups {
+  animation: ai-fade-up 320ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-chat,
+  .ai-bubble--loading,
+  .ai-followups {
+    animation: none;
+  }
+}

@@ -64,18 +64,37 @@ function createId() {
   return `msg-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
 }
 
-function snapTurnToTop(container: HTMLElement, turnEl: HTMLElement) {
-  const containerTop = container.getBoundingClientRect().top;
-  const turnTop = container.scrollTop + (turnEl.getBoundingClientRect().top - containerTop);
-  container.scrollTop = Math.max(0, Math.ceil(turnTop));
+function prefersReducedMotion(): boolean {
+  return window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
 }
 
+function getTurnTopOffset(container: HTMLElement, turnEl: HTMLElement): number {
+  const containerTop = container.getBoundingClientRect().top;
+  return Math.max(0, Math.ceil(container.scrollTop + (turnEl.getBoundingClientRect().top - containerTop)));
+}
+
+/**
+ * 새 질문을 채팅 영역 맨 위로 올린다.
+ *
+ * 예전에는 scrollTop을 직접 대입하고 rAF로 3번 반복해서 "빡" 하고 끊기듯 튀었다.
+ * 이제 한 번만 부드럽게 이동한다. 목표 위치는 이 턴 위쪽 콘텐츠로만 정해지고
+ * 그 위쪽은 이미 확정된 상태라, 여러 번 다시 잡아줄 필요가 없다.
+ * 다만 카드가 뒤늦게 렌더되며 레이아웃이 밀릴 수 있어, 애니메이션이 끝날 즈음
+ * 한 번만 어긋남을 확인하고 조용히 보정한다.
+ */
 function scrollTurnToTop(container: HTMLElement, turnEl: HTMLElement) {
-  snapTurnToTop(container, turnEl);
-  requestAnimationFrame(() => {
-    snapTurnToTop(container, turnEl);
-    requestAnimationFrame(() => snapTurnToTop(container, turnEl));
-  });
+  const behavior: ScrollBehavior = prefersReducedMotion() ? "auto" : "smooth";
+  container.scrollTo({ top: getTurnTopOffset(container, turnEl), behavior });
+
+  if (behavior === "auto") return;
+
+  window.setTimeout(() => {
+    const target = getTurnTopOffset(container, turnEl);
+    // 몇 px 차이로 다시 스크롤하면 그게 또 흔들림으로 보인다. 눈에 띌 때만 보정.
+    if (Math.abs(container.scrollTop - target) > 8) {
+      container.scrollTo({ top: target, behavior: "smooth" });
+    }
+  }, 420);
 }
 
 function defaultTripForm(): TripIntentFormValue {
@@ -595,7 +614,10 @@ export function AiRecommend() {
                   <div
                     key={turn.id}
                     ref={(el) => setTurnRef(turn.id, el)}
-                    className={`ai-chat-turn${index === 0 ? " ai-fade-up" : ""}`}
+                    // 예전엔 첫 턴에만 등장 애니메이션이 있어서 이후 질문은 툭 나타났다.
+                    // key가 turn.id라 DOM 노드가 유지되므로, 클래스를 항상 붙여도
+                    // 애니메이션은 그 턴이 처음 마운트될 때 한 번만 재생된다.
+                    className="ai-chat-turn ai-fade-up"
                   >
                     <div className="ai-bubble ai-bubble--user">
                       <p>{turn.displayText}</p>
