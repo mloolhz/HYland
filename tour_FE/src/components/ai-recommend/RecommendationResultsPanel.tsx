@@ -8,16 +8,13 @@ type RecommendationResultsPanelProps = {
   weather?: WeatherInfo | null;
 };
 
-function ScoreRow({ label, value }: { label: string; value: number }) {
-  if (value <= 0) return null;
-  return (
-    <li className="ai-rec-score-item">
-      <span>{label}</span>
-      <strong>{value}%</strong>
-    </li>
-  );
-}
-
+/**
+ * 추천도(%)·순위는 화면에 노출하지 않는다.
+ * "추천도 90%"처럼 숫자만 보여주면 "무슨 근거로 매긴 값이지?"라는 의문이 남는데,
+ * 그 근거를 숫자로 납득시키기는 어렵다. 그래서 순위 경쟁이 아니라
+ * "이런 이유로 이 3곳"이라는 설명 중심으로 바꿨다.
+ * (내부 점수 계산·정렬은 그대로 유지 — 어떤 3곳을 고를지 정하는 데만 쓴다)
+ */
 export function RecommendationResultsPanel({ response, weather }: RecommendationResultsPanelProps) {
   if (response.recommendations.length === 0) {
     return (
@@ -48,32 +45,27 @@ export function RecommendationResultsPanel({ response, weather }: Recommendation
           {ISLAND_BTI_RESULTS[response.userIslandBti]
             ? `(${ISLAND_BTI_RESULTS[response.userIslandBti].name})`
             : ""}{" "}
-          성향을 반영해 TOP {response.recommendations.length} 섬을 골랐어요.
+          성향을 반영해 이런 섬 {response.recommendations.length}곳을 추천해요.
         </p>
       ) : (
-        <p className="ai-rec-results__lead">이번 여행 조건 중심으로 TOP {response.recommendations.length} 섬을 골랐어요.</p>
+        <p className="ai-rec-results__lead">
+          이번 여행 조건에 맞춰 이런 섬 {response.recommendations.length}곳을 추천해요.
+        </p>
       )}
 
       {response.recommendations.map((item) => (
         <article key={item.islandId} className="ai-rec-island-card">
           <header className="ai-rec-island-card__head">
-            <div>
-              <span className="ai-rec-island-card__rank">{item.rank}위</span>
-              <h3>{item.islandName}</h3>
-            </div>
-            <div className="ai-rec-island-card__score">
-              <span>추천도</span>
-              <strong>{item.finalScore}%</strong>
-            </div>
+            <h3>{item.islandName}</h3>
           </header>
 
           {response.useIslandBti ? (
             <p className="ai-rec-island-card__bti-note">당신의 섬BTI 성향을 반영했어요.</p>
           ) : null}
 
-          {/* 근거는 2개까지만. 예전엔 4~5개가 모두 펼쳐져 카드가 화면 4배까지 길어졌다. */}
+          {/* 숫자를 뺀 대신 이유가 본문이 된다. 다만 다 펼치면 카드가 다시 길어지므로 3개까지. */}
           <ul className="ai-rec-reasons">
-            {item.recommendationReasons.slice(0, 2).map((reason) => (
+            {item.recommendationReasons.slice(0, 3).map((reason) => (
               <li key={reason}>✓ {reason}</li>
             ))}
           </ul>
@@ -82,20 +74,9 @@ export function RecommendationResultsPanel({ response, weather }: Recommendation
             <p className="ai-rec-island-card__description">{item.aiDescription}</p>
           ) : null}
 
-          {/* 점수 상세·코스는 기본 접힘. 수치(%)는 이 안에서만 보여준다. */}
-          <details className="ai-rec-details">
-            <summary className="ai-rec-details__summary">추천 점수·코스 자세히 보기</summary>
-
-            <ul className="ai-rec-score-list">
-              <ScoreRow label="섬BTI 성향 일치도" value={item.scores.islandBtiMatch} />
-              <ScoreRow label="이번 여행 스타일 일치" value={item.scores.currentTripMatch} />
-              <ScoreRow label="날씨 조건" value={item.scores.weather} />
-              <ScoreRow label="교통 접근성" value={item.scores.transport} />
-              <ScoreRow label="여행 기간 적합" value={item.scores.condition} />
-              <ScoreRow label="탐험 보너스" value={item.scores.exploration} />
-            </ul>
-
-            {item.itinerary && item.itinerary.length > 0 ? (
+          {item.itinerary && item.itinerary.length > 0 ? (
+            <details className="ai-rec-details">
+              <summary className="ai-rec-details__summary">코스 자세히 보기</summary>
               <ol className="ai-rec-itinerary">
                 {item.itinerary.map((step) => (
                   <li key={step.order}>
@@ -104,8 +85,8 @@ export function RecommendationResultsPanel({ response, weather }: Recommendation
                   </li>
                 ))}
               </ol>
-            ) : null}
-          </details>
+            </details>
+          ) : null}
 
           <div className="ai-rec-island-card__actions">
             <Link to={`/islands/${item.islandId}`} className="ai-rec-island-card__link">

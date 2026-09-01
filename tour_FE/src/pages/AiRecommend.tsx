@@ -371,7 +371,7 @@ export function AiRecommend() {
           ]);
           weather = weatherResult;
 
-          // 카드(RecommendationResultsPanel)가 순위·추천도를 이미 보여주므로 같은 내용을
+          // 카드(RecommendationResultsPanel)가 추천 섬과 이유를 이미 보여주므로 같은 내용을
           // 타이핑 애니메이션으로 다시 보여주지 않는다 — 데이터가 오는 즉시 카드를 띄운다.
           setTurns((prev) =>
             prev.map((t) => (t.id === turnId ? { ...t, recommendation, weather, phase: "done" } : t)),
