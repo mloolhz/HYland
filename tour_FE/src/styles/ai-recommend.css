@@ -35,8 +35,21 @@ body:has(.ai-page--intro) {
   overflow: auto;
 }
 
-.ai-page ~ footer {
+/*
+ * footer는 .ai-page의 형제가 아니라 .route-fade-root의 형제라서
+ * `.ai-page ~ footer`는 애초에 매칭되지 않았다(= footer가 그대로 보이고 있었다).
+ * 실제 구조(#root > footer, #root > .route-fade-root > main.ai-page)에 맞춰 잡는다.
+ */
+#root:has(.ai-page) > footer {
   display: none;
+}
+
+/*
+ * .ai-page는 뷰포트 높이만 차지하는데 body 기본 배경이 흰색이라,
+ * 그 아래로 흰 띠가 남았다. AI 추천 화면에서는 body까지 같은 배경으로 채운다.
+ */
+body:has(.ai-page) {
+  background: #f7f9fc;
 }
 
 .ai-page-inner {
@@ -1514,4 +1527,56 @@ body:has(.ai-page--intro) {
   .ai-followups {
     animation: none;
   }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   스크롤바 미니멀화 — 채팅 영역과 AI 화면의 페이지 스크롤바
+   ───────────────────────────────────────────────────────────── */
+
+/*
+ * Chromium은 scrollbar-width가 지정돼 있으면 ::-webkit-scrollbar 규칙을 통째로
+ * 무시한다(그래서 thin=10px로 고정되고 아래 6px가 안 먹었다).
+ * ::-webkit-scrollbar를 모르는 브라우저(Firefox)에서만 표준 속성을 쓴다.
+ */
+@supports not selector(::-webkit-scrollbar) {
+  .ai-chat,
+  html:has(.ai-page),
+  body:has(.ai-page) {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(26, 58, 107, 0.16) transparent;
+  }
+}
+
+/* Chromium / Safari */
+.ai-chat::-webkit-scrollbar,
+html:has(.ai-page)::-webkit-scrollbar,
+body:has(.ai-page)::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.ai-chat::-webkit-scrollbar-track,
+html:has(.ai-page)::-webkit-scrollbar-track,
+body:has(.ai-page)::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ai-chat::-webkit-scrollbar-thumb,
+html:has(.ai-page)::-webkit-scrollbar-thumb,
+body:has(.ai-page)::-webkit-scrollbar-thumb {
+  background: rgba(26, 58, 107, 0.16);
+  border-radius: 999px;
+}
+
+.ai-chat::-webkit-scrollbar-thumb:hover,
+html:has(.ai-page)::-webkit-scrollbar-thumb:hover,
+body:has(.ai-page)::-webkit-scrollbar-thumb:hover {
+  background: rgba(26, 58, 107, 0.3);
+}
+
+/* 스크롤바 양 끝의 화살표 버튼 제거 */
+.ai-chat::-webkit-scrollbar-button,
+html:has(.ai-page)::-webkit-scrollbar-button,
+body:has(.ai-page)::-webkit-scrollbar-button {
+  display: none;
 }
