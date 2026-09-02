@@ -6,6 +6,10 @@ import type { CommunityMatchResult } from "@/lib/recommendation/community/commun
 import type { FacilityMatchResult } from "@/lib/recommendation/facility/island-facility-index";
 import type { SportsMatchResult } from "@/lib/recommendation/facility/island-sports-index";
 import {
+  matchesAnyActivity,
+  TRIP_ACTIVITY_TO_LEISURE,
+} from "@/lib/recommendation/vocabulary/activity-vocabulary";
+import {
   objectParticle,
   subjectParticle,
   topicParticle,
@@ -105,8 +109,15 @@ function buildActivityEvidenceLines(
         `${topic} ${objectParticle(names)} 즐길 수 있고, 커뮤니티에 ${subjectParticle(posts)} 올라와 있어요.`,
       );
     } else if (names) {
-      const count = entry.facilityCount > 0 ? ` 등 ${entry.facilityCount}곳` : "";
-      lines.push(`${topic} ${names}${count}에서 즐길 수 있어요.`);
+      // "트레킹 · 백패킹 등 1곳"처럼 이름 수와 곳 수가 어긋나 보이면 안 된다.
+      // 이름은 종목·시설을 합쳐 뽑고 곳 수는 시설만 세므로 둘이 안 맞을 수 있다.
+      // 활동 이름이 하나일 때만 곳 수를 붙인다.
+      const single = [...new Set(entry.names)].length === 1;
+      if (single && entry.facilityCount > 1) {
+        lines.push(`${topic} ${objectParticle(names)} ${entry.facilityCount}곳에서 즐길 수 있어요.`);
+      } else {
+        lines.push(`${topic} ${objectParticle(names)} 즐길 수 있어요.`);
+      }
     } else if (entry.communityPosts > 0) {
       const posts = `후기 ${entry.communityPosts}건`;
       lines.push(`${topic} 커뮤니티에 ${subjectParticle(posts)} 올라온 섬이에요.`);
@@ -203,11 +214,12 @@ export function pickRecommendedActivities(
 
   if (!tripActivities?.length) return pool.slice(0, limit);
 
-  const matched = pool.filter((activity) =>
-    tripActivities.some((selected) => activity.includes(selected) || selected.includes(activity)),
-  );
+  // 추천 이유는 TRIP_ACTIVITY_TO_LEISURE 매핑으로 활동을 맞추는데, 여기서만
+  // 단순 부분문자열 비교를 써서 결과가 어긋났다. "바다"는 "해수욕장"과 글자가
+  // 겹치지 않아 영영 매칭되지 않는다. 같은 매핑을 쓰도록 통일한다.
+  const wanted = tripActivities.flatMap((a) => TRIP_ACTIVITY_TO_LEISURE[a] ?? [a]);
+  const matched = pool.filter((activity) => matchesAnyActivity(activity, wanted));
 
-  // 고른 활동과 겹치는 게 있으면 그걸 먼저, 없으면 그 섬에서 실제로 되는 것들을 보여준다.
   if (matched.length > 0) {
     return [...matched, ...pool.filter((a) => !matched.includes(a))].slice(0, limit);
   }

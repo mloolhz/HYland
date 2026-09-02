@@ -26,7 +26,7 @@ const POSITIVE = [
 const NEGATIVE = [
   "별로", "실망", "아쉽", "아쉬웠", "최악", "비추", "불편", "힘들", "위험",
   "더럽", "지저분", "비싸", "웨이팅", "붐볐", "복잡", "시끄",
-  "실패", "후회", "짜증", "불친절",
+  "실패", "후회", "짜증", "불친절", "빡세", "빡셈", "험하", "막히", "헬",
 ];
 
 /**
@@ -100,6 +100,10 @@ export function analyzeWithLexicon(title: string, content: string): PostAnalysis
     const score = scoreSentence(sentence);
     total += score;
     // 대표 문장은 "긍정적이면서 활동을 언급한" 문장을 고른다.
+    // 순점수가 양수인 문장만 대표로 쓴다.
+    // "주말엔 교통이 좀 빡세니 평일 추천."은 '추천'(+1)과 '빡세'(-2)가 상쇄돼
+    // 음수가 되므로 자연히 빠진다. 예전엔 '빡세'가 사전에 없어 단점 문장이
+    // 추천 근거 자리에 실렸다.
     const weight = score + (ACTIVITY_TERMS.some((t) => sentence.includes(t)) ? 1 : 0);
     if (score > 0 && (!best || weight > best.weight)) best = { sentence, weight };
   }
