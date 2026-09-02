@@ -2,6 +2,7 @@ import { LEISURE_FACILITIES, type LeisureFacility } from "@/data/leisure-facilit
 import {
   TRIP_ACTIVITY_TO_LEISURE,
 } from "@/lib/recommendation/vocabulary/activity-vocabulary";
+import { applyConfidence } from "@/lib/recommendation/confidence";
 import type { TripIntent } from "@/types/recommendation";
 
 /**
@@ -122,7 +123,7 @@ export function scoreFacilityMatch(islandId: string, trip: TripIntent): Facility
       sum += coverage * 0.75 + depth * 0.25;
     }
     return {
-      score: Math.round((sum / selected.length) * 100),
+      score: applyConfidence(Math.round((sum / selected.length) * 100), summary.total),
       matchedActivities,
       scorableCount: selected.length,
       total: summary.total,
@@ -135,7 +136,7 @@ export function scoreFacilityMatch(islandId: string, trip: TripIntent): Facility
     const count = categories.reduce((sum: number, c: string) => sum + (summary.byCategory.get(c) ?? 0), 0);
     const depth = Math.min(count, DEPTH_CAP * 2) / (DEPTH_CAP * 2);
     return {
-      score: Math.round(40 + depth * 60),
+      score: applyConfidence(Math.round(40 + depth * 60), summary.total),
       matchedActivities: [],
       scorableCount: 0,
       total: summary.total,

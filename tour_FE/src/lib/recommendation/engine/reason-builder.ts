@@ -227,37 +227,14 @@ export function buildRecommendationTags(
 }
 
 /**
- * 후보 전체의 평균을 기준으로 편차를 넓혀 순위 차이가 읽히게 만든다.
+ * 점수가 높은 순으로 3개를 고른다.
  *
- * 원점수는 요소들이 구조적으로 비슷해 83~90처럼 좁은 구간에 몰린다. 그대로 두면
- * 1위와 꼴찌가 7점 차라 "추천도"가 신뢰 신호로 작동하지 않는다.
- * min-max로 늘이면 후보 수준과 무관하게 항상 1위=100/꼴찌=0이 되어 과장되므로,
- * 평균은 유지한 채 편차만 확대한다(전체가 좋으면 다 같이 높게 남는다).
+ * 예전엔 여기서 spreadFinalScores로 편차를 1.5배 늘렸다. 추천도(%)를 카드에
+ * 보여주던 시절, 1~3위가 83~90처럼 붙어 있으면 순위 차이가 안 읽혔기 때문이다.
+ * 지금은 점수도 순위도 화면에 없어서 목적이 사라졌고, 35~99 클램프가 동점을
+ * 만들어 정렬이 데이터 배열 순서에 좌우될 위험만 남아 제거했다.
+ * (140개 조건으로 확인: 3위 자리가 상한에 닿는 경우 0건 — 결과는 동일하다)
  */
-/**
- * 의도 벡터 재설계(trip-intent-scorer)로 원점수 자체가 22~31점 폭으로 벌어진 뒤라
- * 강한 확대는 오히려 상위권을 전부 상한(99)에 붙여버린다. 상위 몇 개를 구분할
- * 정도로만 완만하게 둔다.
- */
-const SCORE_CONTRAST = 1.5;
-
-export function spreadFinalScores<T extends { finalScore: number }>(items: T[]): T[] {
-  if (items.length < 2) return items;
-
-  const mean = items.reduce((sum, item) => sum + item.finalScore, 0) / items.length;
-
-  return items.map((item) => ({
-    ...item,
-    finalScore: Math.round(
-      Math.min(99, Math.max(35, mean + (item.finalScore - mean) * SCORE_CONTRAST)),
-    ),
-  }));
-}
-
-export function attachRank(items: Omit<IslandRecommendationItem, "rank">[]): IslandRecommendationItem[] {
-  // 편차 확대는 후보 전체를 놓고 계산해야 의미가 있으므로 자르기 전에 적용한다.
-  return spreadFinalScores(items)
-    .sort((a, b) => b.finalScore - a.finalScore)
-    .slice(0, 3)
-    .map((item, index) => ({ ...item, rank: index + 1 }));
+export function pickTopIslands(items: IslandRecommendationItem[]): IslandRecommendationItem[] {
+  return [...items].sort((a, b) => b.finalScore - a.finalScore).slice(0, 3);
 }

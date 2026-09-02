@@ -84,9 +84,8 @@ export type RecommendationScoreBreakdown = {
   finalScore: number;
 };
 
-/** TOP N 추천 항목 */
+/** 추천 섬 항목 (순위·추천도는 화면에 노출하지 않는다) */
 export type IslandRecommendationItem = {
-  rank: number;
   islandId: string;
   islandName: string;
   finalScore: number;

@@ -3,6 +3,7 @@ import {
   matchesAnyActivity,
   TRIP_ACTIVITY_TO_LEISURE,
 } from "@/lib/recommendation/vocabulary/activity-vocabulary";
+import { applyConfidence } from "@/lib/recommendation/confidence";
 import type { TripIntent } from "@/types/recommendation";
 
 /**
@@ -63,7 +64,7 @@ export function scoreSportsMatch(islandId: string, trip: TripIntent): SportsMatc
 
   if (selected.length === 0) {
     const depth = Math.min(sports.length, 6) / 6;
-    return { ...empty, score: Math.round(40 + depth * 50) };
+    return { ...empty, score: applyConfidence(Math.round(40 + depth * 50), sports.length) };
   }
 
   const matched: SportsMatchResult["matched"] = [];
@@ -87,7 +88,7 @@ export function scoreSportsMatch(islandId: string, trip: TripIntent): SportsMatc
   }
 
   return {
-    score: Math.round((sum / selected.length) * 100),
+    score: applyConfidence(Math.round((sum / selected.length) * 100), sports.length),
     matched,
     totalSports: sports.length,
   };

@@ -5,7 +5,7 @@ import { scoreContextFactors } from "@/lib/recommendation/engine/context-scorer"
 import { computeFinalScore } from "@/lib/recommendation/engine/final-score";
 import { applyHardFilters } from "@/lib/recommendation/engine/hard-filter";
 import {
-  attachRank,
+  pickTopIslands,
   buildRecommendationReasons,
   buildRecommendationTags,
   pickRecommendedActivities,
@@ -54,7 +54,7 @@ export function runRecommendationEngine(
   const contexts = buildMockIslandTravelContexts(request.trip.travelDate);
   const contextMap = new Map(contexts.map((ctx) => [ctx.islandId, ctx]));
 
-  const candidates: Omit<IslandRecommendationItem, "rank">[] = [];
+  const candidates: IslandRecommendationItem[] = [];
 
   for (const island of ISLAND_RECOMMENDATION_FEATURES) {
     const context = contextMap.get(island.islandId);
@@ -142,7 +142,7 @@ export function runRecommendationEngine(
     });
   }
 
-  const recommendations = attachRank(candidates);
+  const recommendations = pickTopIslands(candidates);
 
   const userTraits =
     useIslandBti && userPreference
