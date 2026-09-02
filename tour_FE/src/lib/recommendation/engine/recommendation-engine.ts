@@ -11,7 +11,9 @@ import {
   pickRecommendedActivities,
 } from "@/lib/recommendation/engine/reason-builder";
 import { scoreCurrentTripMatch } from "@/lib/recommendation/engine/trip-intent-scorer";
+import { scoreCommunityMatch } from "@/lib/recommendation/community/community-signal";
 import { scoreFacilityMatch } from "@/lib/recommendation/facility/island-facility-index";
+import { scoreSportsMatch } from "@/lib/recommendation/facility/island-sports-index";
 import { getUserTraitLabelsFromBti } from "@/lib/recommendation/preference/bti-preference.mapper";
 import { cosineSimilarityScore } from "@/lib/recommendation/preference/similarity";
 import { loadUserPreference } from "@/lib/recommendation/preference/user-preference-storage";
@@ -63,11 +65,15 @@ export function runRecommendationEngine(
     const currentTripMatch = scoreCurrentTripMatch(request.trip, island);
     const contextScores = scoreContextFactors(island, context, request.trip, visitedIslandIds);
     const facility = scoreFacilityMatch(island.islandId, request.trip);
+    const sports = scoreSportsMatch(island.islandId, request.trip);
+    const community = scoreCommunityMatch(island.islandId, request.trip);
 
     const partialScores = {
       islandBtiMatch,
       currentTripMatch,
       facilityMatch: facility.score,
+      sportsMatch: sports.score,
+      communityMatch: community.score,
       weather: contextScores.weather,
       transport: contextScores.transport,
       condition: contextScores.condition,
@@ -93,6 +99,8 @@ export function runRecommendationEngine(
         },
         { weatherAlert: context.weatherAlert, waveHeightM: context.waveHeightM },
         facility,
+        sports,
+        community,
       ),
       tags: buildRecommendationTags(partialScores, visitedIslandIds.has(island.islandId)),
       estimatedBudget: island.averageBudget,
@@ -101,6 +109,23 @@ export function runRecommendationEngine(
         .flatMap((matched) => matched.samples)
         .slice(0, 3)
         .map((f) => ({ name: f.name, activity: f.activity })),
+      sportHighlights: [...new Set(sports.matched.flatMap((m) => m.sportNames))].slice(0, 4),
+      // 같은 글이 여러 활동에 걸릴 수 있다(카약·바다 → 같은 패들보드 후기). postId로 중복 제거.
+      communityHighlights: [
+        ...new Map(
+          community.evidences
+            .filter((e) => e.topPost !== null)
+            .map((e) => [
+              e.topPost!.id,
+              {
+                postId: e.topPost!.id,
+                title: e.topPost!.title,
+                activity: e.tripActivity,
+                likes: e.topPost!.likes,
+              },
+            ]),
+        ).values(),
+      ].slice(0, 2),
     });
   }
 

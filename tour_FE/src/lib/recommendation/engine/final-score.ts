@@ -5,23 +5,26 @@ export function computeFinalScore(
   scores: Omit<RecommendationScoreBreakdown, "finalScore">,
   useIslandBti: boolean,
 ): number {
-  // 섬BTI를 안 쓰면 그 몫을 여행 조건 쪽으로 넘긴다. 전부 currentTripMatch에 몰면
-  // 손으로 적은 특성 벡터 비중이 과해지므로, 실제 시설 근거인 facilityMatch와 나눈다.
+  // 섬BTI를 안 쓰면 그 몫을 나머지 신호로 넘긴다. 전부 currentTripMatch에 몰면
+  // 손으로 적은 특성 벡터 비중이 과해지므로, 실제 데이터 근거인 세 신호와 나눈다.
+  const bti = RECOMMENDATION_WEIGHTS.islandBtiMatch;
   const weights = useIslandBti
     ? RECOMMENDATION_WEIGHTS
     : {
         ...RECOMMENDATION_WEIGHTS,
         islandBtiMatch: 0,
-        currentTripMatch:
-          RECOMMENDATION_WEIGHTS.currentTripMatch + RECOMMENDATION_WEIGHTS.islandBtiMatch / 2,
-        facilityMatch:
-          RECOMMENDATION_WEIGHTS.facilityMatch + RECOMMENDATION_WEIGHTS.islandBtiMatch / 2,
+        currentTripMatch: RECOMMENDATION_WEIGHTS.currentTripMatch + bti * 0.3,
+        facilityMatch: RECOMMENDATION_WEIGHTS.facilityMatch + bti * 0.23,
+        sportsMatch: RECOMMENDATION_WEIGHTS.sportsMatch + bti * 0.32,
+        communityMatch: RECOMMENDATION_WEIGHTS.communityMatch + bti * 0.15,
       };
 
   const weighted =
     scores.islandBtiMatch * weights.islandBtiMatch +
     scores.currentTripMatch * weights.currentTripMatch +
     scores.facilityMatch * weights.facilityMatch +
+    scores.sportsMatch * weights.sportsMatch +
+    scores.communityMatch * weights.communityMatch +
     scores.weather * weights.weather +
     scores.transport * weights.transport +
     scores.condition * weights.condition +

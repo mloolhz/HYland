@@ -2,7 +2,13 @@ import {
   IS_MOCK_WEATHER_CONTEXT,
   type IslandTravelContext,
 } from "@/lib/recommendation/context/travel-context.mock";
+import type { CommunityMatchResult } from "@/lib/recommendation/community/community-signal";
 import type { FacilityMatchResult } from "@/lib/recommendation/facility/island-facility-index";
+import type { SportsMatchResult } from "@/lib/recommendation/facility/island-sports-index";
+import {
+  objectParticle,
+  subjectParticle,
+} from "@/lib/recommendation/vocabulary/korean-particle";
 import type {
   IslandRecommendationItem,
   RecommendationScoreBreakdown,
@@ -45,11 +51,32 @@ export function buildRecommendationReasons(
   ctx: ReasonContext,
   weather: WeatherContext,
   facility?: FacilityMatchResult,
+  sports?: SportsMatchResult,
+  community?: CommunityMatchResult,
 ): string[] {
   const reasons: string[] = [];
 
-  // 실제 시설 데이터에 근거한 이유를 맨 앞에 둔다. 추천도(%)를 없앤 뒤로는
-  // 이유가 곧 근거이므로, 검증 가능한 사실("트레킹 시설 19곳")이 가장 앞에 와야 한다.
+  // 근거의 힘이 센 순서대로 앞에 둔다. 추천도(%)를 없앤 뒤로는 이유가 곧 근거다.
+  //   1. 다녀온 사람의 후기 (가장 설득력 있음)
+  //   2. 실제로 가능한 종목
+  //   3. 시설 수
+  if (community) {
+    for (const evidence of community.evidences.slice(0, 1)) {
+      const noun =
+        evidence.postCount > 1 ? `후기 ${evidence.postCount}건` : "후기";
+      reasons.push(
+        `커뮤니티에 ${evidence.tripActivity} ${subjectParticle(noun)} 올라온 섬이에요.`,
+      );
+    }
+  }
+
+  if (sports) {
+    for (const matched of sports.matched.slice(0, 1)) {
+      const names = matched.sportNames.slice(0, 2).join(" · ");
+      reasons.push(`${matched.tripActivity} 활동으로 ${objectParticle(names)} 즐길 수 있어요.`);
+    }
+  }
+
   if (facility) {
     for (const matched of facility.matchedActivities.slice(0, 2)) {
       reasons.push(`선택하신 ${matched.tripActivity} 시설이 ${matched.count}곳 있어요.`);

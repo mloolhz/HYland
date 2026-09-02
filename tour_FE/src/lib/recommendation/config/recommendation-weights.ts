@@ -1,17 +1,25 @@
 /**
  * 추천 Final Score 가중치 — 하드코딩 금지, 여기서만 관리
  *
- * facilityMatch는 관광공사 API·웹 조사로 수집한 실제 레저시설 145곳을 근거로 하는
- * 유일한 "검증 가능한" 신호라 비중을 크게 뒀다. 반대로 weather는 아직 mock이고
- * 하드 필터에서도 빠져 있어(IS_MOCK_WEATHER_CONTEXT) 비중을 줄였다.
+ * 근거의 성격이 서로 달라 셋으로 나눠 뒀다.
+ *  - facilityMatch : 실제 시설 145곳. 구체적이지만 조사 범위가 치우쳐 있다
+ *                    (강화도 45곳 vs 연평도 2곳).
+ *  - sportsMatch   : 종목-섬 88쌍. 사람이 정리해 섬당 1~9종으로 고르다.
+ *                    시설 데이터의 조사 편중을 눌러주는 역할.
+ *  - communityMatch: 이용자 후기. 가장 설득력 있는 근거지만 아직 글이 13건뿐이라
+ *                    비중을 작게 뒀다. 글이 쌓이면 올릴 값.
+ *
+ * weather는 아직 mock이고 하드 필터에서도 빠져 있어(IS_MOCK_WEATHER_CONTEXT) 낮다.
  */
 export const RECOMMENDATION_WEIGHTS = {
-  islandBtiMatch: 0.3,
-  currentTripMatch: 0.22,
-  facilityMatch: 0.25,
-  weather: 0.08,
-  transport: 0.08,
-  condition: 0.04,
+  islandBtiMatch: 0.26,
+  currentTripMatch: 0.17,
+  facilityMatch: 0.15,
+  sportsMatch: 0.17,
+  communityMatch: 0.07,
+  weather: 0.06,
+  transport: 0.06,
+  condition: 0.03,
   exploration: 0.03,
 } as const;
 

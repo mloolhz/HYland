@@ -1,4 +1,7 @@
 import { LEISURE_FACILITIES, type LeisureFacility } from "@/data/leisure-facilities";
+import {
+  TRIP_ACTIVITY_TO_LEISURE,
+} from "@/lib/recommendation/vocabulary/activity-vocabulary";
 import type { TripIntent } from "@/types/recommendation";
 
 /**
@@ -8,19 +11,6 @@ import type { TripIntent } from "@/types/recommendation";
  * 숫자 말고는 설명할 수 없었다. 실제 시설 데이터를 쓰면 "선택하신 트레킹
  * 시설이 19곳 있어요"처럼 검증 가능한 근거를 만들 수 있다.
  */
-
-/** 조건 패널의 관심 활동 → 실제 시설 활동명. 시설 데이터에 없는 활동은 빈 배열. */
-const TRIP_ACTIVITY_TO_FACILITY: Record<string, string[]> = {
-  바다: ["해수욕장", "유람선", "요트", "패들보트", "풀등 체험", "해루질"],
-  산책: ["해안 산책", "섬마을 투어", "산림욕"],
-  트레킹: ["트레킹", "백패킹"],
-  카약: ["패들보트", "요트"], // 시설 데이터에 '카약'이 따로 없어 근사 매칭
-  사이클: ["자전거"],
-  낚시: ["낚시", "해루질"],
-  갯벌: ["갯벌체험", "풀등 체험", "해루질"],
-  // '카페'는 레저시설 수집 대상이 아니라 매칭 불가 — 점수에서 제외한다(감점 아님).
-  카페: [],
-};
 
 /** 여행 분위기 → 시설 카테고리. 활동을 안 고른 경우의 보조 신호. */
 const MOOD_TO_CATEGORY: Record<string, string[]> = {
@@ -77,7 +67,7 @@ export function getFacilitiesForTripActivity(
   const summary = FACILITY_INDEX.get(islandId);
   if (!summary) return [];
 
-  const names = TRIP_ACTIVITY_TO_FACILITY[tripActivity];
+  const names = TRIP_ACTIVITY_TO_LEISURE[tripActivity];
   if (!names || names.length === 0) return [];
 
   return names.flatMap((name) => summary.byActivity.get(name) ?? []);
@@ -111,7 +101,7 @@ export function scoreFacilityMatch(islandId: string, trip: TripIntent): Facility
   if (!summary) return { ...empty, score: 30 };
 
   const selected = (trip.activities ?? []).filter(
-    (a) => (TRIP_ACTIVITY_TO_FACILITY[a]?.length ?? 0) > 0,
+    (a) => (TRIP_ACTIVITY_TO_LEISURE[a]?.length ?? 0) > 0,
   );
 
   const matchedActivities: FacilityMatchResult["matchedActivities"] = [];
@@ -142,7 +132,7 @@ export function scoreFacilityMatch(islandId: string, trip: TripIntent): Facility
   // 활동을 안 골랐으면 분위기에 맞는 카테고리 시설이 있는지로 대신 본다.
   const categories = trip.travelMood ? MOOD_TO_CATEGORY[trip.travelMood] ?? [] : [];
   if (categories.length > 0) {
-    const count = categories.reduce((sum, c) => sum + (summary.byCategory.get(c) ?? 0), 0);
+    const count = categories.reduce((sum: number, c: string) => sum + (summary.byCategory.get(c) ?? 0), 0);
     const depth = Math.min(count, DEPTH_CAP * 2) / (DEPTH_CAP * 2);
     return {
       score: Math.round(40 + depth * 60),
