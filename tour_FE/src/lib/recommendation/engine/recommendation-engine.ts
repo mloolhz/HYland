@@ -12,8 +12,14 @@ import {
 } from "@/lib/recommendation/engine/reason-builder";
 import { scoreCurrentTripMatch } from "@/lib/recommendation/engine/trip-intent-scorer";
 import { scoreCommunityMatch } from "@/lib/recommendation/community/community-signal";
-import { scoreFacilityMatch } from "@/lib/recommendation/facility/island-facility-index";
-import { scoreSportsMatch } from "@/lib/recommendation/facility/island-sports-index";
+import {
+  getIslandFacilitySummary,
+  scoreFacilityMatch,
+} from "@/lib/recommendation/facility/island-facility-index";
+import {
+  getIslandSports,
+  scoreSportsMatch,
+} from "@/lib/recommendation/facility/island-sports-index";
 import { getUserTraitLabelsFromBti } from "@/lib/recommendation/preference/bti-preference.mapper";
 import { cosineSimilarityScore } from "@/lib/recommendation/preference/similarity";
 import { loadUserPreference } from "@/lib/recommendation/preference/user-preference-storage";
@@ -104,7 +110,14 @@ export function runRecommendationEngine(
       ),
       tags: buildRecommendationTags(partialScores, visitedIslandIds.has(island.islandId)),
       estimatedBudget: island.averageBudget,
-      recommendedActivities: pickRecommendedActivities(island.activities, request.trip.activities),
+      recommendedActivities: pickRecommendedActivities(
+        island.activities,
+        request.trip.activities,
+        {
+          sportNames: getIslandSports(island.islandId).map((s) => s.name),
+          facilityActivities: [...(getIslandFacilitySummary(island.islandId)?.byActivity.keys() ?? [])],
+        },
+      ),
       facilityHighlights: facility.matchedActivities
         .flatMap((matched) => matched.samples)
         .slice(0, 3)

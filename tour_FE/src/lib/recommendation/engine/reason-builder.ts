@@ -8,6 +8,7 @@ import type { SportsMatchResult } from "@/lib/recommendation/facility/island-spo
 import {
   objectParticle,
   subjectParticle,
+  topicParticle,
 } from "@/lib/recommendation/vocabulary/korean-particle";
 import type {
   IslandRecommendationItem,
@@ -44,6 +45,77 @@ function buildWeatherReason(weather: WeatherContext): string {
   return `예보상 파도가 잔잔해요(파고 약 ${waveHeightLabel}m). 배편 이용하기 좋은 날씨예요.`;
 }
 
+type ActivityEvidence = {
+  activity: string;
+  communityPosts: number;
+  names: string[];
+  facilityCount: number;
+};
+
+/** 선택한 활동 순서를 유지하면서 세 소스의 근거를 활동별로 모은다. */
+function collectActivityEvidence(
+  trip: TripIntent,
+  facility?: FacilityMatchResult,
+  sports?: SportsMatchResult,
+  community?: CommunityMatchResult,
+): ActivityEvidence[] {
+  const byActivity = new Map<string, ActivityEvidence>();
+  const ensure = (activity: string) => {
+    const found = byActivity.get(activity);
+    if (found) return found;
+    const created: ActivityEvidence = { activity, communityPosts: 0, names: [], facilityCount: 0 };
+    byActivity.set(activity, created);
+    return created;
+  };
+
+  for (const evidence of community?.evidences ?? []) {
+    ensure(evidence.tripActivity).communityPosts = evidence.postCount;
+  }
+  for (const matched of sports?.matched ?? []) {
+    ensure(matched.tripActivity).names.push(...matched.sportNames);
+  }
+  for (const matched of facility?.matchedActivities ?? []) {
+    const entry = ensure(matched.tripActivity);
+    entry.facilityCount = matched.count;
+    entry.names.push(...matched.samples.map((f) => f.activity));
+  }
+
+  // 사용자가 고른 순서대로 보여준다 (Map 삽입 순서는 소스 순서라 뒤섞인다).
+  const order = trip.activities ?? [];
+  return [...byActivity.values()].sort(
+    (a, b) => order.indexOf(a.activity) - order.indexOf(b.activity),
+  );
+}
+
+function buildActivityEvidenceLines(
+  trip: TripIntent,
+  facility?: FacilityMatchResult,
+  sports?: SportsMatchResult,
+  community?: CommunityMatchResult,
+): string[] {
+  const lines: string[] = [];
+
+  for (const entry of collectActivityEvidence(trip, facility, sports, community).slice(0, 2)) {
+    const names = [...new Set(entry.names)].slice(0, 2).join(" · ");
+    const topic = topicParticle(entry.activity);
+
+    if (names && entry.communityPosts > 0) {
+      const posts = `후기 ${entry.communityPosts}건`;
+      lines.push(
+        `${topic} ${objectParticle(names)} 즐길 수 있고, 커뮤니티에 ${subjectParticle(posts)} 올라와 있어요.`,
+      );
+    } else if (names) {
+      const count = entry.facilityCount > 0 ? ` 등 ${entry.facilityCount}곳` : "";
+      lines.push(`${topic} ${names}${count}에서 즐길 수 있어요.`);
+    } else if (entry.communityPosts > 0) {
+      const posts = `후기 ${entry.communityPosts}건`;
+      lines.push(`${topic} 커뮤니티에 ${subjectParticle(posts)} 올라온 섬이에요.`);
+    }
+  }
+
+  return lines;
+}
+
 export function buildRecommendationReasons(
   islandId: string,
   islandName: string,
@@ -56,31 +128,12 @@ export function buildRecommendationReasons(
 ): string[] {
   const reasons: string[] = [];
 
-  // 근거의 힘이 센 순서대로 앞에 둔다. 추천도(%)를 없앤 뒤로는 이유가 곧 근거다.
-  //   1. 다녀온 사람의 후기 (가장 설득력 있음)
-  //   2. 실제로 가능한 종목
-  //   3. 시설 수
-  if (community) {
-    for (const evidence of community.evidences.slice(0, 1)) {
-      const noun =
-        evidence.postCount > 1 ? `후기 ${evidence.postCount}건` : "후기";
-      reasons.push(
-        `커뮤니티에 ${evidence.tripActivity} ${subjectParticle(noun)} 올라온 섬이에요.`,
-      );
-    }
-  }
-
-  if (sports) {
-    for (const matched of sports.matched.slice(0, 1)) {
-      const names = matched.sportNames.slice(0, 2).join(" · ");
-      reasons.push(`${matched.tripActivity} 활동으로 ${objectParticle(names)} 즐길 수 있어요.`);
-    }
-  }
-
-  if (facility) {
-    for (const matched of facility.matchedActivities.slice(0, 2)) {
-      reasons.push(`선택하신 ${matched.tripActivity} 시설이 ${matched.count}곳 있어요.`);
-    }
+  // 근거를 소스별로 한 줄씩 쓰면 같은 활동이 세 번 반복된다.
+  //   "커뮤니티에 바다 후기 2건이 …" / "바다 활동으로 해수욕장을 …" / "선택하신 바다 시설이 1곳 …"
+  // 세 문장이 사실상 같은 말이라 이유 4줄이 중복으로 다 차버렸다.
+  // 활동 하나당 한 줄로 합쳐, 그 활동에 대한 근거를 모아서 말한다.
+  for (const line of buildActivityEvidenceLines(ctx.trip, facility, sports, community)) {
+    reasons.push(line);
   }
 
   // 퍼센트 수치는 접이식 점수 상세에만 둔다. 여기서 또 쓰면 점수표·설명문과 함께
@@ -125,19 +178,40 @@ export function buildRecommendationReasons(
   return reasons.slice(0, 4);
 }
 
+/**
+ * 카드에 "○○에서 △△ 활동을 즐기기 좋아요"로 나가는 활동 목록.
+ *
+ * 예전엔 island-recommendation-features.ts에 손으로 적어둔 activities를 썼는데,
+ * 그 값이 실제 데이터와 어긋난다. 석모도는 "등대·트레킹·카약"으로 적혀 있지만
+ * 종목 데이터에는 해수욕장·캠핑·온천뿐이라 겹치는 게 하나도 없다(8개 섬 전부 불일치).
+ * 순위는 실제 데이터로 매기면서 설명만 하드코딩으로 하면, 카드가 데이터에 없는
+ * 활동을 할 수 있다고 말하게 된다.
+ *
+ * 그래서 실제 종목 → 실제 시설 순으로 쓰고, 둘 다 없을 때만 하드코딩으로 물러난다.
+ */
 export function pickRecommendedActivities(
   islandActivities: string[],
   tripActivities: string[] | undefined,
+  realActivities?: { sportNames: string[]; facilityActivities: string[] },
   limit = 3,
 ): string[] {
-  if (!tripActivities?.length) return islandActivities.slice(0, limit);
+  const fromData = [
+    ...new Set([...(realActivities?.sportNames ?? []), ...(realActivities?.facilityActivities ?? [])]),
+  ];
 
-  const matched = islandActivities.filter((activity) =>
+  const pool = fromData.length > 0 ? fromData : islandActivities;
+
+  if (!tripActivities?.length) return pool.slice(0, limit);
+
+  const matched = pool.filter((activity) =>
     tripActivities.some((selected) => activity.includes(selected) || selected.includes(activity)),
   );
 
-  if (matched.length > 0) return matched.slice(0, limit);
-  return islandActivities.slice(0, limit);
+  // 고른 활동과 겹치는 게 있으면 그걸 먼저, 없으면 그 섬에서 실제로 되는 것들을 보여준다.
+  if (matched.length > 0) {
+    return [...matched, ...pool.filter((a) => !matched.includes(a))].slice(0, limit);
+  }
+  return pool.slice(0, limit);
 }
 
 export function buildRecommendationTags(

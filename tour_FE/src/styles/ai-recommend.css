@@ -1636,3 +1636,17 @@ body:has(.ai-page)::-webkit-scrollbar-button {
   font-weight: 700;
   color: #5a6b82;
 }
+
+/* 모바일 터치 영역 — 링크가 37px·21px로 손가락 기준(44px)에 못 미쳤다 */
+@media (max-width: 768px) {
+  .ai-rec-community__link {
+    min-height: 44px;
+    padding: 8px 10px;
+  }
+
+  .ai-rec-island-card__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+}
