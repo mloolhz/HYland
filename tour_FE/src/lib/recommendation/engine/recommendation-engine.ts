@@ -133,6 +133,10 @@ export function runRecommendationEngine(
               {
                 postId: e.topPost!.id,
                 title: e.topPost!.title,
+                // 본문에서 뽑은 문장이 있으면 제목보다 그걸 보여준다.
+                // 제목은 "덕적도 SUP 첫 도전"처럼 사실만 담는 경우가 많은데,
+                // 대표 문장은 "왜 좋았는지"가 드러나 근거로 훨씬 낫다.
+                highlight: e.topPost!.highlight,
                 activity: e.tripActivity,
                 likes: e.topPost!.likes,
               },

@@ -40,6 +40,13 @@ export interface Post {
   likes: number;
   views: number;
   comments: Comment[];
+  /** 본문 분석 결과 (서버에서 계산·저장) — AI 추천 근거로 쓴다 */
+  sentiment?: "positive" | "neutral" | "negative";
+  sentimentScore?: number;
+  /** 추천 근거로 보여줄 본문 대표 문장 */
+  highlight?: string;
+  /** 본문에 실제로 언급된 활동 (태그와 다를 수 있다) */
+  mentionedActivities?: string[];
 }
 
 export interface Island {

@@ -710,6 +710,21 @@ model CommunityPost {
   likes          Int      @default(0)
   views          Int      @default(0)
 
+  // ── 본문 분석 결과 ────────────────────────────────────────
+  // 추천할 때마다 본문을 분석하면 느리고(추천은 브라우저에서 동기 실행) 비싸다.
+  // 글당 한 번만 분석해 여기 저장하고, 추천은 읽기만 한다.
+  /// positive | neutral | negative
+  sentiment           String?
+  /// -100 ~ 100
+  sentimentScore      Int?      @map("sentiment_score")
+  /// 추천 근거로 보여줄 대표 문장 (제목보다 "왜 좋았는지"가 드러난다)
+  highlight           String?   @db.Text
+  /// 본문에서 실제로 언급된 활동 (태그와 다를 수 있다)
+  mentionedActivities Json?     @map("mentioned_activities")
+  /// lexicon | gemini — 어느 분석기가 만든 값인지
+  analyzedBy          String?   @map("analyzed_by")
+  analyzedAt          DateTime? @map("analyzed_at")
+
   comments CommunityComment[]
 
   @@index([island])

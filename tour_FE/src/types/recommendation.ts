@@ -102,7 +102,14 @@ export type IslandRecommendationItem = {
   /** 이 섬에서 실제로 가능한 종목 중 선택한 활동에 해당하는 것 */
   sportHighlights?: string[];
   /** 추천 근거가 된 커뮤니티 후기 */
-  communityHighlights?: { postId: string; title: string; activity: string; likes: number }[];
+  communityHighlights?: {
+    postId: string;
+    title: string;
+    /** 본문에서 뽑은 대표 문장 (없으면 제목을 쓴다) */
+    highlight?: string;
+    activity: string;
+    likes: number;
+  }[];
   aiDescription?: string;
   itinerary?: { order: number; name: string }[];
 };

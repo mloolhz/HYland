@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { prisma } from "../prisma";
+import { askGemini } from "../services/gemini";
+import { analyzeWithGemini, analyzeWithLexicon } from "../services/community-analysis";
 
 /**
  * 커뮤니티 게시글 API.
@@ -60,6 +62,10 @@ function toPostDto(post: {
   createdAt: Date;
   likes: number;
   views: number;
+  sentiment: string | null;
+  sentimentScore: number | null;
+  highlight: string | null;
+  mentionedActivities: unknown;
   comments: CommentRow[];
 }) {
   return {
@@ -78,6 +84,13 @@ function toPostDto(post: {
     createdAt: post.createdAt.toISOString(),
     likes: post.likes,
     views: post.views,
+    // 본문 분석 결과 — AI 추천이 "좋았는지"를 판단하고 대표 문장을 보여주는 데 쓴다.
+    sentiment: post.sentiment ?? undefined,
+    sentimentScore: post.sentimentScore ?? undefined,
+    highlight: post.highlight ?? undefined,
+    mentionedActivities: Array.isArray(post.mentionedActivities)
+      ? (post.mentionedActivities as string[])
+      : undefined,
     comments: nestComments(post.comments),
   };
 }
@@ -119,6 +132,10 @@ router.post("/posts", async (req, res) => {
       return res.status(400).json({ error: "제목과 내용을 입력해주세요." });
     }
 
+    // 작성 즉시 사전 분석을 붙인다. 무료·즉시라 글쓰기 흐름을 막지 않는다.
+    // 더 정확한 Gemini 분석은 나중에 POST /analyze로 덮어쓸 수 있다.
+    const analysis = analyzeWithLexicon(b.title, b.content);
+
     const created = await prisma.communityPost.create({
       data: {
         id: b.id ?? `p-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
@@ -138,6 +155,12 @@ router.post("/posts", async (req, res) => {
         createdAt: new Date(),
         likes: 0,
         views: 0,
+        sentiment: analysis.sentiment,
+        sentimentScore: analysis.sentimentScore,
+        highlight: analysis.highlight,
+        mentionedActivities: analysis.mentionedActivities,
+        analyzedBy: analysis.analyzedBy,
+        analyzedAt: new Date(),
       },
       include: { comments: true },
     });
@@ -160,6 +183,57 @@ router.post("/posts/:id/views", async (req, res) => {
     console.error("조회수 증가 실패:", error);
   }
   res.status(204).end();
+});
+
+/**
+ * 본문 분석 (배치).
+ *
+ * 추천은 브라우저에서 동기적으로 도는데 글마다 LLM을 부를 수는 없다.
+ * 그래서 분석은 여기서 한 번만 돌려 DB에 저장하고, 추천은 저장된 값만 읽는다.
+ *
+ * ?engine=gemini 면 Gemini로 분석하고, 실패한 글은 사전 분석으로 채운다.
+ * 기본은 사전 분석이라 할당량과 무관하게 항상 동작한다.
+ * ?force=1 이 없으면 아직 분석되지 않은 글만 처리한다.
+ */
+router.post("/analyze", async (req, res) => {
+  const useGemini = req.query.engine === "gemini";
+  const force = req.query.force === "1";
+
+  try {
+    const posts = await prisma.communityPost.findMany({
+      where: force ? {} : { analyzedAt: null },
+      select: { id: true, title: true, content: true },
+    });
+
+    let gemini = 0;
+    let lexicon = 0;
+
+    for (const post of posts) {
+      const analysis =
+        (useGemini ? await analyzeWithGemini(post.title, post.content, (p) => askGemini(p)) : null) ??
+        analyzeWithLexicon(post.title, post.content);
+
+      if (analysis.analyzedBy === "gemini") gemini += 1;
+      else lexicon += 1;
+
+      await prisma.communityPost.update({
+        where: { id: post.id },
+        data: {
+          sentiment: analysis.sentiment,
+          sentimentScore: analysis.sentimentScore,
+          highlight: analysis.highlight,
+          mentionedActivities: analysis.mentionedActivities,
+          analyzedBy: analysis.analyzedBy,
+          analyzedAt: new Date(),
+        },
+      });
+    }
+
+    res.json({ analyzed: posts.length, gemini, lexicon });
+  } catch (error) {
+    console.error("본문 분석 실패:", error);
+    res.status(500).json({ error: "본문을 분석하지 못했어요." });
+  }
 });
 
 export default router;

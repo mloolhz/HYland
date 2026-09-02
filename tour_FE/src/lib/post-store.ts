@@ -60,6 +60,14 @@ export function getPostsSnapshot(): Post[] {
   return posts;
 }
 
+// 모듈이 로드되는 즉시 한 번 받아온다.
+//
+// 예전엔 subscribePosts에서만 불러서, 커뮤니티 화면을 거치지 않고 AI 추천으로
+// 바로 들어오면 목 데이터가 그대로 쓰였다. AI 추천은 usePosts()를 쓰지 않고
+// getPostsSnapshot()을 동기로 읽기 때문에 구독이 일어나지 않는다.
+// 그 결과 서버가 분석해 넣은 sentiment·highlight가 추천에 반영되지 않았다.
+void loadPosts();
+
 export function usePosts(): Post[] {
   return useSyncExternalStore(subscribePosts, getPostsSnapshot, getPostsSnapshot);
 }

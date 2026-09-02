@@ -81,7 +81,7 @@ export function RecommendationResultsPanel({ response, weather }: Recommendation
                 <li key={post.postId} className="ai-rec-community__item">
                   <Link to={`/community/${post.postId}`} className="ai-rec-community__link">
                     <span className="ai-rec-community__tag">후기</span>
-                    <span className="ai-rec-community__title">{post.title}</span>
+                    <span className="ai-rec-community__title">{post.highlight ?? post.title}</span>
                     <span className="ai-rec-community__likes">♥ {post.likes}</span>
                   </Link>
                 </li>

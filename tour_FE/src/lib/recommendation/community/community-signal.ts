@@ -22,9 +22,18 @@ import type { TripIntent } from "@/types/recommendation";
  * 옮겨가도 이 파일만 바꾸면 된다.
  */
 
-/** 추천 근거가 되는 글: 후기·사진 (질문 제외) */
+/**
+ * 추천 근거가 되는 글: 후기·사진 중 부정적이지 않은 것.
+ *
+ * 예전엔 후기이기만 하면 무조건 긍정 근거로 셌다. "낚시 꽝이었어요"도
+ * 낚시 추천 근거가 되던 셈이다. 서버가 본문을 분석해 넣어준 sentiment로 거른다.
+ * (분석 전 글은 sentiment가 없는데, 이때는 예전처럼 후기로 인정한다 —
+ *  분석이 아직 안 돌았다고 근거를 잃을 이유는 없다)
+ */
 function isEndorsement(post: Post): boolean {
-  return !post.isNotice && (post.type === "review" || post.type === "photo");
+  if (post.isNotice) return false;
+  if (post.type !== "review" && post.type !== "photo") return false;
+  return post.sentiment !== "negative";
 }
 
 function engagementOf(post: Post): number {
@@ -36,7 +45,7 @@ export type CommunityEvidence = {
   tripActivity: string;
   postCount: number;
   /** 대표 글 (반응이 가장 많은 후기) */
-  topPost: { id: string; title: string; likes: number } | null;
+  topPost: { id: string; title: string; likes: number; highlight?: string } | null;
 };
 
 export type CommunityMatchResult = {
@@ -87,20 +96,28 @@ export function scoreCommunityMatch(islandId: string, trip: TripIntent): Communi
 
   for (const activity of selected) {
     const names = TRIP_ACTIVITY_TO_COMMUNITY[activity];
-    const matched = endorsements.filter((p) => matchesAnyActivity(p.activity, names));
+    // 태그뿐 아니라 본문에서 언급된 활동도 본다. 태그를 "캠핑"으로 달았어도
+    // 본문에 낚시 얘기가 있으면 낚시 근거로 잡힌다.
+    const matched = endorsements.filter(
+      (p) =>
+        matchesAnyActivity(p.activity, names) ||
+        (p.mentionedActivities ?? []).some((a) => matchesAnyActivity(a, names)),
+    );
 
     if (matched.length > 0) {
       const top = [...matched].sort((a, b) => engagementOf(b) - engagementOf(a))[0];
       evidences.push({
         tripActivity: activity,
         postCount: matched.length,
-        topPost: { id: top.id, title: top.title, likes: top.likes },
+        topPost: { id: top.id, title: top.title, likes: top.likes, highlight: top.highlight },
       });
 
       const engagement =
         Math.min(matched.reduce((n, p) => n + engagementOf(p), 0), ENGAGEMENT_CAP) / ENGAGEMENT_CAP;
       // 글이 있다는 사실이 주(0.7), 반응 크기는 보조(0.3).
-      sum += 0.7 + engagement * 0.3;
+      // 본문이 뚜렷하게 긍정인 후기가 섞여 있으면 조금 더 쳐준다.
+      const hasPositive = matched.some((p) => p.sentiment === "positive");
+      sum += 0.7 + engagement * 0.3 + (hasPositive ? 0.1 : 0);
     } else {
       // 그 활동 글은 없지만 섬 자체에 후기가 있으면 아주 약하게만 인정한다.
       sum += endorsements.length > 0 ? 0.15 : 0;
