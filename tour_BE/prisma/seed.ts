@@ -11,6 +11,7 @@ import { CATEGORY_META, MISSION_CATEGORIES, MISSION_QUESTS } from "@/mocks/missi
 import { ISLAND_BTI_QUESTIONS } from "@/data/island-bti/questions";
 import { ISLAND_BTI_RESULTS } from "@/data/island-bti/results";
 import { LEISURE_ACTIVITIES } from "./seed-data/leisure-activities";
+import { MOCK_POSTS } from "@/mocks/posts";
 
 const RES: Record<string, string> = {
   reservable: "RESERVABLE",
@@ -204,7 +205,70 @@ async function main() {
   });
 
   // 결과 카운트
-  const [islands, courses, sports, sportIslands, bookings2, quests, cats, btiQ, btiR] =
+  // ── 커뮤니티 ──────────────────────────────────────────────
+  // 대댓글이 부모를 참조하므로 부모 댓글을 먼저 넣는다.
+  await prisma.communityComment.deleteMany();
+  await prisma.communityPost.deleteMany();
+
+  for (const post of MOCK_POSTS) {
+    await prisma.communityPost.create({
+      data: {
+        id: post.id,
+        type: post.type,
+        title: post.title,
+        content: post.content,
+        summary: post.summary ?? null,
+        island: post.island,
+        activity: post.activity,
+        images: post.images ?? undefined,
+        badge: post.badge ?? null,
+        isNotice: post.isNotice ?? false,
+        isResolved: post.isResolved ?? null,
+        authorId: post.author.id,
+        authorNickname: post.author.nickname,
+        authorBti: post.author.bti,
+        createdAt: new Date(post.createdAt),
+        likes: post.likes,
+        views: post.views,
+      },
+    });
+
+    for (const comment of post.comments) {
+      await prisma.communityComment.create({
+        data: {
+          id: comment.id,
+          postId: post.id,
+          parentId: null,
+          authorId: comment.author.id,
+          authorNickname: comment.author.nickname,
+          authorBti: comment.author.bti,
+          content: comment.content,
+          createdAt: new Date(comment.createdAt),
+          likes: comment.likes,
+          isAuthor: comment.isAuthor,
+        },
+      });
+
+      for (const reply of comment.replies ?? []) {
+        await prisma.communityComment.create({
+          data: {
+            id: reply.id,
+            postId: post.id,
+            parentId: comment.id,
+            authorId: reply.author.id,
+            authorNickname: reply.author.nickname,
+            authorBti: reply.author.bti,
+            content: reply.content,
+            createdAt: new Date(reply.createdAt),
+            likes: reply.likes,
+            isAuthor: reply.isAuthor,
+          },
+        });
+      }
+    }
+  }
+
+  const [islands, courses, sports, sportIslands, bookings2, quests, cats, btiQ, posts, comments, btiR] =
     await Promise.all([
       prisma.island.count(),
       prisma.islandLeisureCourse.count(),
@@ -214,6 +278,8 @@ async function main() {
       prisma.missionQuest.count(),
       prisma.missionCategory.count(),
       prisma.islandBtiQuestion.count(),
+      prisma.communityPost.count(),
+      prisma.communityComment.count(),
       prisma.islandBtiResult.count(),
     ]);
   console.log("✅ 시드 완료");
@@ -227,6 +293,8 @@ async function main() {
     미션퀘스트: quests,
     BTI문항: btiQ,
     BTI유형: btiR,
+    커뮤니티글: posts,
+    커뮤니티댓글: comments,
   });
 }
 

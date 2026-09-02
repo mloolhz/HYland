@@ -48,6 +48,7 @@ export function WritePost() {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const [imageError, setImageError] = useState("");
   const [error, setError] = useState("");
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     return () => {
@@ -81,7 +82,7 @@ export function WritePost() {
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!title.trim() || !island || !activity || !content.trim()) {
@@ -109,8 +110,17 @@ export function WritePost() {
       comments: [],
     };
 
-    addPost(newPost);
-    navigate(`/community/${newPost.id}`);
+    // 저장이 끝난 뒤에 이동한다. 예전엔 곧바로 이동해서, 저장이 실패하면
+    // 존재하지 않는 글 상세로 들어가 빈 화면을 보게 됐다.
+    try {
+      setSaving(true);
+      const saved = await addPost(newPost);
+      navigate(`/community/${saved.id}`);
+    } catch {
+      setError("글을 저장하지 못했어요. 잠시 후 다시 시도해주세요.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -278,8 +288,8 @@ export function WritePost() {
               <Link to="/community" className="cm-write-cancel">
                 뒤로
               </Link>
-              <button type="submit" className="cm-write-submit">
-                등록하기
+              <button type="submit" className="cm-write-submit" disabled={saving}>
+                {saving ? "등록 중..." : "등록하기"}
               </button>
             </div>
           </form>

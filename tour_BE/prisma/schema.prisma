@@ -17,7 +17,9 @@ datasource db {
 
 // ═══════════════════════════ ENUM ═══════════════════════════
 
-/** 레저 예약 유형 (FE data/sport-info.ts) */
+/**
+ * 레저 예약 유형 (FE data/sport-info.ts)
+ */
 enum ReservationType {
   RESERVABLE // 예약 가능
   FREE // 무료/자유
@@ -26,7 +28,9 @@ enum ReservationType {
   MIXED // 혼합
 }
 
-/** 예약/안내처 링크 유형 (FE data/sport-booking.ts) */
+/**
+ * 예약/안내처 링크 유형 (FE data/sport-booking.ts)
+ */
 enum BookingType {
   OFFICIAL // 공식 예약
   FACILITY // 시설 직접
@@ -34,21 +38,27 @@ enum BookingType {
   INFO // 정보 링크
 }
 
-/** 배지 희귀도 (FE mocks/missions.ts) */
+/**
+ * 배지 희귀도 (FE mocks/missions.ts)
+ */
 enum MissionTier {
   COMMON // 일반
   RARE // 희귀
   LEGEND // 전설
 }
 
-/** 배지 종류 — 여권/섬스탬프/미션 통합 (badge_definitions) */
+/**
+ * 배지 종류 — 여권/섬스탬프/미션 통합 (badge_definitions)
+ */
 enum BadgeType {
   PASSPORT // 여권 배지
   ISLAND // 섬 방문 스탬프
   MISSION // 미션 보상
 }
 
-/** 섬BTI 축 (AB/WL/CI/PF) */
+/**
+ * 섬BTI 축 (AB/WL/CI/PF)
+ */
 enum BtiDimension {
   AB
   WL
@@ -56,7 +66,9 @@ enum BtiDimension {
   PF
 }
 
-/** 관광공사 TourAPI 콘텐츠 타입 */
+/**
+ * 관광공사 TourAPI 콘텐츠 타입
+ */
 enum TourContentType {
   LEPORTS // 28 레포츠 ⭐
   SPOT // 12 관광지
@@ -68,112 +80,126 @@ enum TourContentType {
 // ═══════════════════ Phase 0 — 회원/인증 ═══════════════════
 
 model User {
-  id             String   @id @default(cuid())
-  email          String   @unique
-  passwordHash   String?  @map("password_hash") // OAuth-only 계정이면 null
-  phone          String?
-  createdAt      DateTime @default(now()) @map("created_at")
-  updatedAt      DateTime @updatedAt @map("updated_at")
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String?  @map("password_hash") // OAuth-only 계정이면 null
+  phone        String?
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
 
-  profile        UserProfile?
-  settings       UserSettings?
-  oauthAccounts  OAuthAccount[]
-  islandVisits   UserIslandVisit[]
+  profile         UserProfile?
+  settings        UserSettings?
+  oauthAccounts   OAuthAccount[]
+  islandVisits    UserIslandVisit[]
   missionProgress UserMissionProgress[]
-  badges         UserBadge[]
-  btiResults     UserIslandBtiResult[]
+  badges          UserBadge[]
+  btiResults      UserIslandBtiResult[]
 
   @@map("users")
 }
 
-/** 소셜 로그인 (선택) */
+/**
+ * 소셜 로그인 (선택)
+ */
 model OAuthAccount {
-  id           String @id @default(cuid())
-  userId       String @map("user_id")
-  provider     String // "kakao" | "google" | ...
-  providerUid  String @map("provider_uid")
-  user         User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id          String @id @default(cuid())
+  userId      String @map("user_id")
+  provider    String // "kakao" | "google" | ...
+  providerUid String @map("provider_uid")
+  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerUid])
   @@map("oauth_accounts")
 }
 
-/** 휴대폰 인증 (FE의 123456 mock 대체) */
+/**
+ * 휴대폰 인증 (FE의 123456 mock 대체)
+ */
 model PhoneVerification {
-  id         String   @id @default(cuid())
-  phone      String
-  code       String
-  verified   Boolean  @default(false)
-  expiresAt  DateTime @map("expires_at")
-  createdAt  DateTime @default(now()) @map("created_at")
+  id        String   @id @default(cuid())
+  phone     String
+  code      String
+  verified  Boolean  @default(false)
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
 
   @@index([phone])
   @@map("phone_verifications")
 }
 
-/** 프로필 + 여권 스탯 (FE user-profile.ts / userPassport.ts) */
+/**
+ * 프로필 + 여권 스탯 (FE user-profile.ts / userPassport.ts)
+ */
 model UserProfile {
-  userId          String  @id @map("user_id")
-  nickname        String
-  joinedAt        DateTime @default(now()) @map("joined_at")
-  level           Int     @default(1)
-  levelTitle      String  @default("새싹 탐험가") @map("level_title")
-  expCurrent      Int     @default(0) @map("exp_current")
-  expMax          Int     @default(1000) @map("exp_max")
-  bti             String? // 커뮤니티 4타입(파도형 등) 표시용
-  characterId     String? @map("character_id")
-  passportAvatar  String? @map("passport_avatar")
+  userId         String   @id @map("user_id")
+  nickname       String
+  joinedAt       DateTime @default(now()) @map("joined_at")
+  level          Int      @default(1)
+  levelTitle     String   @default("새싹 탐험가") @map("level_title")
+  expCurrent     Int      @default(0) @map("exp_current")
+  expMax         Int      @default(1000) @map("exp_max")
+  bti            String? // 커뮤니티 4타입(파도형 등) 표시용
+  characterId    String?  @map("character_id")
+  passportAvatar String?  @map("passport_avatar")
 
-  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  character       ProfileCharacter? @relation(fields: [characterId], references: [id])
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  character ProfileCharacter? @relation(fields: [characterId], references: [id])
 
   @@map("user_profiles")
 }
 
-/** 마이페이지 설정 (알림 on/off 등) */
+/**
+ * 마이페이지 설정 (알림 on/off 등)
+ */
 model UserSettings {
-  userId             String  @id @map("user_id")
-  notificationsOn    Boolean @default(true) @map("notifications_on")
-  marketingOptIn     Boolean @default(false) @map("marketing_opt_in")
-  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String  @id @map("user_id")
+  notificationsOn Boolean @default(true) @map("notifications_on")
+  marketingOptIn  Boolean @default(false) @map("marketing_opt_in")
+  user            User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("user_settings")
 }
 
 // ═════════════ Phase 1 — 마스터 카탈로그 (읽기 전용 시드) ═════════════
 
-/** 섬 권역 (FE island_regions) */
+/**
+ * 섬 권역 (FE island_regions)
+ */
 model IslandRegion {
-  id       String   @id // slug
-  name     String
-  islands  Island[]
+  id      String   @id // slug
+  name    String
+  islands Island[]
 
   @@map("island_regions")
 }
 
-/** 섬 (FE lib/island-data.ts, 18개) */
+/**
+ * 섬 (FE lib/island-data.ts, 18개)
+ */
 model Island {
-  id            String  @id // "baek", "muui" ... (FE 키 그대로)
-  name          String
-  regionId      String? @map("region_id")
-  intro         String  @db.Text
-  ferryRoute    String  @map("ferry_route")
-  travelTime    String  @map("travel_time")
-  bookingLabel  String? @map("booking_label")
+  id           String  @id // "baek", "muui" ... (FE 키 그대로)
+  name         String
+  regionId     String? @map("region_id")
+  intro        String  @db.Text
+  ferryRoute   String  @map("ferry_route")
+  travelTime   String  @map("travel_time")
+  bookingLabel String? @map("booking_label")
 
-  region        IslandRegion?          @relation(fields: [regionId], references: [id])
+  region         IslandRegion?         @relation(fields: [regionId], references: [id])
   leisureCourses IslandLeisureCourse[]
-  stampMeta     IslandStampMeta?
-  tourSpots     TourSpot[]
-  sportLinks    SportIsland[]
-  missionQuests MissionQuest[]
-  visits        UserIslandVisit[]
-  leisureSports LeisureSport[]
+  stampMeta      IslandStampMeta?
+  tourSpots      TourSpot[]
+  sportLinks     SportIsland[]
+  missionQuests  MissionQuest[]
+  visits         UserIslandVisit[]
+  leisureSports  LeisureSport[]
 
   @@map("islands")
 }
 
-/** 섬 레저 코스 (island-data의 leisureCourses[] 문자열) */
+/**
+ * 섬 레저 코스 (island-data의 leisureCourses[] 문자열)
+ */
 model IslandLeisureCourse {
   id        Int    @id @default(autoincrement())
   islandId  String @map("island_id")
@@ -184,18 +210,22 @@ model IslandLeisureCourse {
   @@map("island_leisure_courses")
 }
 
-/** 레저 카테고리 (water/land/exp/heal) */
+/**
+ * 레저 카테고리 (water/land/exp/heal)
+ */
 model SportCategory {
-  id      String  @id // "water" | "land" | "exp" | "heal"
-  label   String
-  sports  Sport[]
-  leisureSports LeisureSport[]
+  id                   String                @id // "water" | "land" | "exp" | "heal"
+  label                String
+  sports               Sport[]
+  leisureSports        LeisureSport[]
   leisureActivityTypes LeisureActivityType[]
 
   @@map("sport_categories")
 }
 
-/** 레저 종목 (FE data/sports.ts) */
+/**
+ * 레저 종목 (FE data/sports.ts)
+ */
 model Sport {
   id              String          @id // "kayak", "trek" ...
   categoryId      String          @map("category_id")
@@ -208,16 +238,18 @@ model Sport {
   season          String
   reservationType ReservationType @default(INFO) @map("reservation_type")
 
-  category        SportCategory        @relation(fields: [categoryId], references: [id])
-  islands         SportIsland[]
-  bookingMethods  SportBookingMethod[]
-  tourSpots       TourSpotSport[]
-  missionQuests   MissionQuest[]
+  category       SportCategory        @relation(fields: [categoryId], references: [id])
+  islands        SportIsland[]
+  bookingMethods SportBookingMethod[]
+  tourSpots      TourSpotSport[]
+  missionQuests  MissionQuest[]
 
   @@map("sports")
 }
 
-/** 종목 ↔ 섬 (N:M + 표시명/색) */
+/**
+ * 종목 ↔ 섬 (N:M + 표시명/색)
+ */
 model SportIsland {
   id          Int     @id @default(autoincrement())
   sportId     String  @map("sport_id")
@@ -225,26 +257,30 @@ model SportIsland {
   displayName String  @map("display_name") // "시도 (수기해변)"
   color       String
 
-  sport       Sport   @relation(fields: [sportId], references: [id], onDelete: Cascade)
-  island      Island? @relation(fields: [islandId], references: [id])
+  sport  Sport   @relation(fields: [sportId], references: [id], onDelete: Cascade)
+  island Island? @relation(fields: [islandId], references: [id])
 
   @@map("sport_islands")
 }
 
-/** 종목 예약/안내처 링크 (FE data/sport-booking.ts) — 예약 자체는 안 함 */
+/**
+ * 종목 예약/안내처 링크 (FE data/sport-booking.ts) — 예약 자체는 안 함
+ */
 model SportBookingMethod {
-  id       Int         @id @default(autoincrement())
-  sportId  String      @map("sport_id")
-  type     BookingType
-  label    String
-  url      String?
-  tel      String?
-  sport    Sport       @relation(fields: [sportId], references: [id], onDelete: Cascade)
+  id      Int         @id @default(autoincrement())
+  sportId String      @map("sport_id")
+  type    BookingType
+  label   String
+  url     String?
+  tel     String?
+  sport   Sport       @relation(fields: [sportId], references: [id], onDelete: Cascade)
 
   @@map("sport_booking_methods")
 }
 
-/** 미션 카테고리 (섬/해상/육상/체험/힐링/기타) */
+/**
+ * 미션 카테고리 (섬/해상/육상/체험/힐링/기타)
+ */
 model MissionCategory {
   id        String         @id // "섬" ... (FE 값 그대로)
   emoji     String
@@ -255,7 +291,9 @@ model MissionCategory {
   @@map("mission_categories")
 }
 
-/** 미션 퀘스트 (FE mocks/missions.ts) */
+/**
+ * 미션 퀘스트 (FE mocks/missions.ts)
+ */
 model MissionQuest {
   id          Int         @id
   categoryId  String      @map("category_id")
@@ -269,45 +307,51 @@ model MissionQuest {
   islandId    String?     @map("island_id")
   sportId     String?     @map("sport_id")
 
-  category    MissionCategory      @relation(fields: [categoryId], references: [id])
-  island      Island?              @relation(fields: [islandId], references: [id])
-  sport       Sport?               @relation(fields: [sportId], references: [id])
-  progress    UserMissionProgress[]
+  category MissionCategory       @relation(fields: [categoryId], references: [id])
+  island   Island?               @relation(fields: [islandId], references: [id])
+  sport    Sport?                @relation(fields: [sportId], references: [id])
+  progress UserMissionProgress[]
 
   @@map("mission_quests")
 }
 
-/** 배지 정의 통합 — 여권 + 섬 스탬프 + 미션 보상 (badge_definitions) */
+/**
+ * 배지 정의 통합 — 여권 + 섬 스탬프 + 미션 보상 (badge_definitions)
+ */
 model BadgeDefinition {
-  id          String      @id // slug
+  id          String       @id // slug
   type        BadgeType
   name        String
   description String?
   icon        String?
   color       String?
-  islandId    String?     @map("island_id")
+  islandId    String?      @map("island_id")
   tier        MissionTier?
   condition   String? // 획득 조건 설명
 
-  earnedBy    UserBadge[]
+  earnedBy UserBadge[]
 
   @@map("badge_definitions")
 }
 
-/** 섬 스탬프 UI 메타 (FE data/island-stamp-data.ts) */
+/**
+ * 섬 스탬프 UI 메타 (FE data/island-stamp-data.ts)
+ */
 model IslandStampMeta {
-  islandId  String  @id @map("island_id")
-  color     String
-  scene     String?
-  activity  String
-  rotate    Float   @default(0)
-  imageUrl  String? @map("image_url")
-  island    Island  @relation(fields: [islandId], references: [id], onDelete: Cascade)
+  islandId String  @id @map("island_id")
+  color    String
+  scene    String?
+  activity String
+  rotate   Float   @default(0)
+  imageUrl String? @map("image_url")
+  island   Island  @relation(fields: [islandId], references: [id], onDelete: Cascade)
 
   @@map("island_stamp_meta")
 }
 
-/** 프로필 캐릭터 (FE data/profile-characters.ts) */
+/**
+ * 프로필 캐릭터 (FE data/profile-characters.ts)
+ */
 model ProfileCharacter {
   id       String        @id
   name     String
@@ -316,7 +360,9 @@ model ProfileCharacter {
   @@map("profile_characters")
 }
 
-/** 섬BTI 문항 (FE data/island-bti/*) */
+/**
+ * 섬BTI 문항 (FE data/island-bti/*)
+ */
 model IslandBtiQuestion {
   id        Int          @id
   dimension BtiDimension
@@ -329,37 +375,43 @@ model IslandBtiQuestion {
   @@map("island_bti_questions")
 }
 
-/** 섬BTI 결과 유형 (16코드) */
+/**
+ * 섬BTI 결과 유형 (16코드)
+ */
 model IslandBtiResult {
-  code                 String  @id // "AWCP" 등 16코드
-  name                 String
-  description          String  @db.Text
-  themeColor           String  @map("theme_color")
-  recommendedIslands   Json    @map("recommended_islands") // string[]
+  code                  String @id // "AWCP" 등 16코드
+  name                  String
+  description           String @db.Text
+  themeColor            String @map("theme_color")
+  recommendedIslands    Json   @map("recommended_islands") // string[]
   recommendedActivities Json   @map("recommended_activities") // string[]
 
-  userResults          UserIslandBtiResult[]
+  userResults UserIslandBtiResult[]
 
   @@map("island_bti_results")
 }
 
 // ═════════════ Phase 2 — 유저 상태 (게임화) ═════════════
 
-/** 섬 방문 기록 (섬 탐험 visited + 섬 정령 성장은 여기서 계산) */
+/**
+ * 섬 방문 기록 (섬 탐험 visited + 섬 정령 성장은 여기서 계산)
+ */
 model UserIslandVisit {
   id        Int      @id @default(autoincrement())
   userId    String   @map("user_id")
   islandId  String   @map("island_id")
   visitedAt DateTime @default(now()) @map("visited_at")
 
-  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  island    Island @relation(fields: [islandId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  island Island @relation(fields: [islandId], references: [id])
 
   @@unique([userId, islandId])
   @@map("user_island_visits")
 }
 
-/** 미션 진행도 (FE missions.ts current/target 중 current) */
+/**
+ * 미션 진행도 (FE missions.ts current/target 중 current)
+ */
 model UserMissionProgress {
   id          Int       @id @default(autoincrement())
   userId      String    @map("user_id")
@@ -367,28 +419,32 @@ model UserMissionProgress {
   current     Int       @default(0)
   completedAt DateTime? @map("completed_at")
 
-  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  quest       MissionQuest @relation(fields: [questId], references: [id])
+  user  User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quest MissionQuest @relation(fields: [questId], references: [id])
 
   @@unique([userId, questId])
   @@map("user_mission_progress")
 }
 
-/** 획득 배지 (여권/미션/섬 스탬프 공통) */
+/**
+ * 획득 배지 (여권/미션/섬 스탬프 공통)
+ */
 model UserBadge {
   id         Int      @id @default(autoincrement())
   userId     String   @map("user_id")
   badgeId    String   @map("badge_id")
   acquiredAt DateTime @default(now()) @map("acquired_at")
 
-  user       User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  badge      BadgeDefinition @relation(fields: [badgeId], references: [id])
+  user  User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge BadgeDefinition @relation(fields: [badgeId], references: [id])
 
   @@unique([userId, badgeId])
   @@map("user_badges")
 }
 
-/** 유저 섬BTI 테스트 결과 (지금 localStorage) */
+/**
+ * 유저 섬BTI 테스트 결과 (지금 localStorage)
+ */
 model UserIslandBtiResult {
   id         Int      @id @default(autoincrement())
   userId     String   @map("user_id")
@@ -396,8 +452,8 @@ model UserIslandBtiResult {
   scores     Json // 축별 점수
   testedAt   DateTime @default(now()) @map("tested_at")
 
-  user       User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  result     IslandBtiResult @relation(fields: [resultCode], references: [code])
+  user   User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  result IslandBtiResult @relation(fields: [resultCode], references: [code])
 
   @@index([userId])
   @@map("user_island_bti_results")
@@ -405,7 +461,9 @@ model UserIslandBtiResult {
 
 // ═══════════ 관광공사 TourAPI 데이터 (필수요소) ═══════════
 
-/** TourAPI 지역기반 관광정보 (레포츠/관광지/맛집/숙소) → 섬별 매핑 */
+/**
+ * TourAPI 지역기반 관광정보 (레포츠/관광지/맛집/숙소) → 섬별 매핑
+ */
 model TourSpot {
   id          Int             @id @default(autoincrement())
   contentId   String          @unique @map("content_id") // TourAPI contentid (중복수집 방지)
@@ -421,20 +479,22 @@ model TourSpot {
   islandId    String?         @map("island_id") // 좌표/주소로 매핑한 섬 (핵심 후처리)
   syncedAt    DateTime        @default(now()) @map("synced_at")
 
-  island      Island?         @relation(fields: [islandId], references: [id])
-  sports      TourSpotSport[]
+  island Island?         @relation(fields: [islandId], references: [id])
+  sports TourSpotSport[]
 
   @@index([islandId, contentType])
   @@map("tour_spots")
 }
 
-/** 관광 레저시설 ↔ 종목 연결 ("이 시설에서 가능한 활동") */
+/**
+ * 관광 레저시설 ↔ 종목 연결 ("이 시설에서 가능한 활동")
+ */
 model TourSpotSport {
   tourSpotId Int    @map("tour_spot_id")
   sportId    String @map("sport_id")
 
-  tourSpot   TourSpot @relation(fields: [tourSpotId], references: [id], onDelete: Cascade)
-  sport      Sport    @relation(fields: [sportId], references: [id], onDelete: Cascade)
+  tourSpot TourSpot @relation(fields: [tourSpotId], references: [id], onDelete: Cascade)
+  sport    Sport    @relation(fields: [sportId], references: [id], onDelete: Cascade)
 
   @@id([tourSpotId, sportId])
   @@map("tour_spot_sports")
@@ -449,15 +509,19 @@ model TourSpotSport {
  * 팀 컨벤션(snake_case)으로 통일하려면 별도 rename 마이그레이션이 필요하다.
  */
 model Recommendation {
-  id        Int      @id @default(autoincrement())
-  question  String   @db.Text
-  persona   Json? // 조건: 날짜·동행·분위기·관심활동
-  response  Json
-  /** persona.islandBti 스냅샷 — 섬BTI 유형별 섬 선호도 집계용 인덱스 */
-  islandBti String?
-  /** 브라우저 세션 단위 식별자(FE sessionStorage) — 같은 대화 안의 턴 순서를
-      추적해 "비슷한 조건 다음에 사람들이 무엇을 물었는지" 집계에 사용 */
-  sessionId String?
+  id             Int      @id @default(autoincrement())
+  question       String   @db.Text
+  persona        Json? // 조건: 날짜·동행·분위기·관심활동
+  response       Json
+  /**
+   * persona.islandBti 스냅샷 — 섬BTI 유형별 섬 선호도 집계용 인덱스
+   */
+  islandBti      String?
+  /**
+   * 브라우저 세션 단위 식별자(FE sessionStorage) — 같은 대화 안의 턴 순서를
+   * 추적해 "비슷한 조건 다음에 사람들이 무엇을 물었는지" 집계에 사용
+   */
+  sessionId      String?
   /**
    * 질문 출처: "user"(사용자가 직접 입력) | "chip"(AI 추천 칩·인기질문 클릭).
    * 칩 클릭도 사용자 질문으로 저장되다 보니, AI가 만든 followup 문구가 인기질문에
@@ -465,7 +529,7 @@ model Recommendation {
    * "chip"을 제외하기 위한 필드. 값이 없는 과거 기록은 분류 불가라 집계에 남긴다.
    */
   questionSource String?
-  createdAt DateTime @default(now())
+  createdAt      DateTime @default(now())
 
   @@index([islandBti])
   @@index([sessionId, createdAt])
@@ -475,9 +539,13 @@ model Recommendation {
 // 외부 API 원본을 그대로 넣지 않고, 후보 수집 → 검수 → 마스터 등록 순서를 거친다.
 // 월별 순위(hubRank·rlteRank)는 서비스 데이터로 쓰지 않으므로 저장하지 않는다.
 
-/** 레저 활동 — 프론트 레저스포츠 탭의 활동 목록과 1:1 대응 */
+/**
+ * 레저 활동 — 프론트 레저스포츠 탭의 활동 목록과 1:1 대응
+ */
 
-/** 검증 상태 — 외부 API에서 사라져도 CLOSED로 바꾸지 않는다 */
+/**
+ * 검증 상태 — 외부 API에서 사라져도 CLOSED로 바꾸지 않는다
+ */
 enum VerificationStatus {
   UNVERIFIED // 외부 출처에서 발견했으나 미검증
   VERIFIED // 실제 운영 확인
@@ -487,7 +555,9 @@ enum VerificationStatus {
   CLOSED // 폐업·운영 종료 (별도 출처로 확인된 경우만)
 }
 
-/** 외부 출처 구분 */
+/**
+ * 외부 출처 구분
+ */
 enum LeisureSourceType {
   TOUR_CONTENT // 국문 관광정보 (contentTypeId=28 등)
   LOCAL_HUB // 기초지자체 중심 관광지
@@ -496,14 +566,18 @@ enum LeisureSourceType {
   MANUAL // 직접 입력
 }
 
-/** 주소 정확도 */
+/**
+ * 주소 정확도
+ */
 enum AddressLevel {
   EXACT // 도로명·지번까지 확인
   VILLAGE // 리·동 단위까지만 확인
   UNKNOWN // 주소 미확보
 }
 
-/** 검수를 통과한 레저스포츠 시설 (서비스에 노출되는 마스터) */
+/**
+ * 검수를 통과한 레저스포츠 시설 (서비스에 노출되는 마스터)
+ */
 /// 레저 활동 종류. enum 이었으나 활동을 추가할 때마다 마이그레이션이 필요해
 /// 참조 테이블로 바꿨다. 이제 행만 추가하면 된다 (seed-data/leisure-activities.ts).
 model LeisureActivityType {
@@ -520,44 +594,50 @@ model LeisureActivityType {
 }
 
 model LeisureSport {
-  id           Int                @id @default(autoincrement())
-  name         String
-  categoryId   String             @map("category_id") // sport_categories.id (water/land/exp/heal/unique)
-  activityId   String             @map("activity_id") // leisure_activity_types.id
-  islandId     String?            @map("island_id")
-  address      String?
-  addressLevel AddressLevel       @default(UNKNOWN) @map("address_level")
-  latitude     Float?
-  longitude    Float?
-  description  String?            @db.Text
-  imageUrl     String?            @map("image_url")
-  phone        String?
-  reservationUrl String?          @map("reservation_url")
-  active       Boolean            @default(true)
-  verification VerificationStatus @default(UNVERIFIED)
-  createdAt    DateTime           @default(now()) @map("created_at")
-  updatedAt    DateTime           @updatedAt @map("updated_at")
+  id             Int                @id @default(autoincrement())
+  name           String
+  categoryId     String             @map("category_id") // sport_categories.id (water/land/exp/heal/unique)
+  activityId     String             @map("activity_id") // leisure_activity_types.id
+  islandId       String?            @map("island_id")
+  address        String?
+  addressLevel   AddressLevel       @default(UNKNOWN) @map("address_level")
+  latitude       Float?
+  longitude      Float?
+  description    String?            @db.Text
+  imageUrl       String?            @map("image_url")
+  phone          String?
+  reservationUrl String?            @map("reservation_url")
+  active         Boolean            @default(true)
+  verification   VerificationStatus @default(UNVERIFIED)
+  createdAt      DateTime           @default(now()) @map("created_at")
+  updatedAt      DateTime           @updatedAt @map("updated_at")
 
-  category SportCategory        @relation(fields: [categoryId], references: [id])
-  activityType LeisureActivityType @relation(fields: [activityId], references: [id])
-  island   Island?              @relation(fields: [islandId], references: [id])
-  sources  LeisureSportSource[]
+  category     SportCategory        @relation(fields: [categoryId], references: [id])
+  activityType LeisureActivityType  @relation(fields: [activityId], references: [id])
+  island       Island?              @relation(fields: [islandId], references: [id])
+  sources      LeisureSportSource[]
 
   @@index([islandId, activityId])
   @@index([categoryId])
   @@map("leisure_sports")
 }
 
-/** 시설이 어느 출처에서 발견됐는지 (한 시설이 여러 출처에 걸칠 수 있음) */
+/**
+ * 시설이 어느 출처에서 발견됐는지 (한 시설이 여러 출처에 걸칠 수 있음)
+ */
 model LeisureSportSource {
   id             Int               @id @default(autoincrement())
   leisureSportId Int               @map("leisure_sport_id")
   sourceType     LeisureSourceType @map("source_type")
-  /** 출처 내부 고유키 (contentid, hubTatsCd, rlteTatsCd 등) */
+  /**
+   * 출처 내부 고유키 (contentid, hubTatsCd, rlteTatsCd 등)
+   */
   externalId     String?           @map("external_id")
   sourceName     String?           @map("source_name")
   sourceUrl      String?           @map("source_url") @db.Text
-  /** 출처가 붙인 원본 분류 (예: 레저스포츠/수상레저스포츠) */
+  /**
+   * 출처가 붙인 원본 분류 (예: 레저스포츠/수상레저스포츠)
+   */
   rawCategory    String?           @map("raw_category")
   firstSeenAt    DateTime          @default(now()) @map("first_seen_at")
   lastSeenAt     DateTime          @updatedAt @map("last_seen_at")
@@ -570,28 +650,93 @@ model LeisureSportSource {
   @@map("leisure_sport_sources")
 }
 
-/** 아직 검수를 통과하지 못한 후보 (보고서 단계의 데이터) */
+/**
+ * 아직 검수를 통과하지 못한 후보 (보고서 단계의 데이터)
+ */
 model LeisureCandidate {
-  id                Int                @id @default(autoincrement())
-  sourceType        LeisureSourceType  @map("source_type")
-  externalId        String?            @map("external_id")
-  name              String
-  address           String?
-  addressLevel      AddressLevel       @default(UNKNOWN) @map("address_level")
-  latitude          Float?
-  longitude         Float?
-  suggestedActivityId String?          @map("suggested_activity_id") // leisure_activity_types.id
-  suggestedIslandId String?            @map("suggested_island_id")
-  verification      VerificationStatus @default(UNVERIFIED)
-  /** 검수 메모 (판정 사유·통합 대상 등) */
-  reviewNote        String?            @map("review_note") @db.Text
-  rawData           Json?              @map("raw_data")
-  createdAt         DateTime           @default(now()) @map("created_at")
-  updatedAt         DateTime           @updatedAt @map("updated_at")
+  id                  Int                @id @default(autoincrement())
+  sourceType          LeisureSourceType  @map("source_type")
+  externalId          String?            @map("external_id")
+  name                String
+  address             String?
+  addressLevel        AddressLevel       @default(UNKNOWN) @map("address_level")
+  latitude            Float?
+  longitude           Float?
+  suggestedActivityId String?            @map("suggested_activity_id") // leisure_activity_types.id
+  suggestedIslandId   String?            @map("suggested_island_id")
+  verification        VerificationStatus @default(UNVERIFIED)
+  /**
+   * 검수 메모 (판정 사유·통합 대상 등)
+   */
+  reviewNote          String?            @map("review_note") @db.Text
+  rawData             Json?              @map("raw_data")
+  createdAt           DateTime           @default(now()) @map("created_at")
+  updatedAt           DateTime           @updatedAt @map("updated_at")
 
   suggestedActivity LeisureActivityType? @relation(fields: [suggestedActivityId], references: [id])
 
   @@unique([sourceType, externalId])
   @@index([suggestedIslandId])
   @@map("leisure_candidates")
+}
+
+// ─────────────────────────────────────────────────────────────
+// 커뮤니티
+//
+// 작성자 정보(닉네임·BTI)는 users 테이블을 참조하지 않고 행에 그대로 둔다.
+// 아직 로그인이 붙지 않아 users가 비어 있고, FE도 CURRENT_USER_ID 상수로만
+// 동작한다. 실제 인증이 들어오면 authorId를 users.id로 연결하면 된다.
+// ─────────────────────────────────────────────────────────────
+
+model CommunityPost {
+  id             String   @id
+  /// review | photo | question
+  type           String
+  title          String
+  content        String   @db.Text
+  summary        String?
+  /// 섬 이름 (FE 표시용 원문 — islandId 변환은 추천 엔진에서 한다)
+  island         String
+  activity       String
+  /// 이미지 URL 배열
+  images         Json?
+  badge          String?
+  isNotice       Boolean  @default(false) @map("is_notice")
+  isResolved     Boolean? @map("is_resolved")
+  authorId       String   @map("author_id")
+  authorNickname String   @map("author_nickname")
+  authorBti      String   @map("author_bti")
+  createdAt      DateTime @map("created_at")
+  likes          Int      @default(0)
+  views          Int      @default(0)
+
+  comments CommunityComment[]
+
+  @@index([island])
+  @@index([activity])
+  @@index([createdAt])
+  @@map("community_posts")
+}
+
+model CommunityComment {
+  id             String   @id
+  postId         String   @map("post_id")
+  /// 대댓글이면 부모 댓글 id
+  parentId       String?  @map("parent_id")
+  authorId       String   @map("author_id")
+  authorNickname String   @map("author_nickname")
+  authorBti      String   @map("author_bti")
+  content        String   @db.Text
+  createdAt      DateTime @map("created_at")
+  likes          Int      @default(0)
+  /// 글쓴이 본인이 단 댓글인지
+  isAuthor       Boolean  @default(false) @map("is_author")
+
+  post    CommunityPost      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  parent  CommunityComment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies CommunityComment[] @relation("CommentReplies")
+
+  @@index([postId])
+  @@index([parentId])
+  @@map("community_comments")
 }
