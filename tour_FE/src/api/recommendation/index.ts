@@ -27,7 +27,7 @@ export async function postRecommendations(
 ): Promise<RecommendationResponse> {
   const engineResult = runRecommendationEngine(request);
   const tripSummary = buildTripSummary(request.trip);
-  const enriched = enrichRecommendationsWithLlm(engineResult, tripSummary);
+  const enriched = enrichRecommendationsWithLlm(engineResult, tripSummary, request.trip);
   return delay(enriched);
 }
 

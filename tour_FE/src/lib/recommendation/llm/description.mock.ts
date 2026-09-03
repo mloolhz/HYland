@@ -1,7 +1,12 @@
 import { getIslandBtiResult } from "@/data/island-bti/results";
 import { ISLAND_MAP } from "@/lib/island-data";
 import type { IslandBtiResultCode } from "@/types/island-bti";
-import type { IslandRecommendationItem, RecommendationResponse } from "@/types/recommendation";
+import { buildRecommendationCourse } from "@/lib/recommendation/llm/course-builder";
+import type {
+  IslandRecommendationItem,
+  RecommendationResponse,
+  TripIntent,
+} from "@/types/recommendation";
 
 export type LlmDescriptionInput = {
   userIslandBti: string | null;
@@ -44,19 +49,10 @@ export function buildMockLlmDescription(input: LlmDescriptionInput): string {
   return parts.filter(Boolean).join("\n\n");
 }
 
-export function buildMockItinerary(item: IslandRecommendationItem): { order: number; name: string }[] {
-  const activities = item.recommendedActivities;
-  const steps = [
-    { order: 1, name: "인천항 출발 · 섬 도착" },
-    ...activities.map((name, index) => ({ order: index + 2, name })),
-    { order: activities.length + 2, name: "일몰 감상 후 귀항" },
-  ];
-  return steps;
-}
-
 export function enrichRecommendationsWithLlm(
   response: RecommendationResponse,
   tripSummary: string,
+  trip: TripIntent,
 ): RecommendationResponse {
   return {
     ...response,
@@ -68,7 +64,7 @@ export function enrichRecommendationsWithLlm(
         item,
         tripSummary,
       }),
-      itinerary: buildMockItinerary(item),
+      course: buildRecommendationCourse(item, trip),
     })),
   };
 }

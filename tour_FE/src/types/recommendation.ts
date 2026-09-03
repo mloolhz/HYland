@@ -1,3 +1,4 @@
+import type { CourseStep } from "@/types/ai-recommend";
 import type { IslandBtiResultCode } from "@/types/island-bti";
 
 /** 추천 알고리즘 공통 Feature 키 (User ↔ Island 비교용) */
@@ -116,7 +117,12 @@ export type IslandRecommendationItem = {
     likes: number;
   }[];
   aiDescription?: string;
-  itinerary?: { order: number; name: string }[];
+  /**
+   * 하루 코스 (시간·활동·설명).
+   * 예전 itinerary는 활동명만 나열한 5줄이라 접어둘 이유가 없었다.
+   * 일반 질문 답변과 같은 타임라인 형태로 맞춘다.
+   */
+  course?: { title: string; steps: CourseStep[] };
 };
 
 export type RecommendationResponse = {

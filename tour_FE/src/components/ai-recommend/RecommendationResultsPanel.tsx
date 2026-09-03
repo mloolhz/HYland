@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { AiCourseTimeline } from "@/components/ai-recommend/AiCourseTimeline";
 import { ISLAND_BTI_RESULTS } from "@/data/island-bti/results";
 import type { RecommendationResponse } from "@/types/recommendation";
 import type { WeatherInfo } from "@/types/ai-recommend";
@@ -101,17 +102,14 @@ export function RecommendationResultsPanel({ response, weather }: Recommendation
             </ul>
           ) : null}
 
-          {item.itinerary && item.itinerary.length > 0 ? (
+          {/* 일반 질문 답변과 같은 타임라인을 쓴다. 접어두는 만큼 펼쳤을 때
+              시간·장소·설명이 있는 실제 일정이 나와야 한다. */}
+          {item.course && item.course.steps.length > 0 ? (
             <details className="ai-rec-details">
-              <summary className="ai-rec-details__summary">코스 자세히 보기</summary>
-              <ol className="ai-rec-itinerary">
-                {item.itinerary.map((step) => (
-                  <li key={step.order}>
-                    <span>{step.order}</span>
-                    {step.name}
-                  </li>
-                ))}
-              </ol>
+              <summary className="ai-rec-details__summary">
+                코스 자세히 보기 ({item.course.steps.length}단계)
+              </summary>
+              <AiCourseTimeline title={item.course.title} steps={item.course.steps} />
             </details>
           ) : null}
 
