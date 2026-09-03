@@ -18,8 +18,10 @@ import {
 } from "@/lib/recommendation/facility/island-facility-index";
 import {
   getIslandSports,
+  getSportById,
   scoreSportsMatch,
 } from "@/lib/recommendation/facility/island-sports-index";
+import { getPrimaryInfoSource, sourceButtonLabel } from "@/lib/sport-booking-resolve";
 import { getUserTraitLabelsFromBti } from "@/lib/recommendation/preference/bti-preference.mapper";
 import { cosineSimilarityScore } from "@/lib/recommendation/preference/similarity";
 import { loadUserPreference } from "@/lib/recommendation/preference/user-preference-storage";
@@ -42,6 +44,36 @@ function resolveUserPreference(options?: RecommendationEngineOptions): UserPrefe
 function resolveVisitedIds(options?: RecommendationEngineOptions): Set<string> {
   const ids = options?.visitedIslandIds ?? getUniqueIslandIdsFromEarnedStamps();
   return new Set(ids);
+}
+
+/**
+ * 매칭된 종목의 외부 이용·예약 링크를 모은다.
+ *
+ * 링크 판단 규칙(커뮤니티형·출처 없음은 제외)은 레저스포츠 탭이 쓰는
+ * getPrimaryInfoSource를 그대로 재사용한다. 두 화면이 다른 링크를 보여주면
+ * 사용자가 혼란스럽고, 규칙이 갈라지면 한쪽만 고쳐지기 쉽다.
+ *
+ * 같은 기관(인천 섬포털 등)이 여러 종목의 안내처인 경우가 많아 URL로 중복을 없앤다.
+ */
+function buildExternalLinks(sportIds: string[]) {
+  const byUrl = new Map<string, { sportName: string; label: string; url: string; tel?: string }>();
+
+  for (const sportId of sportIds) {
+    const sport = getSportById(sportId);
+    if (!sport) continue;
+
+    const source = getPrimaryInfoSource(sportId);
+    if (!source?.url || byUrl.has(source.url)) continue;
+
+    byUrl.set(source.url, {
+      sportName: sport.name,
+      label: sourceButtonLabel(source, sport.reservationType),
+      url: source.url,
+      tel: source.tel,
+    });
+  }
+
+  return [...byUrl.values()].slice(0, 3);
 }
 
 export function runRecommendationEngine(
@@ -125,6 +157,9 @@ export function runRecommendationEngine(
         .slice(0, 3)
         .map((f) => ({ name: f.name, activity: f.activity })),
       sportHighlights: [...new Set(sports.matched.flatMap((m) => m.sportNames))].slice(0, 4),
+      // 레저스포츠 탭과 같은 출처를 그대로 쓴다. 추천을 보고 바로 예약·문의로
+      // 넘어갈 수 있게, 매칭된 종목의 이용정보 링크를 카드에 붙인다.
+      externalLinks: buildExternalLinks(sports.matched.flatMap((m) => m.sportIds)),
       // 같은 글이 여러 활동에 걸릴 수 있다(카약·바다 → 같은 패들보드 후기). postId로 중복 제거.
       communityHighlights: [
         ...new Map(

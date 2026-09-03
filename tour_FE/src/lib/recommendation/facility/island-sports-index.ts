@@ -20,7 +20,13 @@ import type { TripIntent } from "@/types/recommendation";
 export type SportsMatchResult = {
   /** 0~100 */
   score: number;
-  matched: { tripActivity: string; sportNames: string[]; reservableCount: number }[];
+  matched: {
+    tripActivity: string;
+    sportNames: string[];
+    /** 외부 이용정보 링크를 뽑기 위한 종목 id */
+    sportIds: string[];
+    reservableCount: number;
+  }[];
   /** 이 섬에서 가능한 전체 종목 수 */
   totalSports: number;
 };
@@ -47,6 +53,13 @@ const SPORTS_INDEX = buildIndex();
 
 export function getIslandSports(islandId: string): Sport[] {
   return SPORTS_INDEX.get(islandId)?.sports ?? [];
+}
+
+const SPORT_BY_ID = new Map(Object.values(SPORTS_DATA).flat().map((s) => [s.id, s]));
+
+/** 종목 id로 조회 (외부 이용정보 링크를 붙일 때 쓴다) */
+export function getSportById(sportId: string): Sport | undefined {
+  return SPORT_BY_ID.get(sportId);
 }
 
 /** 섬당 종목 수가 1~9로 좁아 상한을 낮게 둔다. */
@@ -87,6 +100,7 @@ export function scoreSportsMatch(
       matched.push({
         tripActivity: activity,
         sportNames: hits.map((s) => s.name),
+        sportIds: hits.map((s) => s.id),
         reservableCount,
       });
       const depth = Math.min(hits.length, DEPTH_CAP) / DEPTH_CAP;

@@ -115,6 +115,30 @@ export function RecommendationResultsPanel({ response, weather }: Recommendation
             </details>
           ) : null}
 
+          {/* 레저스포츠 탭과 같은 이용정보 출처 — 추천에서 바로 예약·문의로 넘어간다 */}
+          {item.externalLinks && item.externalLinks.length > 0 ? (
+            <div className="ai-rec-links">
+              {item.externalLinks.map((link) => (
+                <a
+                  key={link.url}
+                  className="ai-rec-link"
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span className="ai-rec-link__copy">
+                    <span className="ai-rec-link__sport">{link.sportName}</span>
+                    <span className="ai-rec-link__label">{link.label}</span>
+                    {link.tel ? <span className="ai-rec-link__tel">전화 {link.tel}</span> : null}
+                  </span>
+                  <span className="ai-rec-link__external" aria-hidden="true">
+                    ↗
+                  </span>
+                </a>
+              ))}
+            </div>
+          ) : null}
+
           <div className="ai-rec-island-card__actions">
             <Link to={`/islands/${item.islandId}`} className="ai-rec-island-card__link">
               {item.islandName} 자세히 보기

@@ -101,6 +101,11 @@ export type IslandRecommendationItem = {
   facilityHighlights?: { name: string; activity: string }[];
   /** 이 섬에서 실제로 가능한 종목 중 선택한 활동에 해당하는 것 */
   sportHighlights?: string[];
+  /**
+   * 추천된 종목의 외부 이용·예약 안내 링크 (레저스포츠 탭과 같은 출처).
+   * 추천을 보고 바로 예약·문의로 넘어갈 수 있게 한다.
+   */
+  externalLinks?: { sportName: string; label: string; url: string; tel?: string }[];
   /** 추천 근거가 된 커뮤니티 후기 */
   communityHighlights?: {
     postId: string;
