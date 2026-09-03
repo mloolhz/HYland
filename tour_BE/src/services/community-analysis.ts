@@ -34,6 +34,15 @@ const NEGATIVE = [
  * 긍정어에 부정 어미가 붙은 형태라, 긍정어 검사보다 **먼저** 잡아내고 그 구간을
  * 지운 뒤 나머지를 센다. 그러지 않으면 "좋지"의 "좋"이 긍정으로 잡힌다.
  */
+/**
+ * 부정어 + 부정 어미 = 칭찬. "험하지 않고", "불편하지 않았어요".
+ *
+ * 긍정어 쪽(NEGATED_PRAISE)만 처리하고 이쪽을 빠뜨려서, "길이 험하지 않고"가
+ * '험하' 하나 때문에 감점됐다. 뜻이 정반대인데 부정으로 세던 셈이다.
+ */
+const NEGATED_COMPLAINT =
+  /(험하|힘들|불편|위험|비싸|복잡|더럽|지저분|시끄|막히|붐비|붐볐|빡세)[가-힣]{0,3}(지\s?않|지\s?못|진\s?않|지도\s?않)/g;
+
 const NEGATED_PRAISE =
   /(좋|괜찮|깨끗|편하|편했|친절|재밌|재미있|맑|시원|아름답|멋있)[가-힣]{0,3}(지\s?않|지\s?못|진\s?않|지도\s?않)/g;
 
@@ -73,10 +82,15 @@ function scoreSentence(sentence: string): number {
 
   let score = 0;
 
-  // 1) 부정형 서술을 먼저 처리하고 그 구간을 지운다.
-  const negated = sentence.match(NEGATED_PRAISE);
+  // 1) 어미로 뜻이 뒤집히는 표현을 먼저 처리하고 그 구간을 지운다.
+  //    순서가 중요하다 — 지우지 않으면 아래 단어 검사에서 반대로 잡힌다.
+  const praised = sentence.match(NEGATED_COMPLAINT);
+  score += (praised?.length ?? 0) * 1;
+
+  const negated = sentence.replace(NEGATED_COMPLAINT, " ").match(NEGATED_PRAISE);
   score -= (negated?.length ?? 0) * 2;
-  const rest = sentence.replace(NEGATED_PRAISE, " ");
+
+  const rest = sentence.replace(NEGATED_COMPLAINT, " ").replace(NEGATED_PRAISE, " ");
 
   // 2) 남은 부분에서 긍정어·부정어를 센다.
   for (const word of POSITIVE) {
