@@ -13,6 +13,7 @@ import {
 import { scoreCurrentTripMatch } from "@/lib/recommendation/engine/trip-intent-scorer";
 import { scoreCommunityMatch } from "@/lib/recommendation/community/community-signal";
 import {
+  getFacilitiesForTripActivity,
   getIslandFacilitySummary,
   scoreFacilityMatch,
 } from "@/lib/recommendation/facility/island-facility-index";
@@ -21,6 +22,7 @@ import {
   getSportById,
   scoreSportsMatch,
 } from "@/lib/recommendation/facility/island-sports-index";
+import { LEISURE_FACILITY_LINKS } from "@/data/leisure-facility-links";
 import { getPrimaryInfoSource, sourceButtonLabel } from "@/lib/sport-booking-resolve";
 import { getUserTraitLabelsFromBti } from "@/lib/recommendation/preference/bti-preference.mapper";
 import { cosineSimilarityScore } from "@/lib/recommendation/preference/similarity";
@@ -47,24 +49,41 @@ function resolveVisitedIds(options?: RecommendationEngineOptions): Set<string> {
 }
 
 /**
- * 매칭된 종목의 외부 이용·예약 링크를 모은다.
+ * 카드에 붙일 외부 링크를 모은다.
  *
- * 링크 판단 규칙(커뮤니티형·출처 없음은 제외)은 레저스포츠 탭이 쓰는
- * getPrimaryInfoSource를 그대로 재사용한다. 두 화면이 다른 링크를 보여주면
- * 사용자가 혼란스럽고, 규칙이 갈라지면 한쪽만 고쳐지기 쉽다.
+ * 우선순위가 있다.
+ *  1) 시설 자체의 홈페이지 — 관광공사 TourAPI(detailCommon2)의 homepage 필드.
+ *     수집 때는 areaBasedList2만 불러 이 값이 빠져 있었고, 그래서 링크가 전부
+ *     수작업으로 모은 포털 주소(인천 섬포털 등)였다. 추천한 바로 그 시설의
+ *     홈페이지가 훨씬 구체적이라 이쪽을 먼저 쓴다.
+ *  2) 종목 단위 안내처 — 시설 홈페이지가 없을 때의 대비책.
+ *     판단 규칙은 레저스포츠 탭의 getPrimaryInfoSource를 그대로 재사용한다.
  *
- * 같은 기관(인천 섬포털 등)이 여러 종목의 안내처인 경우가 많아 URL로 중복을 없앤다.
+ * 같은 기관이 여러 종목·시설의 안내처인 경우가 많아 URL로 중복을 없앤다.
  */
-function buildExternalLinks(sportIds: string[]) {
+function buildExternalLinks(
+  facilities: { id: string; name: string; activity: string }[],
+  sportIds: string[],
+) {
   const byUrl = new Map<string, { sportName: string; label: string; url: string; tel?: string }>();
 
+  // 1) 시설 홈페이지 (API 출처).
+  //    홈페이지가 있는 시설은 145곳 중 43곳뿐이라, 카드에 이름만 띄운 2곳으로
+  //    한정하면 링크가 거의 안 잡힌다. 매칭된 시설 전체를 놓고 링크가 있는 것부터 고른다.
+  for (const facility of facilities) {
+    const url = LEISURE_FACILITY_LINKS[facility.id];
+    if (!url || byUrl.has(url)) continue;
+    byUrl.set(url, { sportName: facility.activity, label: facility.name, url });
+    if (byUrl.size >= 3) break;
+  }
+
+  // 2) 부족하면 종목 단위 안내처로 채운다
   for (const sportId of sportIds) {
+    if (byUrl.size >= 3) break;
     const sport = getSportById(sportId);
     if (!sport) continue;
-
     const source = getPrimaryInfoSource(sportId);
     if (!source?.url || byUrl.has(source.url)) continue;
-
     byUrl.set(source.url, {
       sportName: sport.name,
       label: sourceButtonLabel(source, sport.reservationType),
@@ -159,7 +178,16 @@ export function runRecommendationEngine(
       sportHighlights: [...new Set(sports.matched.flatMap((m) => m.sportNames))].slice(0, 4),
       // 레저스포츠 탭과 같은 출처를 그대로 쓴다. 추천을 보고 바로 예약·문의로
       // 넘어갈 수 있게, 매칭된 종목의 이용정보 링크를 카드에 붙인다.
-      externalLinks: buildExternalLinks(sports.matched.flatMap((m) => m.sportIds)),
+      externalLinks: buildExternalLinks(
+        facility.matchedActivities.flatMap((m) =>
+          getFacilitiesForTripActivity(island.islandId, m.tripActivity).map((f) => ({
+            id: f.id,
+            name: f.name,
+            activity: f.activity,
+          })),
+        ),
+        sports.matched.flatMap((m) => m.sportIds),
+      ),
       // 같은 글이 여러 활동에 걸릴 수 있다(카약·바다 → 같은 패들보드 후기). postId로 중복 제거.
       communityHighlights: [
         ...new Map(
