@@ -71,7 +71,9 @@ export function runRecommendationEngine(
     const currentTripMatch = scoreCurrentTripMatch(request.trip, island);
     const contextScores = scoreContextFactors(island, context, request.trip, visitedIslandIds);
     const facility = scoreFacilityMatch(island.islandId, request.trip);
-    const sports = scoreSportsMatch(island.islandId, request.trip);
+    // 시설이 이미 확인해 준 활동은 종목 목록에 없더라도 감점하지 않는다.
+    const confirmedByFacility = new Set(facility.matchedActivities.map((m) => m.tripActivity));
+    const sports = scoreSportsMatch(island.islandId, request.trip, confirmedByFacility);
     const community = scoreCommunityMatch(island.islandId, request.trip);
 
     const partialScores = {

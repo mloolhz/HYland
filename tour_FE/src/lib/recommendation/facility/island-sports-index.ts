@@ -52,7 +52,15 @@ export function getIslandSports(islandId: string): Sport[] {
 /** 섬당 종목 수가 1~9로 좁아 상한을 낮게 둔다. */
 const DEPTH_CAP = 2;
 
-export function scoreSportsMatch(islandId: string, trip: TripIntent): SportsMatchResult {
+/**
+ * @param confirmedByFacility 시설 데이터가 이미 "가능하다"고 확인해 준 활동들.
+ *   종목 목록에 없다고 감점하면 안 되는 경우를 걸러내기 위해 받는다.
+ */
+export function scoreSportsMatch(
+  islandId: string,
+  trip: TripIntent,
+  confirmedByFacility?: Set<string>,
+): SportsMatchResult {
   const sports = getIslandSports(islandId);
   const empty: SportsMatchResult = { score: 40, matched: [], totalSports: sports.length };
 
@@ -84,6 +92,18 @@ export function scoreSportsMatch(islandId: string, trip: TripIntent): SportsMatc
       const depth = Math.min(hits.length, DEPTH_CAP) / DEPTH_CAP;
       const reservableBonus = reservableCount > 0 ? 0.1 : 0;
       sum += Math.min(1, 0.7 + depth * 0.2 + reservableBonus);
+    } else if (confirmedByFacility?.has(activity)) {
+      // 시설 데이터가 "된다"고 하는데 종목 목록에 없는 경우.
+      // 석모도가 그렇다 — 시설엔 트레킹이 있지만 종목 목록엔 없어서,
+      // 예전엔 종목 점수가 0이 되어 다른 신호가 아무리 좋아도 밀렸다.
+      // 한 소스가 확인해 준 사실을 다른 소스의 공백으로 뒤집지 않는다.
+      sum += 0.5;
+    } else {
+      // 종목 목록은 전수 조사가 아니라 큐레이션이다. 목록에 없다고 "못 한다"는
+      // 뜻은 아니므로 0점을 주지 않는다. 다만 목록이 길게 정리된 섬에서 없다면
+      // 그건 실제로 없을 가능성이 높으니 그만큼 낮춘다.
+      const catalogued = Math.min(sports.length / 6, 1);
+      sum += 0.1 + 0.3 * (1 - catalogued);
     }
   }
 

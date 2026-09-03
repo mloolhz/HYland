@@ -100,27 +100,36 @@ function buildActivityEvidenceLines(
   const lines: string[] = [];
 
   for (const entry of collectActivityEvidence(trip, facility, sports, community).slice(0, 2)) {
-    const names = [...new Set(entry.names)].slice(0, 2).join(" · ");
-    const topic = topicParticle(entry.activity);
+    const uniqueNames = [...new Set(entry.names)];
+    const names = uniqueNames.slice(0, 2).join(" · ");
+
+    // "캠핑은 캠핑을 3곳에서" 처럼 고른 활동과 시설·종목 이름이 겹치면 앞말을 뺀다.
+    // "바다는 해수욕장을"처럼 이름이 다를 때만 무엇에 대한 답인지 밝혀준다.
+    const echoes = uniqueNames.some(
+      (n) => n === entry.activity || n.includes(entry.activity) || entry.activity.includes(n),
+    );
+    const topic = echoes ? "" : `${topicParticle(entry.activity)} `;
 
     if (names && entry.communityPosts > 0) {
       const posts = `후기 ${entry.communityPosts}건`;
       lines.push(
-        `${topic} ${objectParticle(names)} 즐길 수 있고, 커뮤니티에 ${subjectParticle(posts)} 올라와 있어요.`,
+        `${topic}${objectParticle(names)} 즐길 수 있고, 커뮤니티에 ${subjectParticle(posts)} 올라와 있어요.`,
       );
     } else if (names) {
       // "트레킹 · 백패킹 등 1곳"처럼 이름 수와 곳 수가 어긋나 보이면 안 된다.
       // 이름은 종목·시설을 합쳐 뽑고 곳 수는 시설만 세므로 둘이 안 맞을 수 있다.
       // 활동 이름이 하나일 때만 곳 수를 붙인다.
-      const single = [...new Set(entry.names)].length === 1;
+      const single = uniqueNames.length === 1;
       if (single && entry.facilityCount > 1) {
-        lines.push(`${topic} ${objectParticle(names)} ${entry.facilityCount}곳에서 즐길 수 있어요.`);
+        lines.push(`${topic}${objectParticle(names)} ${entry.facilityCount}곳에서 즐길 수 있어요.`);
       } else {
-        lines.push(`${topic} ${objectParticle(names)} 즐길 수 있어요.`);
+        lines.push(`${topic}${objectParticle(names)} 즐길 수 있어요.`);
       }
     } else if (entry.communityPosts > 0) {
       const posts = `후기 ${entry.communityPosts}건`;
-      lines.push(`${topic} 커뮤니티에 ${subjectParticle(posts)} 올라온 섬이에요.`);
+      lines.push(
+        `${topicParticle(entry.activity)} 커뮤니티에 ${subjectParticle(posts)} 올라온 섬이에요.`,
+      );
     }
   }
 
