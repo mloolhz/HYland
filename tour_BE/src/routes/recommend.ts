@@ -2,6 +2,7 @@ import { Router, Response } from "express";
 import { Prisma } from "@prisma/client";
 import { prisma } from "../prisma";
 import { askGemini, askGeminiStream } from "../services/gemini";
+import { buildCommunityTips, findIslandNamesInText } from "../services/community-tips";
 
 // 커넥션 풀을 하나만 쓰도록 앱 공용 Prisma 클라이언트(../prisma)를 재사용한다.
 // DATABASE_URL 파싱과 driver adapter 구성은 그쪽에 모여 있다.
@@ -396,6 +397,23 @@ router.post("/recommend", async (req, res) => {
     const prompt = buildRecommendPrompt(question, history, persona);
     const raw = await askGemini(prompt, { grounded: needsWeatherSearch(persona) });
     const parsed = parseGeminiResponse(raw);
+
+    // Gemini가 추천한 섬에 방문객 다수가 남긴 팁이 있으면 함께 보여준다.
+    // 조건 패널과 같은 합의 로직을 재사용한다.
+    // 추천 배열 + 질문·답변 텍스트에 등장한 섬 모두에서 팁을 찾는다.
+    // 정보성 질문("자월도 어때?")은 recommendations가 비고 text로만 답하기 때문이다.
+    const recommendedIslands = [
+      ...(parsed.recommendations ?? [])
+        .map((r: { islandName?: string }) => r.islandName)
+        .filter((n: string | undefined): n is string => typeof n === "string"),
+      ...findIslandNamesInText(`${question} ${parsed.text ?? ""}`),
+    ];
+    if (recommendedIslands.length > 0) {
+      const communityTips = await buildCommunityTips(recommendedIslands);
+      if (communityTips.length > 0) {
+        parsed.tips = [...(parsed.tips ?? []), ...communityTips];
+      }
+    }
 
     res.json(parsed);
 

@@ -1,7 +1,20 @@
-import { getPostsSnapshot } from "@/lib/post-store";
 import { resolveIslandId } from "@/lib/recommendation/vocabulary/activity-vocabulary";
-import type { Post } from "@/types/community";
 import type { TripIntent } from "@/types/recommendation";
+
+/**
+ * 집계에 필요한 최소 형태. FE의 Post와 BE의 DB 행이 둘 다 이 모양을 만족하므로
+ * (구조적 타이핑), 이 모듈은 어느 쪽에서 부르든 그대로 동작한다.
+ * 그래서 자유 질문(백엔드 Gemini)과 조건 패널(FE 엔진)이 같은 합의 로직을 쓴다.
+ */
+export type InsightPost = {
+  island: string;
+  isNotice?: boolean;
+  type: string;
+  sentiment?: "positive" | "neutral" | "negative";
+  bestMonths?: number[];
+  companionFit?: string[];
+  cautions?: string[];
+};
 
 /**
  * 섬별 커뮤니티 후기를 "합의(consensus)"로 집계한다.
@@ -18,7 +31,7 @@ import type { TripIntent } from "@/types/recommendation";
  * 부정 후기는 집계에서 뺀다(추천 근거가 아니므로).
  */
 
-function isUsable(post: Post): boolean {
+function isUsable(post: InsightPost): boolean {
   if (post.isNotice) return false;
   if (post.type !== "review" && post.type !== "photo") return false;
   return post.sentiment !== "negative";
@@ -62,7 +75,7 @@ const CAUTION_TOPICS: { topic: string; hints: string[] }[] = [
   { topic: "주차 공간", hints: ["주차"] },
   { topic: "배편 시간", hints: ["배 시간", "배편", "결항", "선착장"] },
   { topic: "물때 확인", hints: ["물때", "만조", "간조", "썰물", "밀물"] },
-  { topic: "미리 예약", hints: ["예약", "매진", "미리"] },
+  { topic: "미리 예약", hints: ["예약", "매진"] },
   { topic: "챙길 것", hints: ["챙기", "그늘", "현금", "화장실", "편의점", "식당"] },
 ];
 
@@ -71,8 +84,12 @@ function topicOf(caution: string): string {
   return hit?.topic ?? caution;
 }
 
-export function aggregateCommunityInsights(islandId: string, trip: TripIntent): CommunityInsight {
-  const reviews = getPostsSnapshot().filter(
+export function aggregateCommunityInsights(
+  posts: InsightPost[],
+  islandId: string,
+  trip: TripIntent,
+): CommunityInsight {
+  const reviews = posts.filter(
     (p) => resolveIslandId(p.island) === islandId && isUsable(p),
   );
   if (reviews.length === 0) return EMPTY;

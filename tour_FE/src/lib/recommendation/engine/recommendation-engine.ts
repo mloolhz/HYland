@@ -12,6 +12,7 @@ import {
 } from "@/lib/recommendation/engine/reason-builder";
 import { scoreCurrentTripMatch } from "@/lib/recommendation/engine/trip-intent-scorer";
 import { aggregateCommunityInsights } from "@/lib/recommendation/community/community-insights";
+import { getPostsSnapshot } from "@/lib/post-store";
 import { scoreCommunityMatch } from "@/lib/recommendation/community/community-signal";
 import {
   getFacilitiesForTripActivity,
@@ -107,6 +108,8 @@ export function runRecommendationEngine(
   const contextMap = new Map(contexts.map((ctx) => [ctx.islandId, ctx]));
 
   const candidates: IslandRecommendationItem[] = [];
+  // 후기 스냅샷은 섬마다 같으므로 루프 밖에서 한 번만 읽는다.
+  const communityPosts = getPostsSnapshot();
 
   for (const island of ISLAND_RECOMMENDATION_FEATURES) {
     const context = contextMap.get(island.islandId);
@@ -127,7 +130,7 @@ export function runRecommendationEngine(
     const confirmedByFacility = new Set(facility.matchedActivities.map((m) => m.tripActivity));
     const sports = scoreSportsMatch(island.islandId, request.trip, confirmedByFacility);
     const community = scoreCommunityMatch(island.islandId, request.trip);
-    const insights = aggregateCommunityInsights(island.islandId, request.trip);
+    const insights = aggregateCommunityInsights(communityPosts, island.islandId, request.trip);
 
     // 여행 시기·동행이 후기 합의와 맞으면 커뮤니티 점수를 소폭 올린다.
     // 가중치가 0.07이라 +한도(30)여도 최종 +2점 남짓 — 근거가 확실할 때만 살짝 민다.
