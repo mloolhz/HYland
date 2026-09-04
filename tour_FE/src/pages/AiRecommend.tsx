@@ -158,7 +158,22 @@ export function AiRecommend() {
   const [bootstrapped, setBootstrapped] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [showConditionsSummary, setShowConditionsSummary] = useState(false);
-  const [popularQuestions, setPopularQuestions] = useState<string[]>([]);
+  // 인기질문은 "표시 중 교체"가 거슬리므로(정적 예시 → 서버 질문으로 갑자기 바뀜),
+  // 마운트 시 한 번만 정하고 그 뒤로는 안 바꾼다. 세션 캐시에 있으면 그걸 즉시
+  // 보여주고, 없으면 예시 질문을 보여준 뒤 백그라운드로 캐시만 갱신한다
+  // (stale-while-revalidate) — 갱신분은 다음 진입 때 반영된다.
+  const [popularQuestions] = useState<string[]>(() => {
+    try {
+      const cached = sessionStorage.getItem("ai-popular-questions");
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch {
+      // 세션스토리지 접근 불가(사생활 보호 모드 등) — 예시 질문으로 진행
+    }
+    return [];
+  });
 
   const chatScrollRef = useRef<HTMLDivElement>(null);
   const turnRefs = useRef<Map<string, HTMLDivElement>>(new Map());
@@ -518,8 +533,14 @@ export function AiRecommend() {
   }, [turns]);
 
   useEffect(() => {
+    // 화면은 그대로 두고 캐시만 갱신한다. 지금 보이는 칩을 갑자기 바꾸지 않으려는 것.
     void getPopularQuestions().then((qs) => {
-      if (qs.length > 0) setPopularQuestions(qs);
+      if (qs.length === 0) return;
+      try {
+        sessionStorage.setItem("ai-popular-questions", JSON.stringify(qs));
+      } catch {
+        // 저장 실패해도 무방 — 다음 진입 때 다시 시도한다
+      }
     });
   }, []);
 
