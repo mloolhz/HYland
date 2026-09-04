@@ -90,6 +90,20 @@ export function RecommendationResultsPanel({ response, weather }: Recommendation
             </ul>
           ) : null}
 
+          {/* 여러 방문객이 남긴 주의·팁 — 후기 합의라 개별 글보다 신뢰도가 높다 */}
+          {item.communityCautions && item.communityCautions.length > 0 ? (
+            <ul className="ai-rec-cautions">
+              {item.communityCautions.map((caution) => (
+                <li key={caution} className="ai-rec-caution">
+                  <span className="ai-rec-caution__icon" aria-hidden="true">
+                    💡
+                  </span>
+                  방문객 팁: {caution}
+                </li>
+              ))}
+            </ul>
+          ) : null}
+
           {/* 실제 존재하는 시설 이름 — 추천 이유를 눈으로 확인할 수 있게 한다 */}
           {item.facilityHighlights && item.facilityHighlights.length > 0 ? (
             <ul className="ai-rec-facilities">

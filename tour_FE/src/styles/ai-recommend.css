@@ -1716,3 +1716,31 @@ body:has(.ai-page)::-webkit-scrollbar-button {
     min-height: 44px;
   }
 }
+
+/* 방문객 팁 — 후기 합의로 뽑은 주의사항 */
+.ai-rec-cautions {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.ai-rec-caution {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #7a5a1a;
+  background: #fdf6e8;
+  border: 1px solid #f0e2c4;
+  border-radius: 6px;
+  padding: 7px 10px;
+}
+
+.ai-rec-caution__icon {
+  flex-shrink: 0;
+  font-size: 12px;
+}

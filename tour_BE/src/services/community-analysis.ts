@@ -17,6 +17,29 @@ const ACTIVITY_TERMS = [
   "일몰", "일출", "온천", "골프", "유람선", "짚라인", "루지", "모노레일",
 ];
 
+/**
+ * 구조화 추출용 사전.
+ *
+ * 커뮤니티 글이 대량으로 쌓였을 때를 가정한다. 글 한 건에서 뽑은 사실은
+ * 믿을 게 못 되지만(주관·오타), 수십·수백 건이 같은 말을 하면 신호가 된다.
+ * 그래서 여기서는 문장에서 후보만 뽑고, 합의 판단은 집계 단계에서 한다.
+ */
+
+/** 동행 적합도 — 여행 조건 companion(solo/couple/friend/family)과 매칭한다. */
+const COMPANION_HINTS: Record<string, string[]> = {
+  family: ["가족", "아이", "아이들", "애들", "부모님", "어른", "유아", "아기", "노약자"],
+  couple: ["연인", "커플", "데이트", "둘이서", "여자친구", "남자친구", "신혼"],
+  friend: ["친구", "친구들", "동기", "우정", "무리"],
+  solo: ["혼자", "혼행", "나홀로", "솔로", "혼자서"],
+};
+
+/** 방문객 주의·팁 — 점수엔 안 쓰고 카드에 그대로 보여준다. */
+const CAUTION_HINTS = [
+  "주차", "챙기", "미리", "예약", "매진", "없으니", "없어서", "부족", "조심",
+  "주의", "위험", "그늘", "화장실", "편의점", "식당", "배 시간", "배편", "결항",
+  "물때", "만조", "간조", "썰물", "밀물", "현금",
+];
+
 const POSITIVE = [
   "좋았", "좋아", "좋다", "좋은", "최고", "추천", "만족", "예쁘", "예뻤", "아름",
   "맑", "깨끗", "잔잔", "편했", "편하", "친절", "훌륭", "완벽", "인생", "강추",
@@ -67,8 +90,34 @@ export type PostAnalysis = {
   sentimentScore: number;
   highlight: string | null;
   mentionedActivities: string[];
+  /** 후기에서 "좋았다"고 한 달 (1~12). 여행 시기 매칭용. */
+  bestMonths: number[];
+  /** 이 글이 시사하는 동행 형태 (family/couple/friend/solo). */
+  companionFit: string[];
+  /** 방문객 주의·팁 문장. 점수엔 안 쓰고 카드에 보여준다. */
+  cautions: string[];
   analyzedBy: "lexicon" | "gemini";
 };
+
+/** 본문에서 월(1~12)을 뽑는다. "9월", "구월"까진 보고 애매한 건 버린다. */
+function extractMonths(text: string): number[] {
+  const months = new Set<number>();
+  for (const m of text.matchAll(/(\d{1,2})\s*월/g)) {
+    const n = Number(m[1]);
+    if (n >= 1 && n <= 12) months.add(n);
+  }
+  return [...months];
+}
+
+function extractCompanionFit(text: string): string[] {
+  return Object.entries(COMPANION_HINTS)
+    .filter(([, words]) => words.some((w) => text.includes(w)))
+    .map(([key]) => key);
+}
+
+function extractCautions(sentences: string[]): string[] {
+  return sentences.filter((s) => CAUTION_HINTS.some((w) => s.includes(w))).slice(0, 3);
+}
 
 function splitSentences(text: string): string[] {
   return text
@@ -131,11 +180,20 @@ export function analyzeWithLexicon(title: string, content: string): PostAnalysis
   const normalized = opinionated > 0 ? total / opinionated : 0;
   const sentimentScore = Math.max(-100, Math.min(100, Math.round(normalized * 40)));
 
+  // 구조화 추출 — 긍정 글에서만 "좋은 시기"를 인정한다(부정 글의 "9월은 별로"를
+  // 좋은 시기로 세면 안 된다). 동행·주의사항은 감성과 무관하게 뽑는다.
+  const bestMonths = sentimentScore > 0 ? extractMonths(full) : [];
+  const companionFit = extractCompanionFit(full);
+  const cautions = extractCautions(sentences);
+
   return {
     sentiment: sentimentScore > 15 ? "positive" : sentimentScore < -15 ? "negative" : "neutral",
     sentimentScore,
     highlight: best?.sentence ?? null,
     mentionedActivities,
+    bestMonths,
+    companionFit,
+    cautions,
     analyzedBy: "lexicon",
   };
 }
@@ -160,12 +218,17 @@ export async function analyzeWithGemini(
   "sentiment": "positive | neutral | negative",
   "sentimentScore": -100~100 정수,
   "highlight": "이 섬을 추천할 근거가 되는 문장 하나를 본문에서 그대로 인용(없으면 null)",
-  "mentionedActivities": ["본문에 실제로 언급된 레저 활동"]
+  "mentionedActivities": ["본문에 실제로 언급된 레저 활동"],
+  "bestMonths": [본문에서 방문하기 좋았다고 한 달의 숫자 1~12, 없으면 빈 배열],
+  "companionFit": ["이 글이 어울린다고 시사하는 동행: family|couple|friend|solo 중에서만"],
+  "cautions": ["다음 방문자가 알면 좋을 주의·팁을 본문 근거로 1~3개(주차·배편·물때·챙길 것 등). 없으면 빈 배열"]
 }
 
 주의:
 - 질문("~할까요?")은 추천 근거가 아니므로 neutral로 두세요.
-- highlight는 요약하지 말고 본문 문장을 그대로 쓰세요.`;
+- highlight는 요약하지 말고 본문 문장을 그대로 쓰세요.
+- bestMonths는 "좋았다"는 맥락일 때만. "9월은 사람이 너무 많았다"처럼 부정이면 넣지 마세요.
+- 본문에 없는 내용은 지어내지 말고 빈 배열로 두세요.`;
 
   try {
     const raw = await askGemini(prompt);
@@ -184,6 +247,18 @@ export async function analyzeWithGemini(
       highlight: typeof parsed.highlight === "string" ? parsed.highlight : null,
       mentionedActivities: Array.isArray(parsed.mentionedActivities)
         ? parsed.mentionedActivities.filter((a): a is string => typeof a === "string")
+        : [],
+      bestMonths: Array.isArray(parsed.bestMonths)
+        ? parsed.bestMonths.map(Number).filter((n) => n >= 1 && n <= 12)
+        : [],
+      companionFit: Array.isArray(parsed.companionFit)
+        ? parsed.companionFit.filter(
+            (c): c is string =>
+              c === "family" || c === "couple" || c === "friend" || c === "solo",
+          )
+        : [],
+      cautions: Array.isArray(parsed.cautions)
+        ? parsed.cautions.filter((c): c is string => typeof c === "string").slice(0, 3)
         : [],
       analyzedBy: "gemini",
     };

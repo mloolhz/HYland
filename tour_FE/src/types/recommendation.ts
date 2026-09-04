@@ -107,6 +107,8 @@ export type IslandRecommendationItem = {
    * 추천을 보고 바로 예약·문의로 넘어갈 수 있게 한다.
    */
   externalLinks?: { sportName: string; label: string; url: string; tel?: string }[];
+  /** 방문객이 자주 남긴 주의·팁 (커뮤니티 후기 합의) */
+  communityCautions?: string[];
   /** 추천 근거가 된 커뮤니티 후기 */
   communityHighlights?: {
     postId: string;

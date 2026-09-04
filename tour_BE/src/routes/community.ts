@@ -66,6 +66,9 @@ function toPostDto(post: {
   sentimentScore: number | null;
   highlight: string | null;
   mentionedActivities: unknown;
+  bestMonths: unknown;
+  companionFit: unknown;
+  cautions: unknown;
   comments: CommentRow[];
 }) {
   return {
@@ -91,6 +94,9 @@ function toPostDto(post: {
     mentionedActivities: Array.isArray(post.mentionedActivities)
       ? (post.mentionedActivities as string[])
       : undefined,
+    bestMonths: Array.isArray(post.bestMonths) ? (post.bestMonths as number[]) : undefined,
+    companionFit: Array.isArray(post.companionFit) ? (post.companionFit as string[]) : undefined,
+    cautions: Array.isArray(post.cautions) ? (post.cautions as string[]) : undefined,
     comments: nestComments(post.comments),
   };
 }
@@ -159,6 +165,9 @@ router.post("/posts", async (req, res) => {
         sentimentScore: analysis.sentimentScore,
         highlight: analysis.highlight,
         mentionedActivities: analysis.mentionedActivities,
+        bestMonths: analysis.bestMonths,
+        companionFit: analysis.companionFit,
+        cautions: analysis.cautions,
         analyzedBy: analysis.analyzedBy,
         analyzedAt: new Date(),
       },
@@ -223,6 +232,9 @@ router.post("/analyze", async (req, res) => {
           sentimentScore: analysis.sentimentScore,
           highlight: analysis.highlight,
           mentionedActivities: analysis.mentionedActivities,
+          bestMonths: analysis.bestMonths,
+          companionFit: analysis.companionFit,
+          cautions: analysis.cautions,
           analyzedBy: analysis.analyzedBy,
           analyzedAt: new Date(),
         },

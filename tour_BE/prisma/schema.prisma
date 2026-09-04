@@ -721,6 +721,12 @@ model CommunityPost {
   highlight           String?   @db.Text
   /// 본문에서 실제로 언급된 활동 (태그와 다를 수 있다)
   mentionedActivities Json?     @map("mentioned_activities")
+  /// 후기에서 "좋았다"고 한 달 (1~12). 여행 시기 매칭용.
+  bestMonths          Json?     @map("best_months")
+  /// 이 글이 시사하는 동행 (family/couple/friend/solo)
+  companionFit        Json?     @map("companion_fit")
+  /// 방문객 주의·팁 문장 (점수 아님, 카드에 표시)
+  cautions            Json?
   /// lexicon | gemini — 어느 분석기가 만든 값인지
   analyzedBy          String?   @map("analyzed_by")
   analyzedAt          DateTime? @map("analyzed_at")

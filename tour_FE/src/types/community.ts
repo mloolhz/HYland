@@ -47,6 +47,12 @@ export interface Post {
   highlight?: string;
   /** 본문에 실제로 언급된 활동 (태그와 다를 수 있다) */
   mentionedActivities?: string[];
+  /** 후기에서 "좋았다"고 한 달 (1~12) */
+  bestMonths?: number[];
+  /** 이 글이 시사하는 동행 (family/couple/friend/solo) */
+  companionFit?: string[];
+  /** 방문객 주의·팁 */
+  cautions?: string[];
 }
 
 export interface Island {

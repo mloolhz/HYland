@@ -2,6 +2,7 @@ import {
   IS_MOCK_WEATHER_CONTEXT,
   type IslandTravelContext,
 } from "@/lib/recommendation/context/travel-context.mock";
+import type { CommunityInsight } from "@/lib/recommendation/community/community-insights";
 import type { CommunityMatchResult } from "@/lib/recommendation/community/community-signal";
 import type { FacilityMatchResult } from "@/lib/recommendation/facility/island-facility-index";
 import type { SportsMatchResult } from "@/lib/recommendation/facility/island-sports-index";
@@ -20,6 +21,13 @@ import type {
   TripIntent,
   UserPreference,
 } from "@/types/recommendation";
+
+const COMPANION_LABEL: Record<string, string> = {
+  family: "가족",
+  couple: "연인",
+  friend: "친구",
+  solo: "혼자 온",
+};
 
 type ReasonContext = {
   useIslandBti: boolean;
@@ -145,8 +153,21 @@ export function buildRecommendationReasons(
   facility?: FacilityMatchResult,
   sports?: SportsMatchResult,
   community?: CommunityMatchResult,
+  insights?: CommunityInsight,
 ): string[] {
   const reasons: string[] = [];
+
+  // 여러 방문객이 같은 시기·동행을 좋았다고 하면, 그건 개인 취향이 아니라 합의다.
+  // "N명이 그랬다"고 수를 밝혀 근거의 무게를 보여준다.
+  if (insights?.seasonMatch) {
+    reasons.push(
+      `${insights.seasonMatch.month}월에 다녀온 방문객 ${insights.seasonMatch.support}명이 좋았다고 했어요.`,
+    );
+  }
+  if (insights?.companionMatch) {
+    const label = COMPANION_LABEL[insights.companionMatch.companion] ?? "이 구성";
+    reasons.push(`${label} 방문객 후기가 ${insights.companionMatch.support}건 있어요.`);
+  }
 
   // 근거를 소스별로 한 줄씩 쓰면 같은 활동이 세 번 반복된다.
   //   "커뮤니티에 바다 후기 2건이 …" / "바다 활동으로 해수욕장을 …" / "선택하신 바다 시설이 1곳 …"
