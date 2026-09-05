@@ -23,7 +23,11 @@ import { CONTAINER } from "@/constants/layout";
 import { LEISURE_SPORTS_HERO } from "@/lib/landing-images";
 import { SportCommunityLink } from "@/components/sports/SportCommunityLink";
 import { FacilityGrid } from "@/components/sports/FacilityGrid";
-import { getIslandsByActivity } from "@/data/leisure-facilities";
+import {
+  fetchFacilitiesByActivity,
+  islandsOf,
+  type LeisureFacility,
+} from "@/api/leisure";
 
 const HERO_IMAGE = LEISURE_SPORTS_HERO;
 
@@ -127,11 +131,34 @@ export function Sports() {
     setSelectedId(SPORTS_DATA[key][0].id);
   };
 
+  // 시설 목록은 종목이 바뀔 때 한 번만 부른다. 섬 목록도 같은 응답에서 뽑는다.
+  const [facilities, setFacilities] = useState<LeisureFacility[]>([]);
+  const [facilitiesLoading, setFacilitiesLoading] = useState(true);
+  const [facilitiesError, setFacilitiesError] = useState<string | null>(null);
+
+  const selectedName = selected?.name;
+  useEffect(() => {
+    if (!selectedName) return;
+    const ctrl = new AbortController();
+    setFacilitiesLoading(true);
+    setFacilitiesError(null);
+    fetchFacilitiesByActivity(selectedName, ctrl.signal)
+      .then((rows) => {
+        setFacilities(rows);
+        setFacilitiesLoading(false);
+      })
+      .catch((err: unknown) => {
+        if (ctrl.signal.aborted) return; // 종목을 빠르게 바꾼 경우
+        console.error("[sports] 시설 목록 조회 실패:", err);
+        setFacilities([]);
+        setFacilitiesError("시설 정보를 불러오지 못했어요.");
+        setFacilitiesLoading(false);
+      });
+    return () => ctrl.abort();
+  }, [selectedName]);
+
   /** 이 종목의 시설이 실제로 있는 섬만 노출한다 */
-  const islands = useMemo(
-    () => (selected ? getIslandsByActivity(selected.name) : []),
-    [selected],
-  );
+  const islands = useMemo(() => islandsOf(facilities), [facilities]);
 
   const openIsland = useCallback(
     (id: string, name: string) => {
@@ -253,7 +280,12 @@ export function Sports() {
               </section>
             )}
 
-            <FacilityGrid sportName={selected.name} />
+            <FacilityGrid
+              sportName={selected.name}
+              facilities={facilities}
+              loading={facilitiesLoading}
+              error={facilitiesError}
+            />
 
             <SportBookingSection sport={selected} />
           </div>

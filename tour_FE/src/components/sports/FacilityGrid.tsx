@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  getFacilitiesByActivity,
-  type LeisureFacility,
-} from "@/data/leisure-facilities";
+import type { LeisureFacility } from "@/api/leisure";
 import { resolveSportIslandAccent } from "@/lib/sports-region";
 
 /** 한 번에 보여줄 카드 수 — 넘치면 "더 보기"로 펼친다 */
@@ -77,10 +74,44 @@ function FacilityCard({ facility }: { facility: LeisureFacility }) {
   );
 }
 
-/** 종목(활동)에 해당하는 실제 레저스포츠 시설 목록 */
-export function FacilityGrid({ sportName }: { sportName: string }) {
+/**
+ * 종목(활동)에 해당하는 실제 레저스포츠 시설 목록.
+ * 데이터는 Sports 페이지가 한 번만 불러와 내려준다 (섬 목록과 같은 응답을 쓴다).
+ */
+export function FacilityGrid({
+  sportName,
+  facilities,
+  loading,
+  error,
+}: {
+  sportName: string;
+  facilities: LeisureFacility[];
+  loading: boolean;
+  error: string | null;
+}) {
   const [expanded, setExpanded] = useState(false);
-  const facilities = getFacilitiesByActivity(sportName);
+
+  if (loading) {
+    return (
+      <section className="sp-section" aria-labelledby="sp-facilities-heading">
+        <h3 id="sp-facilities-heading" className="sp-section-title">
+          {sportName} 시설
+        </h3>
+        <p className="fc-state">불러오는 중…</p>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="sp-section" aria-labelledby="sp-facilities-heading">
+        <h3 id="sp-facilities-heading" className="sp-section-title">
+          {sportName} 시설
+        </h3>
+        <p className="fc-state fc-state--error">{error}</p>
+      </section>
+    );
+  }
 
   if (facilities.length === 0) return null;
 

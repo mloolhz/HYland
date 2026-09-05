@@ -142,3 +142,19 @@
     height: 160px;
   }
 }
+
+/* 목록을 불러오는 중 / 실패했을 때 */
+.fc-state {
+  margin: 0;
+  padding: 20px 18px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.fc-state--error {
+  border-color: #fecaca;
+  background: #fef2f2;
+  color: #b91c1c;
+}
