@@ -140,10 +140,6 @@ export function HeroSection() {
           <aside className="pass-card" aria-label="나의 섬 여권">
             <div className="pc-head">
               <h3>나의 섬 여권</h3>
-              <Link to="/mypage" className="pc-profile-link">
-                <AuthorAvatar author={{ nickname: profile.nickname }} className="pc-profile-avatar" />
-                <span>{profile.nickname}님</span>
-              </Link>
             </div>
 
             <div className="pc-passport-layout">
@@ -162,11 +158,16 @@ export function HeroSection() {
                 {/*
                   원래 "Lv.1 새싹 탐험가 · EXP 0 / 1000" 이 있던 자리.
                   DB 에 level·exp 칸은 있지만 올려 주는 곳이 없어 누구나 영원히
-                  Lv.1 이었다. 대신 여권 주인 이름을 넣는다.
+                  Lv.1 이었다. 대신 여권 주인을 크게 보여준다.
+                  (카드 머리에 있던 작은 칩을 이리로 옮긴 것 — 두 번 두지 않는다)
                 */}
-                <p className="passport-owner">
-                  <b>{profile.nickname}</b>님의 섬 여권
-                </p>
+                <Link to="/mypage" className="pc-profile-link pc-profile-link--lg">
+                  <AuthorAvatar
+                    author={{ nickname: profile.nickname }}
+                    className="pc-profile-avatar"
+                  />
+                  <span>{profile.nickname}님</span>
+                </Link>
 
                 <div className="passport-metrics" aria-label="탐험 현황">
                   <div className="passport-metric">

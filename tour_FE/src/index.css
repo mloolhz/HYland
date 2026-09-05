@@ -264,8 +264,6 @@ html.site-menu-open{overflow:hidden;overscroll-behavior:none}
 .passport-cover__emblem{position:relative;z-index:1;width:58px;height:58px;color:#E5C687;filter:drop-shadow(0 2px 3px rgba(0,0,0,.28))}
 .passport-cover__footer{position:relative;z-index:1;font-size:9px;font-weight:800;letter-spacing:.22em;color:#E5C687;text-shadow:0 1px 2px rgba(0,0,0,.28)}
 .passport-info{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:12px}
-.passport-owner{margin:0;font-size:14px;font-weight:700;color:var(--muted);letter-spacing:-.2px}
-.passport-owner b{font-size:16px;font-weight:800;color:var(--navy)}
 .passport-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .passport-metric{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:58px;padding:12px 6px;border-radius:10px;background:var(--alt);border:1px solid var(--line)}
 .passport-metric .passport-metric__value{display:block;font-size:20px;font-weight:800;color:var(--navy);line-height:1.1;text-align:center;font-variant-numeric:tabular-nums}
@@ -277,6 +275,9 @@ html.site-menu-open{overflow:hidden;overscroll-behavior:none}
 .pc-profile-link{flex:none;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--navy);text-decoration:none;transition:color .15s}
 .pc-profile-link:hover{color:var(--navy2)}
 .pc-profile-link .pc-profile-avatar{width:24px;height:24px;border-color:var(--line);background:var(--alt);color:var(--muted)}
+.pc-profile-link--lg{gap:9px;font-size:18px;font-weight:800;letter-spacing:-.3px}
+.pc-profile-link--lg .pc-profile-avatar{width:34px;height:34px}
+.pc-profile-link--lg .pc-profile-avatar svg{width:22px;height:22px}
 .pc-head .pill{font-size:10.5px;font-weight:800;color:var(--blue);border:1px solid var(--blue2);border-radius:4px;padding:3px 9px;letter-spacing:.06em}
 .pc-body{display:block}
 .pc-form-main{display:flex;align-items:stretch;gap:10px}
