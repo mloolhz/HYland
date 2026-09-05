@@ -15,6 +15,8 @@ export type AuthUser = {
 };
 
 export type MeResponse = AuthUser & {
+  /** USER | ADMIN — 검수 메뉴 노출 판단용 */
+  role: string;
   level: number;
   levelTitle: string;
   expCurrent: number;

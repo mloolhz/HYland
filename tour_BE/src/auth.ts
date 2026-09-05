@@ -131,6 +131,8 @@ router.get("/me", requireAuth, async (req: Request, res: Response) => {
     id: user.id,
     username: user.username,
     email: user.email,
+    // 프론트가 검수 메뉴를 보여줄지 판단하는 데 쓴다 (실제 권한은 서버가 확인)
+    role: user.role,
     nickname: user.profile?.nickname,
     level: user.profile?.level,
     levelTitle: user.profile?.levelTitle,

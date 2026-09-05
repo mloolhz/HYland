@@ -781,3 +781,22 @@ footer{background:var(--sea-dark);color:#B6C4D8;margin-top:92px}
     font-size: 28px;
   }
 }
+
+/* 관리자 전용 검수 링크 (헤더) */
+.btn-admin {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border: 1px solid #2563eb;
+  border-radius: 999px;
+  color: #2563eb;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-admin:hover {
+  background: #2563eb;
+  color: #fff;
+}

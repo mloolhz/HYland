@@ -8,7 +8,7 @@ import { formatJoinDateYmd } from "@/mocks/accounts";
 export function MyPageSettings() {
   const navigate = useNavigate();
   const profile = useUserProfile();
-  const { signOut, token, isLoggedIn } = useSession();
+  const { signOut, token, isLoggedIn, user } = useSession();
 
   /** 로그아웃 — 예전에는 mock 플래그만 지워서 새로고침하면 다시 로그인 상태였다 */
   const handleLogout = () => {
@@ -60,6 +60,19 @@ export function MyPageSettings() {
             </div>
           </dl>
         </section>
+
+        {user?.role === "ADMIN" && (
+          <section className="mp-section mp-settings-section" aria-label="관리자">
+            <h3 className="mp-settings-group-title">관리자</h3>
+            <ul className="mp-settings-menu">
+              <li>
+                <Link to="/admin/submissions" className="mp-settings-menu-link">
+                  미션 인증 검수
+                </Link>
+              </li>
+            </ul>
+          </section>
+        )}
 
         <section className="mp-section mp-settings-section" aria-label="계정 관리">
           <h3 className="mp-settings-group-title">계정 관리</h3>

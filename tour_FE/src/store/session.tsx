@@ -95,6 +95,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       } catch {
         setUser({
           ...nextUser,
+          role: "USER",
           level: 1,
           levelTitle: "새싹 탐험가",
           expCurrent: 0,

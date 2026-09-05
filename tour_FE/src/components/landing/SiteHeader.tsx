@@ -550,6 +550,15 @@ export function SiteHeader() {
                 ↗
               </span>
             </a>
+            {user?.role === "ADMIN" && (
+              <Link
+                to="/admin/submissions"
+                className="btn-admin"
+                title="미션 인증 검수"
+              >
+                검수
+              </Link>
+            )}
             {isLoggedIn ? (
               <Link
                 to="/mypage"
