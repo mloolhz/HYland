@@ -74,6 +74,11 @@ export function fetchMe(token: string): Promise<MeResponse> {
   return request("/auth/me", {}, token);
 }
 
+/** 회원탈퇴 — 관련 데이터가 함께 삭제된다 */
+export function deleteAccount(token: string): Promise<{ ok: boolean }> {
+  return request("/auth/me", { method: "DELETE" }, token);
+}
+
 /** 회원가입 폼의 "중복 확인" — 이미 쓰이고 있으면 true */
 export async function checkUsernameTaken(username: string): Promise<boolean> {
   const r = await request<{ taken: boolean }>(

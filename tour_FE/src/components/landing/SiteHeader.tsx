@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useSession } from "@/store/session";
 import { Link, useLocation } from "react-router-dom";
 import { resolveCommunityHref } from "@/lib/community-list-state";
 import { NotificationBell } from "@/components/notification/NotificationBell";
@@ -339,6 +340,7 @@ function DrawerNav({ items, onNavigate }: DrawerNavProps) {
 }
 
 export function SiteHeader() {
+  const { isLoggedIn, user } = useSession();
   const scrollSnapshotRef = useRef(0);
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -548,9 +550,21 @@ export function SiteHeader() {
                 ↗
               </span>
             </a>
-            <Link to="/mypage" className="icon-btn" aria-label="마이페이지" title="마이페이지">
-              <ProfileIcon />
-            </Link>
+            {isLoggedIn ? (
+              <Link
+                to="/mypage"
+                className="icon-btn"
+                aria-label={`마이페이지 (${user?.nickname ?? ""})`}
+                title={user?.nickname ? `${user.nickname}님 · 마이페이지` : "마이페이지"}
+              >
+                <ProfileIcon />
+              </Link>
+            ) : (
+              // 비로그인이면 마이페이지로 보내봐야 볼 게 없다
+              <Link to="/login" className="icon-btn" aria-label="로그인" title="로그인">
+                <ProfileIcon />
+              </Link>
+            )}
             <NotificationBell />
           </div>
         </div>
