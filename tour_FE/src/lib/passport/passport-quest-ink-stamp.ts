@@ -19,22 +19,6 @@ export type InkStampDisplay = {
   earnedAt?: string;
 };
 
-const FEATURED_DATES: Record<number, string> = {
-  1: "2025.05.10",
-  2: "2025.05.18",
-  3: "2025.06.01",
-  4: "2025.06.05",
-  5: "2025.06.08",
-  7: "2025.06.10",
-  8: "2025.06.22",
-  9: "2025.06.14",
-  11: "2025.06.02",
-  13: "2025.06.18",
-  16: "2025.06.25",
-  18: "2025.07.01",
-  20: "2025.07.25",
-};
-
 const FEATURED_PLACES: Record<number, { place: string; activity: string }> = {
   1: { place: "백령도", activity: "탐험 완료" },
   2: { place: "자월도", activity: "하이킹" },
@@ -51,7 +35,11 @@ const FEATURED_PLACES: Record<number, { place: string; activity: string }> = {
   20: { place: "섬BTI", activity: "참여 완료" },
 };
 
-export function questToInkStampDisplay(quest: MissionQuest): InkStampDisplay {
+export function questToInkStampDisplay(
+  quest: MissionQuest,
+  /** 실제 획득 시각 (ISO). 예전에는 날짜가 하드코딩돼 있었다. */
+  earnedAt?: string | null,
+): InkStampDisplay {
   const variant = getQuestStampVariant(quest.id, quest.category);
   const featured = FEATURED_PLACES[quest.id];
 
@@ -62,8 +50,17 @@ export function questToInkStampDisplay(quest: MissionQuest): InkStampDisplay {
     variant,
     theme: getStampTheme(variant),
     layout: getStampLayout(quest.id),
-    earnedAt: FEATURED_DATES[quest.id],
+    earnedAt: earnedAt ? formatStampDate(earnedAt) : undefined,
   };
+}
+
+/** ISO → "2026.09.05" */
+function formatStampDate(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(
+    d.getDate(),
+  ).padStart(2, "0")}`;
 }
 
 export function isInkStampEarned(quest: MissionQuest): boolean {

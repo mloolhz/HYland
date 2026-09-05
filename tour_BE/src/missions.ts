@@ -120,6 +120,8 @@ router.get("/my/progress", requireAuth, async (req: Request, res: Response) => {
       current: r.current,
       target: r.quest.target,
       completed: !!r.completedAt,
+      // 여권이 배지 획득 날짜를 찍는 데 쓴다
+      completedAt: r.completedAt,
     })),
   });
 });

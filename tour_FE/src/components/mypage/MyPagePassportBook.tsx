@@ -1,26 +1,26 @@
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { PassportBook, type PassportBookHandle } from "@/components/landing/PassportBook";
 import { MyPagePassportProfilePage } from "@/components/mypage/MyPagePassportProfilePage";
 import { buildMissionBookSpreads, type BookNavState } from "@/components/landing/passport-book-spreads";
+import { useMissionProgress } from "@/store/mission-progress";
 import { useOptionalProfileCharacter } from "@/context/ProfileCharacterContext";
 import type { UserProfile } from "@/lib/user-profile";
 
-const BOOK_SPREADS = buildMissionBookSpreads();
-
-const INITIAL_NAV: BookNavState = {
-  spread: 0,
-  totalSpreads: BOOK_SPREADS.length,
-  canPrev: false,
-  canNext: BOOK_SPREADS.length > 1,
-  flipping: false,
-};
 
 type MyPagePassportBookProps = {
   profile: UserProfile;
 };
 
 export function MyPagePassportBook({ profile }: MyPagePassportBookProps) {
-  const [nav, setNav] = useState<BookNavState>(INITIAL_NAV);
+  const { quests } = useMissionProgress();
+  const spreads = useMemo(() => buildMissionBookSpreads(quests), [quests]);
+  const [nav, setNav] = useState<BookNavState>({
+    spread: 0,
+    totalSpreads: spreads.length,
+    canPrev: false,
+    canNext: spreads.length > 1,
+    flipping: false,
+  });
   const bookRef = useRef<PassportBookHandle>(null);
   const profileCharacterContext = useOptionalProfileCharacter();
   const isProfileSelectModalOpen = profileCharacterContext?.isProfileSelectModalOpen ?? false;
@@ -33,7 +33,7 @@ export function MyPagePassportBook({ profile }: MyPagePassportBookProps) {
             <div className="passport-book__scene">
               <PassportBook
                 ref={bookRef}
-                spreads={BOOK_SPREADS}
+                spreads={spreads}
                 profile={profile}
                 titleId="mp-passport-title"
                 ProfilePage={MyPagePassportProfilePage}

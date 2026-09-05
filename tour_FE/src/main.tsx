@@ -33,6 +33,7 @@ import { IslandBtiResult } from "@/pages/IslandBtiResult";
 import { ProfileCharacterProvider } from "@/context/ProfileCharacterContext";
 import { SessionProvider } from "@/store/session";
 import { VisitedIslandsProvider } from "@/store/visited-islands";
+import { MissionProgressProvider } from "@/store/mission-progress";
 import { RequireAuth } from "@/components/RequireAuth";
 import "./index.css";
 import "./styles/auth.css";
@@ -101,9 +102,11 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <SessionProvider>
       <VisitedIslandsProvider>
+        <MissionProgressProvider>
         <ProfileCharacterProvider>
           <RouterProvider router={router} />
         </ProfileCharacterProvider>
+        </MissionProgressProvider>
       </VisitedIslandsProvider>
     </SessionProvider>
   </StrictMode>,

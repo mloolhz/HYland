@@ -82,8 +82,11 @@ export type MissionProgressResponse = {
   total: number;
   items: {
     questId: number;
+    title: string;
     current: number;
     target: number;
+    completed: boolean;
+    /** 완료 시각 — 여권 배지의 획득 날짜 */
     completedAt: string | null;
   }[];
 };
