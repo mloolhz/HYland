@@ -1,12 +1,13 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { CommunityHeader } from "@/components/community/CommunityHeader";
-import { CURRENT_USER_ID } from "@/constants/auth";
 import { ISLAND_CATALOG } from "@/constants/island";
 import { CONTAINER } from "@/constants/layout";
 import { COMMUNITY_ACTIVITY_OPTIONS } from "@/lib/community-activities";
-import { addPost, usePosts } from "@/lib/post-store";
-import type { Post, PostType } from "@/types/community";
+import { refreshPosts } from "@/lib/post-store";
+import { createPost } from "@/api/community";
+import { ApiError } from "@/api/auth";
+import type { PostType } from "@/types/community";
 
 const TYPE_OPTIONS: { value: PostType; label: string }[] = [
   { value: "review", label: "후기" },
@@ -32,12 +33,8 @@ export function WritePost() {
   const navigate = useNavigate();
   const location = useLocation();
   const prefill = (location.state as WritePrefill | null) ?? null;
-  const posts = usePosts();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const author = useMemo(() => {
-    const existing = posts.find((p) => p.author.id === CURRENT_USER_ID);
-    return existing?.author ?? { id: CURRENT_USER_ID, nickname: "이파도", bti: "파도형" as const };
-  }, [posts]);
+  // 작성자는 서버가 토큰으로 판단한다 (예전에는 프론트가 mock 사용자를 붙였다)
 
   const [type, setType] = useState<PostType>(prefill?.type ?? "review");
   const [title, setTitle] = useState("");
@@ -81,7 +78,7 @@ export function WritePost() {
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!title.trim() || !island || !activity || !content.trim()) {
@@ -94,23 +91,25 @@ export function WritePost() {
     const images: string[] | undefined = undefined;
     void imageFile;
 
-    const newPost: Post = {
-      id: `p-${Date.now()}`,
-      type,
-      title: title.trim(),
-      content: content.trim(),
-      island,
-      activity,
-      images,
-      author,
-      createdAt: new Date().toISOString(),
-      likes: 0,
-      views: 0,
-      comments: [],
-    };
-
-    addPost(newPost);
-    navigate(`/community/${newPost.id}`);
+    try {
+      const created = await createPost({
+        type,
+        title: title.trim(),
+        content: content.trim(),
+        island,
+        activity,
+        images,
+      });
+      await refreshPosts();
+      navigate(`/community/${created.id}`);
+    } catch (err) {
+      console.error("[community] 글 작성 실패:", err);
+      setError(
+        err instanceof ApiError && err.status === 401
+          ? "로그인이 필요해요. 로그인 후 다시 시도해주세요."
+          : "글을 저장하지 못했어요. 잠시 후 다시 시도해주세요.",
+      );
+    }
   };
 
   return (

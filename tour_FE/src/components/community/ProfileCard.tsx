@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
+import { useUserProfile } from "@/hooks/useUserProfile";
 import { isCurrentUser } from "@/constants/auth";
-import { getCurrentUserProfile } from "@/lib/user-profile";
 import { findAuthorInPosts, getUserCommentCount, getUserPosts, getUserPublicProfile } from "@/lib/community-users";
 import { usePosts } from "@/lib/post-store";
 import { formatJoinDate } from "@/mocks/accounts";
-import { getLikedPosts, getMyComments, getMyPosts } from "@/mocks/myActivity";
+import { useMyActivity } from "@/hooks/useMyActivity";
 
 function ProfilePlaceholderIcon() {
   return (
@@ -29,13 +29,15 @@ type ProfileCardProps = {
 
 export function ProfileCard({ userId }: ProfileCardProps) {
   const posts = usePosts();
+  // 훅은 분기 밖에서 부른다 (조건부 호출은 리액트 훅 규칙 위반)
+  const profile = useUserProfile();
+  const { myPosts, myComments, likedPosts } = useMyActivity();
   const isSelf = !userId || isCurrentUser(userId);
 
   if (isSelf) {
-    const profile = getCurrentUserProfile();
-    const postCount = getMyPosts(posts).length;
-    const commentCount = getMyComments(posts).length;
-    const likeCount = getLikedPosts(posts).length;
+    const postCount = myPosts.length;
+    const commentCount = myComments.length;
+    const likeCount = likedPosts.length;
 
     const stats: StatLink[] = [
       { label: "내가 작성한 게시글", value: `${postCount}개`, href: "/community/my-posts" },

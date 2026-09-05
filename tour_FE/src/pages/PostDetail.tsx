@@ -13,25 +13,49 @@ import { getSurroundingPosts } from "@/lib/post-navigation";
 import { countComments, filterPosts, findComment, removeComment, sortPosts } from "@/lib/posts";
 import { parseActivitiesQuery, parseIslandsQuery } from "@/lib/query";
 import { formatDetailDate } from "@/lib/time";
-import { getPostById, incrementPostViews, usePosts } from "@/lib/post-store";
+import { usePosts } from "@/lib/post-store";
+import {
+  fetchPost,
+  addComment as addCommentRequest,
+  deleteComment as deleteCommentRequest,
+  togglePostLike,
+  type PostDetail as PostDetailData,
+} from "@/api/community";
+import { useSession } from "@/store/session";
 
 export function PostDetail() {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
   const posts = usePosts();
-  const post = id ? getPostById(id) : undefined;
-  const [comments, setComments] = useState(post?.comments ?? []);
+  // 상세는 목록과 별개로 부른다 — 댓글 본문과 조회수는 상세 응답에만 있다
+  const [post, setPost] = useState<PostDetailData | undefined>(undefined);
+  const [comments, setComments] = useState<PostDetailData["comments"]>([]);
+  const { isLoggedIn } = useSession();
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
   const [lightboxImageIndex, setLightboxImageIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const hash = location.hash;
 
   useEffect(() => {
-    setComments(post?.comments ?? []);
-  }, [post]);
-
-  useEffect(() => {
     if (!id) return;
-    incrementPostViews(id);
+    let alive = true;
+    fetchPost(id)
+      .then((row) => {
+        if (!alive) return;
+        setPost(row);
+        setComments(row.comments);
+        setLiked(row.likedByMe);
+        setLikeCount(row.likes);
+      })
+      .catch((err: unknown) => {
+        if (!alive) return;
+        console.error("[community] 글 상세 조회 실패:", err);
+        setPost(undefined);
+      });
+    return () => {
+      alive = false;
+    };
   }, [id]);
 
   useEffect(() => {
@@ -102,9 +126,43 @@ export function PostDetail() {
   const region = getIslandColors(post.island);
   const images = post.images ?? [];
 
+  /** 댓글 등록 — 서버에 저장하고 목록을 다시 받아온다 */
+  const handleAddComment = async (content: string) => {
+    if (!id) return;
+    try {
+      await addCommentRequest(id, { content });
+      const fresh = await fetchPost(id);
+      setComments(fresh.comments);
+    } catch (err) {
+      console.error("[community] 댓글 등록 실패:", err);
+    }
+  };
+
+  /** 좋아요 토글 — 화면을 먼저 바꾸고 실패하면 되돌린다 */
+  const handleToggleLike = async () => {
+    if (!id || !isLoggedIn) return;
+    const prevLiked = liked;
+    const prevCount = likeCount;
+    setLiked(!prevLiked);
+    setLikeCount(prevCount + (prevLiked ? -1 : 1));
+    try {
+      const res = await togglePostLike(id);
+      setLiked(res.liked);
+      setLikeCount(res.likes);
+    } catch (err) {
+      console.error("[community] 좋아요 실패:", err);
+      setLiked(prevLiked);
+      setLikeCount(prevCount);
+    }
+  };
+
   const handleDeleteComment = (commentId: string) => {
     const target = findComment(comments, commentId);
     if (!target || !isCurrentUser(target.author.id)) return;
+    // 서버에서 먼저 지우고 화면에서 뺀다 (실패하면 그대로 둔다)
+    void deleteCommentRequest(commentId).catch((err: unknown) => {
+      console.error("[community] 댓글 삭제 실패:", err);
+    });
     setComments((prev) => removeComment(prev, commentId));
   };
 
@@ -190,13 +248,20 @@ export function PostDetail() {
               </div>
 
               <div className="cm-detail-actions">
-                <button type="button" className="cm-action-btn cm-action-btn--like" aria-pressed={false}>
+                <button
+                  type="button"
+                  className={`cm-action-btn cm-action-btn--like${liked ? " is-on" : ""}`}
+                  aria-pressed={liked}
+                  disabled={!isLoggedIn}
+                  title={isLoggedIn ? undefined : "로그인 후 이용할 수 있어요"}
+                  onClick={handleToggleLike}
+                >
                   <HeartIcon />
-                  {post.likes}
+                  {likeCount}
                 </button>
                 <span className="cm-action-btn cm-action-btn--comment">
                   <CommentIcon />
-                  {countComments(post.comments)}
+                  {countComments(comments)}
                 </span>
                 <div className="cm-detail-actions-side">
                   <button type="button" className="cm-action-btn cm-action-btn--share">
@@ -210,8 +275,9 @@ export function PostDetail() {
 
               <CommentThread
                 comments={comments}
-                isLoggedIn
+                isLoggedIn={isLoggedIn}
                 onDeleteComment={handleDeleteComment}
+                onSubmitComment={handleAddComment}
               />
             </div>
 

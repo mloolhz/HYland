@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import { useUserProfile } from "@/hooks/useUserProfile";
 import { Link, useLocation } from "react-router-dom";
 import { AuthorAvatar } from "@/components/community/AuthorAvatar";
-import { getCurrentUserProfile } from "@/lib/user-profile";
 import { countComments } from "@/lib/posts";
 import { useAuthRedirect } from "@/hooks/useAuthRedirect";
 import type { Comment } from "@/types/community";
@@ -11,17 +11,38 @@ type CommentThreadProps = {
   comments: Comment[];
   isLoggedIn?: boolean;
   onDeleteComment?: (id: string) => void;
+  /** 댓글 등록 — 서버 저장은 상위(PostDetail)가 맡는다 */
+  onSubmitComment?: (content: string) => Promise<void>;
 };
 
-function MainCommentInput({ isLoggedIn }: { isLoggedIn: boolean }) {
+function MainCommentInput({
+  isLoggedIn,
+  onSubmitComment,
+}: {
+  isLoggedIn: boolean;
+  onSubmitComment?: (content: string) => Promise<void>;
+}) {
   const [focused, setFocused] = useState(false);
   const [draft, setDraft] = useState("");
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const location = useLocation();
   const { buildLoginUrl } = useAuthRedirect();
   const loginUrl = buildLoginUrl(`${location.pathname}${location.search}${location.hash}`);
-  const profile = getCurrentUserProfile();
-  const canSubmit = draft.trim().length > 0;
+  const profile = useUserProfile();
+  const [saving, setSaving] = useState(false);
+  const canSubmit = draft.trim().length > 0 && !saving;
+
+  const submit = async () => {
+    if (!canSubmit || !onSubmitComment) return;
+    setSaving(true);
+    try {
+      await onSubmitComment(draft.trim());
+      setDraft("");
+      setFocused(false);
+    } finally {
+      setSaving(false);
+    }
+  };
 
   useEffect(() => {
     if (focused) inputRef.current?.focus();
@@ -61,8 +82,8 @@ function MainCommentInput({ isLoggedIn }: { isLoggedIn: boolean }) {
           />
         )}
       </div>
-      <button type="button" className="cm-thread-submit" disabled={!canSubmit}>
-        등록
+      <button type="button" className="cm-thread-submit" disabled={!canSubmit} onClick={submit}>
+        {saving ? "등록 중…" : "등록"}
       </button>
     </div>
   );
@@ -72,6 +93,7 @@ export function CommentThread({
   comments,
   isLoggedIn = false,
   onDeleteComment,
+  onSubmitComment,
 }: CommentThreadProps) {
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const total = countComments(comments);
@@ -105,7 +127,7 @@ export function CommentThread({
         </div>
       )}
       <div className="cm-thread-input-wrap">
-        <MainCommentInput isLoggedIn={isLoggedIn} />
+        <MainCommentInput isLoggedIn={isLoggedIn} onSubmitComment={onSubmitComment} />
       </div>
     </section>
   );
