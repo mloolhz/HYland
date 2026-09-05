@@ -11,6 +11,21 @@ function signToken(userId: string): string {
   return jwt.sign({ sub: userId }, JWT_SECRET, { expiresIn: TOKEN_TTL });
 }
 
+/** 로그인/회원가입 응답에 담는 사용자 정보 (비밀번호 해시 등은 뺀다) */
+function publicUser(user: {
+  id: string;
+  username: string;
+  email: string | null;
+  profile: { nickname: string } | null;
+}) {
+  return {
+    id: user.id,
+    username: user.username,
+    email: user.email,
+    nickname: user.profile?.nickname ?? user.username,
+  };
+}
+
 /** Authorization: Bearer <token> 검사 → req.userId 세팅 */
 export function requireAuth(req: Request, res: Response, next: NextFunction) {
   const header = req.headers.authorization;
@@ -40,19 +55,44 @@ export function optionalAuth(req: Request, _res: Response, next: NextFunction) {
   next();
 }
 
+// ── 아이디/닉네임 중복 확인 (회원가입 폼의 "중복 확인" 버튼) ──
+router.get("/check-username", async (req: Request, res: Response) => {
+  const username = typeof req.query.username === "string" ? req.query.username.trim() : "";
+  if (!username) return res.status(400).json({ error: "아이디를 입력해주세요" });
+  const taken = (await prisma.user.count({ where: { username } })) > 0;
+  res.json({ taken });
+});
+
+router.get("/check-nickname", async (req: Request, res: Response) => {
+  const nickname = typeof req.query.nickname === "string" ? req.query.nickname.trim() : "";
+  if (!nickname) return res.status(400).json({ error: "닉네임을 입력해주세요" });
+  const taken = (await prisma.userProfile.count({ where: { nickname } })) > 0;
+  res.json({ taken });
+});
+
 // ── 회원가입 ──
 router.post("/signup", async (req: Request, res: Response) => {
-  const { email, password, nickname, phone } = req.body ?? {};
-  if (!email || !password || !nickname) {
-    return res.status(400).json({ error: "이메일·비밀번호·닉네임을 모두 입력해주세요" });
+  const { username, password, nickname, email, phone } = req.body ?? {};
+  if (!username || !password || !nickname) {
+    return res.status(400).json({ error: "아이디·비밀번호·닉네임을 모두 입력해주세요" });
   }
-  const exists = await prisma.user.findUnique({ where: { email } });
-  if (exists) return res.status(409).json({ error: "이미 가입된 이메일이에요" });
+
+  if (await prisma.user.findUnique({ where: { username } })) {
+    return res.status(409).json({ error: "이미 사용 중인 아이디예요" });
+  }
+  // 이메일은 선택 입력이지만, 넣었다면 중복이면 안 된다
+  if (email && (await prisma.user.findUnique({ where: { email } }))) {
+    return res.status(409).json({ error: "이미 가입된 이메일이에요" });
+  }
+  if (await prisma.userProfile.findFirst({ where: { nickname } })) {
+    return res.status(409).json({ error: "이미 사용 중인 닉네임이에요" });
+  }
 
   const passwordHash = await bcrypt.hash(password, 10);
   const user = await prisma.user.create({
     data: {
-      email,
+      username,
+      email: email || null,
       passwordHash,
       phone: phone ?? null,
       profile: { create: { nickname } },
@@ -62,30 +102,24 @@ router.post("/signup", async (req: Request, res: Response) => {
   });
 
   const token = signToken(user.id);
-  res.status(201).json({
-    token,
-    user: { id: user.id, email: user.email, nickname: user.profile?.nickname },
-  });
+  res.status(201).json({ token, user: publicUser(user) });
 });
 
 // ── 로그인 ──
 router.post("/login", async (req: Request, res: Response) => {
-  const { email, password } = req.body ?? {};
-  if (!email || !password) {
-    return res.status(400).json({ error: "이메일과 비밀번호를 입력해주세요" });
+  const { username, password } = req.body ?? {};
+  if (!username || !password) {
+    return res.status(400).json({ error: "아이디와 비밀번호를 입력해주세요" });
   }
-  const user = await prisma.user.findUnique({ where: { email }, include: { profile: true } });
+  const user = await prisma.user.findUnique({ where: { username }, include: { profile: true } });
   if (!user || !user.passwordHash) {
-    return res.status(401).json({ error: "이메일 또는 비밀번호가 올바르지 않아요" });
+    return res.status(401).json({ error: "아이디 또는 비밀번호가 올바르지 않아요" });
   }
   const ok = await bcrypt.compare(password, user.passwordHash);
-  if (!ok) return res.status(401).json({ error: "이메일 또는 비밀번호가 올바르지 않아요" });
+  if (!ok) return res.status(401).json({ error: "아이디 또는 비밀번호가 올바르지 않아요" });
 
   const token = signToken(user.id);
-  res.json({
-    token,
-    user: { id: user.id, email: user.email, nickname: user.profile?.nickname },
-  });
+  res.json({ token, user: publicUser(user) });
 });
 
 // ── 내 정보 (토큰 필요) ──
@@ -95,6 +129,7 @@ router.get("/me", requireAuth, async (req: Request, res: Response) => {
   if (!user) return res.status(404).json({ error: "사용자를 찾을 수 없어요" });
   res.json({
     id: user.id,
+    username: user.username,
     email: user.email,
     nickname: user.profile?.nickname,
     level: user.profile?.level,

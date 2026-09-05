@@ -10,6 +10,7 @@ import profileRouter from "./profile";
 import leaderboardRouter from "./leaderboard";
 import weatherRouter from "./weather";
 import leisureRouter from "./leisure";
+import communityRouter from "./community";
 import recommendRouter from "./routes/recommend";
 
 const app = express();
@@ -45,6 +46,9 @@ app.use("/weather", weatherRouter);
 
 // 레저스포츠 시설 (관광공사 API + 웹 조사 145곳)
 app.use("/leisure-sports", leisureRouter);
+
+// 커뮤니티 (글·댓글·좋아요)
+app.use("/community", communityRouter);
 
 // AI 추천 (추천·스트리밍·날씨·인기질문·섬BTI 선호도·예상 질문)
 app.use("/api", recommendRouter);

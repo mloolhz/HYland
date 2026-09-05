@@ -69,7 +69,10 @@ enum TourContentType {
 
 model User {
   id             String   @id @default(cuid())
-  email          String   @unique
+  /** 로그인 아이디. 프론트 로그인 폼이 이메일이 아니라 "아이디"를 받는다. */
+  username       String   @unique
+  /** 회원가입에서 선택 입력이라 없을 수 있다 */
+  email          String?  @unique
   passwordHash   String?  @map("password_hash") // OAuth-only 계정이면 null
   phone          String?
   createdAt      DateTime @default(now()) @map("created_at")
@@ -82,6 +85,10 @@ model User {
   missionProgress UserMissionProgress[]
   badges         UserBadge[]
   btiResults     UserIslandBtiResult[]
+  posts          Post[]
+  comments       Comment[]
+  postLikes      PostLike[]
+  commentLikes   CommentLike[]
 
   @@map("users")
 }
@@ -594,4 +601,113 @@ model LeisureCandidate {
   @@unique([sourceType, externalId])
   @@index([suggestedIslandId])
   @@map("leisure_candidates")
+}
+
+// ═══════════════════ Phase 4 — 커뮤니티 ═══════════════════
+// 프론트 types/community.ts 구조를 그대로 옮겼다.
+// 섬·활동은 자유 문자열이다. 글쓰기에서 목록에 없는 값도 적을 수 있고,
+// 섬 마스터가 바뀌어도 과거 글이 깨지면 안 되기 때문이다.
+
+/** 글 종류 (후기/인증샷/Q&A) */
+enum PostType {
+  REVIEW // 후기
+  PHOTO // 인증샷
+  QUESTION // Q&A
+}
+
+/** 글에 붙는 뱃지 표시 */
+enum PostBadge {
+  RARE_CARD // 레어카드
+  STAMP // 스탬프
+}
+
+model Post {
+  id         String    @id @default(cuid())
+  authorId   String    @map("author_id")
+  type       PostType
+  title      String
+  content    String    @db.Text
+  /** 목록에서 쓰는 짧은 요약 (없으면 본문 앞부분) */
+  summary    String?   @db.Text
+  island     String
+  activity   String
+  badge      PostBadge?
+  /** 공지는 목록 최상단 고정 */
+  isNotice   Boolean   @default(false) @map("is_notice")
+  /** Q&A 해결 표시 */
+  isResolved Boolean   @default(false) @map("is_resolved")
+  views      Int       @default(0)
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+
+  author   User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  images   PostImage[]
+  comments Comment[]
+  likes    PostLike[]
+
+  @@index([type, createdAt])
+  @@index([island])
+  @@index([authorId])
+  @@map("posts")
+}
+
+model PostImage {
+  id        Int    @id @default(autoincrement())
+  postId    String @map("post_id")
+  url       String @db.Text
+  sortOrder Int    @default(0) @map("sort_order")
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId])
+  @@map("post_images")
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  postId    String   @map("post_id")
+  authorId  String   @map("author_id")
+  /** 대댓글이면 부모 댓글 id (1단계까지만 쓴다) */
+  parentId  String?  @map("parent_id")
+  content   String   @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  post    Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author  User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  parent  Comment?      @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies Comment[]     @relation("CommentReplies")
+  likes   CommentLike[]
+
+  @@index([postId, createdAt])
+  @@index([authorId])
+  @@map("comments")
+}
+
+/** 글 좋아요 — 사용자당 1회 */
+model PostLike {
+  postId    String   @map("post_id")
+  userId    String   @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([postId, userId])
+  @@index([userId])
+  @@map("post_likes")
+}
+
+/** 댓글 좋아요 — 사용자당 1회 */
+model CommentLike {
+  commentId String   @map("comment_id")
+  userId    String   @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  comment Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([commentId, userId])
+  @@index([userId])
+  @@map("comment_likes")
 }
