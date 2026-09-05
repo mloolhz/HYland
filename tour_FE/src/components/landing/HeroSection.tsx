@@ -158,12 +158,16 @@ export function HeroSection() {
                 <PassportCoverVisual />
               </button>
 
-              {/*
-                레벨·경험치는 뺐다. DB 에 칸만 있고 올려 주는 곳이 없어서
-                누구나 영원히 "Lv.1 새싹 탐험가 · EXP 0 / 1000" 이었다.
-                실제로 쌓이는 수치(방문 섬·배지)만 남긴다.
-              */}
               <div className="passport-info">
+                {/*
+                  원래 "Lv.1 새싹 탐험가 · EXP 0 / 1000" 이 있던 자리.
+                  DB 에 level·exp 칸은 있지만 올려 주는 곳이 없어 누구나 영원히
+                  Lv.1 이었다. 대신 여권 주인 이름을 넣는다.
+                */}
+                <p className="passport-owner">
+                  <b>{profile.nickname}</b>님의 섬 여권
+                </p>
+
                 <div className="passport-metrics" aria-label="탐험 현황">
                   <div className="passport-metric">
                     <CountUpNumber value={badgeStats.visited} delay={320} className="passport-metric__value" />
