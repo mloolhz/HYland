@@ -1343,3 +1343,20 @@
   font-size: 13px;
   line-height: 1.6;
 }
+
+/* 문자 발송 연동 전 — 서버가 내려준 인증번호 안내 */
+.auth-dev-code {
+  margin: 0 0 10px;
+  padding: 8px 12px;
+  border: 1px dashed #C7D2E4;
+  border-radius: 8px;
+  background: #F4F7FC;
+  font-size: 12px;
+  color: #55637A;
+  text-align: center;
+}
+.auth-dev-code b {
+  font-size: 14px;
+  letter-spacing: 2px;
+  color: #1a3a6b;
+}

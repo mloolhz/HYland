@@ -20,6 +20,9 @@ router.get("/", requireAuth, async (req: Request, res: Response) => {
   res.json({
     userId: profile.userId,
     nickname: profile.nickname,
+    // 가입일. 예전에는 프론트가 "2024-06-15" 를 하드코딩해서 여권 발급일과
+    // 커뮤니티 프로필에 남의 날짜가 찍혔다.
+    joinedAt: profile.joinedAt,
     level: profile.level,
     levelTitle: profile.levelTitle,
     expCurrent: profile.expCurrent,

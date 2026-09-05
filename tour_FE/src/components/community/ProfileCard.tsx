@@ -4,7 +4,7 @@ import { useSession } from "@/store/session";
 import { isCurrentUser } from "@/constants/auth";
 import { findAuthorInPosts, getUserCommentCount, getUserPosts, getUserPublicProfile } from "@/lib/community-users";
 import { usePosts } from "@/lib/post-store";
-import { formatJoinDate } from "@/mocks/accounts";
+import { formatJoinDate } from "@/lib/account-format";
 import { useMyActivity } from "@/hooks/useMyActivity";
 
 function ProfilePlaceholderIcon() {

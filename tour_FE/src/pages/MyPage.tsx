@@ -9,15 +9,16 @@ import { MyPagePassportBook } from "@/components/mypage/MyPagePassportBook";
 import { MyPageSpiritGrowthSection } from "@/components/mypage/MyPageSpiritGrowthSection";
 import { ISLAND_BTI } from "@/constants/island";
 import { CONTAINER } from "@/constants/layout";
-import {
-  getIslandVisitStats,
-  getPassportExpPercent,
-} from "@/lib/user-profile";
+import { getPassportExpPercent } from "@/lib/user-profile";
+import { ISLANDS } from "@/lib/island-data";
+import { useVisitedIslands } from "@/store/visited-islands";
 import { formatNumber } from "@/lib/landing-data";
 
 export function MyPage() {
   const profile = useUserProfile();
-  const islandStats = getIslandVisitStats();
+  // 방문 섬은 서버 기록(user_island_visits)에서 센다
+  const { ids: visitedIds } = useVisitedIslands();
+  const islandStats = { visited: visitedIds.size, total: ISLANDS.length };
   const badgeStats = useBadgeStats();
   const btiColors = ISLAND_BTI[profile.bti];
   const expPercent = getPassportExpPercent(profile);

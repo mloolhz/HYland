@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { formatPhone, isValidPhone, phoneDigits } from "@/lib/phone";
+import { ApiError, requestPhoneCode, verifyPhoneCode } from "@/api/auth";
 
 export type PhoneStep = "idle" | "sent" | "verified";
 
-const MOCK_CODE = "123456";
 const RESEND_COOLDOWN = 30;
 
 export function usePhoneVerification() {
@@ -14,6 +14,8 @@ export function usePhoneVerification() {
   const [resendSeconds, setResendSeconds] = useState(0);
   const [errors, setErrors] = useState<{ phone?: string; code?: string }>({});
   const [verifiedPhone, setVerifiedPhone] = useState("");
+  /** 문자 발송 연동 전이라 서버가 코드를 그대로 준다 — 화면에 안내로 띄운다 */
+  const [devCode, setDevCode] = useState("");
   const prevPhoneRef = useRef("");
 
   const setPhone = useCallback(
@@ -32,6 +34,7 @@ export function usePhoneVerification() {
         setSeconds(180);
         setResendSeconds(0);
         setVerifiedPhone("");
+        setDevCode("");
       }
     },
     [step, verifiedPhone],
@@ -45,6 +48,7 @@ export function usePhoneVerification() {
     setResendSeconds(0);
     setErrors({});
     setVerifiedPhone("");
+    setDevCode("");
   }, []);
 
   useEffect(() => {
@@ -70,18 +74,24 @@ export function usePhoneVerification() {
     }
     if (resendSeconds > 0) return;
 
-    // TODO: POST /api/sms/send
-    await new Promise((r) => setTimeout(r, 500));
-    setStep("sent");
-    setSeconds(180);
-    setResendSeconds(RESEND_COOLDOWN);
-    setCode("");
-    setErrors((prev) => {
-      const next = { ...prev };
-      delete next.code;
-      return next;
-    });
-    console.log("인증번호: 123456");
+    try {
+      const res = await requestPhoneCode(phoneDigits(phone));
+      setDevCode(res.devCode ?? "");
+      setStep("sent");
+      setSeconds(180);
+      setResendSeconds(RESEND_COOLDOWN);
+      setCode("");
+      setErrors((prev) => {
+        const next = { ...prev };
+        delete next.code;
+        return next;
+      });
+    } catch (err) {
+      setErrors((prev) => ({
+        ...prev,
+        phone: err instanceof ApiError ? err.message : "인증번호를 보내지 못했어요",
+      }));
+    }
   }, [phone, resendSeconds]);
 
   const verifyCode = useCallback(async () => {
@@ -94,10 +104,13 @@ export function usePhoneVerification() {
       return;
     }
 
-    // TODO: POST /api/sms/verify
-    await new Promise((r) => setTimeout(r, 400));
-    if (code !== MOCK_CODE) {
-      setErrors((prev) => ({ ...prev, code: "인증번호가 일치하지 않아요" }));
+    try {
+      await verifyPhoneCode(phoneDigits(phone), code);
+    } catch (err) {
+      setErrors((prev) => ({
+        ...prev,
+        code: err instanceof ApiError ? err.message : "인증번호를 확인하지 못했어요",
+      }));
       return;
     }
 
@@ -127,6 +140,7 @@ export function usePhoneVerification() {
     sendCode,
     verifyCode,
     reset,
+    devCode,
     phoneDigits: phoneDigits(phone),
     isPhoneValid: isValidPhone(phone),
   };

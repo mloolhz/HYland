@@ -18,6 +18,8 @@ type PhoneVerificationProps = {
   sendCode: () => void;
   verifyCode: () => void;
   isPhoneValid: boolean;
+  /** 문자 발송 연동 전이라 서버가 코드를 그대로 내려준다 */
+  devCode?: string;
 };
 
 export function PhoneVerification({
@@ -34,6 +36,7 @@ export function PhoneVerification({
   sendCode,
   verifyCode,
   isPhoneValid,
+  devCode,
 }: PhoneVerificationProps) {
   const [liveMessage, setLiveMessage] = useState("");
   const announcedRef = useRef<Set<number>>(new Set());
@@ -69,6 +72,13 @@ export function PhoneVerification({
       {step === "verified" && (
         <p className="sr-only" role="status">
           전화번호 인증이 완료되었어요
+        </p>
+      )}
+
+      {/* 문자 발송을 붙이면 서버가 devCode 를 안 주고, 이 안내도 사라진다 */}
+      {step === "sent" && devCode && (
+        <p className="auth-dev-code" role="status">
+          문자 발송 연동 전이에요 — 인증번호 <b>{devCode}</b>
         </p>
       )}
 

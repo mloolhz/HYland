@@ -234,6 +234,7 @@ export function Signup() {
               sendCode={phoneVerify.sendCode}
               verifyCode={phoneVerify.verifyCode}
               isPhoneValid={phoneVerify.isPhoneValid}
+              devCode={phoneVerify.devCode}
             />
           </FormSection>
 

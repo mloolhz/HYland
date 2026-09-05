@@ -28,6 +28,8 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
 export type ProfileResponse = {
   userId: string;
   nickname: string;
+  /** 가입일 (ISO) */
+  joinedAt: string;
   level: number;
   levelTitle: string;
   expCurrent: number;

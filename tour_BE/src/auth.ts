@@ -205,4 +205,87 @@ router.post("/phone/verify", async (req: Request, res: Response) => {
   res.json({ ok: true });
 });
 
+// ─────────────── 계정 찾기 ───────────────
+//
+// 이름 대신 "휴대폰 인증"만으로 본인을 확인한다. 회원가입에서 이름을 받지
+// 않아서 이름으로는 대조할 것이 없다. 인증을 통과한 지 10분 안인 번호만
+// 인정하므로, 번호만 안다고 남의 아이디를 캐거나 비밀번호를 바꿀 수 없다.
+
+/** 최근에 인증을 끝낸 번호인지 — 아니면 null */
+async function findFreshVerification(phone: string) {
+  const since = new Date(Date.now() - 10 * 60 * 1000);
+  return prisma.phoneVerification.findFirst({
+    where: { phone, verified: true, createdAt: { gt: since } },
+    orderBy: { createdAt: "desc" },
+  });
+}
+
+/** 아이디 일부를 가린다 — 목록에서 본인 계정을 알아볼 만큼만 보여준다 */
+function maskUsername(id: string): string {
+  const visible = Math.min(5, Math.max(3, Math.floor(id.length / 2)));
+  return id.slice(0, visible) + "*".repeat(Math.max(4, id.length - visible));
+}
+
+/** 숫자만 남긴다 — 저장된 번호와 입력 형식(010-1234-5678)이 다를 수 있다 */
+const digits = (v: string) => v.replace(/\D/g, "");
+
+// ── 아이디 찾기 ──
+router.post("/find-id", async (req: Request, res: Response) => {
+  const { phone } = req.body ?? {};
+  if (!phone) return res.status(400).json({ error: "휴대폰 번호를 입력해주세요" });
+
+  const verification = await findFreshVerification(phone);
+  if (!verification) {
+    return res.status(403).json({ error: "휴대폰 인증을 먼저 완료해주세요" });
+  }
+
+  const target = digits(phone);
+  const users = await prisma.user.findMany({
+    where: { phone: { not: null } },
+    select: { username: true, phone: true, profile: { select: { joinedAt: true } } },
+    orderBy: { createdAt: "asc" },
+  });
+
+  const accounts = users
+    .filter((u) => digits(u.phone!) === target)
+    .map((u) => ({
+      username: u.username,
+      maskedUsername: maskUsername(u.username),
+      joinedAt: u.profile?.joinedAt ?? null,
+    }));
+
+  res.json({ total: accounts.length, accounts });
+});
+
+// ── 비밀번호 재설정 ──
+router.post("/reset-password", async (req: Request, res: Response) => {
+  const { phone, username, password } = req.body ?? {};
+  if (!phone || !username || !password) {
+    return res.status(400).json({ error: "아이디·휴대폰 번호·새 비밀번호가 필요해요" });
+  }
+  if (String(password).length < 8) {
+    return res.status(400).json({ error: "비밀번호는 8자 이상이어야 해요" });
+  }
+
+  const verification = await findFreshVerification(phone);
+  if (!verification) {
+    return res.status(403).json({ error: "휴대폰 인증을 먼저 완료해주세요" });
+  }
+
+  const user = await prisma.user.findUnique({ where: { username: String(username).trim() } });
+  // 그 번호로 가입한 계정이 맞는지까지 확인한다
+  if (!user || !user.phone || digits(user.phone) !== digits(phone)) {
+    return res.status(404).json({ error: "휴대폰 번호와 일치하는 계정이 없어요" });
+  }
+
+  const passwordHash = await bcrypt.hash(String(password), 10);
+  await prisma.$transaction([
+    prisma.user.update({ where: { id: user.id }, data: { passwordHash } }),
+    // 같은 인증으로 두 번 바꾸지 못하게 소모시킨다
+    prisma.phoneVerification.delete({ where: { id: verification.id } }),
+  ]);
+
+  res.json({ ok: true });
+});
+
 export default router;

@@ -101,3 +101,52 @@ export async function checkNicknameTaken(nickname: string): Promise<boolean> {
   );
   return r.taken;
 }
+
+// ─────────────── 휴대폰 인증 ───────────────
+//
+// 실제 SMS 연동 전이라 서버가 인증코드를 응답에 담아 준다(devCode).
+// 문자 발송을 붙이면 그 필드만 사라지고 흐름은 그대로다.
+
+export function requestPhoneCode(phone: string): Promise<{ ok: boolean; devCode?: string }> {
+  return request("/auth/phone/request", {
+    method: "POST",
+    body: JSON.stringify({ phone }),
+  });
+}
+
+export function verifyPhoneCode(phone: string, code: string): Promise<{ ok: boolean }> {
+  return request("/auth/phone/verify", {
+    method: "POST",
+    body: JSON.stringify({ phone, code }),
+  });
+}
+
+// ─────────────── 계정 찾기 ───────────────
+
+export type FoundAccount = {
+  username: string;
+  /** 목록에 보여줄 가려진 아이디 */
+  maskedUsername: string;
+  joinedAt: string | null;
+};
+
+/** 인증을 마친 번호로 가입된 아이디 목록 */
+export async function findAccountIds(phone: string): Promise<FoundAccount[]> {
+  const r = await request<{ total: number; accounts: FoundAccount[] }>("/auth/find-id", {
+    method: "POST",
+    body: JSON.stringify({ phone }),
+  });
+  return r.accounts;
+}
+
+/** 비밀번호 재설정 — 인증한 번호로 가입된 아이디여야 한다 */
+export function resetPassword(input: {
+  phone: string;
+  username: string;
+  password: string;
+}): Promise<{ ok: boolean }> {
+  return request("/auth/reset-password", {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+}

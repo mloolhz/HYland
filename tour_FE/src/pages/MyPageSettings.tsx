@@ -3,7 +3,7 @@ import { useUserProfile } from "@/hooks/useUserProfile";
 import { useSession } from "@/store/session";
 import { deleteAccount } from "@/api/auth";
 import { CONTAINER } from "@/constants/layout";
-import { formatJoinDateYmd } from "@/mocks/accounts";
+import { formatJoinDateYmd } from "@/lib/account-format";
 
 export function MyPageSettings() {
   const navigate = useNavigate();
