@@ -20,6 +20,8 @@ import {
   deleteComment as deleteCommentRequest,
   togglePostLike,
   deletePost,
+  updateComment,
+  updatePost,
   type PostDetail as PostDetailData,
 } from "@/api/community";
 import { useSession } from "@/store/session";
@@ -35,6 +37,10 @@ export function PostDetail() {
   const { isLoggedIn } = useSession();
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
+  const [editing, setEditing] = useState(false);
+  const [editTitle, setEditTitle] = useState("");
+  const [editContent, setEditContent] = useState("");
+  const [savingPost, setSavingPost] = useState(false);
   const [lightboxImageIndex, setLightboxImageIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const hash = location.hash;
@@ -128,6 +134,31 @@ export function PostDetail() {
   const region = getIslandColors(post.island);
   const images = post.images ?? [];
 
+  const startEdit = () => {
+    if (!post) return;
+    setEditTitle(post.title);
+    setEditContent(post.content);
+    setEditing(true);
+  };
+
+  /** 글 수정 — 제목·내용만 고친다 (섬·활동·사진은 그대로) */
+  const handleSavePost = async () => {
+    if (!id || !editTitle.trim() || !editContent.trim()) return;
+    setSavingPost(true);
+    try {
+      await updatePost(id, { title: editTitle.trim(), content: editContent.trim() });
+      const fresh = await fetchPost(id);
+      setPost(fresh);
+      await refreshPosts();
+      setEditing(false);
+    } catch (err) {
+      console.error("[community] 글 수정 실패:", err);
+      window.alert("글을 수정하지 못했어요. 잠시 후 다시 시도해주세요.");
+    } finally {
+      setSavingPost(false);
+    }
+  };
+
   /** 내 글 삭제 — 되돌릴 수 없어 한 번 묻는다 */
   const handleDeletePost = async () => {
     if (!id || !post) return;
@@ -151,6 +182,30 @@ export function PostDetail() {
       setComments(fresh.comments);
     } catch (err) {
       console.error("[community] 댓글 등록 실패:", err);
+    }
+  };
+
+  /** 답글 등록 */
+  const handleAddReply = async (parentId: string, content: string) => {
+    if (!id) return;
+    try {
+      await addCommentRequest(id, { content, parentId });
+      const fresh = await fetchPost(id);
+      setComments(fresh.comments);
+    } catch (err) {
+      console.error("[community] 답글 등록 실패:", err);
+    }
+  };
+
+  /** 댓글 수정 */
+  const handleEditComment = async (commentId: string, content: string) => {
+    if (!id) return;
+    try {
+      await updateComment(commentId, content);
+      const fresh = await fetchPost(id);
+      setComments(fresh.comments);
+    } catch (err) {
+      console.error("[community] 댓글 수정 실패:", err);
     }
   };
 
@@ -220,7 +275,16 @@ export function PostDetail() {
                 </Link>
               </nav>
 
-              <h1 className="cm-detail-title">{post.title}</h1>
+              {editing ? (
+                <input
+                  className="cm-detail-title-input"
+                  value={editTitle}
+                  onChange={(e) => setEditTitle(e.target.value)}
+                  aria-label="제목 수정"
+                />
+              ) : (
+                <h1 className="cm-detail-title">{post.title}</h1>
+              )}
 
               <div className="cm-detail-meta">
                 <div className="cm-detail-author">
@@ -243,7 +307,35 @@ export function PostDetail() {
               </div>
 
               <div className="cm-detail-body">
+                {editing ? (
+                  <div className="cm-detail-edit">
+                    <textarea
+                      rows={8}
+                      value={editContent}
+                      onChange={(e) => setEditContent(e.target.value)}
+                      aria-label="내용 수정"
+                    />
+                    <div className="cm-detail-edit-actions">
+                      <button
+                        type="button"
+                        className="cm-action-btn"
+                        onClick={() => setEditing(false)}
+                      >
+                        취소
+                      </button>
+                      <button
+                        type="button"
+                        className="cm-action-btn cm-action-btn--save"
+                        disabled={!editTitle.trim() || !editContent.trim() || savingPost}
+                        onClick={handleSavePost}
+                      >
+                        {savingPost ? "저장 중…" : "저장"}
+                      </button>
+                    </div>
+                  </div>
+                ) : (
                 <p className="cm-detail-content">{post.content}</p>
+                )}
                 {images.length > 0 && (
                   <div className="cm-detail-images">
                     {images.map((src, i) => (
@@ -281,13 +373,20 @@ export function PostDetail() {
                 </span>
                 <div className="cm-detail-actions-side">
                   {post.isMine ? (
-                    <button
-                      type="button"
-                      className="cm-action-btn cm-action-btn--delete"
-                      onClick={handleDeletePost}
-                    >
-                      삭제
-                    </button>
+                    <>
+                      {!editing && (
+                        <button type="button" className="cm-action-btn" onClick={startEdit}>
+                          수정
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        className="cm-action-btn cm-action-btn--delete"
+                        onClick={handleDeletePost}
+                      >
+                        삭제
+                      </button>
+                    </>
                   ) : (
                     <button type="button" className="cm-action-btn cm-action-btn--report">
                       신고
@@ -301,6 +400,8 @@ export function PostDetail() {
                 isLoggedIn={isLoggedIn}
                 onDeleteComment={handleDeleteComment}
                 onSubmitComment={handleAddComment}
+                onSubmitReply={handleAddReply}
+                onEditComment={handleEditComment}
               />
             </div>
 

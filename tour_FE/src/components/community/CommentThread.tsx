@@ -13,6 +13,8 @@ type CommentThreadProps = {
   onDeleteComment?: (id: string) => void;
   /** 댓글 등록 — 서버 저장은 상위(PostDetail)가 맡는다 */
   onSubmitComment?: (content: string) => Promise<void>;
+  onSubmitReply?: (parentId: string, content: string) => Promise<void>;
+  onEditComment?: (id: string, content: string) => Promise<void>;
 };
 
 function MainCommentInput({
@@ -94,6 +96,8 @@ export function CommentThread({
   isLoggedIn = false,
   onDeleteComment,
   onSubmitComment,
+  onSubmitReply,
+  onEditComment,
 }: CommentThreadProps) {
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const total = countComments(comments);
@@ -121,6 +125,8 @@ export function CommentThread({
               onReply={handleReply}
               onCancelReply={() => setReplyingTo(null)}
               onDeleteComment={handleDeleteComment}
+              onSubmitReply={onSubmitReply}
+              onEditComment={onEditComment}
               isLoggedIn={isLoggedIn}
             />
           ))}
