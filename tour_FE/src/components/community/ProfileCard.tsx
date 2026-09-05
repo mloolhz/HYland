@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useUserProfile } from "@/hooks/useUserProfile";
+import { useSession } from "@/store/session";
 import { isCurrentUser } from "@/constants/auth";
 import { findAuthorInPosts, getUserCommentCount, getUserPosts, getUserPublicProfile } from "@/lib/community-users";
 import { usePosts } from "@/lib/post-store";
@@ -32,7 +33,23 @@ export function ProfileCard({ userId }: ProfileCardProps) {
   // 훅은 분기 밖에서 부른다 (조건부 호출은 리액트 훅 규칙 위반)
   const profile = useUserProfile();
   const { myPosts, myComments, likedPosts } = useMyActivity();
+  const { isLoggedIn } = useSession();
   const isSelf = !userId || isCurrentUser(userId);
+
+  // 로그인 전에는 내 활동을 보여줄 것이 없다 (예전에는 mock 프로필이 보였다)
+  if (isSelf && !isLoggedIn) {
+    return (
+      <aside className="cm-profile-card cm-profile-card--guest">
+        <p className="cm-profile-guest-title">로그인하고 기록을 남겨보세요</p>
+        <p className="cm-profile-guest-desc">
+          섬 후기와 인증샷을 올리면 미션을 깨고 배지를 모을 수 있어요.
+        </p>
+        <Link to="/login" className="cm-profile-write-btn">
+          로그인
+        </Link>
+      </aside>
+    );
+  }
 
   if (isSelf) {
     const postCount = myPosts.length;

@@ -3179,3 +3179,22 @@ div.cm-post-row[role="link"] {
   line-height: 1.7;
   color: #64748b;
 }
+
+/* 커뮤니티 사이드바 — 비로그인 안내 */
+.cm-profile-card--guest {
+  text-align: center;
+}
+
+.cm-profile-guest-title {
+  margin: 0 0 6px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #1a3a6b;
+}
+
+.cm-profile-guest-desc {
+  margin: 0 0 16px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #64748b;
+}

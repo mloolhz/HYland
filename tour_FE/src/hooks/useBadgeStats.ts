@@ -14,7 +14,10 @@ export function useBadgeStats() {
 
   return useMemo(() => {
     const base = getBadgeStats();
-    if (!profile) return base;
+    // 로그인 전에는 mock 진행도 대신 0 으로 보여준다 (전체 개수는 카탈로그라 유지)
+    if (!profile) {
+      return { ...base, earned: 0, unearned: base.total, visited: 0, islandTotal: ISLANDS.length };
+    }
 
     const earned = profile.stats.badgeCount;
     return {

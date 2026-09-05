@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useSession } from "@/store/session";
 import { useBadgeStats } from "@/hooks/useBadgeStats";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { Link } from "react-router-dom";
@@ -19,7 +20,6 @@ import { PassportCoverVisual } from "./PassportCoverVisual";
 import { IncheonWeatherBar } from "./IncheonWeatherBar";
 
 /** 패스포트 카드가 로그인 상태로 노출되는 동안 프로필 표시 */
-const SHOW_LANDING_PROFILE = true;
 
 const SLIDE_COUNT = HERO_SLIDES.length;
 const CATEGORIES = [
@@ -32,6 +32,9 @@ const CATEGORIES = [
 export function HeroSection() {
   const profile = useUserProfile();
   const badgeStats = useBadgeStats();
+  // 예전에는 SHOW_LANDING_PROFILE = true 로 박아둬서, 로그인 안 한 사람에게도
+  // 남의 닉네임과 수치가 그대로 보였다.
+  const { isLoggedIn } = useSession();
   const expPercent = getPassportExpPercent(profile);
   const [activeSlide, setActiveSlide] = useState(0);
   const [showScrollHint, setShowScrollHint] = useState(true);
@@ -137,7 +140,7 @@ export function HeroSection() {
           <aside className="pass-card" aria-label="나의 섬 여권">
             <div className="pc-head">
               <h3>나의 섬 여권</h3>
-              {SHOW_LANDING_PROFILE ? (
+              {isLoggedIn ? (
                 <Link to="/mypage" className="pc-profile-link">
                   <AuthorAvatar author={{ nickname: profile.nickname }} className="pc-profile-avatar" />
                   <span>{profile.nickname}님</span>
@@ -150,7 +153,7 @@ export function HeroSection() {
             </div>
 
             <div className="pc-passport-layout">
-              {SHOW_LANDING_PROFILE ? (
+              {isLoggedIn ? (
                 <button
                   type="button"
                   ref={passportTriggerRef}
@@ -167,6 +170,22 @@ export function HeroSection() {
                 </div>
               )}
 
+              {!isLoggedIn ? (
+                <div className="passport-info passport-info--guest">
+                  <p className="passport-guest-title">로그인하고 나만의 섬 여권을 만들어보세요</p>
+                  <p className="passport-guest-desc">
+                    인증샷으로 미션을 완료하면 배지가 쌓이고, 방문한 섬이 지도에 표시돼요.
+                  </p>
+                  <div className="passport-guest-actions">
+                    <Link to="/login" className="passport-guest-btn">
+                      로그인
+                    </Link>
+                    <Link to="/signup" className="passport-guest-btn passport-guest-btn--ghost">
+                      회원가입
+                    </Link>
+                  </div>
+                </div>
+              ) : (
               <div className="passport-info">
                 <div className="passport-level">
                   <div className="passport-level-top">
@@ -206,6 +225,7 @@ export function HeroSection() {
                   </div>
                 </div>
               </div>
+              )}
             </div>
 
             <div className="quick-grid">

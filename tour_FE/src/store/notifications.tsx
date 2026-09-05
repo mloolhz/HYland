@@ -2,12 +2,14 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   type ReactNode,
 } from "react";
 import type { NotificationType } from "@/constants/notification";
 import { MOCK_NOTIFICATIONS } from "@/mocks/notifications";
+import { useSession } from "@/store/session";
 
 export interface Notification {
   id: string;
@@ -34,7 +36,19 @@ interface NotificationStore {
 const NotificationContext = createContext<NotificationStore | null>(null);
 
 export function NotificationProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<Notification[]>(() => [...MOCK_NOTIFICATIONS]);
+  const { isLoggedIn } = useSession();
+  /**
+   * 알림은 아직 mock 이다(테이블이 없다). 다만 로그인도 안 한 방문자에게
+   * "회원님의 글에 댓글이 달렸어요" 같은 남의 알림이 보이면 안 되므로
+   * 비로그인일 때는 비워 둔다.
+   */
+  const [items, setItems] = useState<Notification[]>(() =>
+    isLoggedIn ? [...MOCK_NOTIFICATIONS] : [],
+  );
+
+  useEffect(() => {
+    setItems(isLoggedIn ? [...MOCK_NOTIFICATIONS] : []);
+  }, [isLoggedIn]);
 
   const unreadCount = useMemo(() => items.filter((n) => !n.read).length, [items]);
 

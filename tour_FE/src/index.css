@@ -638,3 +638,61 @@ footer{background:var(--sea-dark);color:#B6C4D8;margin-top:92px}
   gap:12px;
   justify-content:center;
 }
+
+/* 랜딩 여권 — 비로그인 안내 */
+.passport-info--guest {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.passport-guest-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a3a6b;
+  line-height: 1.4;
+  word-break: keep-all;
+}
+
+.passport-guest-desc {
+  margin: 0 0 6px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #64748b;
+  word-break: keep-all;
+}
+
+.passport-guest-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.passport-guest-btn {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #1a3a6b;
+  background: #1a3a6b;
+  color: #fff;
+  font-size: 13px;
+  text-align: center;
+  text-decoration: none;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.passport-guest-btn:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.passport-guest-btn--ghost {
+  background: #fff;
+  color: #1a3a6b;
+}
+
+.passport-guest-btn--ghost:hover {
+  background: #f8fafc;
+  color: #2563eb;
+}

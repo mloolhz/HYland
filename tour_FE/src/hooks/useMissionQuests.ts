@@ -41,10 +41,12 @@ export function useMissionQuests(): { quests: MissionQuest[]; loading: boolean }
   }, [isLoggedIn]);
 
   const quests = useMemo(() => {
+    // 로그인 전에는 mock 진행도를 보여주지 않는다 (남의 기록처럼 보인다)
+    if (!isLoggedIn) return MISSION_QUESTS.map((q) => ({ ...q, current: 0 }));
     if (!progress) return MISSION_QUESTS;
     // 서버에 기록이 없는 미션은 아직 시작 전이므로 0 으로 본다
     return MISSION_QUESTS.map((q) => ({ ...q, current: progress.get(q.id) ?? 0 }));
-  }, [progress]);
+  }, [progress, isLoggedIn]);
 
   return { quests, loading };
 }
