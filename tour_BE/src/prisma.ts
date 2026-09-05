@@ -14,6 +14,13 @@ function parseMysqlConnectionOptions(databaseUrl: string) {
     user: decodeURIComponent(url.username),
     password: decodeURIComponent(url.password),
     database: url.pathname.replace(/^\//, ""),
+    /**
+     * MySQL 8의 기본 인증(caching_sha2_password)은 서버가 재시작돼 인증 캐시가
+     * 비면 클라이언트가 RSA 공개키를 받아 비밀번호를 암호화해야 한다. 이 옵션이
+     * 없으면 그때부터 ER_CANNOT_RETRIEVE_RSA_KEY 로 연결이 막힌다.
+     * (평문 채널로 공개키를 받으므로 로컬 개발용. 원격 DB라면 TLS를 쓸 것)
+     */
+    allowPublicKeyRetrieval: true,
   };
 }
 
