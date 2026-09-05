@@ -78,7 +78,28 @@ npx prisma generate
 npm run db:seed
 ```
 
-### 6. 개발 서버 실행
+### 6. 데모 계정 시드
+
+계정은 DB 에만 있고 git 에는 없습니다. 코드를 받은 사람도 같은 계정으로
+시연할 수 있도록 세 계정을 시드로 넣어 둡니다.
+
+```bash
+npm run db:seed:accounts
+```
+
+| 아이디 | 비밀번호 | 닉네임 | 권한 |
+|--------|----------|--------|------|
+| `demo-jichan` | `Demo1234!` | 지찬데모 | **ADMIN** — 인증샷 검수, 남의 글·댓글 삭제 |
+| `ipado` | `Ipado1234!` | 이파도 | USER |
+| `deungdae` | `Deungdae1234!` | 박등대 | USER |
+
+재실행해도 안전합니다. 이미 있는 계정이면 비밀번호·권한만 맞추고 글·배지·방문
+기록은 그대로 둡니다.
+
+> ⚠ 데모용이라 비밀번호가 코드에 그대로 있습니다. 실제 서비스로 올릴 때는
+> `prisma/seed-accounts.ts` 와 `db:seed:accounts` 스크립트를 반드시 지우세요.
+
+### 7. 개발 서버 실행
 
 ```bash
 npm run dev
@@ -98,6 +119,9 @@ npm run dev
 | `npm run db:generate` | `prisma generate` |
 | `npm run db:studio` | Prisma Studio (DB를 눈으로 확인) |
 | `npm run db:seed` | 정적 카탈로그 시드 |
+| `npm run db:seed:leisure` | 레저 시설 145곳 시드 |
+| `npm run db:seed:badges` | 배지 정의 시드 |
+| `npm run db:seed:accounts` | 데모 계정 3개 시드 |
 | `npm run tour:inspect` | 관광공사 레포츠 데이터 조회 |
 
 ---
