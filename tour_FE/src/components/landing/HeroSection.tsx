@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSession } from "@/store/session";
+import { LandingLoginCard } from "@/components/landing/LandingLoginCard";
 import { useBadgeStats } from "@/hooks/useBadgeStats";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { Link } from "react-router-dom";
@@ -137,55 +138,30 @@ export function HeroSection() {
 
         <div className="pass-card-wrap">
           <IncheonWeatherBar />
+          {!isLoggedIn ? (
+            <LandingLoginCard />
+          ) : (
           <aside className="pass-card" aria-label="나의 섬 여권">
             <div className="pc-head">
               <h3>나의 섬 여권</h3>
-              {isLoggedIn ? (
-                <Link to="/mypage" className="pc-profile-link">
-                  <AuthorAvatar author={{ nickname: profile.nickname }} className="pc-profile-avatar" />
-                  <span>{profile.nickname}님</span>
-                </Link>
-              ) : (
-                <Link to="/login" className="pc-login-link">
-                  로그인하기
-                </Link>
-              )}
+              <Link to="/mypage" className="pc-profile-link">
+                <AuthorAvatar author={{ nickname: profile.nickname }} className="pc-profile-avatar" />
+                <span>{profile.nickname}님</span>
+              </Link>
             </div>
 
             <div className="pc-passport-layout">
-              {isLoggedIn ? (
-                <button
-                  type="button"
-                  ref={passportTriggerRef}
-                  className="passport-cover passport-cover--link passport-cover--trigger"
-                  aria-label="마이 여권 펼치기"
-                  aria-haspopup="dialog"
-                  onClick={() => setPassportModalOpen(true)}
-                >
-                  <PassportCoverVisual />
-                </button>
-              ) : (
-                <div className="passport-cover" aria-hidden="true">
-                  <PassportCoverVisual />
-                </div>
-              )}
+              <button
+                type="button"
+                ref={passportTriggerRef}
+                className="passport-cover passport-cover--link passport-cover--trigger"
+                aria-label="마이 여권 펼치기"
+                aria-haspopup="dialog"
+                onClick={() => setPassportModalOpen(true)}
+              >
+                <PassportCoverVisual />
+              </button>
 
-              {!isLoggedIn ? (
-                <div className="passport-info passport-info--guest">
-                  <p className="passport-guest-title">로그인하고 나만의 섬 여권을 만들어보세요</p>
-                  <p className="passport-guest-desc">
-                    인증샷으로 미션을 완료하면 배지가 쌓이고, 방문한 섬이 지도에 표시돼요.
-                  </p>
-                  <div className="passport-guest-actions">
-                    <Link to="/login" className="passport-guest-btn">
-                      로그인
-                    </Link>
-                    <Link to="/signup" className="passport-guest-btn passport-guest-btn--ghost">
-                      회원가입
-                    </Link>
-                  </div>
-                </div>
-              ) : (
               <div className="passport-info">
                 <div className="passport-level">
                   <div className="passport-level-top">
@@ -225,7 +201,6 @@ export function HeroSection() {
                   </div>
                 </div>
               </div>
-              )}
             </div>
 
             <div className="quick-grid">
@@ -240,6 +215,7 @@ export function HeroSection() {
               </span>
             </div>
           </aside>
+          )}
           <a
             className="btn-ipass"
             href="https://island.theksa.co.kr/page/main"

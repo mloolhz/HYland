@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { AuthorAvatar } from "@/components/community/AuthorAvatar";
 import { CommentThread } from "@/components/community/CommentThread";
 import { Lightbox } from "@/components/community/Lightbox";
@@ -13,12 +13,13 @@ import { getSurroundingPosts } from "@/lib/post-navigation";
 import { countComments, filterPosts, findComment, removeComment, sortPosts } from "@/lib/posts";
 import { parseActivitiesQuery, parseIslandsQuery } from "@/lib/query";
 import { formatDetailDate } from "@/lib/time";
-import { usePosts } from "@/lib/post-store";
+import { usePosts, refreshPosts } from "@/lib/post-store";
 import {
   fetchPost,
   addComment as addCommentRequest,
   deleteComment as deleteCommentRequest,
   togglePostLike,
+  deletePost,
   type PostDetail as PostDetailData,
 } from "@/api/community";
 import { useSession } from "@/store/session";
@@ -26,6 +27,7 @@ import { useSession } from "@/store/session";
 export function PostDetail() {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
+  const navigate = useNavigate();
   const posts = usePosts();
   // 상세는 목록과 별개로 부른다 — 댓글 본문과 조회수는 상세 응답에만 있다
   const [post, setPost] = useState<PostDetailData | undefined>(undefined);
@@ -125,6 +127,20 @@ export function PostDetail() {
 
   const region = getIslandColors(post.island);
   const images = post.images ?? [];
+
+  /** 내 글 삭제 — 되돌릴 수 없어 한 번 묻는다 */
+  const handleDeletePost = async () => {
+    if (!id || !post) return;
+    if (!window.confirm("이 글을 삭제할까요? 댓글도 함께 지워지고 되돌릴 수 없어요.")) return;
+    try {
+      await deletePost(id);
+      await refreshPosts();
+      navigate("/community", { replace: true });
+    } catch (err) {
+      console.error("[community] 글 삭제 실패:", err);
+      window.alert("글을 삭제하지 못했어요. 잠시 후 다시 시도해주세요.");
+    }
+  };
 
   /** 댓글 등록 — 서버에 저장하고 목록을 다시 받아온다 */
   const handleAddComment = async (content: string) => {
@@ -264,12 +280,19 @@ export function PostDetail() {
                   {countComments(comments)}
                 </span>
                 <div className="cm-detail-actions-side">
-                  <button type="button" className="cm-action-btn cm-action-btn--share">
-                    공유
-                  </button>
-                  <button type="button" className="cm-action-btn cm-action-btn--report">
-                    신고
-                  </button>
+                  {post.isMine ? (
+                    <button
+                      type="button"
+                      className="cm-action-btn cm-action-btn--delete"
+                      onClick={handleDeletePost}
+                    >
+                      삭제
+                    </button>
+                  ) : (
+                    <button type="button" className="cm-action-btn cm-action-btn--report">
+                      신고
+                    </button>
+                  )}
                 </div>
               </div>
 

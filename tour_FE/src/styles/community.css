@@ -3198,3 +3198,13 @@ div.cm-post-row[role="link"] {
   line-height: 1.7;
   color: #64748b;
 }
+
+/* 내 글 삭제 */
+.cm-action-btn--delete {
+  color: #b91c1c;
+}
+
+.cm-action-btn--delete:hover {
+  border-color: #dc2626;
+  background: #fef2f2;
+}

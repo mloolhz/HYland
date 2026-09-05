@@ -639,60 +639,145 @@ footer{background:var(--sea-dark);color:#B6C4D8;margin-top:92px}
   justify-content:center;
 }
 
-/* 랜딩 여권 — 비로그인 안내 */
-.passport-info--guest {
+/* ── 랜딩 히어로: 비로그인 로그인 카드 ── */
+.lg-card {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 8px;
-  min-width: 0;
-}
-
-.passport-guest-title {
-  margin: 0;
-  font-size: 15px;
-  font-weight: 600;
-  color: #1a3a6b;
-  line-height: 1.4;
-  word-break: keep-all;
-}
-
-.passport-guest-desc {
-  margin: 0 0 6px;
-  font-size: 13px;
-  line-height: 1.7;
-  color: #64748b;
-  word-break: keep-all;
-}
-
-.passport-guest-actions {
-  display: flex;
-  gap: 8px;
-}
-
-.passport-guest-btn {
-  flex: 1;
-  padding: 10px 12px;
-  border: 1px solid #1a3a6b;
-  background: #1a3a6b;
-  color: #fff;
-  font-size: 13px;
-  text-align: center;
-  text-decoration: none;
-  transition: background 0.15s ease, border-color 0.15s ease;
-}
-
-.passport-guest-btn:hover {
-  background: #2563eb;
-  border-color: #2563eb;
-}
-
-.passport-guest-btn--ghost {
+  padding: 36px 32px 28px;
+  border-radius: 18px;
   background: #fff;
-  color: #1a3a6b;
+  box-shadow: 0 18px 40px rgb(15 23 42 / 0.14);
 }
 
-.passport-guest-btn--ghost:hover {
-  background: #f8fafc;
-  color: #2563eb;
+.lg-title {
+  margin: 0 0 10px;
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #2f3a5c;
+  text-align: center;
+}
+
+.lg-tagline {
+  margin: 0 0 26px;
+  font-size: 14px;
+  color: #64748b;
+  text-align: center;
+  word-break: keep-all;
+}
+
+.lg-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lg-field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 18px;
+  border-radius: 12px;
+  background: #f4f5f8;
+}
+
+.lg-icon {
+  flex: none;
+  display: flex;
+  color: #8b93a7;
+}
+
+.lg-field input {
+  flex: 1;
+  min-width: 0;
+  padding: 16px 0;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: 15px;
+  color: #2f3a5c;
+}
+
+.lg-field input::placeholder {
+  color: #9aa1b4;
+}
+
+.lg-field input:focus {
+  outline: none;
+}
+
+.lg-field:focus-within {
+  outline: 2px solid #5b64c4;
+  outline-offset: 1px;
+}
+
+.lg-error {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.lg-submit {
+  margin-top: 6px;
+  padding: 17px;
+  border: none;
+  border-radius: 12px;
+  background: #5b64c4;
+  color: #fff;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.lg-submit:hover:not(:disabled) {
+  background: #4a53b3;
+}
+
+.lg-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.lg-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 22px;
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.lg-links a,
+.lg-links button {
+  padding: 0;
+  border: none;
+  background: none;
+  color: #4a5567;
+  font-family: inherit;
+  font-size: 13px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.lg-links a:hover,
+.lg-links button:hover {
+  color: #5b64c4;
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .lg-card {
+    padding: 28px 22px 24px;
+  }
+
+  .lg-title {
+    font-size: 28px;
+  }
 }
