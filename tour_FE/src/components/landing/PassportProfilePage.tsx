@@ -65,14 +65,6 @@ export function PassportProfilePage({ profile, titleId }: PassportProfilePagePro
 
           <p className="passport-page__nickname">{profile.nickname}님</p>
 
-          <div className="passport-page__badges">
-
-            <span className="passport-page__level">Lv.{profile.level}</span>
-
-            <span className="passport-page__rank">{profile.levelTitle}</span>
-
-          </div>
-
         </div>
 
       </div>

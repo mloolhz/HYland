@@ -23,12 +23,6 @@ export function PassportProfileCard({ profile }: PassportProfileCardProps) {
           <span className="passport-profile-card__label">Nationality</span>
           <span className="passport-profile-card__value">대한민국</span>
         </div>
-        <div className="passport-profile-card__field">
-          <span className="passport-profile-card__label">Rank</span>
-          <span className="passport-profile-card__rank">
-            Lv.{profile.level} · {profile.levelTitle}
-          </span>
-        </div>
       </div>
     </div>
   );

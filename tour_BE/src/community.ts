@@ -305,7 +305,12 @@ router.delete("/posts/:id", requireAuth, async (req: Request, res: Response) => 
     return res.status(403).json({ error: "내가 쓴 글만 삭제할 수 있어요." });
   }
 
-  await prisma.post.delete({ where: { id: post.id } });
+  await prisma.$transaction([
+    prisma.post.delete({ where: { id: post.id } }),
+    // 그 글을 가리키던 알림도 같이 치운다. 안 그러면 눌렀을 때 404 로 간다.
+    // (댓글·답글 알림은 "/community/<id>#comment-..." 라 startsWith 로 잡는다)
+    prisma.notification.deleteMany({ where: { link: { startsWith: `/community/${post.id}` } } }),
+  ]);
   res.json({ ok: true });
 });
 
@@ -449,7 +454,11 @@ router.delete("/comments/:id", requireAuth, async (req: Request, res: Response) 
     return res.status(403).json({ error: "내가 쓴 댓글만 삭제할 수 있어요." });
   }
 
-  await prisma.comment.delete({ where: { id: c.id } });
+  await prisma.$transaction([
+    prisma.comment.delete({ where: { id: c.id } }),
+    // 이 댓글로 만들어진 알림(댓글·답글)도 같이 치운다
+    prisma.notification.deleteMany({ where: { link: { endsWith: `#comment-${c.id}` } } }),
+  ]);
   res.json({ ok: true });
 });
 

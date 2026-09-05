@@ -5,10 +5,7 @@ import { useBadgeStats } from "@/hooks/useBadgeStats";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { Link } from "react-router-dom";
 import { AuthorAvatar } from "@/components/community/AuthorAvatar";
-import { AnimatedWidthBar } from "@/components/mypage/AnimatedWidthBar";
 import { CountUpNumber } from "@/components/mypage/CountUpNumber";
-import { formatNumber } from "@/lib/landing-data";
-import { getPassportExpPercent } from "@/lib/user-profile";
 import { scrollToSection } from "@/utils/layout";
 import { demoProps } from "./ToastProvider";
 import {
@@ -36,7 +33,6 @@ export function HeroSection() {
   // 예전에는 SHOW_LANDING_PROFILE = true 로 박아둬서, 로그인 안 한 사람에게도
   // 남의 닉네임과 수치가 그대로 보였다.
   const { isLoggedIn } = useSession();
-  const expPercent = getPassportExpPercent(profile);
   const [activeSlide, setActiveSlide] = useState(0);
   const [showScrollHint, setShowScrollHint] = useState(true);
   const [passportModalOpen, setPassportModalOpen] = useState(false);
@@ -162,30 +158,12 @@ export function HeroSection() {
                 <PassportCoverVisual />
               </button>
 
+              {/*
+                레벨·경험치는 뺐다. DB 에 칸만 있고 올려 주는 곳이 없어서
+                누구나 영원히 "Lv.1 새싹 탐험가 · EXP 0 / 1000" 이었다.
+                실제로 쌓이는 수치(방문 섬·배지)만 남긴다.
+              */}
               <div className="passport-info">
-                <div className="passport-level">
-                  <div className="passport-level-top">
-                    <span className="passport-level-badge">Lv.{profile.level}</span>
-                    <strong>{profile.levelTitle}</strong>
-                  </div>
-                  <div
-                    className="passport-progress"
-                    role="progressbar"
-                    aria-valuenow={expPercent}
-                    aria-valuemin={0}
-                    aria-valuemax={100}
-                    aria-label="경험치 진행률"
-                  >
-                    <AnimatedWidthBar width={expPercent} className="passport-progress-fill" />
-                  </div>
-                  <p className="passport-exp">
-                    EXP{" "}
-                    <CountUpNumber value={profile.expCurrent} delay={200} format={formatNumber} />
-                    {" / "}
-                    {formatNumber(profile.expMax)}
-                  </p>
-                </div>
-
                 <div className="passport-metrics" aria-label="탐험 현황">
                   <div className="passport-metric">
                     <CountUpNumber value={badgeStats.visited} delay={320} className="passport-metric__value" />
