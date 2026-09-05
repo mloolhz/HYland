@@ -1744,3 +1744,29 @@ body:has(.ai-page)::-webkit-scrollbar-button {
   flex-shrink: 0;
   font-size: 12px;
 }
+
+/* 시간이 없는 코스(종목 추천 등)는 타임라인 대신 단순 목록으로 — 점만 작게 남긴다 */
+.ai-course-list--plain::before {
+  display: none;
+}
+
+.ai-course-list--plain {
+  padding-left: 18px;
+}
+
+.ai-course-list--plain .ai-course-dot {
+  left: -18px;
+  top: 6px;
+  width: 6px;
+  height: 6px;
+  border-width: 0;
+  background: #1a3a6b;
+}
+
+.ai-course-list--plain .ai-course-step:nth-child(even) .ai-course-dot {
+  background: #1a3a6b;
+}
+
+.ai-course-list--plain .ai-course-step {
+  margin-bottom: 14px;
+}

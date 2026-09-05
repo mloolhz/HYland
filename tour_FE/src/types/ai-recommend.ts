@@ -1,5 +1,6 @@
 export type CourseStep = {
-  time: string;
+  /** 하루 일정 전체를 잡는 코스에만 넣는다. 단순 종목·활동 나열이면 생략. */
+  time?: string;
   activity: string;
   desc: string;
 };

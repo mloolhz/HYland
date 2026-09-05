@@ -201,6 +201,7 @@ ${buildWeatherSection(persona)}
   "followups": ["후속 질문 칩 2~3개"],
   "weather": { "date": "...", "summary": "...", "recommendation": "..." }
 }
+course.steps의 "time"은 선택 필드입니다. 하루 일정 전체를 시간 순서로 짜는 코스일 때만 각 step에 "time"을 넣으세요(예: "당일치기 코스", "1박 2일 코스"). 단순히 종목·활동 몇 개를 추천·나열하는 경우(예: "레저 스포츠 추천")에는 "time"을 넣지 말고 activity·desc만 채우세요.
 레저 활동 추천과 무관한 질문이면 recommendations는 [], course는 null, tips·followups도 관련 없으면 빈 배열로 두세요.
 중요: "text"·"tips"·"followups"는 서로 모순되면 안 됩니다. text에서 특정 정보를 모른다고 하거나 제공할 수 없다고 답했다면, tips나 followups에도 그 정보(예: 구체적인 음식점 추천)를 채워 넣지 마세요.
 "weather" 필드는 [날씨 검색 지시]가 있을 때만, 검색에 성공한 경우에만 포함하세요. 그 외에는 필드 자체를 생략하세요.
