@@ -2,7 +2,9 @@ import { useMemo, useState, type CSSProperties } from "react";
 import { AnimatedWidthBar } from "@/components/mypage/AnimatedWidthBar";
 import { MissionBadge } from "@/components/landing/MissionBadge";
 import { MissionSummary } from "@/components/landing/MissionSummary";
+import { MissionLoginPrompt } from "@/components/mission/MissionLoginPrompt";
 import { useMissionQuests } from "@/hooks/useMissionQuests";
+import { useSession } from "@/store/session";
 import { getCategoryProgressOf } from "@/lib/passport/passport-mission-stamps";
 import {
   CATEGORY_META,
@@ -163,6 +165,7 @@ export function MissionsView() {
   const [filter, setFilter] = useState<MissionFilter>("전체");
   // 진행도는 로그인한 사용자의 DB 값 (비로그인이면 mock)
   const { quests: allQuests } = useMissionQuests();
+  const { isLoggedIn } = useSession();
 
   const counts = useMemo(() => {
     const earned = allQuests.filter((q) => missionQuestState(q) === "earned").length;
@@ -171,7 +174,14 @@ export function MissionsView() {
 
   return (
     <div className="container">
-      <MissionSummary />
+      {isLoggedIn ? (
+        <MissionSummary />
+      ) : (
+        <MissionLoginPrompt
+          title="로그인하고 미션을 시작해보세요"
+          desc="섬 후기와 인증샷을 올리면 미션을 깨고 배지를 모을 수 있어요."
+        />
+      )}
 
       <div className="ms-filter" role="tablist" aria-label="미션 필터">
         {FILTERS.map((f) => (

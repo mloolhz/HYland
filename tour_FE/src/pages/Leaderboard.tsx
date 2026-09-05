@@ -4,6 +4,8 @@ import { AnimatedWidthBar } from "@/components/mypage/AnimatedWidthBar";
 import { CountUpNumber } from "@/components/mypage/CountUpNumber";
 import { avaColor, SEASON_REWARDS } from "@/lib/landing-data";
 import { useLeaderboardView } from "@/hooks/useLeaderboard";
+import { MissionLoginPrompt } from "@/components/mission/MissionLoginPrompt";
+import { useSession } from "@/store/session";
 import { MISSION_CATEGORIES, type MissionCategory } from "@/mocks/missions";
 
 /**
@@ -17,6 +19,7 @@ import { MISSION_CATEGORIES, type MissionCategory } from "@/mocks/missions";
 export function LeaderboardView() {
   const [category, setCategory] = useState<MissionCategory>("섬");
   const me = useUserProfile();
+  const { isLoggedIn } = useSession();
   const { rows, myRank, byCategoryAll, loading } = useLeaderboardView(category);
 
   const myBadges = myRank?.badgeCount ?? 0;
@@ -33,7 +36,13 @@ export function LeaderboardView() {
 
   return (
     <div className="container">
-      {/* 내 순위 카드 */}
+      {/* 내 순위 카드 — 로그인 전에는 보여줄 내 기록이 없다 */}
+      {!isLoggedIn ? (
+        <MissionLoginPrompt
+          title="로그인하고 순위에 도전해보세요"
+          desc="섬 후기와 인증샷을 올려 미션을 깨면 배지 수만큼 순위가 올라가요."
+        />
+      ) : (
       <section className="lbp-me" aria-label="내 순위">
         <div className="lbp-me__top">
           <div className="lbp-me__ava" style={{ background: avaColor(me.nickname) }}>
@@ -91,6 +100,7 @@ export function LeaderboardView() {
           )}
         </div>
       </section>
+      )}
 
       <div className="lb-card">
         <div className="lb-top">
@@ -164,6 +174,7 @@ export function LeaderboardView() {
       </div>
 
       {/* 내 부문별 순위 */}
+      {isLoggedIn && (
       <section className="lbp-mine" aria-label="내 부문별 순위">
         <div className="lbp-section-head">
           <h2>내 부문별 순위</h2>
@@ -201,6 +212,7 @@ export function LeaderboardView() {
           ))}
         </div>
       </section>
+      )}
 
       {/* 시즌 리워드 배너 */}
       <section className="lbp-reward" aria-label="시즌 보상">
