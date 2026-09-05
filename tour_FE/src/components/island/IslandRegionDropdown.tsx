@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import { useVisitedIslands } from "@/store/visited-islands";
 import {
   ISLAND_MAP,
   ISLAND_REGIONS,
@@ -34,6 +35,7 @@ export function IslandRegionDropdown({
   onRegionChange,
   onIslandSelect,
 }: IslandRegionDropdownProps) {
+  const { isVisited } = useVisitedIslands();
   const [open, setOpen] = useState(false);
   const [expandedRegion, setExpandedRegion] = useState<IslandRegionName | null>(activeRegion);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -170,12 +172,12 @@ export function IslandRegionDropdown({
                               type="button"
                               role="option"
                               aria-selected={isSelected}
-                              className={`isl-region-dropdown__island${isSelected ? " is-selected" : ""}${island.visited ? " is-visited" : ""}`}
+                              className={`isl-region-dropdown__island${isSelected ? " is-selected" : ""}${isVisited(island.id) ? " is-visited" : ""}`}
                               onClick={() => handleSelectIsland(island.id)}
                             >
                               <span className="isl-region-dropdown__island-name">{island.name}</span>
                               <span className="isl-region-dropdown__island-status">
-                                {island.visited ? "방문 완료" : "미방문"}
+                                {isVisited(island.id) ? "방문 완료" : "미방문"}
                               </span>
                             </button>
                           </li>

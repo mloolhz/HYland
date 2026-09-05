@@ -9,6 +9,7 @@ import {
   type PointerEvent,
 } from "react";
 import { ISLAND_MAP } from "@/lib/island-data";
+import { useVisitedIslands } from "@/store/visited-islands";
 import {
   ISLAND_MAP_AREAS,
   ISLAND_MAP_AREA_BY_ID,
@@ -25,9 +26,13 @@ type IslandExplorerMapProps = {
   readonly?: boolean;
 };
 
-function islandClass(id: string, selectedId: string | null, activeRegion: string | null) {
+function islandClass(
+  id: string,
+  selectedId: string | null,
+  activeRegion: string | null,
+  visited: boolean,
+) {
   const island = ISLAND_MAP[id];
-  const visited = island?.visited ?? false;
   const selected = selectedId === id;
   const dimmed = activeRegion !== null && island?.region !== activeRegion;
   return `isl-explorer ${visited ? "done" : "todo"}${selected ? " selected" : ""}${dimmed ? " is-dimmed" : ""}`;
@@ -78,6 +83,9 @@ function IslandHitArea({
   onHover?: (id: string | null, event?: PointerEvent<SVGGElement>) => void;
   readonly?: boolean;
 }) {
+  const { isVisited } = useVisitedIslands();
+  const visited = isVisited(id);
+
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (readonly || !onSelect) return;
@@ -89,7 +97,7 @@ function IslandHitArea({
     [id, onSelect, readonly],
   );
 
-  const visitLabel = ISLAND_MAP[id]?.visited ? "방문 완료" : "미방문";
+  const visitLabel = visited ? "방문 완료" : "미방문";
   const style = { "--isl-region-color": regionColor } as CSSProperties;
 
   const handlePointer = useCallback(
@@ -112,7 +120,7 @@ function IslandHitArea({
 
   return (
     <g
-      className={islandClass(id, selectedId, activeRegion)}
+      className={islandClass(id, selectedId, activeRegion, visited)}
       style={style}
       {...(readonly
         ? {}
@@ -185,10 +193,10 @@ type MapHover = {
 };
 
 function IslandMapTooltip({ hover }: { hover: MapHover }) {
+  const { isVisited } = useVisitedIslands();
   const island = ISLAND_MAP[hover.id];
+  const visited = isVisited(hover.id);
   if (!island) return null;
-
-  const visited = island.visited;
 
   return (
     <div

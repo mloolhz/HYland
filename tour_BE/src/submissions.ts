@@ -187,6 +187,24 @@ router.post("/:id/approve", requireAuth, requireAdmin, async (req: Request, res:
         },
       });
 
+      /**
+       * 섬 방문 미션이면 방문 기록도 남긴다.
+       * 여권의 "방문 섬"과 섬 지도의 방문 표시가 이 테이블을 본다. 인증이
+       * 승인돼야만 방문으로 치므로, 유저가 스스로 방문을 주장할 수는 없다.
+       */
+      let visitedIsland: string | null = null;
+      if (sub.quest.islandId) {
+        const already = await tx.userIslandVisit.findUnique({
+          where: { userId_islandId: { userId: sub.userId, islandId: sub.quest.islandId } },
+        });
+        if (!already) {
+          await tx.userIslandVisit.create({
+            data: { userId: sub.userId, islandId: sub.quest.islandId },
+          });
+          visitedIsland = sub.quest.islandId;
+        }
+      }
+
       // 목표를 채웠으면 배지를 준다. 이미 있으면 그대로 둔다.
       let badgeGranted: string | null = null;
       if (completed) {
@@ -203,7 +221,7 @@ router.post("/:id/approve", requireAuth, requireAdmin, async (req: Request, res:
         }
       }
 
-      return { current, target: sub.quest.target, completed, badgeGranted };
+      return { current, target: sub.quest.target, completed, badgeGranted, visitedIsland };
     });
 
     res.json({ id: sub.id, status: "APPROVED", ...result });

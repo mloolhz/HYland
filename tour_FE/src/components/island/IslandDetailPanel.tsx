@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useVisitedIslands } from "@/store/visited-islands";
 import type { IslandInfo } from "@/lib/island-data";
 import { getIslandPortalUrl } from "@/lib/island-portal-links";
 import { serializeIslandsQuery } from "@/lib/query";
@@ -10,6 +11,10 @@ type IslandDetailPanelProps = {
 };
 
 export function IslandDetailPanel({ island, onClose }: IslandDetailPanelProps) {
+  // 훅은 조기 반환보다 앞에서 부른다
+  const { isVisited } = useVisitedIslands();
+  const visited = isVisited(island?.id);
+
   if (!island) {
     return (
       <aside className="isl-detail isl-detail--empty" aria-label="섬 상세 정보">
@@ -38,8 +43,8 @@ export function IslandDetailPanel({ island, onClose }: IslandDetailPanelProps) {
         <div className="isl-detail-head">
           <div className="isl-detail-head-top">
             <span className="isl-detail-region">{island.region}</span>
-            <span className={`isl-detail-badge ${island.visited ? "done" : "todo"}`}>
-              {island.visited ? "방문 완료" : "미방문"}
+            <span className={`isl-detail-badge ${visited ? "done" : "todo"}`}>
+              {visited ? "방문 완료" : "미방문"}
             </span>
             <button type="button" className="isl-detail-close" onClick={onClose} aria-label="닫기">
               ×

@@ -32,6 +32,9 @@ async function main() {
 
   // dev 리셋: 유저 활동 데이터 먼저 정리 (마스터 재시드를 위한 FK 해제)
   // ⚠️ 개발용 — 마스터 카탈로그를 다시 심기 위해 테스트 유저 진행데이터를 비움
+  // 인증 제출이 미션을 참조하므로 미션보다 먼저 지운다
+  await prisma.missionSubmission.deleteMany();
+  await prisma.userBadge.deleteMany();
   await prisma.userMissionProgress.deleteMany();
   await prisma.userIslandVisit.deleteMany();
   await prisma.userIslandBtiResult.deleteMany();
@@ -40,6 +43,7 @@ async function main() {
   await prisma.sportBookingMethod.deleteMany();
   await prisma.sportIsland.deleteMany();
   await prisma.islandLeisureCourse.deleteMany();
+  await prisma.badgeDefinition.deleteMany();
   await prisma.missionQuest.deleteMany();
   await prisma.sport.deleteMany();
   await prisma.island.deleteMany();
@@ -69,6 +73,8 @@ async function main() {
     })),
   });
   const islandIds = new Set(ISLANDS.map((i) => i.id));
+  /** 섬 이름 → id. 섬 미션("백령도 방문")을 섬과 잇는 데 쓴다. */
+  const islandIdByName = new Map(ISLANDS.map((i) => [i.name, i.id]));
 
   await prisma.islandLeisureCourse.createMany({
     data: ISLANDS.flatMap((i) =>
@@ -173,7 +179,13 @@ async function main() {
       unit: q.unit,
       reward: q.reward,
       tier: TIER[q.tier] ?? "COMMON",
-      islandId: anyQ.islandId && islandIds.has(anyQ.islandId) ? anyQ.islandId : null,
+      /**
+       * 섬 미션은 프론트 mock 이 islandId 를 안 들고 있어서 제목("백령도 방문")에서
+       * 섬 이름을 뽑아 잇는다. 인증이 승인될 때 어느 섬을 방문 처리할지 알아야 한다.
+       */
+      islandId:
+        (anyQ.islandId && islandIds.has(anyQ.islandId) ? anyQ.islandId : null) ??
+        (q.category === "섬" ? (islandIdByName.get(q.title.replace(/ 방문$/, "")) ?? null) : null),
       sportId: anyQ.sportId && seenSport.has(anyQ.sportId) ? anyQ.sportId : null,
     };
   });
