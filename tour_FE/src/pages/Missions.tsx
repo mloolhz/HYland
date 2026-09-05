@@ -2,11 +2,11 @@ import { useMemo, useState, type CSSProperties } from "react";
 import { AnimatedWidthBar } from "@/components/mypage/AnimatedWidthBar";
 import { MissionBadge } from "@/components/landing/MissionBadge";
 import { MissionSummary } from "@/components/landing/MissionSummary";
+import { useMissionQuests } from "@/hooks/useMissionQuests";
 import {
   CATEGORY_META,
   getCategoryProgress,
   MISSION_CATEGORIES,
-  MISSION_QUESTS,
   missionQuestPercent,
   missionQuestState,
   type MissionCategory,
@@ -83,11 +83,19 @@ function QuestCard({ quest, index }: { quest: MissionQuest; index: number }) {
   );
 }
 
-function CategoryGroup({ category, filter }: { category: MissionCategory; filter: MissionFilter }) {
+function CategoryGroup({
+  category,
+  filter,
+  allQuests,
+}: {
+  category: MissionCategory;
+  filter: MissionFilter;
+  allQuests: MissionQuest[];
+}) {
   const [expanded, setExpanded] = useState(false);
   const { emoji, color } = CATEGORY_META[category];
   const { earned, total } = getCategoryProgress(category);
-  const quests = MISSION_QUESTS.filter((q) => q.category === category && matchesFilter(q, filter));
+  const quests = allQuests.filter((q) => q.category === category && matchesFilter(q, filter));
   if (quests.length === 0) return null;
 
   const style = { "--cat": color } as CSSProperties;
@@ -151,11 +159,13 @@ function CategoryGroup({ category, filter }: { category: MissionCategory; filter
 
 export function MissionsView() {
   const [filter, setFilter] = useState<MissionFilter>("전체");
+  // 진행도는 로그인한 사용자의 DB 값 (비로그인이면 mock)
+  const { quests: allQuests } = useMissionQuests();
 
   const counts = useMemo(() => {
-    const earned = MISSION_QUESTS.filter((q) => missionQuestState(q) === "earned").length;
-    return { 전체: MISSION_QUESTS.length, 획득: earned, 진행중: MISSION_QUESTS.length - earned };
-  }, []);
+    const earned = allQuests.filter((q) => missionQuestState(q) === "earned").length;
+    return { 전체: allQuests.length, 획득: earned, 진행중: allQuests.length - earned };
+  }, [allQuests]);
 
   return (
     <div className="container">
@@ -179,7 +189,7 @@ export function MissionsView() {
 
       <div className="ms-groups">
         {MISSION_CATEGORIES.map((category) => (
-          <CategoryGroup key={category} category={category} filter={filter} />
+          <CategoryGroup key={category} category={category} filter={filter} allQuests={allQuests} />
         ))}
       </div>
     </div>

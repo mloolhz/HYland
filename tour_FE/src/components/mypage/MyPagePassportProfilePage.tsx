@@ -1,4 +1,5 @@
-import { getBadgeStats, type UserProfile } from "@/lib/user-profile";
+import { type UserProfile } from "@/lib/user-profile";
+import { useBadgeStats } from "@/hooks/useBadgeStats";
 
 import { PassportAvatarPicker } from "@/components/landing/PassportAvatarPicker";
 import { PassportBtiCard } from "@/components/landing/PassportBtiCard";
@@ -10,7 +11,7 @@ type MyPagePassportProfilePageProps = {
 };
 
 export function MyPagePassportProfilePage({ profile, titleId }: MyPagePassportProfilePageProps) {
-  const badgeStats = getBadgeStats();
+  const badgeStats = useBadgeStats();
 
   return (
     <div className="passport-page passport-page--left passport-page--mypage">

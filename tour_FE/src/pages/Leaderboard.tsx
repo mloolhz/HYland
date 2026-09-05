@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useUserProfile } from "@/hooks/useUserProfile";
 import { AnimatedWidthBar } from "@/components/mypage/AnimatedWidthBar";
 import { CountUpNumber } from "@/components/mypage/CountUpNumber";
 import {
@@ -12,8 +13,7 @@ import {
 import {
   getAllCategoryRanks,
   getCategoryLeaderboardRank,
-  getCurrentUserProfile,
-} from "@/lib/user-profile";
+  } from "@/lib/user-profile";
 import { MISSION_CATEGORIES, type MissionCategory } from "@/mocks/missions";
 
 /** 순위 변동 뱃지 (↑2 / ↓1 / NEW / -) */
@@ -29,7 +29,7 @@ export function LeaderboardView() {
   const [category, setCategory] = useState<MissionCategory>("섬");
   const data = CATEGORY_LEADERBOARD[category];
   const deltas = CATEGORY_RANK_DELTAS[category];
-  const me = getCurrentUserProfile();
+  const me = useUserProfile();
   const myRank = getCategoryLeaderboardRank(category);
   const allRanks = getAllCategoryRanks();
   const bestCategory = allRanks.reduce((best, cur) => (cur.rank < best.rank ? cur : best));

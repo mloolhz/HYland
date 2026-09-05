@@ -9,7 +9,8 @@ import { PasswordStrengthBar } from "@/components/auth/PasswordStrengthBar";
 import { TextField } from "@/components/auth/TextField";
 import { PasswordRules } from "@/components/auth/PasswordRules";
 import { isTermsValid, TermsAgreement } from "@/components/auth/TermsAgreement";
-import { mockCheckNickname, mockCheckUserId } from "@/constants/auth";
+import { checkNicknameTaken, checkUsernameTaken, signup as signupRequest, ApiError } from "@/api/auth";
+import { useSession } from "@/store/session";
 import { isPasswordFullyValid, isPasswordAllowedChars } from "@/constants/validation";
 import { useAuthRedirect } from "@/hooks/useAuthRedirect";
 import { usePhoneVerification } from "@/hooks/usePhoneVerification";
@@ -23,6 +24,7 @@ export function Signup() {
   const navigate = useNavigate();
   const { authSearch } = useAuthRedirect();
   const phoneVerify = usePhoneVerification();
+  const { signIn } = useSession();
 
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
@@ -153,18 +155,23 @@ export function Signup() {
     if (!canSubmit) return;
 
     setLoading(true);
-    const formData = {
-      userId,
-      phone: phoneVerify.phoneDigits,
-      email: email || undefined,
-      nickname,
-      ...terms,
-    };
-    // TODO: POST /api/signup
-    await new Promise((r) => setTimeout(r, 600));
-    console.log(formData);
-    setLoading(false);
-    navigate("/", { replace: true });
+    try {
+      const { token, user } = await signupRequest({
+        username: userId.trim(),
+        password,
+        nickname: nickname.trim(),
+        email: email || undefined,
+        phone: phoneVerify.phoneDigits || undefined,
+      });
+      await signIn(token, user);
+      setLoading(false);
+      navigate("/", { replace: true });
+    } catch (err) {
+      setLoading(false);
+      const message =
+        err instanceof ApiError ? err.message : "가입 중 문제가 생겼어요. 잠시 후 다시 시도해주세요.";
+      setErrors((prev) => ({ ...prev, form: message }));
+    }
   };
 
   return (
@@ -184,7 +191,7 @@ export function Signup() {
               placeholder="아이디"
               autoComplete="username"
               validateFormat={validateUserId}
-              checkDuplicate={mockCheckUserId}
+              checkDuplicate={checkUsernameTaken}
               onCheckedChange={setUserIdChecked}
             />
 
@@ -241,7 +248,7 @@ export function Signup() {
               placeholder="닉네임 (2~10자)"
               autoComplete="nickname"
               validateFormat={validateNickname}
-              checkDuplicate={mockCheckNickname}
+              checkDuplicate={checkNicknameTaken}
               onCheckedChange={setNicknameChecked}
             />
 
@@ -269,6 +276,12 @@ export function Signup() {
               onChange={setTerms}
             />
           </FormSection>
+
+          {errors.form && (
+            <p className="auth-form-error" role="alert">
+              {errors.form}
+            </p>
+          )}
 
           <button type="submit" className="auth-submit" disabled={!canSubmit}>
             {loading ? (

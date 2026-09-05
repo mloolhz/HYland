@@ -1,4 +1,6 @@
 import { RollingNumber } from "@/components/island/RollingNumber";
+import { useBadgeStats } from "@/hooks/useBadgeStats";
+import { useUserProfile } from "@/hooks/useUserProfile";
 import { AnimatedWidthBar } from "@/components/mypage/AnimatedWidthBar";
 import { CountUpNumber } from "@/components/mypage/CountUpNumber";
 import { MyPageHeader } from "@/components/mypage/MyPageHeader";
@@ -8,17 +10,15 @@ import { MyPageSpiritGrowthSection } from "@/components/mypage/MyPageSpiritGrowt
 import { ISLAND_BTI } from "@/constants/island";
 import { CONTAINER } from "@/constants/layout";
 import {
-  getBadgeStats,
-  getCurrentUserProfile,
   getIslandVisitStats,
   getPassportExpPercent,
 } from "@/lib/user-profile";
 import { formatNumber } from "@/lib/landing-data";
 
 export function MyPage() {
-  const profile = getCurrentUserProfile();
+  const profile = useUserProfile();
   const islandStats = getIslandVisitStats();
-  const badgeStats = getBadgeStats();
+  const badgeStats = useBadgeStats();
   const btiColors = ISLAND_BTI[profile.bti];
   const expPercent = getPassportExpPercent(profile);
 

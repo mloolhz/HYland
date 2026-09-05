@@ -1,11 +1,11 @@
 import { useCallback, useState } from "react";
+import { useUserProfile } from "@/hooks/useUserProfile";
 import { Link, useSearchParams } from "react-router-dom";
 import { PasswordField } from "@/components/auth/PasswordField";
 import { PasswordRules } from "@/components/auth/PasswordRules";
 import { PasswordStrengthBar } from "@/components/auth/PasswordStrengthBar";
 import { CONTAINER } from "@/constants/layout";
 import { isPasswordAllowedChars, isPasswordFullyValid } from "@/constants/validation";
-import { getCurrentUserProfile } from "@/lib/user-profile";
 
 type ProfileTab = "profile" | "password";
 
@@ -14,7 +14,7 @@ function parseTab(value: string | null): ProfileTab {
 }
 
 export function MyPageProfileEdit() {
-  const profile = getCurrentUserProfile();
+  const profile = useUserProfile();
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = parseTab(searchParams.get("tab"));
 

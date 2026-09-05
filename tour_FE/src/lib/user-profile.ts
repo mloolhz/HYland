@@ -6,13 +6,17 @@ import { MISSION_CATEGORIES, MISSION_QUESTS, missionQuestState, type MissionCate
 import { getMissionStampStats } from "@/lib/passport/passport-mission-stamps";
 import { DEMO_USER_PASSPORT, type UserPassportStats } from "@/mocks/userPassport";
 import { MOCK_POSTS } from "@/mocks/posts";
+import type { ProfileResponse } from "@/api/me";
 
 export type { UserPassportStats };
 
 export type UserProfile = UserPassportStats & {
   id: string;
   nickname: string;
+  /** 커뮤니티 표시용 4타입 (파도형/등대형/갯벌형/해류형) */
   bti: IslandBti;
+  /** 섬BTI 검사 결과 코드 (AWCP 등 16타입). 아직 검사 전이면 null */
+  btiCode?: string | null;
   joinedAt: string;
   stamps: { current: number; total: number };
 };
@@ -68,6 +72,39 @@ export function getCurrentUserProfile(): UserProfile {
 }
 
 /** 배지 현황 — 미션창과 동일 출처 (획득 / 미획득 / 전체 + 섬 방문) */
+/**
+ * 로그인한 사용자의 실제 프로필을 mock 위에 덮어쓴다.
+ *
+ * 닉네임·레벨·경험치·활동 수치는 DB 값이 우선이고, 아직 API 가 없는 항목
+ * (BTI 유형, 가입일 등)은 mock 값을 그대로 쓴다. 로그인 전이면 mock 그대로다.
+ * 컴포넌트에서는 hooks/useUserProfile 로 쓴다.
+ */
+export function mergeUserProfile(live: ProfileResponse | null | undefined): UserProfile {
+  const base = getCurrentUserProfile();
+  if (!live) return base;
+
+  return {
+    ...base,
+    id: live.userId,
+    nickname: live.nickname,
+    /**
+     * bti(커뮤니티 4타입)와 섬BTI 코드(16타입)는 서로 다른 분류다.
+     * 서버의 profile.bti 는 섬BTI 코드(AWCP 등)이므로 여기에 넣으면 안 된다.
+     * (넣었다가 ISLAND_BTI["AWCP"] 가 undefined 라 마이페이지가 죽었다)
+     */
+    bti: base.bti,
+    btiCode: live.bti,
+    level: live.level,
+    levelTitle: live.levelTitle,
+    expCurrent: live.expCurrent,
+    expMax: live.expMax,
+    visitedIslandCount: live.stats.visitedCount,
+    completedMissions: live.stats.completedMissions,
+    earnedBadgeCount: live.stats.badgeCount,
+    stampCount: live.stats.badgeCount,
+  };
+}
+
 export function getBadgeStats() {
   const { earned, total } = getMissionStampStats();
   const visited = MISSION_QUESTS.filter(

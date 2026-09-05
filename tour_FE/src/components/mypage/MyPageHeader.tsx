@@ -1,14 +1,14 @@
 import { Link } from "react-router-dom";
+import { useUserProfile } from "@/hooks/useUserProfile";
 import { GearIcon } from "@/components/mypage/GearIcon";
 import { CONTAINER } from "@/constants/layout";
-import { getCurrentUserProfile } from "@/lib/user-profile";
 
 type MyPageHeaderProps = {
   showSettingsButton?: boolean;
 };
 
 export function MyPageHeader({ showSettingsButton = false }: MyPageHeaderProps) {
-  const profile = getCurrentUserProfile();
+  const profile = useUserProfile();
 
   return (
     <div className="mp-header-band">

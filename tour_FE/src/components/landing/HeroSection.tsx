@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useBadgeStats } from "@/hooks/useBadgeStats";
+import { useUserProfile } from "@/hooks/useUserProfile";
 import { Link } from "react-router-dom";
 import { AuthorAvatar } from "@/components/community/AuthorAvatar";
 import { AnimatedWidthBar } from "@/components/mypage/AnimatedWidthBar";
 import { CountUpNumber } from "@/components/mypage/CountUpNumber";
 import { formatNumber } from "@/lib/landing-data";
-import { getBadgeStats, getCurrentUserProfile, getPassportExpPercent } from "@/lib/user-profile";
+import { getPassportExpPercent } from "@/lib/user-profile";
 import { scrollToSection } from "@/utils/layout";
 import { demoProps } from "./ToastProvider";
 import {
@@ -28,8 +30,8 @@ const CATEGORIES = [
 ] as const;
 
 export function HeroSection() {
-  const profile = getCurrentUserProfile();
-  const badgeStats = getBadgeStats();
+  const profile = useUserProfile();
+  const badgeStats = useBadgeStats();
   const expPercent = getPassportExpPercent(profile);
   const [activeSlide, setActiveSlide] = useState(0);
   const [showScrollHint, setShowScrollHint] = useState(true);

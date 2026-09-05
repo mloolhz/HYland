@@ -1331,3 +1331,15 @@
   flex: none;
 }
 
+
+/* 서버가 돌려준 로그인·가입 실패 메시지 */
+.auth-form-error {
+  margin: 0 0 12px;
+  padding: 12px 14px;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 13px;
+  line-height: 1.6;
+}

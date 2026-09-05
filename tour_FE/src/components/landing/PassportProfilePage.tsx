@@ -1,4 +1,5 @@
-import { getBadgeStats, type UserProfile } from "@/lib/user-profile";
+import { type UserProfile } from "@/lib/user-profile";
+import { useBadgeStats } from "@/hooks/useBadgeStats";
 
 import { PassportAvatarPicker } from "./PassportAvatarPicker";
 import { PassportBtiCard } from "./PassportBtiCard";
@@ -19,7 +20,7 @@ type PassportProfilePageProps = {
 
 export function PassportProfilePage({ profile, titleId }: PassportProfilePageProps) {
 
-  const badgeStats = getBadgeStats();
+  const badgeStats = useBadgeStats();
 
 
   return (

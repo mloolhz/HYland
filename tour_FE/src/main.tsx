@@ -30,6 +30,7 @@ import { IslandBtiIntro } from "@/pages/IslandBtiIntro";
 import { IslandBtiTest } from "@/pages/IslandBtiTest";
 import { IslandBtiResult } from "@/pages/IslandBtiResult";
 import { ProfileCharacterProvider } from "@/context/ProfileCharacterContext";
+import { SessionProvider } from "@/store/session";
 import "./index.css";
 import "./styles/auth.css";
 import "./styles/community.css";
@@ -92,8 +93,10 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ProfileCharacterProvider>
-      <RouterProvider router={router} />
-    </ProfileCharacterProvider>
+    <SessionProvider>
+      <ProfileCharacterProvider>
+        <RouterProvider router={router} />
+      </ProfileCharacterProvider>
+    </SessionProvider>
   </StrictMode>,
 );

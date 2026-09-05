@@ -1,12 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useUserProfile } from "@/hooks/useUserProfile";
 import { clearDemoLoggedIn, clearGuest } from "@/constants/auth";
 import { CONTAINER } from "@/constants/layout";
-import { getCurrentUserProfile } from "@/lib/user-profile";
 import { formatJoinDateYmd } from "@/mocks/accounts";
 
 export function MyPageSettings() {
   const navigate = useNavigate();
-  const profile = getCurrentUserProfile();
+  const profile = useUserProfile();
 
   const handleLogout = () => {
     clearDemoLoggedIn();
