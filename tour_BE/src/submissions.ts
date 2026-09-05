@@ -14,6 +14,7 @@
 import { Router, type Request, type Response, type NextFunction } from "express";
 import { prisma } from "./prisma";
 import { requireAuth } from "./auth";
+import { notify } from "./notifications";
 
 const router = Router();
 const uid = (req: Request) => (req as any).userId as string;
@@ -224,6 +225,23 @@ router.post("/:id/approve", requireAuth, requireAdmin, async (req: Request, res:
       return { current, target: sub.quest.target, completed, badgeGranted, visitedIsland };
     });
 
+    // 트랜잭션 밖에서 알린다 — 알림 실패가 승인을 되돌리면 안 된다
+    await notify({
+      userId: sub.userId,
+      type: "REVIEW",
+      message: `"${sub.quest.title}" 인증이 승인되었어요 (${result.current}/${result.target})`,
+      link: "/missions",
+    });
+    if (result.badgeGranted) {
+      await notify({
+        userId: sub.userId,
+        type: "BADGE",
+        message: "새로운 배지 {highlight}를 획득했어요",
+        highlight: result.badgeGranted,
+        link: "/mypage",
+      });
+    }
+
     res.json({ id: sub.id, status: "APPROVED", ...result });
   } catch (err) {
     console.error("인증 승인 실패:", err);
@@ -249,6 +267,15 @@ router.post("/:id/reject", requireAuth, requireAdmin, async (req: Request, res: 
       reviewedAt: new Date(),
     },
   });
+  const quest = await prisma.missionQuest.findUnique({ where: { id: sub.questId } });
+  await notify({
+    userId: sub.userId,
+    type: "REVIEW",
+    message: `"${quest?.title ?? "미션"}" 인증이 반려되었어요`,
+    highlight: typeof reason === "string" && reason.trim() ? reason.trim() : undefined,
+    link: "/community",
+  });
+
   res.json({ id: sub.id, status: "REJECTED" });
 });
 

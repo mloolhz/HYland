@@ -1833,3 +1833,33 @@
 .mp-settings-form-msg--error {
   color: #b91c1c;
 }
+
+/* 마이페이지 헤더 — 로그아웃 + 설정 */
+.mp-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mp-logout-btn {
+  padding: 8px 16px;
+  border: 1px solid rgb(255 255 255 / 0.55);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.12);
+  color: #fff;
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.mp-logout-btn:hover {
+  background: rgb(255 255 255 / 0.24);
+  border-color: #fff;
+}
+
+.mp-logout-btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}

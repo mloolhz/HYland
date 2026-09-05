@@ -13,6 +13,7 @@ import leisureRouter from "./leisure";
 import communityRouter from "./community";
 import submissionsRouter from "./submissions";
 import uploadsRouter from "./uploads";
+import notificationsRouter from "./notifications";
 import recommendRouter from "./routes/recommend";
 
 const app = express();
@@ -57,6 +58,9 @@ app.use("/submissions", submissionsRouter);
 
 // 인증샷 이미지 업로드 (public/uploads 에 저장 → express.static 이 서빙)
 app.use("/uploads", uploadsRouter);
+
+// 알림 (댓글·좋아요·검수·배지)
+app.use("/notifications", notificationsRouter);
 
 // AI 추천 (추천·스트리밍·날씨·인기질문·섬BTI 선호도·예상 질문)
 app.use("/api", recommendRouter);

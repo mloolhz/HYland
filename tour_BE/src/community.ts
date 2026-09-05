@@ -20,6 +20,7 @@
 import { Router, type Request, type Response } from "express";
 import { prisma } from "./prisma";
 import { requireAuth, optionalAuth } from "./auth";
+import { notify } from "./notifications";
 
 const router = Router();
 
@@ -311,6 +312,16 @@ router.post("/posts/:id/like", requireAuth, async (req: Request, res: Response) 
     const post = await prisma.post.findUnique({ where: { id: postId } });
     if (!post) return res.status(404).json({ error: "글을 찾을 수 없어요." });
     await prisma.postLike.create({ data: { postId, userId: me } });
+
+    const liker = await prisma.userProfile.findUnique({ where: { userId: me } });
+    await notify({
+      userId: post.authorId,
+      actorUserId: me,
+      type: "LIKE",
+      actor: liker?.nickname ?? "누군가",
+      message: "{actor}님이 회원님의 글을 좋아해요",
+      link: `/community/${postId}`,
+    });
   }
 
   const likes = await prisma.postLike.count({ where: { postId } });
@@ -361,6 +372,31 @@ router.post("/posts/:id/comments", requireAuth, async (req: Request, res: Respon
       data: { postId: post.id, authorId: me, parentId: parent, content: content.trim() },
       include: { author: { select: authorSelect } },
     });
+
+    const nickname = comment.author.profile?.nickname ?? "누군가";
+    if (parent) {
+      // 답글이면 원댓글 작성자에게 알린다
+      const parentComment = await prisma.comment.findUnique({ where: { id: parent } });
+      if (parentComment) {
+        await notify({
+          userId: parentComment.authorId,
+          actorUserId: me,
+          type: "REPLY",
+          actor: nickname,
+          message: "{actor}님이 회원님의 댓글에 답글을 남겼어요",
+          link: `/community/${post.id}#comment-${comment.id}`,
+        });
+      }
+    } else {
+      await notify({
+        userId: post.authorId,
+        actorUserId: me,
+        type: "COMMENT",
+        actor: nickname,
+        message: "{actor}님이 회원님의 글에 댓글을 남겼어요",
+        link: `/community/${post.id}#comment-${comment.id}`,
+      });
+    }
 
     res.status(201).json({
       id: comment.id,

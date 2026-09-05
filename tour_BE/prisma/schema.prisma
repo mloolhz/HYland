@@ -89,6 +89,7 @@ model User {
   posts          Post[]
   comments       Comment[]
   submissions      MissionSubmission[] @relation("SubmissionAuthor")
+  notifications    Notification[]
   reviewedSubmissions MissionSubmission[] @relation("SubmissionReviewer")
   postLikes      PostLike[]
   commentLikes   CommentLike[]
@@ -756,4 +757,38 @@ model MissionSubmission {
   @@index([status, createdAt])
   @@index([userId])
   @@map("mission_submissions")
+}
+
+// ═══════════════════ Phase 6 — 알림 ═══════════════════
+// 내 글에 댓글·답글·좋아요가 달리거나, 인증이 승인/반려되거나, 배지를 받으면 쌓인다.
+// 알림을 만든 쪽(actor)과 받는 쪽(user)이 같으면 만들지 않는다 — 내 행동은 알릴 것이 없다.
+
+enum NotificationType {
+  COMMENT // 내 글에 댓글
+  REPLY // 내 댓글에 답글
+  LIKE // 내 글에 좋아요
+  BADGE // 배지 획득
+  REVIEW // 인증 승인·반려
+  NOTICE // 공지
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String           @map("user_id")
+  type      NotificationType
+  /** 알림을 발생시킨 사람의 닉네임. 지워진 계정도 문구가 남도록 값으로 저장한다. */
+  actor     String?
+  /** "{actor}님이 회원님의 글에 댓글을 남겼어요" — {actor} 는 화면에서 치환 */
+  message   String           @db.Text
+  /** 배지 이름처럼 강조할 문구 (actor 가 없을 때) */
+  highlight String?
+  link      String?
+  read      Boolean          @default(false)
+  createdAt DateTime         @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read])
+  @@index([userId, createdAt])
+  @@map("notifications")
 }
