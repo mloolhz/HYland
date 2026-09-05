@@ -16,6 +16,8 @@ const BADGE_TOTAL = MISSION_QUESTS.length;
 export type UserPassportStats = {
   level: number;
   levelTitle: string;
+  /** 지금 레벨이 시작되는 방문 섬 수 */
+  levelMin: number;
   expCurrent: number;
   expMax: number;
   visitedIslandCount: number;
@@ -49,8 +51,9 @@ export const GUEST_PROFILE: UserProfile = {
   joinedAt: "",
   level: 1,
   levelTitle: "여행 준비 중",
+  levelMin: 0,
   expCurrent: 0,
-  expMax: 1000,
+  expMax: 0,
   visitedIslandCount: 0,
   completedMissions: 0,
   earnedBadgeCount: 0,
@@ -59,9 +62,22 @@ export const GUEST_PROFILE: UserProfile = {
   stamps: { current: 0, total: 0 },
 };
 
-export function getPassportExpPercent(stats: UserPassportStats): number {
-  if (stats.expMax <= 0) return 0;
-  return Math.round((stats.expCurrent / stats.expMax) * 100);
+/** 최고 레벨이면 더 오를 곳이 없다 */
+export function isMaxLevel(stats: UserPassportStats): boolean {
+  return stats.expMax <= stats.levelMin;
+}
+
+/**
+ * 다음 레벨까지의 진행률.
+ * 전체가 아니라 "지금 구간 안에서" 얼마나 왔는지를 센다 —
+ * 방문 3곳(Lv.2 시작)에서 게이지가 38% 로 차 있으면 이상하다.
+ */
+export function getLevelPercent(stats: UserPassportStats): number {
+  if (isMaxLevel(stats)) return 100;
+  const span = stats.expMax - stats.levelMin;
+  if (span <= 0) return 0;
+  const done = stats.expCurrent - stats.levelMin;
+  return Math.max(0, Math.min(100, Math.round((done / span) * 100)));
 }
 
 /** 서버 프로필 응답을 화면이 쓰는 모양으로 옮긴다. 로그인 전이면 빈 프로필. */
@@ -82,6 +98,7 @@ export function mergeUserProfile(live: ProfileResponse | null | undefined): User
     btiCode: live.bti,
     level: live.level,
     levelTitle: live.levelTitle,
+    levelMin: live.levelMin,
     expCurrent: live.expCurrent,
     expMax: live.expMax,
     visitedIslandCount: live.stats.visitedCount,

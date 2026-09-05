@@ -32,6 +32,8 @@ export type ProfileResponse = {
   joinedAt: string;
   level: number;
   levelTitle: string;
+  /** 지금 레벨이 시작되는 방문 섬 수 */
+  levelMin: number;
   expCurrent: number;
   expMax: number;
   bti: string | null;

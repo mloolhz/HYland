@@ -1,4 +1,3 @@
-import { getUniqueIslandIdsFromEarnedStamps } from "@/lib/passport/stamp-island-link";
 
 export type IslandSpiritLevel = 1 | 2 | 3 | 4;
 
@@ -39,11 +38,10 @@ function calcProgress(count: number, min: number, next: number | null): number {
 }
 
 /**
- * 섬BTI 정령 성장 상태 — 저장값 없이 매번 도장 원본에서 계산.
+ * 섬BTI 정령 성장 상태 — 방문한 섬 수로 매번 계산한다.
+ * 기준(0/3/8/15)은 tour_BE/src/level.ts 와 같아야 한다.
  */
-export function calculateIslandSpiritGrowth(
-  visitedIslandCount = getUniqueIslandIdsFromEarnedStamps().length,
-): IslandSpiritGrowth {
+export function calculateIslandSpiritGrowth(visitedIslandCount: number): IslandSpiritGrowth {
   const config = resolveLevelConfig(visitedIslandCount);
   const isMaxLevel = config.next === null;
 

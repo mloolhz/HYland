@@ -5,7 +5,9 @@ import { useBadgeStats } from "@/hooks/useBadgeStats";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { Link } from "react-router-dom";
 import { AuthorAvatar } from "@/components/community/AuthorAvatar";
+import { AnimatedWidthBar } from "@/components/mypage/AnimatedWidthBar";
 import { CountUpNumber } from "@/components/mypage/CountUpNumber";
+import { getLevelPercent, isMaxLevel } from "@/lib/user-profile";
 import { scrollToSection } from "@/utils/layout";
 import { demoProps } from "./ToastProvider";
 import {
@@ -30,6 +32,8 @@ const CATEGORIES = [
 export function HeroSection() {
   const profile = useUserProfile();
   const badgeStats = useBadgeStats();
+  const levelPercent = getLevelPercent(profile);
+  const atMaxLevel = isMaxLevel(profile);
   // 예전에는 SHOW_LANDING_PROFILE = true 로 박아둬서, 로그인 안 한 사람에게도
   // 남의 닉네임과 수치가 그대로 보였다.
   const { isLoggedIn } = useSession();
@@ -155,12 +159,7 @@ export function HeroSection() {
               </button>
 
               <div className="passport-info">
-                {/*
-                  원래 "Lv.1 새싹 탐험가 · EXP 0 / 1000" 이 있던 자리.
-                  DB 에 level·exp 칸은 있지만 올려 주는 곳이 없어 누구나 영원히
-                  Lv.1 이었다. 대신 여권 주인을 크게 보여준다.
-                  (카드 머리에 있던 작은 칩을 이리로 옮긴 것 — 두 번 두지 않는다)
-                */}
+                {/* 카드 머리에 있던 프로필 칩을 이리로 옮겨 크게 (두 번 두지 않는다) */}
                 <Link to="/mypage" className="pc-profile-link pc-profile-link--lg">
                   <AuthorAvatar
                     author={{ nickname: profile.nickname }}
@@ -168,6 +167,33 @@ export function HeroSection() {
                   />
                   <span>{profile.nickname}님</span>
                 </Link>
+
+                {/*
+                  레벨은 방문한 섬 수로 정해진다 (서버 level.ts).
+                  예전에는 "EXP 0 / 1000" 이라는 근거 없는 숫자를 보여줬는데,
+                  올려 주는 곳이 없어 누구나 영원히 Lv.1 이었다.
+                */}
+                <div className="passport-level">
+                  <div className="passport-level-top">
+                    <span className="passport-level-badge">Lv.{profile.level}</span>
+                    <strong>{profile.levelTitle}</strong>
+                  </div>
+                  <div
+                    className="passport-progress"
+                    role="progressbar"
+                    aria-valuenow={levelPercent}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-label="다음 레벨까지 진행률"
+                  >
+                    <AnimatedWidthBar width={levelPercent} className="passport-progress-fill" />
+                  </div>
+                  <p className="passport-exp">
+                    {atMaxLevel
+                      ? `최고 레벨 · 방문 섬 ${profile.expCurrent}곳`
+                      : `다음 레벨까지 섬 ${profile.expMax - profile.expCurrent}곳`}
+                  </p>
+                </div>
 
                 <div className="passport-metrics" aria-label="탐험 현황">
                   <div className="passport-metric">

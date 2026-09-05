@@ -11,6 +11,7 @@
  */
 import { Router, type Request, type Response } from "express";
 import { prisma } from "./prisma";
+import { levelFromVisits } from "./level";
 
 const router = Router();
 
@@ -56,7 +57,8 @@ router.get("/", async (req: Request, res: Response) => {
         rank: 0,
         userId: id,
         nickname: profileMap.get(id)!.nickname,
-        level: profileMap.get(id)!.level,
+        // 저장값 대신 방문 섬 수로 계산 — 프로필 화면과 항상 같게
+        level: levelFromVisits(visit.get(id) ?? 0).level,
         badgeCount: badge.get(id) ?? 0,
         visitedCount: visit.get(id) ?? 0,
         completedMissions: mission.get(id) ?? 0,

@@ -1,6 +1,7 @@
 import { Router, type Request, type Response } from "express";
 import { prisma } from "./prisma";
 import { requireAuth } from "./auth";
+import { levelSnapshot } from "./level";
 
 const router = Router();
 
@@ -23,10 +24,8 @@ router.get("/", requireAuth, async (req: Request, res: Response) => {
     // 가입일. 예전에는 프론트가 "2024-06-15" 를 하드코딩해서 여권 발급일과
     // 커뮤니티 프로필에 남의 날짜가 찍혔다.
     joinedAt: profile.joinedAt,
-    level: profile.level,
-    levelTitle: profile.levelTitle,
-    expCurrent: profile.expCurrent,
-    expMax: profile.expMax,
+    // 레벨은 저장값이 아니라 방문한 섬 수로 정한다 (level.ts 참고)
+    ...levelSnapshot(visitedCount),
     bti: profile.bti,
     characterId: profile.characterId,
     passportAvatar: profile.passportAvatar,

@@ -2,6 +2,7 @@ import { Router, type Request, type Response, type NextFunction } from "express"
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { prisma } from "./prisma";
+import { levelSnapshot } from "./level";
 
 const router = Router();
 const JWT_SECRET = process.env.JWT_SECRET || "dev-secret";
@@ -127,6 +128,11 @@ router.get("/me", requireAuth, async (req: Request, res: Response) => {
   const userId = (req as any).userId as string;
   const user = await prisma.user.findUnique({ where: { id: userId }, include: { profile: true } });
   if (!user) return res.status(404).json({ error: "사용자를 찾을 수 없어요" });
+
+  // 레벨은 저장값이 아니라 방문한 섬 수로 정한다 (level.ts 참고)
+  const visitedCount = await prisma.userIslandVisit.count({ where: { userId } });
+  const lv = levelSnapshot(visitedCount);
+
   res.json({
     id: user.id,
     username: user.username,
@@ -134,10 +140,7 @@ router.get("/me", requireAuth, async (req: Request, res: Response) => {
     // 프론트가 검수 메뉴를 보여줄지 판단하는 데 쓴다 (실제 권한은 서버가 확인)
     role: user.role,
     nickname: user.profile?.nickname,
-    level: user.profile?.level,
-    levelTitle: user.profile?.levelTitle,
-    expCurrent: user.profile?.expCurrent,
-    expMax: user.profile?.expMax,
+    ...lv,
   });
 });
 

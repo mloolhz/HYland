@@ -15,6 +15,7 @@ import { Router, type Request, type Response, type NextFunction } from "express"
 import { prisma } from "./prisma";
 import { requireAuth } from "./auth";
 import { notify } from "./notifications";
+import { levelSnapshot } from "./level";
 
 const router = Router();
 const uid = (req: Request) => (req as any).userId as string;
@@ -194,6 +195,8 @@ router.post("/:id/approve", requireAuth, requireAdmin, async (req: Request, res:
        * 승인돼야만 방문으로 치므로, 유저가 스스로 방문을 주장할 수는 없다.
        */
       let visitedIsland: string | null = null;
+      /** 이번 승인으로 레벨이 올랐으면 알림을 하나 더 보낸다 */
+      let leveledUpTo: { level: number; levelTitle: string } | null = null;
       if (sub.quest.islandId) {
         const already = await tx.userIslandVisit.findUnique({
           where: { userId_islandId: { userId: sub.userId, islandId: sub.quest.islandId } },
@@ -203,6 +206,25 @@ router.post("/:id/approve", requireAuth, requireAdmin, async (req: Request, res:
             data: { userId: sub.userId, islandId: sub.quest.islandId },
           });
           visitedIsland = sub.quest.islandId;
+
+          // 섬을 하나 더 밟았으니 레벨을 다시 계산해 저장한다.
+          // (읽는 쪽도 방문 수로 계산하지만, 저장값이 거짓이면 안 된다)
+          const visitedCount = await tx.userIslandVisit.count({ where: { userId: sub.userId } });
+          const lv = levelSnapshot(visitedCount);
+          const before = await tx.userProfile.findUnique({
+            where: { userId: sub.userId },
+            select: { level: true },
+          });
+          await tx.userProfile.update({
+            where: { userId: sub.userId },
+            data: {
+              level: lv.level,
+              levelTitle: lv.levelTitle,
+              expCurrent: lv.expCurrent,
+              expMax: lv.expMax,
+            },
+          });
+          if (before && before.level < lv.level) leveledUpTo = lv;
         }
       }
 
@@ -222,7 +244,7 @@ router.post("/:id/approve", requireAuth, requireAdmin, async (req: Request, res:
         }
       }
 
-      return { current, target: sub.quest.target, completed, badgeGranted, visitedIsland };
+      return { current, target: sub.quest.target, completed, badgeGranted, visitedIsland, leveledUpTo };
     });
 
     // 트랜잭션 밖에서 알린다 — 알림 실패가 승인을 되돌리면 안 된다
@@ -232,6 +254,15 @@ router.post("/:id/approve", requireAuth, requireAdmin, async (req: Request, res:
       message: `"${sub.quest.title}" 인증이 승인되었어요 (${result.current}/${result.target})`,
       link: "/missions",
     });
+    if (result.leveledUpTo) {
+      await notify({
+        userId: sub.userId,
+        type: "BADGE",
+        message: `섬을 더 밟아 {highlight}가 되었어요`,
+        highlight: `Lv.${result.leveledUpTo.level} ${result.leveledUpTo.levelTitle}`,
+        link: "/mypage",
+      });
+    }
     if (result.badgeGranted) {
       await notify({
         userId: sub.userId,
