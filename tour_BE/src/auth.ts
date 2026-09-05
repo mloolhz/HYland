@@ -139,6 +139,31 @@ router.get("/me", requireAuth, async (req: Request, res: Response) => {
   });
 });
 
+// ── 비밀번호 변경 (토큰 필요) ──
+// 현재 비밀번호를 확인한 뒤에만 바꾼다.
+router.patch("/password", requireAuth, async (req: Request, res: Response) => {
+  const userId = (req as any).userId as string;
+  const { currentPassword, newPassword } = req.body ?? {};
+  if (!currentPassword || !newPassword) {
+    return res.status(400).json({ error: "현재 비밀번호와 새 비밀번호를 입력해주세요" });
+  }
+  if (String(newPassword).length < 8) {
+    return res.status(400).json({ error: "비밀번호는 8자 이상이어야 해요" });
+  }
+
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user?.passwordHash) return res.status(404).json({ error: "사용자를 찾을 수 없어요" });
+
+  const ok = await bcrypt.compare(currentPassword, user.passwordHash);
+  if (!ok) return res.status(401).json({ error: "현재 비밀번호가 올바르지 않아요" });
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: { passwordHash: await bcrypt.hash(newPassword, 10) },
+  });
+  res.json({ ok: true });
+});
+
 // ── 회원탈퇴 (토큰 필요) ──
 // 관련 데이터(프로필·방문·미션·배지·글·댓글·좋아요)는 FK 의 onDelete: Cascade 로 함께 지워진다.
 router.delete("/me", requireAuth, async (req: Request, res: Response) => {

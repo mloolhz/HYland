@@ -5,6 +5,7 @@
  * 받고 이메일은 선택이라, 백엔드도 그에 맞춰져 있다.
  */
 import { API_BASE } from "@/lib/api-base";
+import { readToken } from "@/lib/token";
 
 export type AuthUser = {
   id: string;
@@ -72,6 +73,11 @@ export function login(input: { username: string; password: string }): Promise<Au
 
 export function fetchMe(token: string): Promise<MeResponse> {
   return request("/auth/me", {}, token);
+}
+
+/** 비밀번호 변경 — 현재 비밀번호 확인 후에만 바뀐다 */
+export function changePassword(input: { currentPassword: string; newPassword: string }): Promise<{ ok: boolean }> {
+  return request("/auth/password", { method: "PATCH", body: JSON.stringify(input) }, readToken());
 }
 
 /** 회원탈퇴 — 관련 데이터가 함께 삭제된다 */

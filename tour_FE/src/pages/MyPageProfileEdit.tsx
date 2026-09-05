@@ -6,6 +6,9 @@ import { PasswordRules } from "@/components/auth/PasswordRules";
 import { PasswordStrengthBar } from "@/components/auth/PasswordStrengthBar";
 import { CONTAINER } from "@/constants/layout";
 import { isPasswordAllowedChars, isPasswordFullyValid } from "@/constants/validation";
+import { ApiError, changePassword } from "@/api/auth";
+import { updateProfile } from "@/api/me";
+import { useSession } from "@/store/session";
 
 type ProfileTab = "profile" | "password";
 
@@ -15,12 +18,14 @@ function parseTab(value: string | null): ProfileTab {
 
 export function MyPageProfileEdit() {
   const profile = useUserProfile();
+  const { refresh } = useSession();
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = parseTab(searchParams.get("tab"));
 
   const [nickname, setNickname] = useState(profile.nickname);
   const [profileSaving, setProfileSaving] = useState(false);
   const [profileSaved, setProfileSaved] = useState(false);
+  const [profileError, setProfileError] = useState("");
 
   const [currentPassword, setCurrentPassword] = useState("");
   const [password, setPassword] = useState("");
@@ -40,15 +45,25 @@ export function MyPageProfileEdit() {
   const canSavePassword =
     currentPassword.length > 0 && passwordValid && confirmMatch && !passwordSaving;
 
-  const handleProfileSubmit = (event: React.FormEvent) => {
+  const handleProfileSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!nickname.trim()) return;
     setProfileSaving(true);
     setProfileSaved(false);
-    window.setTimeout(() => {
-      setProfileSaving(false);
+    setProfileError("");
+    try {
+      await updateProfile({ nickname: nickname.trim() });
+      // 헤더·여권이 바뀐 닉네임을 바로 반영하도록 세션을 다시 읽는다
+      await refresh();
       setProfileSaved(true);
-    }, 400);
+    } catch (err) {
+      console.error("[profile] 저장 실패:", err);
+      setProfileError(
+        err instanceof ApiError ? err.message : "저장하지 못했어요. 잠시 후 다시 시도해주세요.",
+      );
+    } finally {
+      setProfileSaving(false);
+    }
   };
 
   const handlePasswordSubmit = useCallback(
@@ -67,13 +82,24 @@ export function MyPageProfileEdit() {
 
       setPasswordSaving(true);
       setPasswordSaved(false);
-      window.setTimeout(() => {
-        setPasswordSaving(false);
-        setPasswordSaved(true);
-        setCurrentPassword("");
-        setPassword("");
-        setConfirm("");
-      }, 400);
+      void (async () => {
+        try {
+          await changePassword({ currentPassword, newPassword: password });
+          setPasswordSaved(true);
+          setCurrentPassword("");
+          setPassword("");
+          setConfirm("");
+        } catch (err) {
+          console.error("[auth] 비밀번호 변경 실패:", err);
+          // 현재 비밀번호가 틀린 경우가 대부분이라 그 칸에 붙여 보여준다
+          setPasswordErrors({
+            currentPassword:
+              err instanceof ApiError ? err.message : "비밀번호를 바꾸지 못했어요.",
+          });
+        } finally {
+          setPasswordSaving(false);
+        }
+      })();
     },
     [confirm, currentPassword, password],
   );
@@ -141,6 +167,11 @@ export function MyPageProfileEdit() {
                 {profileSaved && (
                   <p className="mp-settings-form-msg mp-settings-form-msg--success" role="status">
                     저장되었습니다.
+                  </p>
+                )}
+                {profileError && (
+                  <p className="mp-settings-form-msg mp-settings-form-msg--error" role="alert">
+                    {profileError}
                   </p>
                 )}
                 <button type="submit" className="mp-settings-submit" disabled={profileSaving}>

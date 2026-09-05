@@ -4,6 +4,8 @@ import { AuthorAvatar } from "@/components/community/AuthorAvatar";
 import { isCurrentUser } from "@/constants/auth";
 import { formatDetailDate } from "@/lib/time";
 import type { Comment } from "@/types/community";
+import { toggleCommentLike } from "@/api/community";
+import { useSession } from "@/store/session";
 
 function DotsIcon() {
   return (
@@ -116,6 +118,27 @@ export function CommentBubble({
   showReplyButton,
 }: CommentBubbleProps) {
   const isOwner = isCurrentUser(comment.author.id);
+  const { isLoggedIn } = useSession();
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(comment.likes);
+
+  /** 좋아요 토글 — 화면을 먼저 바꾸고 실패하면 되돌린다 */
+  const handleToggleLike = async () => {
+    if (!isLoggedIn) return;
+    const prevLiked = liked;
+    const prevCount = likeCount;
+    setLiked(!prevLiked);
+    setLikeCount(prevCount + (prevLiked ? -1 : 1));
+    try {
+      const r = await toggleCommentLike(comment.id);
+      setLiked(r.liked);
+      setLikeCount(r.likes);
+    } catch (err) {
+      console.error("[community] 댓글 좋아요 실패:", err);
+      setLiked(prevLiked);
+      setLikeCount(prevCount);
+    }
+  };
 
   return (
     <div id={`comment-${comment.id}`} className={`cm-comment-bubble${isReply ? " cm-comment-bubble-reply" : ""}`}>
@@ -137,8 +160,15 @@ export function CommentBubble({
       </div>
       <p className="cm-comment-body">{comment.content}</p>
       <div className="cm-comment-actions">
-        <button type="button" className="cm-comment-action" aria-pressed={false}>
-          ♡ {comment.likes}
+        <button
+          type="button"
+          className={`cm-comment-action${liked ? " is-on" : ""}`}
+          aria-pressed={liked}
+          disabled={!isLoggedIn}
+          title={isLoggedIn ? undefined : "로그인 후 이용할 수 있어요"}
+          onClick={handleToggleLike}
+        >
+          {liked ? "♥" : "♡"} {likeCount}
         </button>
         {showReplyButton && onReply && (
           <button type="button" className="cm-comment-action" onClick={onReply}>
