@@ -3146,3 +3146,36 @@ div.cm-post-row[role="link"] {
     align-self: flex-start;
   }
 }
+
+/* ── 글쓰기: 미션 인증 제출 ── */
+.cm-write-proof {
+  padding: 16px 18px;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+}
+
+.cm-write-proof-toggle {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: #1a3a6b;
+  cursor: pointer;
+}
+
+.cm-write-proof-toggle input {
+  margin-top: 3px;
+  flex: none;
+}
+
+.cm-write-proof-body {
+  margin-top: 14px;
+  padding-left: 26px;
+}
+
+.cm-write-proof-note {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.7;
+  color: #64748b;
+}

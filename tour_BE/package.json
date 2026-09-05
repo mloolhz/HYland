@@ -12,7 +12,8 @@
     "db:seed": "tsx prisma/seed.ts",
     "tour:inspect": "node scripts/inspect-tour-sports.mjs",
     "db:seed:leisure": "tsx prisma/seed-leisure.ts",
-    "check:tour": "node scripts/tour/check-consistency.mjs"
+    "check:tour": "node scripts/tour/check-consistency.mjs",
+    "db:seed:badges": "tsx prisma/seed-badges.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

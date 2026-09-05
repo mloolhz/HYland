@@ -25,6 +25,7 @@ import { MyPageProfileEdit } from "@/pages/MyPageProfileEdit";
 import { AiRecommend } from "@/pages/AiRecommend";
 import { Sports } from "@/pages/Sports";
 import { FacilityDetail } from "@/pages/FacilityDetail";
+import { AdminSubmissions } from "@/pages/AdminSubmissions";
 import { WritePost } from "@/pages/WritePost";
 import { IslandBtiIntro } from "@/pages/IslandBtiIntro";
 import { IslandBtiTest } from "@/pages/IslandBtiTest";
@@ -49,6 +50,7 @@ import "./styles/leaderboard.css";
 import "./styles/ai-recommend.css";
 import "./styles/island-bti.css";
 import "./styles/island-bti-promo.css";
+import "./styles/admin.css";
 import "./styles/route-fade.css";
 
 const router = createBrowserRouter([
@@ -75,6 +77,8 @@ const router = createBrowserRouter([
       { path: "community/users/:userId", element: <UserProfilePage /> },
       { path: "community/:id", element: <PostDetail /> },
       { path: "notifications", element: <Notifications /> },
+      // 검수 권한은 서버가 확인한다 (ADMIN 아니면 403)
+      { path: "admin/submissions", element: <RequireAuth><AdminSubmissions /></RequireAuth> },
       { path: "mypage", element: <RequireAuth><MyPage /></RequireAuth> },
       { path: "mypage/settings", element: <RequireAuth><MyPageSettings /></RequireAuth> },
       { path: "mypage/settings/profile", element: <RequireAuth><MyPageProfileEdit /></RequireAuth> },

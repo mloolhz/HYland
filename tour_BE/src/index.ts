@@ -11,11 +11,13 @@ import leaderboardRouter from "./leaderboard";
 import weatherRouter from "./weather";
 import leisureRouter from "./leisure";
 import communityRouter from "./community";
+import submissionsRouter from "./submissions";
+import uploadsRouter from "./uploads";
 import recommendRouter from "./routes/recommend";
 
 const app = express();
 app.use(cors()); // 프론트(다른 포트)에서 호출 허용
-app.use(express.json());
+app.use(express.json({ limit: "8mb" })); // 인증샷 업로드가 base64 로 온다
 app.use(express.static("public")); // 테스트 콘솔 (http://localhost:4000)
 
 // 상태 확인용
@@ -49,6 +51,12 @@ app.use("/leisure-sports", leisureRouter);
 
 // 커뮤니티 (글·댓글·좋아요)
 app.use("/community", communityRouter);
+
+// 미션 인증 검수 (인증샷 → 관리자 승인 → 진행도·배지)
+app.use("/submissions", submissionsRouter);
+
+// 인증샷 이미지 업로드 (public/uploads 에 저장 → express.static 이 서빙)
+app.use("/uploads", uploadsRouter);
 
 // AI 추천 (추천·스트리밍·날씨·인기질문·섬BTI 선호도·예상 질문)
 app.use("/api", recommendRouter);

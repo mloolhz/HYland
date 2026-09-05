@@ -6,6 +6,9 @@ import { CONTAINER } from "@/constants/layout";
 import { COMMUNITY_ACTIVITY_OPTIONS } from "@/lib/community-activities";
 import { refreshPosts } from "@/lib/post-store";
 import { createPost } from "@/api/community";
+import { uploadImage } from "@/api/uploads";
+import { submitMissionProof } from "@/api/submissions";
+import { useMissionQuests } from "@/hooks/useMissionQuests";
 import { ApiError } from "@/api/auth";
 import type { PostType } from "@/types/community";
 
@@ -45,6 +48,9 @@ export function WritePost() {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const [imageError, setImageError] = useState("");
   const [error, setError] = useState("");
+  const [asMissionProof, setAsMissionProof] = useState(false);
+  const [questId, setQuestId] = useState<number | null>(null);
+  const { quests } = useMissionQuests();
 
   useEffect(() => {
     return () => {
@@ -86,12 +92,19 @@ export function WritePost() {
       return;
     }
 
-    // TODO: 이미지 업로드 API 연동 — 업로드 API가 없어 첨부 파일은 현재 게시글에 저장되지 않음.
-    // API 연동 시: imageFile을 업로드 → 반환 URL을 images 배열에 저장.
-    const images: string[] | undefined = undefined;
-    void imageFile;
+    if (asMissionProof && !questId) {
+      setError("인증할 미션을 선택해주세요.");
+      return;
+    }
+    if (asMissionProof && !imageFile) {
+      setError("미션 인증에는 인증샷이 필요해요.");
+      return;
+    }
 
     try {
+      // 사진이 있으면 먼저 올리고 그 URL 을 글에 담는다
+      const images = imageFile ? [await uploadImage(imageFile)] : undefined;
+
       const created = await createPost({
         type,
         title: title.trim(),
@@ -100,6 +113,10 @@ export function WritePost() {
         activity,
         images,
       });
+      // 미션 인증으로 냈으면 검수 대기로 보낸다
+      if (asMissionProof && questId) {
+        await submitMissionProof(created.id, questId);
+      }
       await refreshPosts();
       navigate(`/community/${created.id}`);
     } catch (err) {
@@ -210,6 +227,44 @@ export function WritePost() {
                 placeholder="섬에서의 경험을 자유롭게 남겨주세요"
                 rows={8}
               />
+            </div>
+
+            <div className="cm-write-field cm-write-proof">
+              <label className="cm-write-proof-toggle">
+                <input
+                  type="checkbox"
+                  checked={asMissionProof}
+                  onChange={(e) => setAsMissionProof(e.target.checked)}
+                />
+                <span>
+                  미션 인증으로 제출하기
+                  <span className="cm-write-optional"> — 관리자 확인 후 배지가 지급돼요</span>
+                </span>
+              </label>
+
+              {asMissionProof && (
+                <div className="cm-write-proof-body">
+                  <select
+                    className="cm-write-select"
+                    value={questId ?? ""}
+                    onChange={(e) => setQuestId(e.target.value ? Number(e.target.value) : null)}
+                    aria-label="인증할 미션 선택"
+                  >
+                    <option value="">인증할 미션 선택</option>
+                    {quests
+                      .filter((q) => q.current < q.target)
+                      .map((q) => (
+                        <option key={q.id} value={q.id}>
+                          {q.icon} {q.title} ({q.current}/{q.target} {q.unit})
+                        </option>
+                      ))}
+                  </select>
+                  <p className="cm-write-proof-note">
+                    인증샷이 있어야 제출할 수 있어요. 승인되면 진행도가 1 올라가고, 목표를 채우면
+                    배지를 받습니다.
+                  </p>
+                </div>
+              )}
             </div>
 
             <div className="cm-write-field">

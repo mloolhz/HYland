@@ -85,8 +85,11 @@ model User {
   missionProgress UserMissionProgress[]
   badges         UserBadge[]
   btiResults     UserIslandBtiResult[]
+  role           UserRole @default(USER)
   posts          Post[]
   comments       Comment[]
+  submissions      MissionSubmission[] @relation("SubmissionAuthor")
+  reviewedSubmissions MissionSubmission[] @relation("SubmissionReviewer")
   postLikes      PostLike[]
   commentLikes   CommentLike[]
 
@@ -280,6 +283,7 @@ model MissionQuest {
   island      Island?              @relation(fields: [islandId], references: [id])
   sport       Sport?               @relation(fields: [sportId], references: [id])
   progress    UserMissionProgress[]
+  submissions MissionSubmission[]
 
   @@map("mission_quests")
 }
@@ -644,6 +648,7 @@ model Post {
   images   PostImage[]
   comments Comment[]
   likes    PostLike[]
+  submissions MissionSubmission[]
 
   @@index([type, createdAt])
   @@index([island])
@@ -710,4 +715,45 @@ model CommentLike {
   @@id([commentId, userId])
   @@index([userId])
   @@map("comment_likes")
+}
+
+// ═══════════════ Phase 5 — 미션 인증 검수 ═══════════════
+// 유저가 커뮤니티에 인증샷을 올리면서 미션을 지정해 제출하면,
+// 관리자가 사진을 보고 승인/반려한다. 승인 시 미션 진행도가 오르고
+// 목표를 채우면 배지가 지급된다.
+
+enum UserRole {
+  USER
+  ADMIN // 인증샷 검수 권한
+}
+
+enum SubmissionStatus {
+  PENDING // 검수 대기
+  APPROVED // 승인 — 미션 진행도 반영됨
+  REJECTED // 반려
+}
+
+model MissionSubmission {
+  id          String           @id @default(cuid())
+  userId      String           @map("user_id")
+  questId     Int              @map("quest_id")
+  /** 인증 근거가 되는 커뮤니티 글 (인증샷) */
+  postId      String           @map("post_id")
+  status      SubmissionStatus @default(PENDING)
+  /** 반려 사유 등 검수 메모 */
+  reviewNote  String?          @map("review_note") @db.Text
+  reviewedBy  String?          @map("reviewed_by")
+  reviewedAt  DateTime?        @map("reviewed_at")
+  createdAt   DateTime         @default(now()) @map("created_at")
+
+  user     User         @relation("SubmissionAuthor", fields: [userId], references: [id], onDelete: Cascade)
+  quest    MissionQuest @relation(fields: [questId], references: [id])
+  post     Post         @relation(fields: [postId], references: [id], onDelete: Cascade)
+  reviewer User?        @relation("SubmissionReviewer", fields: [reviewedBy], references: [id])
+
+  /** 같은 글로 같은 미션을 두 번 제출할 수 없다 */
+  @@unique([postId, questId])
+  @@index([status, createdAt])
+  @@index([userId])
+  @@map("mission_submissions")
 }
