@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
+import { API_BASE } from "@/lib/api-base";
 
-/** 백엔드 해양 날씨 API. 추후 공통 api 클라이언트로 교체 예정. */
-const API_BASE = "http://localhost:4000";
 
 type Summary = {
   observedAt: string | null;

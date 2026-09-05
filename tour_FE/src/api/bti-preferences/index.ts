@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:4000";
+import { API_BASE } from "@/lib/api-base";
 
 export type BtiIslandPreference = {
   islandName: string;

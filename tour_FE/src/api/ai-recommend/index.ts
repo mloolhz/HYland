@@ -1,4 +1,5 @@
 import type { AiResponse, RecItem, WeatherInfo } from "@/types/ai-recommend";
+import { API_BASE } from "@/lib/api-base";
 import type { RecommendationResponse, TripIntent } from "@/types/recommendation";
 import { buildRec } from "./mockData";
 
@@ -9,7 +10,6 @@ export type ChatHistoryItem = {
   sportIds?: string[];
 };
 
-const API_BASE = "http://localhost:4000";
 
 type RecommendPayload = {
   text?: string;
