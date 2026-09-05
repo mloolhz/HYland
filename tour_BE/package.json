@@ -10,7 +10,9 @@
     "db:studio": "prisma studio",
     "db:generate": "prisma generate",
     "db:seed": "tsx prisma/seed.ts",
-    "tour:inspect": "node scripts/inspect-tour-sports.mjs"
+    "tour:inspect": "node scripts/inspect-tour-sports.mjs",
+    "db:seed:leisure": "tsx prisma/seed-leisure.ts",
+    "check:tour": "node scripts/tour/check-consistency.mjs"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

@@ -9,6 +9,7 @@ import visitsRouter from "./visits";
 import profileRouter from "./profile";
 import leaderboardRouter from "./leaderboard";
 import weatherRouter from "./weather";
+import leisureRouter from "./leisure";
 import recommendRouter from "./routes/recommend";
 
 const app = express();
@@ -41,6 +42,9 @@ app.use("/leaderboard", leaderboardRouter);
 
 // 해양 날씨 (기상청 해양관측 → 섬별 파고·수온·바람)
 app.use("/weather", weatherRouter);
+
+// 레저스포츠 시설 (관광공사 API + 웹 조사 145곳)
+app.use("/leisure-sports", leisureRouter);
 
 // AI 추천 (추천·스트리밍·날씨·인기질문·섬BTI 선호도·예상 질문)
 app.use("/api", recommendRouter);
