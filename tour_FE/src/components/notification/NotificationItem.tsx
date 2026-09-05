@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { NOTI_STYLE } from "@/constants/notification";
+import { NOTI_STYLE, NOTI_STYLE_FALLBACK } from "@/constants/notification";
 import type { Notification } from "@/store/notifications";
 import { relativeTime } from "@/utils/relativeTime";
 
@@ -46,7 +46,9 @@ export function NotificationItem({
   onClick,
   onRemove,
 }: NotificationItemProps) {
-  const style = NOTI_STYLE[notification.type];
+  // 서버가 새 알림 종류를 추가해도 아이콘이 없어서 창 전체가 죽지 않게 한다.
+  // (검수 알림 type "review" 가 이 표에 없어서 알림창이 통째로 깨졌었다)
+  const style = NOTI_STYLE[notification.type] ?? NOTI_STYLE_FALLBACK;
   const unread = !notification.read;
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);

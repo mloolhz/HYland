@@ -2,6 +2,8 @@ export type NotificationType =
   | "comment"
   | "like"
   | "badge"
+  /** 미션 인증 검수 결과 (승인·반려) */
+  | "review"
   | "booking"
   | "notice"
   | "reply";
@@ -16,7 +18,11 @@ export const NOTI_STYLE: Record<
   booking: { icon: "ti-calendar-check", bg: "#E6F1FB", color: "#0C447C" },
   notice: { icon: "ti-bell", bg: "#E6F1FB", color: "#0C447C" },
   reply: { icon: "ti-corner-down-right", bg: "#E1F5EE", color: "#0F6E56" },
+  review: { icon: "ti-clipboard-check", bg: "#ECEAFB", color: "#4A3B93" },
 };
+
+/** 모르는 종류가 와도 알림창이 죽지 않도록 하는 기본값 */
+export const NOTI_STYLE_FALLBACK = NOTI_STYLE.notice;
 
 export type NotificationFilter = "all" | "unread" | "activity" | "booking" | "notice";
 
