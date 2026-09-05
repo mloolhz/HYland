@@ -5,7 +5,6 @@ import { CATEGORY_LEADERBOARD, LEADERBOARD, type LeaderboardPeriod } from "@/lib
 import { MISSION_CATEGORIES, MISSION_QUESTS, missionQuestState, type MissionCategory } from "@/mocks/missions";
 import { getMissionStampStats } from "@/lib/passport/passport-mission-stamps";
 import { DEMO_USER_PASSPORT, type UserPassportStats } from "@/mocks/userPassport";
-import { MOCK_POSTS } from "@/mocks/posts";
 import type { ProfileResponse } from "@/api/me";
 
 export type { UserPassportStats };
@@ -48,8 +47,15 @@ export function getPassportExpPercent(stats = getCurrentUserPassportStats()): nu
   return Math.round((stats.expCurrent / stats.expMax) * 100);
 }
 
+/**
+ * mergeUserProfile 의 바탕값.
+ *
+ * 닉네임·레벨·활동 수치는 로그인하면 서버 값이 전부 덮어쓴다. 여기 남은 것은
+ * 아직 API 가 없는 항목(BTI 유형·가입일)과 미션 카탈로그에서 뽑는 분모뿐이다.
+ * 예전에는 mock 게시글에서 작성자를 찾아 닉네임을 채웠는데, 그 글들이 사라진
+ * 지금은 의미가 없어 걷어냈다.
+ */
 export function getCurrentUserProfile(): UserProfile {
-  const author = MOCK_POSTS.find((p) => p.author.id === CURRENT_USER_ID)?.author;
   const passport = getCurrentUserPassportStats();
 
   // 미션창과 동기화 — 카운트를 MISSION_QUESTS에서 실시간 산출
@@ -60,8 +66,8 @@ export function getCurrentUserProfile(): UserProfile {
 
   return {
     id: CURRENT_USER_ID,
-    nickname: author?.nickname ?? "이파도",
-    bti: author?.bti ?? "파도형",
+    nickname: "",
+    bti: "파도형",
     joinedAt: "2024-06-15",
     ...passport,
     visitedIslandCount,

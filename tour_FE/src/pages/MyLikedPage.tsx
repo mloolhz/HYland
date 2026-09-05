@@ -5,20 +5,22 @@ import { EmptyState } from "@/components/community/EmptyState";
 import { PostList } from "@/components/community/PostList";
 import { paginate, totalPages } from "@/lib/posts";
 import { parsePageQuery } from "@/lib/query";
-import { usePosts } from "@/lib/post-store";
-import { getLikedPosts } from "@/mocks/myActivity";
+import { useMyActivity } from "@/hooks/useMyActivity";
 
 export function MyLikedPage() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const page = parsePageQuery(searchParams.get("page"));
-  const posts = usePosts();
-  const [likedIds, setLikedIds] = useState(() => getLikedPosts(posts).map((p) => p.id));
+  const { likedPosts: fromServer } = useMyActivity();
+  const [likedIds, setLikedIds] = useState<string[]>([]);
   const [undo, setUndo] = useState<{ postId: string } | null>(null);
 
+  useEffect(() => setLikedIds(fromServer.map((p) => p.id)), [fromServer]);
+
+  // 좋아요 취소를 화면에서 즉시 반영하려고 likedIds 로 한 번 더 거른다
   const likedPosts = useMemo(
-    () => posts.filter((p) => likedIds.includes(p.id)),
-    [posts, likedIds],
+    () => fromServer.filter((p) => likedIds.includes(p.id)),
+    [fromServer, likedIds],
   );
 
   const setPage = (next: number) => {

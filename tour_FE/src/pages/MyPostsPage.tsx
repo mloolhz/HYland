@@ -3,17 +3,16 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { CommunitySubPageLayout } from "@/components/community/CommunitySubPageLayout";
 import { EmptyState } from "@/components/community/EmptyState";
 import { PostList } from "@/components/community/PostList";
-import { usePosts } from "@/lib/post-store";
 import { paginate, sortPosts, totalPages } from "@/lib/posts";
 import { parsePageQuery } from "@/lib/query";
-import { getMyPosts } from "@/mocks/myActivity";
+import { useMyActivity } from "@/hooks/useMyActivity";
 
 export function MyPostsPage() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const page = parsePageQuery(searchParams.get("page"));
-  const posts = usePosts();
-  const myPosts = useMemo(() => sortPosts(getMyPosts(posts), "latest"), [posts]);
+  const { myPosts: fromServer } = useMyActivity();
+  const myPosts = useMemo(() => sortPosts(fromServer, "latest"), [fromServer]);
 
   const setPage = (next: number) => {
     setSearchParams(
