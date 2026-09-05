@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { ISLANDS } from "@/lib/island-data";
 import { AuthBrand, AuthCard } from "@/components/auth/AuthCard";
 import { PasswordField } from "@/components/auth/PasswordField";
 import { AuthDivider, SocialButtons } from "@/components/auth/SocialButtons";
@@ -113,7 +114,10 @@ export function Login() {
 
   return (
     <div className="auth-page">
-      <AuthBrand title="로그인" subtitle="168개 섬의 탐험 기록이 기다리고 있어요" />
+      <AuthBrand
+        title="로그인"
+        subtitle={`${ISLANDS.length}개 섬의 탐험 기록이 기다리고 있어요`}
+      />
 
       <AuthCard activeTab="login">
         <form className="auth-form" onSubmit={handleSubmit} noValidate>

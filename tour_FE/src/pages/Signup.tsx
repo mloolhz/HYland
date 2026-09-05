@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { ISLANDS } from "@/lib/island-data";
 import { AuthBrand, AuthCard } from "@/components/auth/AuthCard";
 import { DuplicateCheckField } from "@/components/auth/DuplicateCheckField";
 import { FormSection } from "@/components/auth/FormSection";
@@ -176,7 +177,10 @@ export function Signup() {
 
   return (
     <div className="auth-page auth-page-signup">
-      <AuthBrand title="회원가입" subtitle="168개 섬의 탐험 기록을 남겨보세요" />
+      <AuthBrand
+        title="회원가입"
+        subtitle={`${ISLANDS.length}개 섬의 탐험 기록을 남겨보세요`}
+      />
 
       <AuthCard activeTab="signup">
         <form className="auth-form auth-form-signup" onSubmit={handleSubmit} noValidate>
