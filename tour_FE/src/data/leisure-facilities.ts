@@ -18,6 +18,8 @@ export type LeisureFacility = {
   islandName: string;
   address: string;
   tel: string | null;
+  /** 공식 홈페이지 — 아직 수집 전이라 전부 null (detailCommon2 로 채울 예정) */
+  homepage: string | null;
   /** 대표 이미지 (없으면 null — 화면에서 placeholder 처리) */
   photo: string | null;
   /** 관광공사 | 웹 조사 */
@@ -34,6 +36,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 강화읍 해안동로1366번길 18",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/05/1895205_image2_1.jpg",
     "origin": "관광공사"
   },
@@ -46,6 +49,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 강화읍 청하동길 24",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/11/1895211_image2_1.jpg",
     "origin": "관광공사"
   },
@@ -58,6 +62,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 강화읍 청하동길 24",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/98/3393698_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -70,6 +75,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 강화읍 청하동길 24",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/27/3393727_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -82,6 +88,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 내가면 황청포구로385번길 8",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -94,6 +101,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 강화읍",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/96/3350596_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -106,6 +114,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 송해면 전망대로468번길 11",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -118,6 +127,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "관광공사"
   },
@@ -130,6 +140,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 하점면 강화대로 994-40",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/94/2734694_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -142,6 +153,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 내가면 황청포구로443번길 82",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/76/3042376_image2_1.jpg",
     "origin": "관광공사"
   },
@@ -154,6 +166,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "관광공사"
   },
@@ -166,6 +179,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "관광공사"
   },
@@ -178,6 +192,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "관광공사"
   },
@@ -190,6 +205,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 화도면 해안남로 2669",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/90/2799490_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -202,6 +218,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "관광공사"
   },
@@ -214,6 +231,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 강화읍 국화길 51",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/61/1575661_image2_1.jpg",
     "origin": "관광공사"
   },
@@ -226,6 +244,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 해안서로 689",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/79/2847179_image2_1.jpg",
     "origin": "관광공사"
   },
@@ -238,6 +257,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 길상면 초지로 453",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/23/3588423_image2_1.jpg",
     "origin": "관광공사"
   },
@@ -250,6 +270,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 양도면 고려왕릉로 209",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/41/3566241_image2_1.jpg",
     "origin": "관광공사"
   },
@@ -262,6 +283,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 양도면 해안서로 695",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/86/2740286_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -274,6 +296,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 길상면 보리고개로 187-5",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/18/2756518_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -286,6 +309,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 화도면 동막리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -298,6 +322,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 화도면 동녘말길 238-13",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/70/2758570_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -310,6 +335,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 화도면 내리 2146-2",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/05/2908205_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -322,6 +348,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 화도면 해안남로 2421-228",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/29/2747429_image2_1.jpg",
     "origin": "관광공사"
   },
@@ -334,6 +361,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 화도면 해안남로 2355-7",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/35/2740335_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -346,6 +374,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 길상면 해안남로 673-15",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/34/3563634_image2_1.jpg",
     "origin": "관광공사"
   },
@@ -358,6 +387,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 길상면 보리고개로 13",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/22/3477022_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -370,6 +400,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 하점면 고려산로377번길 31",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/47/2908147_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -382,6 +413,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 내가면 고비고개로741번길 37-48",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/50/3566750_image2_1.jpg",
     "origin": "관광공사"
   },
@@ -394,6 +426,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 화도면 해안남로 2680-12",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/65/2728965_image2_1.jpg",
     "origin": "관광공사"
   },
@@ -406,6 +439,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 길상면 장흥로101번길 65",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/64/2740164_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -418,6 +452,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 화도면 해안남로1998번길 8-28",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/72/2730772_image2_1.jpg",
     "origin": "관광공사"
   },
@@ -430,6 +465,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 내가면 해안서로 883",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -442,6 +478,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "관광공사"
   },
@@ -454,6 +491,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 양도면 중앙로787번길 8-1",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/10/3350610_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -466,6 +504,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "관광공사"
   },
@@ -478,6 +517,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 길상면 온수리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -490,6 +530,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 길상면 해안남로 627-5",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/91/2734791_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -502,6 +543,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 길상면 해안남로 497-4",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/92/2799392_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -514,6 +556,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 선원면 시리미로237번길 32",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/64/2755264_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -526,6 +569,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 내가면 고천리 1259-14번지",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/68/2756268_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -538,6 +582,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 화도면 해안남로1196번길 38",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/81/3535281_image2_1.jpg",
     "origin": "관광공사"
   },
@@ -550,6 +595,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "인천광역시 강화군 화도면 마니산로 902-15",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/98/2734798_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -562,6 +608,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "강화도",
     "address": "",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "관광공사"
   },
@@ -574,6 +621,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "교동도",
     "address": "인천광역시 강화군 교동면",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -586,6 +634,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "교동도",
     "address": "인천광역시 강화군 교동면 난정리 741-3",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -598,6 +647,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "교동도",
     "address": "인천광역시 강화군 교동면 대룡리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -610,6 +660,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "굴업도",
     "address": "인천광역시 옹진군 덕적면 굴업리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -622,6 +673,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "굴업도",
     "address": "인천광역시 옹진군 굴업로 39",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -634,6 +686,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "굴업도",
     "address": "인천광역시 옹진군 덕적면 굴업리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -646,6 +699,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "굴업도",
     "address": "인천광역시 옹진군 덕적면 굴업리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -658,6 +712,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "대이작도",
     "address": "인천광역시 옹진군 자월면 이작리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -670,6 +725,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "대이작도",
     "address": "인천광역시 옹진군 자월면 이작리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -682,6 +738,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "대이작도",
     "address": "인천광역시 옹진군 자월면 이작리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -694,6 +751,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "대이작도",
     "address": "인천광역시 옹진군 자월면 이작리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -706,6 +764,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "대이작도",
     "address": "인천광역시 옹진군 자월면 이작리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -718,6 +777,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "대청도",
     "address": "인천광역시 옹진군 대청면",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -730,6 +790,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "대청도",
     "address": "인천광역시 옹진군 대청면",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -742,6 +803,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "대청도",
     "address": "인천광역시 옹진군 대청면",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -754,6 +816,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "덕적도",
     "address": "인천광역시 옹진군 덕적면 북리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -766,6 +829,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "덕적도",
     "address": "인천광역시 옹진군 덕적면 덕적남로 209-1",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -778,6 +842,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "덕적도",
     "address": "인천광역시 옹진군 덕적면 진리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -790,6 +855,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "덕적도",
     "address": "인천광역시 옹진군 덕적면 덕적남로606번길 6",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/52/2786852_image2_1.jpg",
     "origin": "관광공사"
   },
@@ -802,6 +868,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "덕적도",
     "address": "인천광역시 옹진군 덕적면 서포리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -814,6 +881,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "무의도",
     "address": "인천광역시 영종구 무의동",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -826,6 +894,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "무의도",
     "address": "인천광역시 영종구 무의동",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -838,6 +907,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "무의도",
     "address": "인천광역시 영종구 무의동",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -850,6 +920,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "무의도",
     "address": "인천광역시 영종구 대무의로 26-9",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -862,6 +933,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "무의도",
     "address": "인천광역시 영종구 무의동",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -874,6 +946,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "무의도",
     "address": "인천광역시 영종구 무의동",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -886,6 +959,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "무의도",
     "address": "인천광역시 영종구 대무의로 464",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -898,6 +972,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "문갑도",
     "address": "인천광역시 옹진군 덕적면 문갑리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -910,6 +985,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "문갑도",
     "address": "인천광역시 옹진군 덕적면 문갑리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -922,6 +998,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "문갑도",
     "address": "인천광역시 옹진군 덕적면 문갑리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -934,6 +1011,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "백령도",
     "address": "인천광역시 옹진군 백령면 연화리 1026-9",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -946,6 +1024,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "백령도",
     "address": "인천광역시 옹진군 백령면 연화리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -958,6 +1037,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "백령도",
     "address": "인천광역시 옹진군 백령면 진촌리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -970,6 +1050,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "백령도",
     "address": "인천광역시 옹진군 백령면 사곶로 139",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -982,6 +1063,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "백령도",
     "address": "인천광역시 옹진군 백령면",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -994,6 +1076,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "석모도",
     "address": "인천광역시 강화군 삼산북로 397-1",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/18/2908218_image2_1.jpg",
     "origin": "관광공사"
   },
@@ -1006,6 +1089,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "석모도",
     "address": "인천광역시 강화군 삼산면 어류정길212번길",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -1018,6 +1102,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "석모도",
     "address": "인천광역시 강화군 삼산면 삼산남로",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -1030,6 +1115,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "석모도",
     "address": "",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "관광공사"
   },
@@ -1042,6 +1128,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "석모도",
     "address": "인천광역시 강화군 삼산면 삼산남로604번길 37",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/93/2744393_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -1054,6 +1141,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "석모도",
     "address": "인천광역시 강화군 삼산면 삼산서로310번길 21",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/74/3395374_image2_1.jpg",
     "origin": "관광공사"
   },
@@ -1066,6 +1154,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "석모도",
     "address": "인천광역시 강화군 삼산면 석포리 산 185",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -1078,6 +1167,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "석모도",
     "address": "인천광역시 강화군 삼산면 어류정길198번길 8",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/51/2756451_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -1090,6 +1180,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "소야도",
     "address": "인천광역시 옹진군 덕적면 소야리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -1102,6 +1193,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "소야도",
     "address": "인천광역시 옹진군 덕적면 소야리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -1114,6 +1206,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "승봉도",
     "address": "인천광역시 옹진군 자월면 승봉로116번길",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -1126,6 +1219,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "승봉도",
     "address": "인천광역시 옹진군 자월면 승봉리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -1138,6 +1232,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "신도·시도·모도",
     "address": "인천광역시 옹진군 북도면 모도리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -1150,6 +1245,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "신도·시도·모도",
     "address": "인천광역시 옹진군 북도면 시도로86번길 291-49",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -1162,6 +1258,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "신도·시도·모도",
     "address": "인천광역시 옹진군 북도면 시도리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -1174,6 +1271,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "신도·시도·모도",
     "address": "인천광역시 옹진군 북도면",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -1186,6 +1284,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "연평도",
     "address": "인천광역시 옹진군 연평중앙로24번길 3",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -1198,6 +1297,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "연평도",
     "address": "인천광역시 옹진군 연평면 연평중앙로24번길 25",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/50/2710950_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -1210,6 +1310,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영종도",
     "address": "인천광역시 영종구 잠진도길 11",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -1222,6 +1323,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영종도",
     "address": "인천광역시 영종구 늘목로 38 (을왕동)",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/65/2734265_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -1234,6 +1336,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영종도",
     "address": "인천광역시 영종구 덕교동",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -1246,6 +1349,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영종도",
     "address": "",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "관광공사"
   },
@@ -1258,6 +1362,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영종도",
     "address": "인천광역시 영종구 영종순환로 279-20 (중산동)",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/25/2790225_image2_1.jpg",
     "origin": "관광공사"
   },
@@ -1270,6 +1375,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영종도",
     "address": "인천광역시 영종구 영종순환로 279-20 (중산동)",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/48/3565648_image2_1.jpg",
     "origin": "관광공사"
   },
@@ -1282,6 +1388,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영종도",
     "address": "인천광역시 영종구 운서동 산1-1",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -1294,6 +1401,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영종도",
     "address": "",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "관광공사"
   },
@@ -1306,6 +1414,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영종도",
     "address": "",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "관광공사"
   },
@@ -1318,6 +1427,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영종도",
     "address": "인천광역시 영종구 용유서로423번길 41 (을왕동)",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/65/2744865_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -1330,6 +1440,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영종도",
     "address": "인천광역시 영종구 용유로380번길 21",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -1342,6 +1453,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영종도",
     "address": "",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "관광공사"
   },
@@ -1354,6 +1466,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영종도",
     "address": "",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "관광공사"
   },
@@ -1366,6 +1479,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영종도",
     "address": "",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "관광공사"
   },
@@ -1378,6 +1492,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영종도",
     "address": "",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "관광공사"
   },
@@ -1390,6 +1505,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영종도",
     "address": "인천광역시 영종구 용유서로423번길 60 (을왕동)",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/00/2731500_image2_1.jpg",
     "origin": "관광공사"
   },
@@ -1402,6 +1518,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영종도",
     "address": "인천광역시 영종구 왕산마리나길 143",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -1414,6 +1531,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영종도",
     "address": "인천광역시 영종구 을왕동",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -1426,6 +1544,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영종도",
     "address": "",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "관광공사"
   },
@@ -1438,6 +1557,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영종도",
     "address": "",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "관광공사"
   },
@@ -1450,6 +1570,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영종도",
     "address": "",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "관광공사"
   },
@@ -1462,6 +1583,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영종도",
     "address": "",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "관광공사"
   },
@@ -1474,6 +1596,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영종도",
     "address": "",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "관광공사"
   },
@@ -1486,6 +1609,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영종도",
     "address": "",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "관광공사"
   },
@@ -1498,6 +1622,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영종도",
     "address": "",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "관광공사"
   },
@@ -1510,6 +1635,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영종도",
     "address": "",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "관광공사"
   },
@@ -1522,6 +1648,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영종도",
     "address": "",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "관광공사"
   },
@@ -1534,6 +1661,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영흥도",
     "address": "인천광역시 옹진군 영흥면 영흥서로 420-19",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/14/2735714_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -1546,6 +1674,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영흥도",
     "address": "인천광역시 옹진군 영흥면 영흥로722번길 43",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/29/2756529_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -1558,6 +1687,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영흥도",
     "address": "인천광역시 옹진군 영흥면 영흥로757번길 176",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/30/2799530_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -1570,6 +1700,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영흥도",
     "address": "인천광역시 옹진군 영흥면 영흥로757번길 234-13",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/77/2735977_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -1582,6 +1713,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영흥도",
     "address": "인천광역시 옹진군 영흥면 영흥서로 527-14",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/89/2735989_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -1594,6 +1726,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영흥도",
     "address": "인천광역시 옹진군 영흥면 영흥북로 420-26",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -1606,6 +1739,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영흥도",
     "address": "인천광역시 옹진군 영흥면 내리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -1618,6 +1752,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영흥도",
     "address": "인천광역시 옹진군 영흥면",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -1630,6 +1765,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영흥도",
     "address": "인천광역시 옹진군 영흥면 영흥서로 452-67",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/19/2908019_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -1642,6 +1778,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영흥도",
     "address": "인천광역시 옹진군 영흥면 영흥로176번길 21",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/12/2780912_image2_1.jpg",
     "origin": "관광공사"
   },
@@ -1654,6 +1791,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영흥도",
     "address": "인천광역시 옹진군 영흥면 외리 21",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/86/2790486_image2_1.jpg",
     "origin": "관광공사"
   },
@@ -1666,6 +1804,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영흥도",
     "address": "인천광역시 옹진군 영흥면 영흥로757번길 6",
     "tel": null,
+    "homepage": null,
     "photo": "https://tong.visitkorea.or.kr/cms/resource/89/2741689_image2_1.JPG",
     "origin": "관광공사"
   },
@@ -1678,6 +1817,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영흥도",
     "address": "인천광역시 옹진군 영흥면 영흥로757번길 6",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -1690,6 +1830,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "영흥도",
     "address": "인천광역시 옹진군 영흥면 영흥로722번길 146",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -1702,6 +1843,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "자월도",
     "address": "인천광역시 옹진군 자월면 자월리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -1714,6 +1856,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "자월도",
     "address": "인천광역시 옹진군 자월면 자월리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -1726,6 +1869,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "자월도",
     "address": "인천광역시 옹진군 자월면 자월리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -1738,6 +1882,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "장봉도",
     "address": "인천광역시 옹진군 북도면 장봉로 227",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -1750,6 +1895,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "장봉도",
     "address": "인천광역시 옹진군 북도면 장봉리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   },
@@ -1762,6 +1908,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
     "islandName": "장봉도",
     "address": "인천광역시 옹진군 북도면 장봉리",
     "tel": null,
+    "homepage": null,
     "photo": null,
     "origin": "웹 조사"
   }
@@ -1786,6 +1933,11 @@ const BY_ACTIVITY: Record<string, LeisureFacility[]> = LEISURE_FACILITIES.reduce
 /** 종목명(sports.ts `name`)으로 해당 활동의 시설 목록을 가져온다 */
 export function getFacilitiesByActivity(sportName: string): LeisureFacility[] {
   return BY_ACTIVITY[activityKey(sportName)] ?? [];
+}
+
+/** 상세 페이지용 — id 로 시설 하나를 찾는다 */
+export function getFacilityById(id: string): LeisureFacility | undefined {
+  return LEISURE_FACILITIES.find((f) => f.id === id);
 }
 
 /**

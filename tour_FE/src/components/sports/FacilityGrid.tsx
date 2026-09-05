@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   getFacilitiesByActivity,
   type LeisureFacility,
@@ -41,37 +42,37 @@ function FacilityPhoto({ facility }: { facility: LeisureFacility }) {
 
 function FacilityCard({ facility }: { facility: LeisureFacility }) {
   return (
-    <li className="fc-card">
-      <FacilityPhoto facility={facility} />
-      <div className="fc-body">
-        <p className="fc-name">{facility.name}</p>
-        <p className="fc-island">
-          <span
-            className="fc-island-dot"
-            style={{ background: resolveSportIslandAccent(facility.islandName) }}
-            aria-hidden="true"
-          />
-          {facility.islandName}
-        </p>
-        {facility.address && (
-          <p className="fc-line">
-            <span className="fc-icon" aria-hidden="true">
-              ◎
-            </span>
-            {facility.address}
+    <li>
+      <Link className="fc-card" to={`/sports/facility/${facility.id}`}>
+        <FacilityPhoto facility={facility} />
+        <div className="fc-body">
+          <p className="fc-name">{facility.name}</p>
+          <p className="fc-island">
+            <span
+              className="fc-island-dot"
+              style={{ background: resolveSportIslandAccent(facility.islandName) }}
+              aria-hidden="true"
+            />
+            {facility.islandName}
           </p>
-        )}
-        {facility.tel && (
-          <p className="fc-line">
-            <span className="fc-icon" aria-hidden="true">
-              ✆
-            </span>
-            <a className="fc-tel" href={`tel:${facility.tel.replace(/[^0-9+]/g, "")}`}>
+          {facility.address && (
+            <p className="fc-line">
+              <span className="fc-icon" aria-hidden="true">
+                ◎
+              </span>
+              {facility.address}
+            </p>
+          )}
+          {facility.tel && (
+            <p className="fc-line">
+              <span className="fc-icon" aria-hidden="true">
+                ✆
+              </span>
               {facility.tel}
-            </a>
-          </p>
-        )}
-      </div>
+            </p>
+          )}
+        </div>
+      </Link>
     </li>
   );
 }

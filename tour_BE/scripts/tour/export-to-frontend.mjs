@@ -44,6 +44,7 @@ for (const f of JSON.parse(readFileSync(SRC, "utf8"))) {
     islandName: f.islandName,
     address: f.address || "",
     tel: f.tel || null,
+    homepage: f.homepage || null,
     photo: https(f.imageUrl),
     origin: "관광공사",
   });
@@ -61,6 +62,7 @@ const web = (list, prefix, origin) =>
       islandName: f.islandName,
       address: f.address || "",
       tel: null,
+      homepage: null,
       photo: null,
       origin,
     }),
@@ -97,6 +99,8 @@ export type LeisureFacility = {
   islandName: string;
   address: string;
   tel: string | null;
+  /** 공식 홈페이지 — 아직 수집 전이라 전부 null (detailCommon2 로 채울 예정) */
+  homepage: string | null;
   /** 대표 이미지 (없으면 null — 화면에서 placeholder 처리) */
   photo: string | null;
   /** 관광공사 | 웹 조사 */
@@ -124,6 +128,11 @@ const BY_ACTIVITY: Record<string, LeisureFacility[]> = LEISURE_FACILITIES.reduce
 /** 종목명(sports.ts \`name\`)으로 해당 활동의 시설 목록을 가져온다 */
 export function getFacilitiesByActivity(sportName: string): LeisureFacility[] {
   return BY_ACTIVITY[activityKey(sportName)] ?? [];
+}
+
+/** 상세 페이지용 — id 로 시설 하나를 찾는다 */
+export function getFacilityById(id: string): LeisureFacility | undefined {
+  return LEISURE_FACILITIES.find((f) => f.id === id);
 }
 
 /**

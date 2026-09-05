@@ -96,8 +96,14 @@ export function Sports() {
     initialCategory && initialCategory in SPORTS_DATA
       ? (initialCategory as CategoryKey)
       : "water";
+  const initialSport = searchParams.get("sport");
+  /** ?sport= 가 그 카테고리에 실제로 있으면 그 종목을, 없으면 첫 종목을 연다 */
+  const pickSport = (cat: CategoryKey, sportId: string | null) =>
+    (sportId && SPORTS_DATA[cat].some((s) => s.id === sportId) ? sportId : null) ??
+    SPORTS_DATA[cat][0].id;
+
   const [category, setCategory] = useState<CategoryKey>(categoryFromUrl);
-  const [selectedId, setSelectedId] = useState<string>(SPORTS_DATA[categoryFromUrl][0].id);
+  const [selectedId, setSelectedId] = useState<string>(pickSport(categoryFromUrl, initialSport));
 
   useEffect(() => {
     const nextCategory =
@@ -105,8 +111,9 @@ export function Sports() {
         ? (initialCategory as CategoryKey)
         : "water";
     setCategory(nextCategory);
-    setSelectedId(SPORTS_DATA[nextCategory][0].id);
-  }, [initialCategory]);
+    setSelectedId(pickSport(nextCategory, initialSport));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialCategory, initialSport]);
 
   const categoryLabel = SPORTS_CATEGORIES.find((c) => c.key === category)?.label ?? "";
   const sports = SPORTS_DATA[category];

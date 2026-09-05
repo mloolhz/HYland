@@ -24,6 +24,7 @@ import { MyPageSettings } from "@/pages/MyPageSettings";
 import { MyPageProfileEdit } from "@/pages/MyPageProfileEdit";
 import { AiRecommend } from "@/pages/AiRecommend";
 import { Sports } from "@/pages/Sports";
+import { FacilityDetail } from "@/pages/FacilityDetail";
 import { WritePost } from "@/pages/WritePost";
 import { IslandBtiIntro } from "@/pages/IslandBtiIntro";
 import { IslandBtiTest } from "@/pages/IslandBtiTest";
@@ -38,6 +39,7 @@ import "./styles/passport-book.css";
 import "./styles/notification.css";
 import "./styles/sports.css";
 import "./styles/facility-grid.css";
+import "./styles/facility-detail.css";
 import "./styles/missions.css";
 import "./styles/ocean-weather.css";
 import "./styles/island-stamp.css";
@@ -60,6 +62,7 @@ const router = createBrowserRouter([
       { path: "missions", element: <MissionHub /> },
       { path: "leaderboard", element: <MissionHub /> },
       { path: "sports", element: <Sports /> },
+      { path: "sports/facility/:facilityId", element: <FacilityDetail /> },
       { path: "ai-recommend", element: <AiRecommend /> },
       { path: "community", element: <Community /> },
       { path: "community/write", element: <WritePost /> },
