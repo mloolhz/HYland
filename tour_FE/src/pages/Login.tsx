@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthBrand, AuthCard } from "@/components/auth/AuthCard";
-import { CitizenBanner } from "@/components/auth/CitizenBanner";
 import { PasswordField } from "@/components/auth/PasswordField";
 import { AuthDivider, SocialButtons } from "@/components/auth/SocialButtons";
 import { TextField } from "@/components/auth/TextField";
@@ -183,7 +182,6 @@ export function Login() {
         </form>
       </AuthCard>
 
-      <CitizenBanner />
 
       <p className="auth-footer-link">
         아직 계정이 없으신가요?{" "}

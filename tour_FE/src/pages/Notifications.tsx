@@ -42,8 +42,6 @@ function matchesFilter(n: Notification, filter: NotificationFilter): boolean {
         n.type === "badge" ||
         n.type === "review"
       );
-    case "booking":
-      return n.type === "booking";
     case "notice":
       return n.type === "notice";
     default:

@@ -18,16 +18,23 @@ function DotsIcon() {
 
 function CommentMenu({
   isOwner,
+  canModerate,
   onDelete,
   onEdit,
 }: {
   isOwner: boolean;
+  /** 관리자 — 남의 댓글도 지울 수 있다 (신고 처리·부적절한 글 정리) */
+  canModerate?: boolean;
   onDelete?: () => void;
   onEdit?: () => void;
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const menuItems = isOwner ? (["수정", "삭제"] as const) : (["신고"] as const);
+  const menuItems = isOwner
+    ? (["수정", "삭제"] as const)
+    : canModerate
+      ? (["신고", "삭제"] as const)
+      : (["신고"] as const);
 
   useEffect(() => {
     if (!open) return;
@@ -41,7 +48,10 @@ function CommentMenu({
   const handleSelect = (item: (typeof menuItems)[number]) => {
     setOpen(false);
     if (item === "삭제") {
-      if (window.confirm("이 댓글을 삭제할까요?")) onDelete?.();
+      const ask = isOwner
+        ? "이 댓글을 삭제할까요?"
+        : "다른 사람의 댓글입니다. 관리자 권한으로 삭제할까요?";
+      if (window.confirm(ask)) onDelete?.();
     }
     if (item === "수정") onEdit?.();
   };
@@ -152,6 +162,7 @@ export function CommentBubble({
   // 예전에는 mock 상수(CURRENT_USER_ID="u1")와 비교해서, 내 댓글인데도
   // 수정·삭제 메뉴가 뜨지 않았다. 실제 로그인 사용자와 비교한다.
   const isOwner = Boolean(user && user.id === comment.author.id);
+  const canModerate = user?.role === "ADMIN";
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(comment.likes);
   const [editing, setEditing] = useState(false);
@@ -203,7 +214,12 @@ export function CommentBubble({
             {formatDetailDate(comment.createdAt)}
           </time>
         </div>
-        <CommentMenu isOwner={isOwner} onDelete={onDelete} onEdit={() => setEditing(true)} />
+        <CommentMenu
+          isOwner={isOwner}
+          canModerate={canModerate}
+          onDelete={onDelete}
+          onEdit={() => setEditing(true)}
+        />
       </div>
       {editing ? (
         <div className="cm-comment-edit">

@@ -267,6 +267,16 @@ router.get("/posts/:id", optionalAuth, async (req: Request, res: Response) => {
 
 // ─────────────────────── 글 수정 · 삭제 ───────────────────────
 
+
+/**
+ * 관리자인지 — 커뮤니티 정리 권한.
+ * 신고 처리나 부적절한 글을 지우려면 남의 글·댓글도 지울 수 있어야 한다.
+ */
+async function isAdmin(id: string): Promise<boolean> {
+  const u = await prisma.user.findUnique({ where: { id }, select: { role: true } });
+  return u?.role === "ADMIN";
+}
+
 router.patch("/posts/:id", requireAuth, async (req: Request, res: Response) => {
   const me = userId(req)!;
   const post = await prisma.post.findUnique({ where: { id: String(req.params.id) } });
@@ -291,7 +301,9 @@ router.delete("/posts/:id", requireAuth, async (req: Request, res: Response) => 
   const me = userId(req)!;
   const post = await prisma.post.findUnique({ where: { id: String(req.params.id) } });
   if (!post) return res.status(404).json({ error: "글을 찾을 수 없어요." });
-  if (post.authorId !== me) return res.status(403).json({ error: "내가 쓴 글만 삭제할 수 있어요." });
+  if (post.authorId !== me && !(await isAdmin(me))) {
+    return res.status(403).json({ error: "내가 쓴 글만 삭제할 수 있어요." });
+  }
 
   await prisma.post.delete({ where: { id: post.id } });
   res.json({ ok: true });
@@ -433,7 +445,9 @@ router.delete("/comments/:id", requireAuth, async (req: Request, res: Response) 
   const me = userId(req)!;
   const c = await prisma.comment.findUnique({ where: { id: String(req.params.id) } });
   if (!c) return res.status(404).json({ error: "댓글을 찾을 수 없어요." });
-  if (c.authorId !== me) return res.status(403).json({ error: "내가 쓴 댓글만 삭제할 수 있어요." });
+  if (c.authorId !== me && !(await isAdmin(me))) {
+    return res.status(403).json({ error: "내가 쓴 댓글만 삭제할 수 있어요." });
+  }
 
   await prisma.comment.delete({ where: { id: c.id } });
   res.json({ ok: true });

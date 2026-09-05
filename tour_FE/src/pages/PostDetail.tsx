@@ -34,7 +34,9 @@ export function PostDetail() {
   // 상세는 목록과 별개로 부른다 — 댓글 본문과 조회수는 상세 응답에만 있다
   const [post, setPost] = useState<PostDetailData | undefined>(undefined);
   const [comments, setComments] = useState<PostDetailData["comments"]>([]);
-  const { isLoggedIn } = useSession();
+  const { isLoggedIn, user } = useSession();
+  /** 관리자 — 남의 글·댓글도 정리할 수 있다 */
+  const canModerate = user?.role === "ADMIN";
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const [editing, setEditing] = useState(false);
@@ -159,10 +161,13 @@ export function PostDetail() {
     }
   };
 
-  /** 내 글 삭제 — 되돌릴 수 없어 한 번 묻는다 */
+  /** 글 삭제 — 되돌릴 수 없어 한 번 묻는다 */
   const handleDeletePost = async () => {
     if (!id || !post) return;
-    if (!window.confirm("이 글을 삭제할까요? 댓글도 함께 지워지고 되돌릴 수 없어요.")) return;
+    const ask = post.isMine
+      ? "이 글을 삭제할까요? 댓글도 함께 지워지고 되돌릴 수 없어요."
+      : "다른 사람의 글입니다. 관리자 권한으로 삭제할까요? 댓글도 함께 지워집니다.";
+    if (!window.confirm(ask)) return;
     try {
       await deletePost(id);
       await refreshPosts();
@@ -388,9 +393,21 @@ export function PostDetail() {
                       </button>
                     </>
                   ) : (
-                    <button type="button" className="cm-action-btn cm-action-btn--report">
-                      신고
-                    </button>
+                    <>
+                      <button type="button" className="cm-action-btn cm-action-btn--report">
+                        신고
+                      </button>
+                      {/* 관리자는 남의 글도 정리할 수 있어야 한다 */}
+                      {canModerate && (
+                        <button
+                          type="button"
+                          className="cm-action-btn cm-action-btn--delete"
+                          onClick={handleDeletePost}
+                        >
+                          삭제
+                        </button>
+                      )}
+                    </>
                   )}
                 </div>
               </div>
