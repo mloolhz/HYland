@@ -8,6 +8,7 @@ import { getIslandBtiResult } from "@/data/island-bti/results";
 import { useIslandBti, useProfileCharacter } from "@/context/ProfileCharacterContext";
 import { useIslandSpiritGrowth } from "@/hooks/useIslandSpiritGrowth";
 import { calculatePassportIslandStorySummary } from "@/lib/passport/passport-island-story";
+import { useMissionProgress } from "@/store/mission-progress";
 import { ProfileCharacterVisual } from "./ProfileCharacterVisual";
 
 const EMPTY_LABEL = "아직 기록이 없어요";
@@ -28,7 +29,9 @@ function StoryRow({ label, value }: StoryRowProps) {
 
 /** 여권 마지막 페이지 — 나의 섬 이야기 */
 export function PassportIslandStoryPage() {
-  const summary = calculatePassportIslandStorySummary();
+  // 여권 수치는 미션 탭과 같은 원본(DB 진행도)에서 나와야 한다
+  const { quests, completedAt } = useMissionProgress();
+  const summary = calculatePassportIslandStorySummary(quests, completedAt);
   const { latestResult, islandBtiResultCode } = useIslandBti();
   const { selectedCharacterId } = useProfileCharacter();
   const spiritGrowth = useIslandSpiritGrowth();

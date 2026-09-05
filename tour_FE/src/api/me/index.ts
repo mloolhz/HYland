@@ -113,10 +113,17 @@ export type LeaderboardRow = {
   userId: string;
   nickname: string;
   level: number;
+  /** 순위 기준 — 획득한 배지 수 */
+  badgeCount: number;
   visitedCount: number;
   completedMissions: number;
-  /** 방문 섬 × 100 + 완료 미션 × 50 */
-  score: number;
+};
+
+export type CategoryRankRow = {
+  rank: number;
+  userId: string;
+  nickname: string;
+  badgeCount: number;
 };
 
 export type LeaderboardResponse = {
@@ -130,4 +137,12 @@ export async function fetchLeaderboard(limit?: number): Promise<LeaderboardRespo
   const body = await res.json().catch(() => null);
   if (!res.ok) throw new ApiError(res.status, body?.error ?? "리더보드를 불러오지 못했어요.");
   return body as LeaderboardResponse;
+}
+
+/** 미션 카테고리별 순위 (카테고리 id → 순위 목록) */
+export async function fetchCategoryLeaderboard(): Promise<Record<string, CategoryRankRow[]>> {
+  const res = await fetch(`${API_BASE}/leaderboard/categories`);
+  const body = await res.json().catch(() => null);
+  if (!res.ok) throw new ApiError(res.status, body?.error ?? "카테고리 순위를 불러오지 못했어요.");
+  return (body as { categories: Record<string, CategoryRankRow[]> }).categories;
 }

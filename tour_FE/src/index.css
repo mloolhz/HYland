@@ -800,3 +800,12 @@ footer{background:var(--sea-dark);color:#B6C4D8;margin-top:92px}
   background: #2563eb;
   color: #fff;
 }
+
+/* 리더보드 — 아직 배지를 받은 사람이 없는 부문 */
+.lb-empty {
+  padding: 28px 16px 34px;
+  text-align: center;
+  color: #6B7280;
+  font-size: 14px;
+}
+.pd.pd--empty { opacity: 0.45; }

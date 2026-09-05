@@ -1,18 +1,20 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import {
-  getIslandVisitStats,
-  getUnvisitedIslands,
-  getVisitedIslands,
-} from "@/lib/user-profile";
+import { ISLANDS } from "@/lib/island-data";
+import { useVisitedIslands } from "@/store/visited-islands";
 import { RollingNumber } from "./RollingNumber";
 
 type PanelPos = { top: number; left: number; width: number };
 
 export function IslandVisitProgressCard() {
-  const { visited, total, percent } = getIslandVisitStats();
-  const visitedIslands = getVisitedIslands();
-  const unvisitedIslands = getUnvisitedIslands();
+  // 방문 여부는 서버 기록(user_island_visits)이 정답이다.
+  // 예전에는 lib/island-data 의 고정 visited 플래그를 봤다.
+  const { isVisited } = useVisitedIslands();
+  const visitedIslands = ISLANDS.filter((i) => isVisited(i.id));
+  const unvisitedIslands = ISLANDS.filter((i) => !isVisited(i.id));
+  const visited = visitedIslands.length;
+  const total = ISLANDS.length;
+  const percent = total > 0 ? Math.round((visited / total) * 100) : 0;
 
   const [listOpen, setListOpen] = useState(false);
   const [panelPos, setPanelPos] = useState<PanelPos | null>(null);

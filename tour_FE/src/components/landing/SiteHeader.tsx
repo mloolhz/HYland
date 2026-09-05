@@ -354,9 +354,15 @@ export function SiteHeader() {
   const onAiRecommend = location.pathname.startsWith("/ai-recommend");
   const onMissionsHub =
     location.pathname.startsWith("/missions") || location.pathname.startsWith("/leaderboard");
+  /**
+   * 커뮤니티 메뉴는 마지막으로 보던 목록(정렬·필터)으로 돌아가게 한다.
+   * 인자를 빠뜨려 communityHref 가 undefined 였고, 그 결과 커뮤니티를 눌러도
+   * 엉뚱한 곳으로 갔다.
+   */
+  const communityHref = resolveCommunityHref(location.pathname, location.search);
   const navItems = useMemo(
-    () => buildNavItems(onIslands, onSports, onAiRecommend, onMissionsHub, onCommunity),
-    [onIslands, onSports, onAiRecommend, onMissionsHub, onCommunity],
+    () => buildNavItems(onIslands, onSports, onAiRecommend, onMissionsHub, onCommunity, communityHref),
+    [onIslands, onSports, onAiRecommend, onMissionsHub, onCommunity, communityHref],
   );
   const headerSolid = headerScrolled || navMegaOpen;
   const closeNavMega = useCallback(() => {

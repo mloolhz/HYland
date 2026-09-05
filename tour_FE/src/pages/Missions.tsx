@@ -3,9 +3,9 @@ import { AnimatedWidthBar } from "@/components/mypage/AnimatedWidthBar";
 import { MissionBadge } from "@/components/landing/MissionBadge";
 import { MissionSummary } from "@/components/landing/MissionSummary";
 import { useMissionQuests } from "@/hooks/useMissionQuests";
+import { getCategoryProgressOf } from "@/lib/passport/passport-mission-stamps";
 import {
   CATEGORY_META,
-  getCategoryProgress,
   MISSION_CATEGORIES,
   missionQuestPercent,
   missionQuestState,
@@ -94,7 +94,9 @@ function CategoryGroup({
 }) {
   const [expanded, setExpanded] = useState(false);
   const { emoji, color } = CATEGORY_META[category];
-  const { earned, total } = getCategoryProgress(category);
+  // 카테고리 배지 수도 실제 진행도로 센다. 예전에는 정적 정의를 세서
+  // 필터의 "획득 0" 과 카테고리의 "6/18" 이 서로 안 맞았다.
+  const { earned, total } = getCategoryProgressOf(category, allQuests);
   const quests = allQuests.filter((q) => q.category === category && matchesFilter(q, filter));
   if (quests.length === 0) return null;
 
