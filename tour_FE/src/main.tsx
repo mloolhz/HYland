@@ -31,6 +31,7 @@ import { IslandBtiTest } from "@/pages/IslandBtiTest";
 import { IslandBtiResult } from "@/pages/IslandBtiResult";
 import { ProfileCharacterProvider } from "@/context/ProfileCharacterContext";
 import { SessionProvider } from "@/store/session";
+import { RequireAuth } from "@/components/RequireAuth";
 import "./index.css";
 import "./styles/auth.css";
 import "./styles/community.css";
@@ -66,17 +67,17 @@ const router = createBrowserRouter([
       { path: "sports/facility/:facilityId", element: <FacilityDetail /> },
       { path: "ai-recommend", element: <AiRecommend /> },
       { path: "community", element: <Community /> },
-      { path: "community/write", element: <WritePost /> },
-      { path: "community/my-posts", element: <MyPostsPage /> },
-      { path: "community/my-comments", element: <MyCommentsPage /> },
-      { path: "community/liked", element: <MyLikedPage /> },
-      { path: "community/me", element: <MyActivity /> },
+      { path: "community/write", element: <RequireAuth><WritePost /></RequireAuth> },
+      { path: "community/my-posts", element: <RequireAuth><MyPostsPage /></RequireAuth> },
+      { path: "community/my-comments", element: <RequireAuth><MyCommentsPage /></RequireAuth> },
+      { path: "community/liked", element: <RequireAuth><MyLikedPage /></RequireAuth> },
+      { path: "community/me", element: <RequireAuth><MyActivity /></RequireAuth> },
       { path: "community/users/:userId", element: <UserProfilePage /> },
       { path: "community/:id", element: <PostDetail /> },
       { path: "notifications", element: <Notifications /> },
-      { path: "mypage", element: <MyPage /> },
-      { path: "mypage/settings", element: <MyPageSettings /> },
-      { path: "mypage/settings/profile", element: <MyPageProfileEdit /> },
+      { path: "mypage", element: <RequireAuth><MyPage /></RequireAuth> },
+      { path: "mypage/settings", element: <RequireAuth><MyPageSettings /></RequireAuth> },
+      { path: "mypage/settings/profile", element: <RequireAuth><MyPageProfileEdit /></RequireAuth> },
     ],
   },
   {
