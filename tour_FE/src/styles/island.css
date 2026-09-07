@@ -1614,3 +1614,32 @@
     transition: none;
   }
 }
+
+/* 섬 탐험 진행률 — 로그인 전 안내 */
+.isl-progress-card--guest {
+  text-align: center;
+}
+
+.isl-progress-card__guest-desc {
+  margin: 12px 0 14px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.isl-progress-card__guest-btn {
+  display: block;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #fff;
+  color: #1a3a6b;
+  font-size: 13px;
+  font-weight: 800;
+  text-align: center;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.isl-progress-card__guest-btn:hover {
+  background: #eef3fb;
+}

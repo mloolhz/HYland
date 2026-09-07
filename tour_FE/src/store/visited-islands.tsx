@@ -47,6 +47,18 @@ export function VisitedIslandsProvider({ children }: { children: ReactNode }) {
     void refresh();
   }, [refresh]);
 
+  /**
+   * 창으로 돌아올 때 다시 읽는다.
+   * 관리자가 다른 탭에서 인증을 승인하면 방문 섬이 늘어나는데, 이 화면은
+   * 그대로라 새로고침해야만 진행률이 올라갔다.
+   */
+  useEffect(() => {
+    if (!isLoggedIn) return;
+    const onFocus = () => void refresh();
+    window.addEventListener("focus", onFocus);
+    return () => window.removeEventListener("focus", onFocus);
+  }, [isLoggedIn, refresh]);
+
   const value = useMemo<VisitedStore>(
     () => ({
       ids,

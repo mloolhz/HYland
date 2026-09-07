@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { Link } from "react-router-dom";
 import { ISLANDS } from "@/lib/island-data";
+import { useSession } from "@/store/session";
 import { useVisitedIslands } from "@/store/visited-islands";
 import { RollingNumber } from "./RollingNumber";
 
@@ -10,6 +12,7 @@ export function IslandVisitProgressCard() {
   // 방문 여부는 서버 기록(user_island_visits)이 정답이다.
   // 예전에는 lib/island-data 의 고정 visited 플래그를 봤다.
   const { isVisited } = useVisitedIslands();
+  const { isLoggedIn } = useSession();
   const visitedIslands = ISLANDS.filter((i) => isVisited(i.id));
   const unvisitedIslands = ISLANDS.filter((i) => !isVisited(i.id));
   const visited = visitedIslands.length;
@@ -132,6 +135,29 @@ export function IslandVisitProgressCard() {
           document.body,
         )
       : null;
+
+  /**
+   * 로그인 전에는 보여줄 진행률이 없다. 0%로 채운 카드를 두면
+   * "한 곳도 못 갔다"는 기록처럼 보여서, 로그인 안내로 바꾼다.
+   */
+  if (!isLoggedIn) {
+    return (
+      <div className="isl-progress-card isl-progress-card--guest">
+        <div className="isl-progress-card__head">
+          <span className="isl-progress-card__icon" aria-hidden="true">
+            🏝
+          </span>
+          <span className="isl-progress-card__title">섬 탐험 진행률</span>
+        </div>
+        <p className="isl-progress-card__guest-desc">
+          로그인하면 내가 다녀온 섬이 지도에 기록돼요.
+        </p>
+        <Link to="/login" className="isl-progress-card__guest-btn">
+          로그인
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="isl-progress-card" ref={rootRef}>
