@@ -7,17 +7,17 @@ export function SocialButtons() {
 
   return (
     <div className="auth-social">
-      <button type="button" className="auth-social-btn" onClick={() => handleSns("naver")}>
-        <span className="auth-social-icon auth-social-naver" aria-hidden="true">
-          N
-        </span>
-        <span className="auth-social-label">네이버</span>
-      </button>
       <button type="button" className="auth-social-btn" onClick={() => handleSns("google")}>
         <span className="auth-social-icon auth-social-google" aria-hidden="true">
           G
         </span>
         <span className="auth-social-label">구글</span>
+      </button>
+      <button type="button" className="auth-social-btn" onClick={() => handleSns("kakao")}>
+        <span className="auth-social-icon auth-social-kakao" aria-hidden="true">
+          K
+        </span>
+        <span className="auth-social-label">카카오</span>
       </button>
     </div>
   );

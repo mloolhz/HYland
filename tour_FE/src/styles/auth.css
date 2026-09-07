@@ -472,14 +472,14 @@
   font-weight: 800;
 }
 
-.auth-social-naver {
-  background: #03c75a;
-  color: #fff;
-}
-
 .auth-social-google {
   background: #f1f5f9;
   color: #5f6b7c;
+}
+
+.auth-social-kakao {
+  background: #fee500;
+  color: #3c1e1e;
 }
 
 .auth-social-label {
