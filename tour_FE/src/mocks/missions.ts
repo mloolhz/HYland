@@ -208,7 +208,10 @@ const HEALING_SPORT_QUESTS: MissionQuest[] = SPORTS_DATA.heal.map((sport, index)
   tier: sport.id === "star" || sport.id === "seal" ? "희귀" : "일반",
 }));
 
-/** 리더보드 시즌 순위 보상 — Leaderboard 페이지 `SEASON_REWARDS`와 동기화 */
+/**
+ * 리더보드 순위 보상 — Leaderboard 페이지와 공용.
+ * 카테고리(섬·해상·육상·체험·힐링·기타) 중 하나라도 그 등수에 들면 받는다.
+ */
 export type SeasonReward = {
   rank: string;
   medal: string;
@@ -217,15 +220,15 @@ export type SeasonReward = {
 };
 
 export const SEASON_REWARDS: SeasonReward[] = [
-  { rank: "1위", medal: "🏆", title: "골드 탐험가 배지", desc: "여권 특별 스탬프 + 프로필 골드 테두리" },
-  { rank: "2·3위", medal: "🥈", title: "실버 탐험가 배지", desc: "여권 특별 스탬프 지급" },
-  { rank: "4~10위", medal: "🥉", title: "브론즈 탐험가 배지", desc: "여권 기본 스탬프 지급" },
+  { rank: "1위", medal: "🏆", title: "골드 탐험가 배지", desc: "어느 한 부문에서든 1위에 오르면 받아요" },
+  { rank: "2위", medal: "🥈", title: "실버 탐험가 배지", desc: "어느 한 부문에서든 2위에 오르면 받아요" },
+  { rank: "3위", medal: "🥉", title: "브론즈 탐험가 배지", desc: "어느 한 부문에서든 3위에 오르면 받아요" },
 ];
 
 const LEADERBOARD_REWARD_MISSION_DESC: Record<string, string> = {
-  "1위": "시즌 종합 리더보드 1위 달성",
-  "2·3위": "시즌 종합 리더보드 2~3위 달성",
-  "4~10위": "시즌 종합 리더보드 4~10위 달성",
+  "1위": "부문 순위 1위를 한 번이라도 달성해요",
+  "2위": "부문 순위 2위를 한 번이라도 달성해요",
+  "3위": "부문 순위 3위를 한 번이라도 달성해요",
 };
 
 const LEADERBOARD_REWARD_TIERS: MissionTier[] = ["전설", "희귀", "일반"];
@@ -285,7 +288,7 @@ export const MISSION_QUESTS: MissionQuest[] = [
   ...HEALING_SPORT_QUESTS,
   GRAND_SLAM_QUESTS.힐링,
 
-  // ── 기타 (8) ── 레저 종목과 무관한 커뮤니티·시즌 보상 미션
+  // ── 기타 (8) ── 레저 종목과 무관한 커뮤니티 활동·순위 보상 미션
   { id: 60, category: "기타", icon: "✍️", title: "첫 후기", desc: "섬 여행 후기를 처음 남겨요", current: 0, target: 1, unit: "개", reward: "첫 후기 배지", tier: "일반" },
   { id: 61, category: "기타", icon: "💬", title: "댓글 요정", desc: "커뮤니티에 댓글 5개를 남겨요", current: 0, target: 5, unit: "개", reward: "댓글 요정 배지", tier: "일반" },
   { id: 62, category: "기타", icon: "🧩", title: "섬BTI 참여", desc: "나의 섬BTI 테스트에 참여해요", current: 0, target: 1, unit: "회", reward: "섬BTI 배지", tier: "일반" },

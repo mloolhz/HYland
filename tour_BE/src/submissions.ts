@@ -16,6 +16,7 @@ import { prisma } from "./prisma";
 import { requireAuth } from "./auth";
 import { notify } from "./notifications";
 import { levelSnapshot } from "./level";
+import { syncAutoQuests } from "./achievements";
 
 const router = Router();
 const uid = (req: Request) => (req as any).userId as string;
@@ -273,7 +274,13 @@ router.post("/:id/approve", requireAuth, requireAdmin, async (req: Request, res:
       });
     }
 
-    res.json({ id: sub.id, status: "APPROVED", ...result });
+    /**
+     * 종목 미션을 하나 더 깼으니 그랜드슬램·순위 배지를 다시 센다.
+     * 승인은 이미 끝났으므로 여기서 실패해도 되돌리지 않는다.
+     */
+    const autoBadges = await syncAutoQuests(sub.userId);
+
+    res.json({ id: sub.id, status: "APPROVED", ...result, autoBadges });
   } catch (err) {
     console.error("인증 승인 실패:", err);
     res.status(500).json({ error: "승인 처리에 실패했어요." });

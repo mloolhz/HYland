@@ -21,6 +21,7 @@ import { Router, type Request, type Response } from "express";
 import { prisma } from "./prisma";
 import { requireAuth, optionalAuth } from "./auth";
 import { notify } from "./notifications";
+import { syncAutoQuests } from "./achievements";
 
 const router = Router();
 
@@ -173,6 +174,8 @@ router.post("/posts", requireAuth, async (req: Request, res: Response) => {
     });
 
     res.status(201).json({ id: post.id, title: post.title });
+    // 글 수로 채워지는 미션(첫 후기·이야기꾼)을 다시 센다
+    void syncAutoQuests(me);
   } catch (err) {
     console.error("글 작성 실패:", err);
     res.status(500).json({ error: "글을 저장하지 못했어요." });
@@ -343,6 +346,9 @@ router.post("/posts/:id/like", requireAuth, async (req: Request, res: Response) 
 
   const likes = await prisma.postLike.count({ where: { postId } });
   res.json({ liked: !exists, likes });
+  // 글쓴이가 받은 좋아요로 채워지는 미션(인싸 탐험가)
+  const owner = await prisma.post.findUnique({ where: { id: postId }, select: { authorId: true } });
+  if (owner) void syncAutoQuests(owner.authorId);
 });
 
 router.post("/comments/:id/like", requireAuth, async (req: Request, res: Response) => {
@@ -424,6 +430,8 @@ router.post("/posts/:id/comments", requireAuth, async (req: Request, res: Respon
       isAuthor: me === post.authorId,
       parentId: comment.parentId,
     });
+    // 댓글 수로 채워지는 미션(댓글 요정)
+    void syncAutoQuests(me);
   } catch (err) {
     console.error("댓글 작성 실패:", err);
     res.status(500).json({ error: "댓글을 저장하지 못했어요." });

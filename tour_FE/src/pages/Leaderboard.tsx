@@ -214,11 +214,11 @@ export function LeaderboardView() {
       </section>
       )}
 
-      {/* 시즌 리워드 배너 */}
-      <section className="lbp-reward" aria-label="시즌 보상">
+      {/* 순위 보상 배너 */}
+      <section className="lbp-reward" aria-label="순위 보상">
         <div className="lbp-section-head">
-          <h2>🏅 이번 시즌 순위 보상</h2>
-          <p>시즌 종료 시 순위에 따라 배지와 여권 스탬프가 지급돼요.</p>
+          <h2>🏅 순위 보상</h2>
+          <p>부문 순위에 오르면 탐험가 배지가 바로 지급돼요.</p>
         </div>
         <div className="lbp-reward__grid">
           {SEASON_REWARDS.map((reward) => (

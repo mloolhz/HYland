@@ -1,5 +1,6 @@
 import { Router, type Request, type Response } from "express";
 import { prisma } from "./prisma";
+import { syncAutoQuests } from "./achievements";
 import { optionalAuth } from "./auth";
 
 const router = Router();
@@ -85,6 +86,8 @@ router.post("/submit", optionalAuth, async (req: Request, res: Response) => {
     // 프로필에도 최신 BTI 코드 반영 (선택)
     await prisma.userProfile.update({ where: { userId }, data: { bti: code } }).catch(() => {});
     saved = true;
+    // 섬BTI 참여 미션
+    void syncAutoQuests(userId);
   }
 
   res.json({ code, scores, result, saved });
