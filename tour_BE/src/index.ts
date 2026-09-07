@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import { prisma } from "./prisma";
 import authRouter from "./auth";
+import oauthRouter from "./oauth";
 import btiRouter from "./bti";
 import missionsRouter from "./missions";
 import visitsRouter from "./visits";
@@ -28,6 +29,8 @@ app.get("/health", (_req, res) => {
 
 // 인증 (회원가입/로그인/내정보/휴대폰인증)
 app.use("/auth", authRouter);
+// 간편 로그인 — /auth 하위라 프론트 api-base 를 그대로 쓴다
+app.use("/auth/oauth", oauthRouter);
 
 // 섬BTI (문항/결과/제출/이력)
 app.use("/bti", btiRouter);

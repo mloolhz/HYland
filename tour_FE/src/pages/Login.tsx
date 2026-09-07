@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ISLANDS } from "@/lib/island-data";
 import { AuthBrand, AuthCard } from "@/components/auth/AuthCard";
 import { PasswordField } from "@/components/auth/PasswordField";
-import { AuthDivider, SocialButtons } from "@/components/auth/SocialButtons";
+import { SocialButtons } from "@/components/auth/SocialButtons";
 import { TextField } from "@/components/auth/TextField";
 import { SAVED_USERNAME_KEY, setGuest } from "@/constants/auth";
 import { login as loginRequest, ApiError } from "@/api/auth";
@@ -176,7 +176,6 @@ export function Login() {
             {loading ? <span className="auth-spinner" aria-label="로그인 중" /> : "로그인"}
           </button>
 
-          <AuthDivider />
           <SocialButtons />
 
           <button type="button" className="auth-guest-btn" onClick={handleGuest}>
