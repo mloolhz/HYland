@@ -20,6 +20,10 @@ const TYPE_OPTIONS: { value: PostType; label: string }[] = [
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 
+/** 레저 배지 인증에 쓰는 카테고리 — 레저스포츠 분류와 같다 */
+type LeisureCategory = "해상" | "육상" | "체험" | "힐링";
+const LEISURE_CATEGORIES: LeisureCategory[] = ["해상", "육상", "체험", "힐링"];
+
 type WritePrefill = {
   type?: PostType;
   island?: string;
@@ -49,8 +53,22 @@ export function WritePost() {
   const [imageError, setImageError] = useState("");
   const [error, setError] = useState("");
   const [asMissionProof, setAsMissionProof] = useState(false);
-  const [questId, setQuestId] = useState<number | null>(null);
+  /** 어떤 섬을 다녀왔는지 — 인증에는 반드시 있어야 한다 */
+  const [islandQuestId, setIslandQuestId] = useState<number | null>(null);
+  /** 레저 배지는 곁들이 — 카테고리를 먼저 고르고 그 안에서 종목을 고른다 */
+  const [leisureCategory, setLeisureCategory] = useState<LeisureCategory>("해상");
+  const [leisureQuestId, setLeisureQuestId] = useState<number | null>(null);
   const { quests } = useMissionQuests();
+
+  const remaining = quests.filter((q) => q.current < q.target);
+  const islandQuests = remaining.filter((q) => q.category === "섬");
+  /**
+   * 종목이 걸린 미션만 인증할 수 있다.
+   * 그랜드슬램은 다른 미션을 모아야 열리는 것이라 인증샷으로 낼 수 없다.
+   */
+  const leisureQuests = remaining.filter(
+    (q) => q.category === leisureCategory && Boolean(q.sportId),
+  );
 
   useEffect(() => {
     return () => {
@@ -92,8 +110,8 @@ export function WritePost() {
       return;
     }
 
-    if (asMissionProof && !questId) {
-      setError("인증할 미션을 선택해주세요.");
+    if (asMissionProof && !islandQuestId) {
+      setError("어느 섬을 다녀왔는지 선택해주세요.");
       return;
     }
     if (asMissionProof && !imageFile) {
@@ -113,9 +131,11 @@ export function WritePost() {
         activity,
         images,
       });
-      // 미션 인증으로 냈으면 검수 대기로 보낸다
-      if (asMissionProof && questId) {
-        await submitMissionProof(created.id, questId);
+      // 미션 인증으로 냈으면 검수 대기로 보낸다.
+      // 섬은 필수, 레저 배지는 골랐을 때만 — 한 글로 두 건을 낼 수 있다.
+      if (asMissionProof && islandQuestId) {
+        await submitMissionProof(created.id, islandQuestId);
+        if (leisureQuestId) await submitMissionProof(created.id, leisureQuestId);
       }
       await refreshPosts();
       navigate(`/community/${created.id}`);
@@ -147,6 +167,8 @@ export function WritePost() {
                     type="button"
                     role="radio"
                     aria-checked={type === opt.value}
+                    // 미션 인증은 사진이 근거라 유형이 인증샷으로 고정된다
+                    disabled={asMissionProof && opt.value !== "photo"}
                     className={`cm-filter-pill${type === opt.value ? " is-active" : ""}`}
                     onClick={() => setType(opt.value)}
                   >
@@ -154,6 +176,9 @@ export function WritePost() {
                   </button>
                 ))}
               </div>
+              {asMissionProof && (
+                <p className="cm-write-hint">미션 인증은 인증샷으로만 올릴 수 있어요.</p>
+              )}
             </div>
 
             <div className="cm-write-field">
@@ -234,7 +259,11 @@ export function WritePost() {
                 <input
                   type="checkbox"
                   checked={asMissionProof}
-                  onChange={(e) => setAsMissionProof(e.target.checked)}
+                  onChange={(e) => {
+                    setAsMissionProof(e.target.checked);
+                    // 인증은 사진이 근거다 — 켜는 순간 유형을 인증샷으로 바꾼다
+                    if (e.target.checked) setType("photo");
+                  }}
                 />
                 <span>
                   미션 인증으로 제출하기
@@ -244,21 +273,78 @@ export function WritePost() {
 
               {asMissionProof && (
                 <div className="cm-write-proof-body">
-                  <select
-                    className="cm-write-select"
-                    value={questId ?? ""}
-                    onChange={(e) => setQuestId(e.target.value ? Number(e.target.value) : null)}
-                    aria-label="인증할 미션 선택"
-                  >
-                    <option value="">인증할 미션 선택</option>
-                    {quests
-                      .filter((q) => q.current < q.target)
-                      .map((q) => (
+                  {/* 섬 — 필수. 승인되면 이 섬이 방문 기록으로 남는다 */}
+                  <div className="cm-write-proof-step">
+                    <span className="cm-write-proof-step-label">
+                      1. 어느 섬을 다녀왔나요? <b className="cm-write-required">필수</b>
+                    </span>
+                    <select
+                      className="cm-write-select"
+                      value={islandQuestId ?? ""}
+                      onChange={(e) => {
+                        const id = e.target.value ? Number(e.target.value) : null;
+                        setIslandQuestId(id);
+                        // 글의 섬 항목도 같이 맞춰 준다 — 두 번 고르게 하지 않는다
+                        const picked = islandQuests.find((q) => q.id === id);
+                        if (picked) setIsland(picked.title.replace(/ 방문$/, ""));
+                      }}
+                      aria-label="인증할 섬 선택"
+                    >
+                      <option value="">섬 선택</option>
+                      {islandQuests.map((q) => (
                         <option key={q.id} value={q.id}>
-                          {q.icon} {q.title} ({q.current}/{q.target} {q.unit})
+                          {q.title.replace(/ 방문$/, "")}
                         </option>
                       ))}
-                  </select>
+                    </select>
+                  </div>
+
+                  {/* 레저 배지 — 곁들이. 카테고리를 먼저 고른다 */}
+                  <div className="cm-write-proof-step">
+                    <span className="cm-write-proof-step-label">
+                      2. 레저 배지도 함께 인증할까요?{" "}
+                      <span className="cm-write-optional">(선택)</span>
+                    </span>
+                    <div className="cm-filter-pills" role="radiogroup" aria-label="레저 카테고리">
+                      {LEISURE_CATEGORIES.map((c) => (
+                        <button
+                          key={c}
+                          type="button"
+                          role="radio"
+                          aria-checked={leisureCategory === c}
+                          className={`cm-filter-pill${leisureCategory === c ? " is-active" : ""}`}
+                          onClick={() => {
+                            setLeisureCategory(c);
+                            setLeisureQuestId(null);
+                          }}
+                        >
+                          {c}
+                        </button>
+                      ))}
+                    </div>
+                    {leisureQuests.length > 0 ? (
+                      <select
+                        className="cm-write-select"
+                        value={leisureQuestId ?? ""}
+                        onChange={(e) =>
+                          setLeisureQuestId(e.target.value ? Number(e.target.value) : null)
+                        }
+                        aria-label="인증할 레저 배지 선택"
+                      >
+                        <option value="">선택 안 함</option>
+                        {leisureQuests.map((q) => (
+                          <option key={q.id} value={q.id}>
+                            {q.icon} {q.title} ({q.current}/{q.target} {q.unit})
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      <p className="cm-write-hint">
+                        {leisureCategory} 배지는 모두 모았어요.
+                      </p>
+                    )}
+                  </div>
+
                   <p className="cm-write-proof-note">
                     인증샷이 있어야 제출할 수 있어요. 승인되면 진행도가 1 올라가고, 목표를 채우면
                     배지를 받습니다.
