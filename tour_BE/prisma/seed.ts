@@ -2,6 +2,7 @@
 // 하드코딩 복붙이 아니라 FE 원본을 그대로 import → 항상 동기화 유지.
 // Prisma 7은 driver adapter가 필수라 앱 공용 클라이언트(src/prisma.ts)를 그대로 쓴다.
 import { prisma } from "../src/prisma";
+import { Prisma, BookingType } from "@prisma/client";
 import { ISLANDS } from "@/lib/island-data";
 import { SPORTS_CATEGORIES, SPORTS_DATA } from "@/data/sports";
 // 예약/안내처 정보는 예전 data/sport-booking.ts에서 data/sport-info.ts로 옮겨졌다.
@@ -19,7 +20,7 @@ const RES: Record<string, string> = {
   info: "INFO",
   mixed: "MIXED",
 };
-const BK: Record<string, string> = {
+const BK: Record<string, BookingType> = {
   official: "OFFICIAL",
   facility: "FACILITY",
   phone: "PHONE",
@@ -189,7 +190,7 @@ async function main() {
       sportId: anyQ.sportId && seenSport.has(anyQ.sportId) ? anyQ.sportId : null,
     };
   });
-  await prisma.missionQuest.createMany({ data: questRows });
+  await prisma.missionQuest.createMany({ data: questRows as Prisma.MissionQuestCreateManyInput[] });
 
   // ── 섬BTI 문항 + 결과 ──
   await prisma.islandBtiQuestion.createMany({

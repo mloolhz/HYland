@@ -39,7 +39,7 @@ router.get("/results", async (_req: Request, res: Response) => {
 // ── 결과 유형 상세 ──
 router.get("/results/:code", async (req: Request, res: Response) => {
   const result = await prisma.islandBtiResult.findUnique({
-    where: { code: req.params.code.toUpperCase() },
+    where: { code: String(req.params.code).toUpperCase() },
   });
   if (!result) return res.status(404).json({ error: "해당 BTI 유형을 찾을 수 없어요" });
   res.json(result);

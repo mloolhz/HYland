@@ -111,11 +111,12 @@ router.get("/", async (_req: Request, res: Response) => {
 
 // ── 특정 섬 해양 날씨 ──
 router.get("/:islandId", async (req: Request, res: Response) => {
-  const meta = ISLAND_BUOY[req.params.islandId];
+  const islandId = String(req.params.islandId);
+  const meta = ISLAND_BUOY[islandId];
   if (!meta) return res.status(404).json({ error: "지원하지 않는 섬이에요" });
   try {
     const obs = await getSeaObs();
-    res.json(shape(req.params.islandId, obs[meta.stnId], meta));
+    res.json(shape(islandId, obs[meta.stnId], meta));
   } catch (e: any) {
     res.status(502).json({ error: "해양 관측 데이터를 불러오지 못했어요", detail: e.message });
   }
