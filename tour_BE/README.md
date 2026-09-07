@@ -122,6 +122,7 @@ npm run dev
 | `npm run db:seed:leisure` | 레저 시설 145곳 시드 |
 | `npm run db:seed:badges` | 배지 정의 시드 |
 | `npm run db:seed:accounts` | 데모 계정 3개 시드 |
+| `npm run db:seed:missions` | 미션·배지를 레저 종목에 맞춰 재동기화 (진행도·배지 보존) |
 | `npm run tour:inspect` | 관광공사 레포츠 데이터 조회 |
 
 ---
