@@ -1,4 +1,5 @@
-import { getBadgeStats, type UserProfile } from "@/lib/user-profile";
+import { type UserProfile } from "@/lib/user-profile";
+import { useBadgeStats } from "@/hooks/useBadgeStats";
 
 import { PassportAvatarPicker } from "@/components/landing/PassportAvatarPicker";
 import { PassportBtiCard } from "@/components/landing/PassportBtiCard";
@@ -10,7 +11,7 @@ type MyPagePassportProfilePageProps = {
 };
 
 export function MyPagePassportProfilePage({ profile, titleId }: MyPagePassportProfilePageProps) {
-  const badgeStats = getBadgeStats();
+  const badgeStats = useBadgeStats();
 
   return (
     <div className="passport-page passport-page--left passport-page--mypage">
@@ -39,10 +40,6 @@ export function MyPagePassportProfilePage({ profile, titleId }: MyPagePassportPr
           <PassportAvatarPicker />
           <div className="passport-page__profile-meta">
             <p className="passport-page__nickname">{profile.nickname}님</p>
-            <div className="passport-page__badges">
-              <span className="passport-page__level">Lv.{profile.level}</span>
-              <span className="passport-page__rank">{profile.levelTitle}</span>
-            </div>
           </div>
         </div>
 

@@ -8,7 +8,7 @@ import {
   isInkStampEarned,
   questToInkStampDisplay,
 } from "@/lib/passport/passport-quest-ink-stamp";
-import { MISSION_QUESTS } from "@/mocks/missions";
+import { MISSION_QUESTS, type MissionQuest } from "@/mocks/missions";
 
 export const INCHEON_ISLAND_TOTAL = ISLANDS.length;
 
@@ -40,23 +40,28 @@ function formatStoryDate(dateMs: number): string {
 }
 
 /** 획득한 여권 도장(미션) 개수 */
-export function getEarnedPassportStampCount(): number {
-  return MISSION_QUESTS.filter((quest) => isInkStampEarned(quest)).length;
+export function getEarnedPassportStampCount(quests: MissionQuest[] = MISSION_QUESTS): number {
+  return quests.filter((quest) => isInkStampEarned(quest)).length;
 }
 
 /** 방문·도장 원본에서 나의 섬 이야기 요약을 계산한다. */
-export function calculatePassportIslandStorySummary(): PassportIslandStorySummary {
-  const visitedIslandCount = getUniqueIslandIdsFromEarnedStamps().length;
+export function calculatePassportIslandStorySummary(
+  /** 실제 진행도가 얹힌 미션 목록 (mission-progress 스토어) */
+  quests: MissionQuest[] = MISSION_QUESTS,
+  /** questId → 완료 시각. 없으면 날짜 없는 도장으로 본다. */
+  completedAt: Map<number, string> = new Map(),
+): PassportIslandStorySummary {
+  const visitedIslandCount = getUniqueIslandIdsFromEarnedStamps(quests).length;
   const total = INCHEON_ISLAND_TOTAL;
   const islandTimeline = new Map<
     string,
     { name: string; earliest: number; latest: number }
   >();
 
-  for (const quest of MISSION_QUESTS) {
+  for (const quest of quests) {
     if (!isInkStampEarned(quest)) continue;
 
-    const display = questToInkStampDisplay(quest);
+    const display = questToInkStampDisplay(quest, completedAt.get(quest.id));
     const islandId = resolveIslandIdFromStampPlace(display.place);
     if (!islandId || !display.earnedAt) continue;
 
@@ -91,8 +96,8 @@ export function calculatePassportIslandStorySummary(): PassportIslandStorySummar
     firstVisitedIsland: firstVisited?.name ?? null,
     recentVisitedIsland: recentVisited?.name ?? null,
     visitedIslandCount,
-    earnedStampCount: getEarnedPassportStampCount(),
-    completedMissionCount: getMissionStampStats().earned,
+    earnedStampCount: getEarnedPassportStampCount(quests),
+    completedMissionCount: getMissionStampStats(quests).earned,
     explorationStartedAt: firstVisited ? formatStoryDate(firstVisited.earliest) : null,
     explorationRate: {
       visited: visitedIslandCount,

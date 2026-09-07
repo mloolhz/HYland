@@ -35,9 +35,13 @@ function matchesFilter(n: Notification, filter: NotificationFilter): boolean {
     case "unread":
       return !n.read;
     case "activity":
-      return n.type === "comment" || n.type === "like" || n.type === "reply" || n.type === "badge";
-    case "booking":
-      return n.type === "booking";
+      return (
+        n.type === "comment" ||
+        n.type === "like" ||
+        n.type === "reply" ||
+        n.type === "badge" ||
+        n.type === "review"
+      );
     case "notice":
       return n.type === "notice";
     default:

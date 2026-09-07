@@ -15,12 +15,8 @@ import {
 } from "@/constants/validation";
 import { usePhoneVerification } from "@/hooks/usePhoneVerification";
 import { useTabIndicator } from "@/hooks/useTabIndicator";
-import {
-  findAccountByCredentials,
-  findAccountsByNameAndPhone,
-  maskUserId,
-  type MockAccount,
-} from "@/mocks/accounts";
+import { ApiError, findAccountIds, resetPassword, type FoundAccount } from "@/api/auth";
+import { maskUserId } from "@/lib/account-format";
 
 type Tab = "id" | "password";
 type Step = 1 | 2;
@@ -37,10 +33,10 @@ export function FindAccount() {
   const resetPhone = phoneVerify.reset;
 
   const [step, setStep] = useState<Step>(1);
-  const [name, setName] = useState("");
   const [userId, setUserId] = useState("");
-  const [foundAccounts, setFoundAccounts] = useState<MockAccount[] | null>(null);
-  const [resetAccount, setResetAccount] = useState<MockAccount | null>(null);
+  const [foundAccounts, setFoundAccounts] = useState<FoundAccount[] | null>(null);
+  /** 비밀번호를 바꿀 대상 아이디 — 입력한 아이디를 그대로 쓴다 */
+  const [resetAccount, setResetAccount] = useState<string | null>(null);
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -49,7 +45,6 @@ export function FindAccount() {
 
   const resetForm = useCallback(() => {
     setStep(1);
-    setName("");
     setUserId("");
     setFoundAccounts(null);
     setResetAccount(null);
@@ -62,7 +57,6 @@ export function FindAccount() {
 
   useEffect(() => {
     setStep(1);
-    setName("");
     setUserId("");
     setFoundAccounts(null);
     setResetAccount(null);
@@ -88,24 +82,27 @@ export function FindAccount() {
 
   const step2Label = tab === "id" ? "결과 확인" : "비밀번호 재설정";
   const verified = phoneVerify.step === "verified";
-  const canProceedStep1 =
-    verified &&
-    name.trim().length > 0 &&
-    (tab === "id" || userId.trim().length > 0);
+  // 회원가입에서 이름을 받지 않으므로 본인 확인은 휴대폰 인증으로만 한다
+  const canProceedStep1 = verified && (tab === "id" || userId.trim().length > 0);
 
   const handleNext = async () => {
     if (!canProceedStep1) return;
     setLoading(true);
 
-    // TODO: POST /api/account/find-id or verify-reset
-    await new Promise((r) => setTimeout(r, 500));
-
-    if (tab === "id") {
-      const accounts = findAccountsByNameAndPhone(name, phoneVerify.phoneDigits);
-      setFoundAccounts(accounts);
-    } else {
-      const account = findAccountByCredentials(userId, name, phoneVerify.phoneDigits);
-      setResetAccount(account);
+    try {
+      const accounts = await findAccountIds(phoneVerify.phoneDigits);
+      if (tab === "id") {
+        setFoundAccounts(accounts);
+      } else {
+        // 입력한 아이디가 이 번호로 가입된 것인지 먼저 확인한다.
+        // (실제 변경은 서버가 한 번 더 대조한다)
+        const hit = accounts.find((a) => a.username === userId.trim());
+        setResetAccount(hit ? hit.username : null);
+      }
+    } catch (err) {
+      console.error("[find-account] 조회 실패:", err);
+      setFoundAccounts([]);
+      setResetAccount(null);
     }
 
     setLoading(false);
@@ -118,14 +115,23 @@ export function FindAccount() {
   const canReset = passwordValid && confirmMatch && !loading;
 
   const handleReset = async () => {
-    if (!canReset) return;
+    if (!canReset || !resetAccount) return;
     setLoading(true);
-    // TODO: POST /api/account/reset-password
-    // TODO: 서버 응답이 409면 '이전 비밀번호와 같아요' 표시
-    await new Promise((r) => setTimeout(r, 600));
-    console.log("reset password", { userId: resetAccount?.userId });
-    setLoading(false);
-    setResetDone(true);
+    try {
+      await resetPassword({
+        phone: phoneVerify.phoneDigits,
+        username: resetAccount,
+        password,
+      });
+      setResetDone(true);
+    } catch (err) {
+      setErrors({
+        password:
+          err instanceof ApiError ? err.message : "비밀번호를 변경하지 못했어요",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleBackToStep1 = () => {
@@ -197,17 +203,6 @@ export function FindAccount() {
               />
             )}
 
-            <TextField
-              id="find-name"
-              label="이름"
-              type="text"
-              autoComplete="name"
-              placeholder="이름"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              icon={<i className="ti ti-user" />}
-            />
-
             <PhoneVerification
               idPrefix="find"
               phoneIcon={<i className="ti ti-phone" />}
@@ -222,6 +217,7 @@ export function FindAccount() {
               sendCode={phoneVerify.sendCode}
               verifyCode={phoneVerify.verifyCode}
               isPhoneValid={phoneVerify.isPhoneValid}
+              devCode={phoneVerify.devCode}
             />
 
             <button
@@ -258,7 +254,7 @@ export function FindAccount() {
 
                 <div className="auth-found-list">
                   {foundAccounts.map((account) => (
-                    <FoundAccountCard key={account.userId} account={account} />
+                    <FoundAccountCard key={account.username} account={account} />
                   ))}
                 </div>
 
@@ -318,10 +314,10 @@ export function FindAccount() {
               <>
                 <div className="auth-reset-target">
                   <span className="auth-reset-ava" aria-hidden="true">
-                    {resetAccount.userId[0].toUpperCase()}
+                    {resetAccount[0].toUpperCase()}
                   </span>
                   <div>
-                    <p className="auth-reset-userId">{maskUserId(resetAccount.userId)}</p>
+                    <p className="auth-reset-userId">{maskUserId(resetAccount)}</p>
                     <p className="auth-reset-desc">이 계정의 비밀번호를 변경합니다</p>
                   </div>
                 </div>

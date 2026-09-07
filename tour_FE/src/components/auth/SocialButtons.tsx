@@ -13,12 +13,6 @@ export function SocialButtons() {
         </span>
         <span className="auth-social-label">네이버</span>
       </button>
-      <button type="button" className="auth-social-btn" onClick={() => handleSns("kakao")}>
-        <span className="auth-social-icon auth-social-kakao" aria-hidden="true">
-          K
-        </span>
-        <span className="auth-social-label">카카오</span>
-      </button>
       <button type="button" className="auth-social-btn" onClick={() => handleSns("google")}>
         <span className="auth-social-icon auth-social-google" aria-hidden="true">
           G

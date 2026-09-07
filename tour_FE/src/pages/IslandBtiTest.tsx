@@ -1,4 +1,6 @@
 import { useRef, useState } from "react";
+import { submitBtiAnswers } from "@/api/bti";
+import { useSession } from "@/store/session";
 import { useNavigate } from "react-router-dom";
 import { IslandBtiContainer } from "@/components/island-bti/IslandBtiContainer";
 import { ISLAND_BTI_QUESTIONS } from "@/data/island-bti/questions";
@@ -8,6 +10,7 @@ import { calculateIslandBtiResult, shuffleIslandBtiQuestions } from "@/lib/islan
 
 export function IslandBtiTest() {
   const navigate = useNavigate();
+  const { refresh } = useSession();
   const { saveResult } = useIslandBti();
   const [questions] = useState(() => shuffleIslandBtiQuestions(ISLAND_BTI_QUESTIONS));
   const questionCount = questions.length;
@@ -48,6 +51,16 @@ export function IslandBtiTest() {
 
         savedForCompletionRef.current = true;
         saveResult(resultData.result, resultData.scores);
+
+        // 로그인 상태면 서버에도 남긴다 (검사 이력 + 프로필 BTI 갱신).
+        // 화면 이동을 막지 않도록 결과를 기다리지 않는다.
+        const axisAnswers = questions
+          .map((q) => q.options[answers[q.id]]?.value)
+          .filter((v) => typeof v === "string") as string[];
+        void submitBtiAnswers(axisAnswers).then((saved) => {
+          if (saved?.saved) void refresh();
+        });
+
         navigate("/island-bti/result", { state: resultData });
       } catch (error) {
         savedForCompletionRef.current = false;

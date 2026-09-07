@@ -8,7 +8,7 @@ export function SnsHintBanner() {
       </span>
       <span className="auth-sns-hint-text">
         <b>SNS로 가입하셨나요?</b>
-        <span>네이버·카카오·구글 버튼으로 바로 로그인하세요</span>
+        <span>네이버·구글 버튼으로 바로 로그인하세요</span>
       </span>
       <i className="ti ti-chevron-right auth-sns-hint-arrow" aria-hidden="true" />
     </Link>

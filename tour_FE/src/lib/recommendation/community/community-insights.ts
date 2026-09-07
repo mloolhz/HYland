@@ -70,18 +70,51 @@ function monthOf(trip: TripIntent): number | null {
   return m >= 1 && m <= 12 ? m : null;
 }
 
-/** 비슷한 주의사항을 한 덩어리로 묶기 위한 대표 키워드. */
-const CAUTION_TOPICS: { topic: string; hints: string[] }[] = [
-  { topic: "주차 공간", hints: ["주차"] },
-  { topic: "배편 시간", hints: ["배 시간", "배편", "결항", "선착장"] },
-  { topic: "물때 확인", hints: ["물때", "만조", "간조", "썰물", "밀물"] },
-  { topic: "미리 예약", hints: ["예약", "매진"] },
-  { topic: "챙길 것", hints: ["챙기", "그늘", "현금", "화장실", "편의점", "식당"] },
+/**
+ * 주의사항을 주제로 묶고, 각 주제를 "여행에 바로 쓰는 구체적 조언"으로 바꾼다.
+ * 예전엔 "주차 공간"처럼 주제 이름만 보여줬는데, 그건 팁이라기보다 라벨이었다.
+ * 방문객이 그대로 행동할 수 있는 문장으로 구체화한다.
+ */
+const CAUTION_TOPICS: { key: string; hints: string[]; advice: string }[] = [
+  {
+    key: "parking",
+    hints: ["주차"],
+    advice: "주차 공간이 넉넉하지 않으니 아침 일찍 가거나 대중교통·배편을 이용하세요.",
+  },
+  {
+    key: "ferry",
+    hints: ["배 시간", "배편", "결항", "선착장", "막배"],
+    advice: "배편 시간이 자주 바뀌니 출발 전 운항 시간과 막배 시각을 꼭 확인하세요.",
+  },
+  {
+    key: "tide",
+    hints: ["물때", "만조", "간조", "썰물", "밀물"],
+    advice: "갯벌·해안 활동은 물때(간조·만조) 시간을 미리 확인하고 일정을 잡으세요.",
+  },
+  {
+    key: "reserve",
+    hints: ["예약", "매진"],
+    advice: "성수기에는 미리 예약하지 않으면 자리가 없을 수 있으니 예약을 서두르세요.",
+  },
+  {
+    key: "sun",
+    hints: ["그늘", "자외선", "햇빛", "모자", "양산"],
+    advice: "그늘이 적으니 모자·양산·자외선 차단제를 챙기세요.",
+  },
+  {
+    key: "amenity",
+    hints: ["현금", "화장실", "편의점", "식당", "챙기", "매점"],
+    advice: "섬 안 편의시설이 한정적이니 물·먹거리·현금을 미리 준비하세요.",
+  },
 ];
 
-function topicOf(caution: string): string {
-  const hit = CAUTION_TOPICS.find((t) => t.hints.some((h) => caution.includes(h)));
-  return hit?.topic ?? caution;
+/** 주의 문장 → 주제 key (매칭 안 되면 null — 팁으로 안 쓴다) */
+function topicKeyOf(caution: string): string | null {
+  return CAUTION_TOPICS.find((t) => t.hints.some((h) => caution.includes(h)))?.key ?? null;
+}
+
+function adviceOf(key: string): string {
+  return CAUTION_TOPICS.find((t) => t.key === key)?.advice ?? key;
 }
 
 export function aggregateCommunityInsights(
@@ -112,16 +145,25 @@ export function aggregateCommunityInsights(
   }
 
   // ── 주의·팁 (주제로 묶어 빈도순) ───────────────────────
+  // 팁은 "여행에 도움되는 실용 정보"라 후기의 전체 논조와 무관하게 유용하다.
+  // ("주차 힘들었어요"가 별점 낮은 글에 있어도 방문객에겐 도움이 된다)
+  // 그래서 시기·동행 합의(reviews, non-negative)와 달리, 팁은 후기·사진 전체에서
+  // 뽑는다. 단, 불평 문장은 이미 추출 단계(community-analysis)에서 걸러졌다.
+  const cautionSource = posts.filter(
+    (p) => !p.isNotice && (p.type === "review" || p.type === "photo"),
+  );
   const topicCount = new Map<string, number>();
-  for (const post of reviews) {
-    const topics = new Set((post.cautions ?? []).map(topicOf));
-    for (const topic of topics) topicCount.set(topic, (topicCount.get(topic) ?? 0) + 1);
+  for (const post of cautionSource) {
+    const keys = new Set(
+      (post.cautions ?? []).map(topicKeyOf).filter((k): k is string => k !== null),
+    );
+    for (const key of keys) topicCount.set(key, (topicCount.get(key) ?? 0) + 1);
   }
   const cautions = [...topicCount.entries()]
     .filter(([, support]) => support >= threshold)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 2)
-    .map(([text, support]) => ({ text, support }));
+    .map(([key, support]) => ({ text: adviceOf(key), support }));
 
   return { seasonMatch, companionMatch, cautions, reviewCount: reviews.length };
 }

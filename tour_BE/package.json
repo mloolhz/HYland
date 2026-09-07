@@ -10,7 +10,13 @@
     "db:studio": "prisma studio",
     "db:generate": "prisma generate",
     "db:seed": "tsx prisma/seed.ts",
-    "tour:inspect": "node scripts/inspect-tour-sports.mjs"
+    "tour:inspect": "node scripts/inspect-tour-sports.mjs",
+    "db:seed:leisure": "tsx prisma/seed-leisure.ts",
+    "check:tour": "node scripts/tour/check-consistency.mjs",
+    "db:seed:badges": "tsx prisma/seed-badges.ts",
+    "db:seed:accounts": "tsx prisma/seed-accounts.ts",
+    "db:seed:demo-posts": "tsx prisma/seed-demo-posts.ts",
+    "db:seed:missions": "tsx prisma/seed-missions.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

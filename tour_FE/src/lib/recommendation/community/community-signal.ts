@@ -37,7 +37,7 @@ function isEndorsement(post: Post): boolean {
 }
 
 function engagementOf(post: Post): number {
-  const replies = post.comments.reduce((n, c) => n + 1 + (c.replies?.length ?? 0), 0);
+  const replies = (post.comments ?? []).reduce((n, c) => n + 1 + (c.replies?.length ?? 0), 0);
   return post.likes + replies * 3;
 }
 

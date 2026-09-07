@@ -1,15 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { ISLANDS } from "@/lib/island-data";
 import { AuthBrand, AuthCard } from "@/components/auth/AuthCard";
-import { CitizenBanner } from "@/components/auth/CitizenBanner";
 import { PasswordField } from "@/components/auth/PasswordField";
 import { AuthDivider, SocialButtons } from "@/components/auth/SocialButtons";
 import { TextField } from "@/components/auth/TextField";
-import {
-  SAVED_USERNAME_KEY,
-  setDemoLoggedIn,
-  setGuest,
-} from "@/constants/auth";
+import { SAVED_USERNAME_KEY, setGuest } from "@/constants/auth";
+import { login as loginRequest, ApiError } from "@/api/auth";
+import { useSession } from "@/store/session";
 import { useAuthRedirect } from "@/hooks/useAuthRedirect";
 
 export function Login() {
@@ -22,6 +20,7 @@ export function Login() {
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(false);
   const userIdRef = useRef<HTMLInputElement>(null);
+  const { signIn } = useSession();
 
   useEffect(() => {
     const saved = localStorage.getItem(SAVED_USERNAME_KEY);
@@ -89,16 +88,23 @@ export function Login() {
     }
 
     setLoading(true);
-    // TODO: POST /api/login
-    await new Promise((r) => setTimeout(r, 600));
-    console.log("login", { userId, password, remember });
+    try {
+      const { token, user } = await loginRequest({ username: userId.trim(), password });
+      await signIn(token, user);
 
-    if (remember) localStorage.setItem(SAVED_USERNAME_KEY, userId);
-    else localStorage.removeItem(SAVED_USERNAME_KEY);
+      if (remember) localStorage.setItem(SAVED_USERNAME_KEY, userId.trim());
+      else localStorage.removeItem(SAVED_USERNAME_KEY);
 
-    setDemoLoggedIn();
-    setLoading(false);
-    goAfterAuth();
+      setLoading(false);
+      goAfterAuth();
+    } catch (err) {
+      setLoading(false);
+      // 서버가 준 문구를 그대로 보여준다 ("아이디 또는 비밀번호가 올바르지 않아요")
+      const message =
+        err instanceof ApiError ? err.message : "로그인 중 문제가 생겼어요. 잠시 후 다시 시도해주세요.";
+      setErrors((prev) => ({ ...prev, form: message }));
+      userIdRef.current?.focus();
+    }
   };
 
   const handleGuest = () => {
@@ -108,7 +114,10 @@ export function Login() {
 
   return (
     <div className="auth-page">
-      <AuthBrand title="로그인" subtitle="168개 섬의 탐험 기록이 기다리고 있어요" />
+      <AuthBrand
+        title="로그인"
+        subtitle={`${ISLANDS.length}개 섬의 탐험 기록이 기다리고 있어요`}
+      />
 
       <AuthCard activeTab="login">
         <form className="auth-form" onSubmit={handleSubmit} noValidate>
@@ -157,6 +166,12 @@ export function Login() {
             <Link to="/find-account?tab=password">비밀번호 찾기</Link>
           </nav>
 
+          {errors.form && (
+            <p className="auth-form-error" role="alert">
+              {errors.form}
+            </p>
+          )}
+
           <button type="submit" className="auth-submit" disabled={loading}>
             {loading ? <span className="auth-spinner" aria-label="로그인 중" /> : "로그인"}
           </button>
@@ -171,7 +186,6 @@ export function Login() {
         </form>
       </AuthCard>
 
-      <CitizenBanner />
 
       <p className="auth-footer-link">
         아직 계정이 없으신가요?{" "}

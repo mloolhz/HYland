@@ -2,11 +2,13 @@ import { useMemo, useState, type CSSProperties } from "react";
 import { AnimatedWidthBar } from "@/components/mypage/AnimatedWidthBar";
 import { MissionBadge } from "@/components/landing/MissionBadge";
 import { MissionSummary } from "@/components/landing/MissionSummary";
+import { MissionLoginPrompt } from "@/components/mission/MissionLoginPrompt";
+import { useMissionQuests } from "@/hooks/useMissionQuests";
+import { useSession } from "@/store/session";
+import { getCategoryProgressOf } from "@/lib/passport/passport-mission-stamps";
 import {
   CATEGORY_META,
-  getCategoryProgress,
   MISSION_CATEGORIES,
-  MISSION_QUESTS,
   missionQuestPercent,
   missionQuestState,
   type MissionCategory,
@@ -83,11 +85,21 @@ function QuestCard({ quest, index }: { quest: MissionQuest; index: number }) {
   );
 }
 
-function CategoryGroup({ category, filter }: { category: MissionCategory; filter: MissionFilter }) {
+function CategoryGroup({
+  category,
+  filter,
+  allQuests,
+}: {
+  category: MissionCategory;
+  filter: MissionFilter;
+  allQuests: MissionQuest[];
+}) {
   const [expanded, setExpanded] = useState(false);
   const { emoji, color } = CATEGORY_META[category];
-  const { earned, total } = getCategoryProgress(category);
-  const quests = MISSION_QUESTS.filter((q) => q.category === category && matchesFilter(q, filter));
+  // 카테고리 배지 수도 실제 진행도로 센다. 예전에는 정적 정의를 세서
+  // 필터의 "획득 0" 과 카테고리의 "6/18" 이 서로 안 맞았다.
+  const { earned, total } = getCategoryProgressOf(category, allQuests);
+  const quests = allQuests.filter((q) => q.category === category && matchesFilter(q, filter));
   if (quests.length === 0) return null;
 
   const style = { "--cat": color } as CSSProperties;
@@ -151,15 +163,25 @@ function CategoryGroup({ category, filter }: { category: MissionCategory; filter
 
 export function MissionsView() {
   const [filter, setFilter] = useState<MissionFilter>("전체");
+  // 진행도는 로그인한 사용자의 DB 값 (비로그인이면 mock)
+  const { quests: allQuests } = useMissionQuests();
+  const { isLoggedIn } = useSession();
 
   const counts = useMemo(() => {
-    const earned = MISSION_QUESTS.filter((q) => missionQuestState(q) === "earned").length;
-    return { 전체: MISSION_QUESTS.length, 획득: earned, 진행중: MISSION_QUESTS.length - earned };
-  }, []);
+    const earned = allQuests.filter((q) => missionQuestState(q) === "earned").length;
+    return { 전체: allQuests.length, 획득: earned, 진행중: allQuests.length - earned };
+  }, [allQuests]);
 
   return (
     <div className="container">
-      <MissionSummary />
+      {isLoggedIn ? (
+        <MissionSummary />
+      ) : (
+        <MissionLoginPrompt
+          title="로그인하고 미션을 시작해보세요"
+          desc="섬 후기와 인증샷을 올리면 미션을 깨고 배지를 모을 수 있어요."
+        />
+      )}
 
       <div className="ms-filter" role="tablist" aria-label="미션 필터">
         {FILTERS.map((f) => (
@@ -179,7 +201,7 @@ export function MissionsView() {
 
       <div className="ms-groups">
         {MISSION_CATEGORIES.map((category) => (
-          <CategoryGroup key={category} category={category} filter={filter} />
+          <CategoryGroup key={category} category={category} filter={filter} allQuests={allQuests} />
         ))}
       </div>
     </div>

@@ -204,12 +204,6 @@ export const ISLAND_MAP: Record<string, IslandInfo> = Object.fromEntries(
   ISLANDS.map((island) => [island.id, island]),
 );
 
-export function getIslandStats() {
-  // Deprecated: prefer getIslandVisitStats() from @/lib/user-profile
-  const visited = ISLANDS.filter((i) => i.visited).length;
-  return { visited, total: ISLANDS.length, percent: Math.round((visited / ISLANDS.length) * 100) };
-}
-
 export type IslandNavSubItem = {
   label: string;
   href: string;

@@ -30,11 +30,11 @@ export type PassportBookSpread = {
 };
 
 /** 카테고리 순서(섬→해상→육상→체험→힐링→기타)대로 페이지 구성 — 카테고리는 새 장에서 시작 */
-function buildCategoryPages(): PassportCategoryPage[] {
+function buildCategoryPages(allQuests: MissionQuest[]): PassportCategoryPage[] {
   const pages: PassportCategoryPage[] = [];
 
   for (const category of MISSION_CATEGORIES) {
-    const quests = MISSION_QUESTS.filter((q) => q.category === category);
+    const quests = allQuests.filter((q) => q.category === category);
     if (quests.length === 0) continue;
 
     const totalPagesInCategory = Math.ceil(quests.length / PASSPORT_STAMPS_PER_PAGE);
@@ -53,8 +53,8 @@ function buildCategoryPages(): PassportCategoryPage[] {
 }
 
 /** 여권 펼침 — 0: 프로필 + 첫 카테고리, 이후: 카테고리 페이지 2장씩 */
-export function buildMissionBookSpreads(): PassportBookSpread[] {
-  const pages = buildCategoryPages();
+export function buildMissionBookSpreads(allQuests: MissionQuest[] = MISSION_QUESTS): PassportBookSpread[] {
+  const pages = buildCategoryPages(allQuests);
   const spreads: PassportBookSpread[] = [];
 
   // 첫 펼침: 좌측 프로필 + 우측 첫 카테고리 페이지

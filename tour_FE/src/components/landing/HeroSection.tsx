@@ -1,10 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useSession } from "@/store/session";
+import { LandingLoginCard } from "@/components/landing/LandingLoginCard";
+import { useBadgeStats } from "@/hooks/useBadgeStats";
+import { useUserProfile } from "@/hooks/useUserProfile";
 import { Link } from "react-router-dom";
 import { AuthorAvatar } from "@/components/community/AuthorAvatar";
 import { AnimatedWidthBar } from "@/components/mypage/AnimatedWidthBar";
 import { CountUpNumber } from "@/components/mypage/CountUpNumber";
-import { formatNumber } from "@/lib/landing-data";
-import { getBadgeStats, getCurrentUserProfile, getPassportExpPercent } from "@/lib/user-profile";
+import { getLevelPercent, isMaxLevel } from "@/lib/user-profile";
 import { scrollToSection } from "@/utils/layout";
 import { demoProps } from "./ToastProvider";
 import {
@@ -17,7 +20,6 @@ import { PassportCoverVisual } from "./PassportCoverVisual";
 import { IncheonWeatherBar } from "./IncheonWeatherBar";
 
 /** 패스포트 카드가 로그인 상태로 노출되는 동안 프로필 표시 */
-const SHOW_LANDING_PROFILE = true;
 
 const SLIDE_COUNT = HERO_SLIDES.length;
 const CATEGORIES = [
@@ -28,9 +30,13 @@ const CATEGORIES = [
 ] as const;
 
 export function HeroSection() {
-  const profile = getCurrentUserProfile();
-  const badgeStats = getBadgeStats();
-  const expPercent = getPassportExpPercent(profile);
+  const profile = useUserProfile();
+  const badgeStats = useBadgeStats();
+  const levelPercent = getLevelPercent(profile);
+  const atMaxLevel = isMaxLevel(profile);
+  // 예전에는 SHOW_LANDING_PROFILE = true 로 박아둬서, 로그인 안 한 사람에게도
+  // 남의 닉네임과 수치가 그대로 보였다.
+  const { isLoggedIn } = useSession();
   const [activeSlide, setActiveSlide] = useState(0);
   const [showScrollHint, setShowScrollHint] = useState(true);
   const [passportModalOpen, setPassportModalOpen] = useState(false);
@@ -132,40 +138,41 @@ export function HeroSection() {
 
         <div className="pass-card-wrap">
           <IncheonWeatherBar />
+          {!isLoggedIn ? (
+            <LandingLoginCard />
+          ) : (
           <aside className="pass-card" aria-label="나의 섬 여권">
             <div className="pc-head">
               <h3>나의 섬 여권</h3>
-              {SHOW_LANDING_PROFILE ? (
-                <Link to="/mypage" className="pc-profile-link">
-                  <AuthorAvatar author={{ nickname: profile.nickname }} className="pc-profile-avatar" />
-                  <span>{profile.nickname}님</span>
-                </Link>
-              ) : (
-                <Link to="/login" className="pc-login-link">
-                  로그인하기
-                </Link>
-              )}
             </div>
 
             <div className="pc-passport-layout">
-              {SHOW_LANDING_PROFILE ? (
-                <button
-                  type="button"
-                  ref={passportTriggerRef}
-                  className="passport-cover passport-cover--link passport-cover--trigger"
-                  aria-label="마이 여권 펼치기"
-                  aria-haspopup="dialog"
-                  onClick={() => setPassportModalOpen(true)}
-                >
-                  <PassportCoverVisual />
-                </button>
-              ) : (
-                <div className="passport-cover" aria-hidden="true">
-                  <PassportCoverVisual />
-                </div>
-              )}
+              <button
+                type="button"
+                ref={passportTriggerRef}
+                className="passport-cover passport-cover--link passport-cover--trigger"
+                aria-label="마이 여권 펼치기"
+                aria-haspopup="dialog"
+                onClick={() => setPassportModalOpen(true)}
+              >
+                <PassportCoverVisual />
+              </button>
 
               <div className="passport-info">
+                {/* 카드 머리에 있던 프로필 칩을 이리로 옮겨 크게 (두 번 두지 않는다) */}
+                <Link to="/mypage" className="pc-profile-link pc-profile-link--lg">
+                  <AuthorAvatar
+                    author={{ nickname: profile.nickname }}
+                    className="pc-profile-avatar"
+                  />
+                  <span>{profile.nickname}님</span>
+                </Link>
+
+                {/*
+                  레벨은 방문한 섬 수로 정해진다 (서버 level.ts).
+                  예전에는 "EXP 0 / 1000" 이라는 근거 없는 숫자를 보여줬는데,
+                  올려 주는 곳이 없어 누구나 영원히 Lv.1 이었다.
+                */}
                 <div className="passport-level">
                   <div className="passport-level-top">
                     <span className="passport-level-badge">Lv.{profile.level}</span>
@@ -174,18 +181,17 @@ export function HeroSection() {
                   <div
                     className="passport-progress"
                     role="progressbar"
-                    aria-valuenow={expPercent}
+                    aria-valuenow={levelPercent}
                     aria-valuemin={0}
                     aria-valuemax={100}
-                    aria-label="경험치 진행률"
+                    aria-label="다음 레벨까지 진행률"
                   >
-                    <AnimatedWidthBar width={expPercent} className="passport-progress-fill" />
+                    <AnimatedWidthBar width={levelPercent} className="passport-progress-fill" />
                   </div>
                   <p className="passport-exp">
-                    EXP{" "}
-                    <CountUpNumber value={profile.expCurrent} delay={200} format={formatNumber} />
-                    {" / "}
-                    {formatNumber(profile.expMax)}
+                    {atMaxLevel
+                      ? `최고 레벨 · 방문 섬 ${profile.expCurrent}곳`
+                      : `다음 레벨까지 섬 ${profile.expMax - profile.expCurrent}곳`}
                   </p>
                 </div>
 
@@ -218,6 +224,7 @@ export function HeroSection() {
               </span>
             </div>
           </aside>
+          )}
           <a
             className="btn-ipass"
             href="https://island.theksa.co.kr/page/main"

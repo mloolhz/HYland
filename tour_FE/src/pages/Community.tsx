@@ -9,7 +9,6 @@ import { PostList } from "@/components/community/PostList";
 import { ProfileCard } from "@/components/community/ProfileCard";
 import { SelectedIslands } from "@/components/community/SelectedIslands";
 import { SelectedActivities } from "@/components/community/SelectedActivities";
-import { WritePostFab } from "@/components/community/WritePostFab";
 import { CONTAINER } from "@/constants/layout";
 import { usePosts } from "@/lib/post-store";
 import {

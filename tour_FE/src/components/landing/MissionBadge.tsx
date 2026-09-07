@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { useMissionProgress } from "@/store/mission-progress";
 import { ISLANDS } from "@/lib/island-data";
 import { CATEGORY_META, missionQuestPercent, missionQuestState, type MissionQuest } from "@/mocks/missions";
 import { IslandVisitStamp } from "./IslandVisitStamp";
@@ -14,6 +15,7 @@ type MissionBadgeProps = {
 
 /** 수집 배지 — 섬은 타원형 여권 스탬프, 그 외는 원형 메달 */
 export function MissionBadge({ quest, size = 96, tooltip = true }: MissionBadgeProps) {
+  const { completedAt } = useMissionProgress();
   const state = missionQuestState(quest);
   const percent = missionQuestPercent(quest);
   const { color } = CATEGORY_META[quest.category];
@@ -52,6 +54,7 @@ export function MissionBadge({ quest, size = 96, tooltip = true }: MissionBadgeP
           earned={state === "earned"}
           doing={state === "doing"}
           questIndex={quest.id}
+          completedAt={completedAt.get(quest.id)}
           size={size}
         />
         {tooltip && (

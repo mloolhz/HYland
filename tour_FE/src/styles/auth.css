@@ -477,11 +477,6 @@
   color: #fff;
 }
 
-.auth-social-kakao {
-  background: #fee500;
-  color: #3c1e1e;
-}
-
 .auth-social-google {
   background: #f1f5f9;
   color: #5f6b7c;
@@ -1331,3 +1326,32 @@
   flex: none;
 }
 
+
+/* 서버가 돌려준 로그인·가입 실패 메시지 */
+.auth-form-error {
+  margin: 0 0 12px;
+  padding: 12px 14px;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* 문자 발송 연동 전 — 서버가 내려준 인증번호 안내 */
+.auth-dev-code {
+  margin: 0 0 10px;
+  padding: 8px 12px;
+  border: 1px dashed #C7D2E4;
+  border-radius: 8px;
+  background: #F4F7FC;
+  font-size: 12px;
+  color: #55637A;
+  text-align: center;
+}
+.auth-dev-code b {
+  font-size: 14px;
+  letter-spacing: 2px;
+  color: #1a3a6b;
+}

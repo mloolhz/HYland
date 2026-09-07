@@ -11,6 +11,7 @@ import {
   type QuestionSource,
 } from "@/api/ai-recommend";
 import { postRecommendations } from "@/api/recommendation";
+import { loadPosts } from "@/lib/post-store";
 import { AiRecommendComposer } from "@/components/ai-recommend/AiRecommendComposer";
 import { AiResponseContent } from "@/components/ai-recommend/AiResponseContent";
 import { IslandBtiPreferenceCard } from "@/components/ai-recommend/IslandBtiPreferenceCard";
@@ -531,6 +532,13 @@ export function AiRecommend() {
     const turnEl = turnRefs.current.get(lastTurn.id);
     if (turnEl) scrollTurnToTop(container, turnEl);
   }, [turns]);
+
+  // 추천 엔진이 커뮤니티 후기를 근거로 쓰므로(getPostsSnapshot 동기 읽기), 페이지
+  // 진입 시 글을 미리 불러온다. jichan post-store는 usePosts() 훅에서만 로드하는데
+  // 이 화면은 그 훅을 안 써서, 여기서 명시적으로 한 번 당겨둔다.
+  useEffect(() => {
+    void loadPosts();
+  }, []);
 
   useEffect(() => {
     // 화면은 그대로 두고 캐시만 갱신한다. 지금 보이는 칩을 갑자기 바꾸지 않으려는 것.

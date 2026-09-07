@@ -1,6 +1,7 @@
 import { IslandVisitStamp } from "@/components/landing/IslandVisitStamp";
 import type { IslandInfo } from "@/lib/island-data";
-import { MISSION_QUESTS, missionQuestState } from "@/mocks/missions";
+import { missionQuestState } from "@/mocks/missions";
+import { useMissionProgress } from "@/store/mission-progress";
 
 type IslandBadgeListProps = {
   island: IslandInfo;
@@ -8,9 +9,9 @@ type IslandBadgeListProps = {
 
 /** 섬 방문 배지 — 미션·여권과 같은 스탬프를 그대로 사용 */
 export function IslandBadgeList({ island }: IslandBadgeListProps) {
-  const quest = MISSION_QUESTS.find(
-    (q) => q.category === "섬" && q.title === `${island.name} 방문`,
-  );
+  // 진행도는 DB 가 정답 — 정적 MISSION_QUESTS 를 직접 보면 미션 탭과 어긋난다
+  const { quests } = useMissionProgress();
+  const quest = quests.find((q) => q.category === "섬" && q.title === `${island.name} 방문`);
   if (!quest) return null;
 
   const state = missionQuestState(quest);

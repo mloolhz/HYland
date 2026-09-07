@@ -1,5 +1,4 @@
 import { useId } from "react";
-import { PASSPORT_BADGES } from "@/components/landing/passport-book-data";
 import { getIslandStampMeta } from "@/data/island-stamp-data";
 import { IslandScene } from "./island-scenes";
 
@@ -10,13 +9,19 @@ function islandNameLines(name: string): string[] {
   return parts;
 }
 
-function visitDate(islandName: string, earned: boolean, questIndex: number): string | null {
-  if (!earned) return null;
-  const match = PASSPORT_BADGES.find((b) => b.island === islandName && b.acquiredAt);
-  if (match?.acquiredAt) return match.acquiredAt;
-  const month = String((questIndex % 6) + 5).padStart(2, "0");
-  const day = String(((questIndex * 3) % 28) + 1).padStart(2, "0");
-  return `2025.${month}.${day}`;
+/**
+ * 배지 획득 날짜.
+ *
+ * 예전에는 questIndex 로 "2025.{월}.{일}" 을 지어냈다. 실제 획득한 적도 없는
+ * 날짜가 여권에 찍혔다. 지금은 미션 완료 시각(DB)을 쓰고, 없으면 표시하지 않는다.
+ */
+function visitDate(earned: boolean, completedAt?: string | null): string | null {
+  if (!earned || !completedAt) return null;
+  const d = new Date(completedAt);
+  if (Number.isNaN(d.getTime())) return null;
+  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(
+    d.getDate(),
+  ).padStart(2, "0")}`;
 }
 
 type IslandVisitStampProps = {
@@ -25,6 +30,8 @@ type IslandVisitStampProps = {
   earned: boolean;
   doing?: boolean;
   questIndex?: number;
+  /** 미션 완료 시각 (ISO) — 배지에 찍을 날짜 */
+  completedAt?: string | null;
   size?: number;
 };
 
@@ -34,13 +41,14 @@ export function IslandVisitStamp({
   earned,
   doing = false,
   questIndex = 0,
+  completedAt,
   size = 96,
 }: IslandVisitStampProps) {
   const uid = useId().replace(/:/g, "");
   const stampSize = size;
   const meta = getIslandStampMeta(islandId, questIndex);
   const tone = earned || doing ? meta.color : "locked";
-  const date = visitDate(islandName, earned, questIndex);
+  const date = visitDate(earned, completedAt);
   const lines = islandNameLines(islandName);
 
   if (meta.image) {

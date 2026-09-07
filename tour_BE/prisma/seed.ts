@@ -11,7 +11,6 @@ import { CATEGORY_META, MISSION_CATEGORIES, MISSION_QUESTS } from "@/mocks/missi
 import { ISLAND_BTI_QUESTIONS } from "@/data/island-bti/questions";
 import { ISLAND_BTI_RESULTS } from "@/data/island-bti/results";
 import { LEISURE_ACTIVITIES } from "./seed-data/leisure-activities";
-import { MOCK_POSTS } from "@/mocks/posts";
 
 const RES: Record<string, string> = {
   reservable: "RESERVABLE",
@@ -33,6 +32,9 @@ async function main() {
 
   // dev 리셋: 유저 활동 데이터 먼저 정리 (마스터 재시드를 위한 FK 해제)
   // ⚠️ 개발용 — 마스터 카탈로그를 다시 심기 위해 테스트 유저 진행데이터를 비움
+  // 인증 제출이 미션을 참조하므로 미션보다 먼저 지운다
+  await prisma.missionSubmission.deleteMany();
+  await prisma.userBadge.deleteMany();
   await prisma.userMissionProgress.deleteMany();
   await prisma.userIslandVisit.deleteMany();
   await prisma.userIslandBtiResult.deleteMany();
@@ -41,6 +43,7 @@ async function main() {
   await prisma.sportBookingMethod.deleteMany();
   await prisma.sportIsland.deleteMany();
   await prisma.islandLeisureCourse.deleteMany();
+  await prisma.badgeDefinition.deleteMany();
   await prisma.missionQuest.deleteMany();
   await prisma.sport.deleteMany();
   await prisma.island.deleteMany();
@@ -70,6 +73,8 @@ async function main() {
     })),
   });
   const islandIds = new Set(ISLANDS.map((i) => i.id));
+  /** 섬 이름 → id. 섬 미션("백령도 방문")을 섬과 잇는 데 쓴다. */
+  const islandIdByName = new Map(ISLANDS.map((i) => [i.name, i.id]));
 
   await prisma.islandLeisureCourse.createMany({
     data: ISLANDS.flatMap((i) =>
@@ -174,7 +179,13 @@ async function main() {
       unit: q.unit,
       reward: q.reward,
       tier: TIER[q.tier] ?? "COMMON",
-      islandId: anyQ.islandId && islandIds.has(anyQ.islandId) ? anyQ.islandId : null,
+      /**
+       * 섬 미션은 프론트 mock 이 islandId 를 안 들고 있어서 제목("백령도 방문")에서
+       * 섬 이름을 뽑아 잇는다. 인증이 승인될 때 어느 섬을 방문 처리할지 알아야 한다.
+       */
+      islandId:
+        (anyQ.islandId && islandIds.has(anyQ.islandId) ? anyQ.islandId : null) ??
+        (q.category === "섬" ? (islandIdByName.get(q.title.replace(/ 방문$/, "")) ?? null) : null),
       sportId: anyQ.sportId && seenSport.has(anyQ.sportId) ? anyQ.sportId : null,
     };
   });
@@ -205,70 +216,7 @@ async function main() {
   });
 
   // 결과 카운트
-  // ── 커뮤니티 ──────────────────────────────────────────────
-  // 대댓글이 부모를 참조하므로 부모 댓글을 먼저 넣는다.
-  await prisma.communityComment.deleteMany();
-  await prisma.communityPost.deleteMany();
-
-  for (const post of MOCK_POSTS) {
-    await prisma.communityPost.create({
-      data: {
-        id: post.id,
-        type: post.type,
-        title: post.title,
-        content: post.content,
-        summary: post.summary ?? null,
-        island: post.island,
-        activity: post.activity,
-        images: post.images ?? undefined,
-        badge: post.badge ?? null,
-        isNotice: post.isNotice ?? false,
-        isResolved: post.isResolved ?? null,
-        authorId: post.author.id,
-        authorNickname: post.author.nickname,
-        authorBti: post.author.bti,
-        createdAt: new Date(post.createdAt),
-        likes: post.likes,
-        views: post.views,
-      },
-    });
-
-    for (const comment of post.comments) {
-      await prisma.communityComment.create({
-        data: {
-          id: comment.id,
-          postId: post.id,
-          parentId: null,
-          authorId: comment.author.id,
-          authorNickname: comment.author.nickname,
-          authorBti: comment.author.bti,
-          content: comment.content,
-          createdAt: new Date(comment.createdAt),
-          likes: comment.likes,
-          isAuthor: comment.isAuthor,
-        },
-      });
-
-      for (const reply of comment.replies ?? []) {
-        await prisma.communityComment.create({
-          data: {
-            id: reply.id,
-            postId: post.id,
-            parentId: comment.id,
-            authorId: reply.author.id,
-            authorNickname: reply.author.nickname,
-            authorBti: reply.author.bti,
-            content: reply.content,
-            createdAt: new Date(reply.createdAt),
-            likes: reply.likes,
-            isAuthor: reply.isAuthor,
-          },
-        });
-      }
-    }
-  }
-
-  const [islands, courses, sports, sportIslands, bookings2, quests, cats, btiQ, posts, comments, btiR] =
+  const [islands, courses, sports, sportIslands, bookings2, quests, cats, btiQ, btiR] =
     await Promise.all([
       prisma.island.count(),
       prisma.islandLeisureCourse.count(),
@@ -278,8 +226,6 @@ async function main() {
       prisma.missionQuest.count(),
       prisma.missionCategory.count(),
       prisma.islandBtiQuestion.count(),
-      prisma.communityPost.count(),
-      prisma.communityComment.count(),
       prisma.islandBtiResult.count(),
     ]);
   console.log("✅ 시드 완료");
@@ -293,8 +239,6 @@ async function main() {
     미션퀘스트: quests,
     BTI문항: btiQ,
     BTI유형: btiR,
-    커뮤니티글: posts,
-    커뮤니티댓글: comments,
   });
 }
 

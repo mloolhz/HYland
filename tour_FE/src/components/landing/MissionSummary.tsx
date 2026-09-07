@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { CountUpNumber } from "@/components/mypage/CountUpNumber";
-import { MISSION_QUESTS, missionQuestState } from "@/mocks/missions";
+import { missionQuestState } from "@/mocks/missions";
+import { useMissionProgress } from "@/store/mission-progress";
 
 /** 원형 게이지 — 전체 미션 달성률 */
 function RingGauge({ percent }: { percent: number }) {
@@ -49,13 +50,14 @@ function RingGauge({ percent }: { percent: number }) {
 
 /** 미션 요약 카드 — 원형 게이지 + 획득/진행중/전체 통계 (미션 페이지·랜딩 공용) */
 export function MissionSummary() {
+  const { quests } = useMissionProgress();
   const stats = useMemo(() => {
-    const total = MISSION_QUESTS.length;
-    const earned = MISSION_QUESTS.filter((q) => missionQuestState(q) === "earned").length;
-    const doing = MISSION_QUESTS.filter((q) => missionQuestState(q) === "doing").length;
+    const total = quests.length;
+    const earned = quests.filter((q) => missionQuestState(q) === "earned").length;
+    const doing = quests.filter((q) => missionQuestState(q) === "doing").length;
     const percent = total > 0 ? Math.round((earned / total) * 100) : 0;
     return { total, earned, doing, percent };
-  }, []);
+  }, [quests]);
 
   return (
     <section className="ms-summary" aria-label="미션 요약">

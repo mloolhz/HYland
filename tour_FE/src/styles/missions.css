@@ -1142,14 +1142,10 @@
   z-index: 3;
 }
 
-/* 완성 임박(≥67%) — 수집 유도 은은한 펄스 */
+/* 완성 임박(≥67%) — 고정된 은은한 테두리광.
+   예전에는 1.9초짜리 무한 펄스였는데, 랜딩에서 배지가 계속 깜빡여 보였다. */
 .mbadge--near .mbadge__stamp {
-  animation: mbadge-nudge 1.9s ease-in-out infinite;
-}
-
-@keyframes mbadge-nudge {
-  0%, 100% { filter: drop-shadow(0 0 0 transparent); }
-  50% { filter: drop-shadow(0 0 6px color-mix(in srgb, var(--accent) 55%, transparent)); }
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--accent) 40%, transparent));
 }
 
 /* ── 호버 툴팁 ── */
@@ -1208,10 +1204,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .mbadge--near .mbadge__stamp {
-    animation: none;
-  }
-
   .ms-group__panel {
     transition: none;
   }

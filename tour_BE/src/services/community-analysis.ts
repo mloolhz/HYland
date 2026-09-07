@@ -115,8 +115,23 @@ function extractCompanionFit(text: string): string[] {
     .map(([key]) => key);
 }
 
+/**
+ * 여행에 도움 안 되는 "불평"은 팁으로 안 쓴다.
+ * 회의 결론: "쓰레기가 많다·더럽다·실망" 같은 destination 불평을 팁에 넣으면
+ * 인천 섬 활성화라는 목표에 비대칭적으로 해가 된다. 반면 "주차가 힘들다·배편을
+ * 확인해라" 같은 실용 주의는 방문객에게 도움이 되므로 남긴다.
+ * 그래서 CAUTION_HINTS(실용 주의)에 걸리더라도, 불평 단어가 섞인 문장은 제외한다.
+ */
+const CAUTION_COMPLAINT_WORDS = [
+  "쓰레기", "더럽", "지저분", "실망", "최악", "별로", "비추", "다시는", "다시 안",
+  "엉망", "형편없", "불친절", "짜증",
+];
+
 function extractCautions(sentences: string[]): string[] {
-  return sentences.filter((s) => CAUTION_HINTS.some((w) => s.includes(w))).slice(0, 3);
+  return sentences
+    .filter((s) => CAUTION_HINTS.some((w) => s.includes(w)))
+    .filter((s) => !CAUTION_COMPLAINT_WORDS.some((w) => s.includes(w)))
+    .slice(0, 3);
 }
 
 function splitSentences(text: string): string[] {

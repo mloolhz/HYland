@@ -36,7 +36,7 @@ export async function buildCommunityTips(islandNames: string[]): Promise<string[
   const uniqueIslands = [...new Set(islandNames.map((n) => n.trim()).filter(Boolean))];
   if (uniqueIslands.length === 0) return [];
 
-  const rows = await prisma.communityPost.findMany({
+  const rows = await prisma.post.findMany({
     where: { island: { in: uniqueIslands } },
     select: {
       island: true,
@@ -51,9 +51,10 @@ export async function buildCommunityTips(islandNames: string[]): Promise<string[
 
   if (rows.length === 0) return [];
 
+  const TYPE_TO_FE: Record<string, string> = { REVIEW: "review", PHOTO: "photo", QUESTION: "question" };
   const posts: InsightPost[] = rows.map((r) => ({
     island: r.island,
-    type: r.type,
+    type: TYPE_TO_FE[r.type] ?? String(r.type).toLowerCase(),
     isNotice: r.isNotice,
     sentiment: (r.sentiment as InsightPost["sentiment"]) ?? undefined,
     cautions: Array.isArray(r.cautions) ? (r.cautions as string[]) : [],

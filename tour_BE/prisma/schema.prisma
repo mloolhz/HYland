@@ -81,19 +81,34 @@ enum TourContentType {
 
 model User {
   id           String   @id @default(cuid())
-  email        String   @unique
+  /**
+   * 로그인 아이디. 프론트 로그인 폼이 이메일이 아니라 "아이디"를 받는다.
+   */
+  username     String   @unique
+  /**
+   * 회원가입에서 선택 입력이라 없을 수 있다
+   */
+  email        String?  @unique
   passwordHash String?  @map("password_hash") // OAuth-only 계정이면 null
   phone        String?
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
-  profile         UserProfile?
-  settings        UserSettings?
-  oauthAccounts   OAuthAccount[]
-  islandVisits    UserIslandVisit[]
-  missionProgress UserMissionProgress[]
-  badges          UserBadge[]
-  btiResults      UserIslandBtiResult[]
+  profile             UserProfile?
+  settings            UserSettings?
+  oauthAccounts       OAuthAccount[]
+  islandVisits        UserIslandVisit[]
+  missionProgress     UserMissionProgress[]
+  badges              UserBadge[]
+  btiResults          UserIslandBtiResult[]
+  role                UserRole              @default(USER)
+  posts               Post[]
+  comments            Comment[]
+  submissions         MissionSubmission[]   @relation("SubmissionAuthor")
+  notifications       Notification[]
+  reviewedSubmissions MissionSubmission[]   @relation("SubmissionReviewer")
+  postLikes           PostLike[]
+  commentLikes        CommentLike[]
 
   @@map("users")
 }
@@ -307,10 +322,11 @@ model MissionQuest {
   islandId    String?     @map("island_id")
   sportId     String?     @map("sport_id")
 
-  category MissionCategory       @relation(fields: [categoryId], references: [id])
-  island   Island?               @relation(fields: [islandId], references: [id])
-  sport    Sport?                @relation(fields: [sportId], references: [id])
-  progress UserMissionProgress[]
+  category    MissionCategory       @relation(fields: [categoryId], references: [id])
+  island      Island?               @relation(fields: [islandId], references: [id])
+  sport       Sport?                @relation(fields: [sportId], references: [id])
+  progress    UserMissionProgress[]
+  submissions MissionSubmission[]
 
   @@map("mission_quests")
 }
@@ -680,84 +696,233 @@ model LeisureCandidate {
   @@map("leisure_candidates")
 }
 
-// ─────────────────────────────────────────────────────────────
-// 커뮤니티
-//
-// 작성자 정보(닉네임·BTI)는 users 테이블을 참조하지 않고 행에 그대로 둔다.
-// 아직 로그인이 붙지 않아 users가 비어 있고, FE도 CURRENT_USER_ID 상수로만
-// 동작한다. 실제 인증이 들어오면 authorId를 users.id로 연결하면 된다.
-// ─────────────────────────────────────────────────────────────
+// ═══════════════════ Phase 4 — 커뮤니티 ═══════════════════
+// 프론트 types/community.ts 구조를 그대로 옮겼다.
+// 섬·활동은 자유 문자열이다. 글쓰기에서 목록에 없는 값도 적을 수 있고,
+// 섬 마스터가 바뀌어도 과거 글이 깨지면 안 되기 때문이다.
 
-model CommunityPost {
-  id             String   @id
-  /// review | photo | question
-  type           String
-  title          String
-  content        String   @db.Text
-  summary        String?
-  /// 섬 이름 (FE 표시용 원문 — islandId 변환은 추천 엔진에서 한다)
-  island         String
-  activity       String
-  /// 이미지 URL 배열
-  images         Json?
-  badge          String?
-  isNotice       Boolean  @default(false) @map("is_notice")
-  isResolved     Boolean? @map("is_resolved")
-  authorId       String   @map("author_id")
-  authorNickname String   @map("author_nickname")
-  authorBti      String   @map("author_bti")
-  createdAt      DateTime @map("created_at")
-  likes          Int      @default(0)
-  views          Int      @default(0)
+/**
+ * 글 종류 (후기/인증샷/Q&A)
+ */
+enum PostType {
+  REVIEW // 후기
+  PHOTO // 인증샷
+  QUESTION // Q&A
+}
 
-  // ── 본문 분석 결과 ────────────────────────────────────────
-  // 추천할 때마다 본문을 분석하면 느리고(추천은 브라우저에서 동기 실행) 비싸다.
-  // 글당 한 번만 분석해 여기 저장하고, 추천은 읽기만 한다.
+/**
+ * 글에 붙는 뱃지 표시
+ */
+enum PostBadge {
+  RARE_CARD // 레어카드
+  STAMP // 스탬프
+}
+
+model Post {
+  id         String     @id @default(cuid())
+  authorId   String     @map("author_id")
+  type       PostType
+  title      String
+  content    String     @db.Text
+  /**
+   * 목록에서 쓰는 짧은 요약 (없으면 본문 앞부분)
+   */
+  summary    String?    @db.Text
+  island     String
+  activity   String
+  badge      PostBadge?
+  /**
+   * 공지는 목록 최상단 고정
+   */
+  isNotice   Boolean    @default(false) @map("is_notice")
+  /**
+   * Q&A 해결 표시
+   */
+  isResolved Boolean    @default(false) @map("is_resolved")
+  views      Int        @default(0)
+  createdAt  DateTime   @default(now()) @map("created_at")
+  updatedAt  DateTime   @updatedAt @map("updated_at")
+
+  // ── AI 추천용 본문 분석 (글당 한 번 계산해 저장, 추천이 읽기만 한다) ──
   /// positive | neutral | negative
   sentiment           String?
-  /// -100 ~ 100
   sentimentScore      Int?      @map("sentiment_score")
-  /// 추천 근거로 보여줄 대표 문장 (제목보다 "왜 좋았는지"가 드러난다)
+  /// 추천 근거로 보여줄 대표 문장
   highlight           String?   @db.Text
   /// 본문에서 실제로 언급된 활동 (태그와 다를 수 있다)
   mentionedActivities Json?     @map("mentioned_activities")
-  /// 후기에서 "좋았다"고 한 달 (1~12). 여행 시기 매칭용.
+  /// 후기에서 "좋았다"고 한 달 (1~12)
   bestMonths          Json?     @map("best_months")
   /// 이 글이 시사하는 동행 (family/couple/friend/solo)
   companionFit        Json?     @map("companion_fit")
-  /// 방문객 주의·팁 문장 (점수 아님, 카드에 표시)
+  /// 방문객 주의·팁
   cautions            Json?
-  /// lexicon | gemini — 어느 분석기가 만든 값인지
+  /// lexicon | gemini
   analyzedBy          String?   @map("analyzed_by")
   analyzedAt          DateTime? @map("analyzed_at")
 
-  comments CommunityComment[]
+  author      User                @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  images      PostImage[]
+  comments    Comment[]
+  likes       PostLike[]
+  submissions MissionSubmission[]
 
+  @@index([type, createdAt])
   @@index([island])
-  @@index([activity])
-  @@index([createdAt])
-  @@map("community_posts")
+  @@index([authorId])
+  @@map("posts")
 }
 
-model CommunityComment {
-  id             String   @id
-  postId         String   @map("post_id")
-  /// 대댓글이면 부모 댓글 id
-  parentId       String?  @map("parent_id")
-  authorId       String   @map("author_id")
-  authorNickname String   @map("author_nickname")
-  authorBti      String   @map("author_bti")
-  content        String   @db.Text
-  createdAt      DateTime @map("created_at")
-  likes          Int      @default(0)
-  /// 글쓴이 본인이 단 댓글인지
-  isAuthor       Boolean  @default(false) @map("is_author")
+model PostImage {
+  id        Int    @id @default(autoincrement())
+  postId    String @map("post_id")
+  url       String @db.Text
+  sortOrder Int    @default(0) @map("sort_order")
 
-  post    CommunityPost      @relation(fields: [postId], references: [id], onDelete: Cascade)
-  parent  CommunityComment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
-  replies CommunityComment[] @relation("CommentReplies")
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@index([postId])
-  @@index([parentId])
-  @@map("community_comments")
+  @@map("post_images")
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  postId    String   @map("post_id")
+  authorId  String   @map("author_id")
+  /**
+   * 대댓글이면 부모 댓글 id (1단계까지만 쓴다)
+   */
+  parentId  String?  @map("parent_id")
+  content   String   @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  post    Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author  User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  parent  Comment?      @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies Comment[]     @relation("CommentReplies")
+  likes   CommentLike[]
+
+  @@index([postId, createdAt])
+  @@index([authorId])
+  @@map("comments")
+}
+
+/**
+ * 글 좋아요 — 사용자당 1회
+ */
+model PostLike {
+  postId    String   @map("post_id")
+  userId    String   @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([postId, userId])
+  @@index([userId])
+  @@map("post_likes")
+}
+
+/**
+ * 댓글 좋아요 — 사용자당 1회
+ */
+model CommentLike {
+  commentId String   @map("comment_id")
+  userId    String   @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  comment Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([commentId, userId])
+  @@index([userId])
+  @@map("comment_likes")
+}
+
+// ═══════════════ Phase 5 — 미션 인증 검수 ═══════════════
+// 유저가 커뮤니티에 인증샷을 올리면서 미션을 지정해 제출하면,
+// 관리자가 사진을 보고 승인/반려한다. 승인 시 미션 진행도가 오르고
+// 목표를 채우면 배지가 지급된다.
+
+enum UserRole {
+  USER
+  ADMIN // 인증샷 검수 권한
+}
+
+enum SubmissionStatus {
+  PENDING // 검수 대기
+  APPROVED // 승인 — 미션 진행도 반영됨
+  REJECTED // 반려
+}
+
+model MissionSubmission {
+  id         String           @id @default(cuid())
+  userId     String           @map("user_id")
+  questId    Int              @map("quest_id")
+  /**
+   * 인증 근거가 되는 커뮤니티 글 (인증샷)
+   */
+  postId     String           @map("post_id")
+  status     SubmissionStatus @default(PENDING)
+  /**
+   * 반려 사유 등 검수 메모
+   */
+  reviewNote String?          @map("review_note") @db.Text
+  reviewedBy String?          @map("reviewed_by")
+  reviewedAt DateTime?        @map("reviewed_at")
+  createdAt  DateTime         @default(now()) @map("created_at")
+
+  user     User         @relation("SubmissionAuthor", fields: [userId], references: [id], onDelete: Cascade)
+  quest    MissionQuest @relation(fields: [questId], references: [id])
+  post     Post         @relation(fields: [postId], references: [id], onDelete: Cascade)
+  reviewer User?        @relation("SubmissionReviewer", fields: [reviewedBy], references: [id])
+
+  /**
+   * 같은 글로 같은 미션을 두 번 제출할 수 없다
+   */
+  @@unique([postId, questId])
+  @@index([status, createdAt])
+  @@index([userId])
+  @@map("mission_submissions")
+}
+
+// ═══════════════════ Phase 6 — 알림 ═══════════════════
+// 내 글에 댓글·답글·좋아요가 달리거나, 인증이 승인/반려되거나, 배지를 받으면 쌓인다.
+// 알림을 만든 쪽(actor)과 받는 쪽(user)이 같으면 만들지 않는다 — 내 행동은 알릴 것이 없다.
+
+enum NotificationType {
+  COMMENT // 내 글에 댓글
+  REPLY // 내 댓글에 답글
+  LIKE // 내 글에 좋아요
+  BADGE // 배지 획득
+  REVIEW // 인증 승인·반려
+  NOTICE // 공지
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String           @map("user_id")
+  type      NotificationType
+  /**
+   * 알림을 발생시킨 사람의 닉네임. 지워진 계정도 문구가 남도록 값으로 저장한다.
+   */
+  actor     String?
+  /**
+   * "{actor}님이 회원님의 글에 댓글을 남겼어요" — {actor} 는 화면에서 치환
+   */
+  message   String           @db.Text
+  /**
+   * 배지 이름처럼 강조할 문구 (actor 가 없을 때)
+   */
+  highlight String?
+  link      String?
+  read      Boolean          @default(false)
+  createdAt DateTime         @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read])
+  @@index([userId, createdAt])
+  @@map("notifications")
 }

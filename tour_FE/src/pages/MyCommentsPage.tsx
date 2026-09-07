@@ -1,17 +1,16 @@
-import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { CommunitySubPageLayout } from "@/components/community/CommunitySubPageLayout";
 import { EmptyState } from "@/components/community/EmptyState";
 import { MyCommentCard } from "@/components/community/MyCommentCard";
 import { paginate, totalPages } from "@/lib/posts";
 import { parsePageQuery } from "@/lib/query";
-import { getMyComments } from "@/mocks/myActivity";
+import { useMyActivity } from "@/hooks/useMyActivity";
 
 export function MyCommentsPage() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const page = parsePageQuery(searchParams.get("page"));
-  const [myComments] = useState(() => getMyComments());
+  const { myComments } = useMyActivity();
 
   const setPage = (next: number) => {
     setSearchParams(

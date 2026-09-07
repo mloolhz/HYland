@@ -13,8 +13,8 @@ import { useAuthRedirect } from "@/hooks/useAuthRedirect";
 import { CONTAINER } from "@/constants/layout";
 import { paginate, totalPages } from "@/lib/posts";
 import { parsePageQuery } from "@/lib/query";
-import { usePosts } from "@/lib/post-store";
-import { getLikedPosts, getMyComments, getMyPosts } from "@/mocks/myActivity";
+import { useMyActivity } from "@/hooks/useMyActivity";
+import { useUserProfile } from "@/hooks/useUserProfile";
 
 function parseTab(value: string | null): ActivityTab {
   if (value === "comments" || value === "liked") return value;
@@ -29,15 +29,15 @@ export function MyActivity() {
   const tab = parseTab(searchParams.get("tab"));
   const page = parsePageQuery(searchParams.get("page"));
 
-  const posts = usePosts();
-  const myPosts = getMyPosts(posts);
-  const [myComments] = useState(() => getMyComments(posts));
-  const [likedIds, setLikedIds] = useState(() => getLikedPosts(posts).map((p) => p.id));
+  const { myPosts, myComments, likedPosts: likedFromServer } = useMyActivity();
+  const [likedIds, setLikedIds] = useState<string[]>([]);
+  useEffect(() => setLikedIds(likedFromServer.map((p) => p.id)), [likedFromServer]);
   const [undo, setUndo] = useState<{ postId: string } | null>(null);
 
+  // 좋아요 취소를 화면에서 즉시 반영하려고 likedIds 로 한 번 더 거른다
   const likedPosts = useMemo(
-    () => posts.filter((p) => likedIds.includes(p.id)),
-    [posts, likedIds],
+    () => likedFromServer.filter((p) => likedIds.includes(p.id)),
+    [likedFromServer, likedIds],
   );
 
   const counts = useMemo(
@@ -100,7 +100,9 @@ export function MyActivity() {
     );
   }
 
-  const author = myPosts[0]?.author ?? posts.find((p) => p.author.id === "u1")!.author;
+  // 예전에는 mock 글에서 작성자를 뽑았다. 지금은 로그인한 사용자 프로필을 그대로 쓴다
+  // (내가 쓴 글이 없어도 동작해야 하는데, 그 경우 mock 글에서 찾는 방식은 크래시했다)
+  const author = useUserProfile();
   const btiColors = ISLAND_BTI[author.bti];
 
   const pagedPosts = paginate(myPosts, page);

@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useRef, useState, type RefObject } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { createPortal } from "react-dom";
 import { useOptionalProfileCharacter } from "@/context/ProfileCharacterContext";
 import type { UserProfile } from "@/lib/user-profile";
 import { PassportBook, type PassportBookHandle } from "./PassportBook";
 import { PassportFrontCover } from "./PassportFrontCover";
 import { buildMissionBookSpreads, type BookNavState } from "./passport-book-spreads";
+import { useMissionProgress } from "@/store/mission-progress";
 import "@/styles/passport-book.css";
 
 type PassportBookModalProps = {
@@ -15,20 +16,22 @@ type PassportBookModalProps = {
 };
 
 const OPEN_MS = 650;
-const BOOK_SPREADS = buildMissionBookSpreads();
-
-const INITIAL_NAV: BookNavState = {
-  spread: 0,
-  totalSpreads: BOOK_SPREADS.length,
-  canPrev: false,
-  canNext: BOOK_SPREADS.length > 1,
-  flipping: false,
-};
 
 export function PassportBookModal({ open, onClose, profile, returnFocusRef }: PassportBookModalProps) {
+  // 여권 배지는 실제 진행도로 그린다. 예전에는 모듈 로드 때 정적 정의로 한 번
+  // 계산해 굳어 있어서, 미션 탭과 숫자가 달랐다.
+  const { quests } = useMissionProgress();
+  const spreads = useMemo(() => buildMissionBookSpreads(quests), [quests]);
+
   const [mounted, setMounted] = useState(false);
   const [expanded, setExpanded] = useState(false);
-  const [nav, setNav] = useState<BookNavState>(INITIAL_NAV);
+  const [nav, setNav] = useState<BookNavState>({
+    spread: 0,
+    totalSpreads: spreads.length,
+    canPrev: false,
+    canNext: spreads.length > 1,
+    flipping: false,
+  });
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const bookRef = useRef<PassportBookHandle>(null);
   const profileCharacterContext = useOptionalProfileCharacter();
@@ -37,7 +40,13 @@ export function PassportBookModal({ open, onClose, profile, returnFocusRef }: Pa
   useEffect(() => {
     if (open) {
       setMounted(true);
-      setNav(INITIAL_NAV);
+      setNav({
+        spread: 0,
+        totalSpreads: spreads.length,
+        canPrev: false,
+        canNext: spreads.length > 1,
+        flipping: false,
+      });
       const frame = requestAnimationFrame(() => {
         requestAnimationFrame(() => setExpanded(true));
       });
@@ -108,7 +117,7 @@ export function PassportBookModal({ open, onClose, profile, returnFocusRef }: Pa
                 {expanded && (
                   <PassportBook
                     ref={bookRef}
-                    spreads={BOOK_SPREADS}
+                    spreads={spreads}
                     profile={profile}
                     titleId="passport-modal-title"
                     onNavStateChange={setNav}

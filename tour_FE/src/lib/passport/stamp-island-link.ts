@@ -1,5 +1,5 @@
 import { ISLANDS } from "@/lib/island-data";
-import { MISSION_QUESTS } from "@/mocks/missions";
+import { MISSION_QUESTS, type MissionQuest } from "@/mocks/missions";
 import { isInkStampEarned, questToInkStampDisplay } from "@/lib/passport/passport-quest-ink-stamp";
 
 /** 도장 장소명 → 섬 id (비섬·메타 장소는 null) */
@@ -34,10 +34,12 @@ export function resolveIslandIdFromStampPlace(place: string): string | null {
  * 같은 섬에서 도장을 여러 번 받아도 1개로 집계한다.
  * — MISSION_QUESTS + passport-quest-ink-stamp 를 단일 원본으로 사용.
  */
-export function getUniqueIslandIdsFromEarnedStamps(): string[] {
+export function getUniqueIslandIdsFromEarnedStamps(
+  quests: MissionQuest[] = MISSION_QUESTS,
+): string[] {
   const ids = new Set<string>();
 
-  for (const quest of MISSION_QUESTS) {
+  for (const quest of quests) {
     if (!isInkStampEarned(quest)) continue;
 
     const { place } = questToInkStampDisplay(quest);

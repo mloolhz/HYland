@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useSession } from "@/store/session";
 import { Link, useLocation } from "react-router-dom";
 import { resolveCommunityHref } from "@/lib/community-list-state";
 import { NotificationBell } from "@/components/notification/NotificationBell";
@@ -339,6 +340,7 @@ function DrawerNav({ items, onNavigate }: DrawerNavProps) {
 }
 
 export function SiteHeader() {
+  const { isLoggedIn, user } = useSession();
   const scrollSnapshotRef = useRef(0);
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -352,9 +354,15 @@ export function SiteHeader() {
   const onAiRecommend = location.pathname.startsWith("/ai-recommend");
   const onMissionsHub =
     location.pathname.startsWith("/missions") || location.pathname.startsWith("/leaderboard");
+  /**
+   * 커뮤니티 메뉴는 마지막으로 보던 목록(정렬·필터)으로 돌아가게 한다.
+   * 인자를 빠뜨려 communityHref 가 undefined 였고, 그 결과 커뮤니티를 눌러도
+   * 엉뚱한 곳으로 갔다.
+   */
+  const communityHref = resolveCommunityHref(location.pathname, location.search);
   const navItems = useMemo(
-    () => buildNavItems(onIslands, onSports, onAiRecommend, onMissionsHub, onCommunity),
-    [onIslands, onSports, onAiRecommend, onMissionsHub, onCommunity],
+    () => buildNavItems(onIslands, onSports, onAiRecommend, onMissionsHub, onCommunity, communityHref),
+    [onIslands, onSports, onAiRecommend, onMissionsHub, onCommunity, communityHref],
   );
   const headerSolid = headerScrolled || navMegaOpen;
   const closeNavMega = useCallback(() => {
@@ -548,9 +556,30 @@ export function SiteHeader() {
                 ↗
               </span>
             </a>
-            <Link to="/mypage" className="icon-btn" aria-label="마이페이지" title="마이페이지">
-              <ProfileIcon />
-            </Link>
+            {user?.role === "ADMIN" && (
+              <Link
+                to="/admin/submissions"
+                className="btn-admin"
+                title="미션 인증 검수"
+              >
+                검수
+              </Link>
+            )}
+            {isLoggedIn ? (
+              <Link
+                to="/mypage"
+                className="icon-btn"
+                aria-label={`마이페이지 (${user?.nickname ?? ""})`}
+                title={user?.nickname ? `${user.nickname}님 · 마이페이지` : "마이페이지"}
+              >
+                <ProfileIcon />
+              </Link>
+            ) : (
+              // 비로그인이면 마이페이지로 보내봐야 볼 게 없다
+              <Link to="/login" className="icon-btn" aria-label="로그인" title="로그인">
+                <ProfileIcon />
+              </Link>
+            )}
             <NotificationBell />
           </div>
         </div>

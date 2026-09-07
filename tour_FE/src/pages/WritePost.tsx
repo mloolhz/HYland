@@ -1,12 +1,16 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { CommunityHeader } from "@/components/community/CommunityHeader";
-import { CURRENT_USER_ID } from "@/constants/auth";
 import { ISLAND_CATALOG } from "@/constants/island";
 import { CONTAINER } from "@/constants/layout";
 import { COMMUNITY_ACTIVITY_OPTIONS } from "@/lib/community-activities";
-import { addPost, usePosts } from "@/lib/post-store";
-import type { Post, PostType } from "@/types/community";
+import { refreshPosts } from "@/lib/post-store";
+import { createPost } from "@/api/community";
+import { uploadImage } from "@/api/uploads";
+import { submitMissionProof } from "@/api/submissions";
+import { useMissionQuests } from "@/hooks/useMissionQuests";
+import { ApiError } from "@/api/auth";
+import type { PostType } from "@/types/community";
 
 const TYPE_OPTIONS: { value: PostType; label: string }[] = [
   { value: "review", label: "후기" },
@@ -15,6 +19,10 @@ const TYPE_OPTIONS: { value: PostType; label: string }[] = [
 ];
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+
+/** 레저 배지 인증에 쓰는 카테고리 — 레저스포츠 분류와 같다 */
+type LeisureCategory = "해상" | "육상" | "체험" | "힐링";
+const LEISURE_CATEGORIES: LeisureCategory[] = ["해상", "육상", "체험", "힐링"];
 
 type WritePrefill = {
   type?: PostType;
@@ -32,12 +40,8 @@ export function WritePost() {
   const navigate = useNavigate();
   const location = useLocation();
   const prefill = (location.state as WritePrefill | null) ?? null;
-  const posts = usePosts();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const author = useMemo(() => {
-    const existing = posts.find((p) => p.author.id === CURRENT_USER_ID);
-    return existing?.author ?? { id: CURRENT_USER_ID, nickname: "이파도", bti: "파도형" as const };
-  }, [posts]);
+  // 작성자는 서버가 토큰으로 판단한다 (예전에는 프론트가 mock 사용자를 붙였다)
 
   const [type, setType] = useState<PostType>(prefill?.type ?? "review");
   const [title, setTitle] = useState("");
@@ -48,7 +52,23 @@ export function WritePost() {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const [imageError, setImageError] = useState("");
   const [error, setError] = useState("");
-  const [saving, setSaving] = useState(false);
+  const [asMissionProof, setAsMissionProof] = useState(false);
+  /** 어떤 섬을 다녀왔는지 — 인증에는 반드시 있어야 한다 */
+  const [islandQuestId, setIslandQuestId] = useState<number | null>(null);
+  /** 레저 배지는 곁들이 — 카테고리를 먼저 고르고 그 안에서 종목을 고른다 */
+  const [leisureCategory, setLeisureCategory] = useState<LeisureCategory>("해상");
+  const [leisureQuestId, setLeisureQuestId] = useState<number | null>(null);
+  const { quests } = useMissionQuests();
+
+  const remaining = quests.filter((q) => q.current < q.target);
+  const islandQuests = remaining.filter((q) => q.category === "섬");
+  /**
+   * 종목이 걸린 미션만 인증할 수 있다.
+   * 그랜드슬램은 다른 미션을 모아야 열리는 것이라 인증샷으로 낼 수 없다.
+   */
+  const leisureQuests = remaining.filter(
+    (q) => q.category === leisureCategory && Boolean(q.sportId),
+  );
 
   useEffect(() => {
     return () => {
@@ -90,36 +110,42 @@ export function WritePost() {
       return;
     }
 
-    // TODO: 이미지 업로드 API 연동 — 업로드 API가 없어 첨부 파일은 현재 게시글에 저장되지 않음.
-    // API 연동 시: imageFile을 업로드 → 반환 URL을 images 배열에 저장.
-    const images: string[] | undefined = undefined;
-    void imageFile;
+    if (asMissionProof && !islandQuestId) {
+      setError("어느 섬을 다녀왔는지 선택해주세요.");
+      return;
+    }
+    if (asMissionProof && !imageFile) {
+      setError("미션 인증에는 인증샷이 필요해요.");
+      return;
+    }
 
-    const newPost: Post = {
-      id: `p-${Date.now()}`,
-      type,
-      title: title.trim(),
-      content: content.trim(),
-      island,
-      activity,
-      images,
-      author,
-      createdAt: new Date().toISOString(),
-      likes: 0,
-      views: 0,
-      comments: [],
-    };
-
-    // 저장이 끝난 뒤에 이동한다. 예전엔 곧바로 이동해서, 저장이 실패하면
-    // 존재하지 않는 글 상세로 들어가 빈 화면을 보게 됐다.
     try {
-      setSaving(true);
-      const saved = await addPost(newPost);
-      navigate(`/community/${saved.id}`);
-    } catch {
-      setError("글을 저장하지 못했어요. 잠시 후 다시 시도해주세요.");
-    } finally {
-      setSaving(false);
+      // 사진이 있으면 먼저 올리고 그 URL 을 글에 담는다
+      const images = imageFile ? [await uploadImage(imageFile)] : undefined;
+
+      const created = await createPost({
+        type,
+        title: title.trim(),
+        content: content.trim(),
+        island,
+        activity,
+        images,
+      });
+      // 미션 인증으로 냈으면 검수 대기로 보낸다.
+      // 섬은 필수, 레저 배지는 골랐을 때만 — 한 글로 두 건을 낼 수 있다.
+      if (asMissionProof && islandQuestId) {
+        await submitMissionProof(created.id, islandQuestId);
+        if (leisureQuestId) await submitMissionProof(created.id, leisureQuestId);
+      }
+      await refreshPosts();
+      navigate(`/community/${created.id}`);
+    } catch (err) {
+      console.error("[community] 글 작성 실패:", err);
+      setError(
+        err instanceof ApiError && err.status === 401
+          ? "로그인이 필요해요. 로그인 후 다시 시도해주세요."
+          : "글을 저장하지 못했어요. 잠시 후 다시 시도해주세요.",
+      );
     }
   };
 
@@ -141,6 +167,8 @@ export function WritePost() {
                     type="button"
                     role="radio"
                     aria-checked={type === opt.value}
+                    // 미션 인증은 사진이 근거라 유형이 인증샷으로 고정된다
+                    disabled={asMissionProof && opt.value !== "photo"}
                     className={`cm-filter-pill${type === opt.value ? " is-active" : ""}`}
                     onClick={() => setType(opt.value)}
                   >
@@ -148,6 +176,9 @@ export function WritePost() {
                   </button>
                 ))}
               </div>
+              {asMissionProof && (
+                <p className="cm-write-hint">미션 인증은 인증샷으로만 올릴 수 있어요.</p>
+              )}
             </div>
 
             <div className="cm-write-field">
@@ -223,6 +254,105 @@ export function WritePost() {
               />
             </div>
 
+            <div className="cm-write-field cm-write-proof">
+              <label className="cm-write-proof-toggle">
+                <input
+                  type="checkbox"
+                  checked={asMissionProof}
+                  onChange={(e) => {
+                    setAsMissionProof(e.target.checked);
+                    // 인증은 사진이 근거다 — 켜는 순간 유형을 인증샷으로 바꾼다
+                    if (e.target.checked) setType("photo");
+                  }}
+                />
+                <span>
+                  미션 인증으로 제출하기
+                  <span className="cm-write-optional"> — 관리자 확인 후 배지가 지급돼요</span>
+                </span>
+              </label>
+
+              {asMissionProof && (
+                <div className="cm-write-proof-body">
+                  {/* 섬 — 필수. 승인되면 이 섬이 방문 기록으로 남는다 */}
+                  <div className="cm-write-proof-step">
+                    <span className="cm-write-proof-step-label">
+                      1. 어느 섬을 다녀왔나요? <b className="cm-write-required">필수</b>
+                    </span>
+                    <select
+                      className="cm-write-select"
+                      value={islandQuestId ?? ""}
+                      onChange={(e) => {
+                        const id = e.target.value ? Number(e.target.value) : null;
+                        setIslandQuestId(id);
+                        // 글의 섬 항목도 같이 맞춰 준다 — 두 번 고르게 하지 않는다
+                        const picked = islandQuests.find((q) => q.id === id);
+                        if (picked) setIsland(picked.title.replace(/ 방문$/, ""));
+                      }}
+                      aria-label="인증할 섬 선택"
+                    >
+                      <option value="">섬 선택</option>
+                      {islandQuests.map((q) => (
+                        <option key={q.id} value={q.id}>
+                          {q.title.replace(/ 방문$/, "")}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* 레저 배지 — 곁들이. 카테고리를 먼저 고른다 */}
+                  <div className="cm-write-proof-step">
+                    <span className="cm-write-proof-step-label">
+                      2. 레저 배지도 함께 인증할까요?{" "}
+                      <span className="cm-write-optional">(선택)</span>
+                    </span>
+                    <div className="cm-filter-pills" role="radiogroup" aria-label="레저 카테고리">
+                      {LEISURE_CATEGORIES.map((c) => (
+                        <button
+                          key={c}
+                          type="button"
+                          role="radio"
+                          aria-checked={leisureCategory === c}
+                          className={`cm-filter-pill${leisureCategory === c ? " is-active" : ""}`}
+                          onClick={() => {
+                            setLeisureCategory(c);
+                            setLeisureQuestId(null);
+                          }}
+                        >
+                          {c}
+                        </button>
+                      ))}
+                    </div>
+                    {leisureQuests.length > 0 ? (
+                      <select
+                        className="cm-write-select"
+                        value={leisureQuestId ?? ""}
+                        onChange={(e) =>
+                          setLeisureQuestId(e.target.value ? Number(e.target.value) : null)
+                        }
+                        aria-label="인증할 레저 배지 선택"
+                      >
+                        <option value="">선택 안 함</option>
+                        {leisureQuests.map((q) => (
+                          <option key={q.id} value={q.id}>
+                            {q.icon} {q.title} ({q.current}/{q.target} {q.unit})
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      <p className="cm-write-hint">
+                        {leisureCategory} 배지는 모두 모았어요.
+                      </p>
+                    )}
+                  </div>
+
+                  <p className="cm-write-proof-note">
+                    인증샷이 있어야 제출할 수 있어요. 승인되면 진행도가 1 올라가고, 목표를 채우면
+                    배지를 받습니다.
+                  </p>
+                </div>
+              )}
+            </div>
+
             <div className="cm-write-field">
               <span className="cm-write-label">
                 이미지 <span className="cm-write-optional">(선택)</span>
@@ -288,8 +418,8 @@ export function WritePost() {
               <Link to="/community" className="cm-write-cancel">
                 뒤로
               </Link>
-              <button type="submit" className="cm-write-submit" disabled={saving}>
-                {saving ? "등록 중..." : "등록하기"}
+              <button type="submit" className="cm-write-submit">
+                등록하기
               </button>
             </div>
           </form>

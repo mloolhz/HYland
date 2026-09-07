@@ -3146,3 +3146,178 @@ div.cm-post-row[role="link"] {
     align-self: flex-start;
   }
 }
+
+/* ── 글쓰기: 미션 인증 제출 ── */
+.cm-write-proof {
+  padding: 16px 18px;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+}
+
+.cm-write-proof-toggle {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: #1a3a6b;
+  cursor: pointer;
+}
+
+.cm-write-proof-toggle input {
+  margin-top: 3px;
+  flex: none;
+}
+
+.cm-write-proof-body {
+  margin-top: 14px;
+  padding-left: 26px;
+}
+
+.cm-write-proof-note {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.7;
+  color: #64748b;
+}
+
+/* 커뮤니티 사이드바 — 비로그인 안내 */
+.cm-profile-card--guest {
+  text-align: center;
+}
+
+.cm-profile-guest-title {
+  margin: 0 0 6px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #1a3a6b;
+}
+
+.cm-profile-guest-desc {
+  margin: 0 0 16px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #64748b;
+}
+
+/* 내 글 삭제 */
+.cm-action-btn--delete {
+  color: #b91c1c;
+}
+
+.cm-action-btn--delete:hover {
+  border-color: #dc2626;
+  background: #fef2f2;
+}
+
+/* 댓글 수정 입력 */
+.cm-comment-edit textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.6;
+  resize: vertical;
+}
+
+.cm-comment-edit textarea:focus {
+  outline: 2px solid #2563eb;
+  outline-offset: 1px;
+}
+
+.cm-comment-edit .cm-inline-reply-actions {
+  margin-top: 8px;
+}
+
+/* 글 인라인 수정 */
+.cm-detail-title-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 22px;
+  font-weight: 600;
+  color: #1a3a6b;
+}
+
+.cm-detail-title-input:focus {
+  outline: 2px solid #2563eb;
+  outline-offset: 1px;
+}
+
+.cm-detail-edit textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.8;
+  resize: vertical;
+}
+
+.cm-detail-edit textarea:focus {
+  outline: 2px solid #2563eb;
+  outline-offset: 1px;
+}
+
+.cm-detail-edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.cm-action-btn--save {
+  border-color: #2563eb;
+  background: #2563eb;
+  color: #fff;
+}
+
+.cm-action-btn--save:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 글 작성 — 미션 인증 단계 (섬 필수 → 레저 배지 선택) */
+.cm-write-proof-step {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cm-write-proof-step + .cm-write-proof-step {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed #cbd5e1;
+}
+
+.cm-write-proof-step-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a3a6b;
+}
+
+.cm-write-required {
+  margin-left: 4px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: #fdecec;
+  color: #b91c1c;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.cm-write-hint {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* 미션 인증을 켜면 후기·Q&A 는 고를 수 없다 */
+.cm-filter-pill:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
