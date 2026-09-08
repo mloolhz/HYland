@@ -120,6 +120,11 @@ export type IslandRecommendationItem = {
   }[];
   aiDescription?: string;
   /**
+   * 섬 자체의 성격을 직접 수집한 자료(웹 조사 + 현지 인터뷰)로 정리한 큐레이션 특징.
+   * "이 섬은 원래 이런 곳이라 추천"이라는 근거로 카드 상단에 노출한다.
+   */
+  islandCharacteristic?: { summary: string; highlights: string[] };
+  /**
    * 하루 코스 (시간·활동·설명).
    * 예전 itinerary는 활동명만 나열한 5줄이라 접어둘 이유가 없었다.
    * 일반 질문 답변과 같은 타임라인 형태로 맞춘다.

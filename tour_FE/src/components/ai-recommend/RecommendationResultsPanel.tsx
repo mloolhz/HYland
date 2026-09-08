@@ -64,6 +64,22 @@ export function RecommendationResultsPanel({ response, weather }: Recommendation
             <p className="ai-rec-island-card__bti-note">당신의 섬BTI 성향을 반영했어요.</p>
           ) : null}
 
+          {/* 직접 수집한 섬 특징 — "이 섬은 원래 이런 곳이라 추천"의 근거. 점수·후기보다 먼저. */}
+          {item.islandCharacteristic ? (
+            <div className="ai-rec-characteristic">
+              <p className="ai-rec-characteristic__summary">{item.islandCharacteristic.summary}</p>
+              {item.islandCharacteristic.highlights.length > 0 ? (
+                <ul className="ai-rec-characteristic__tags">
+                  {item.islandCharacteristic.highlights.map((tag) => (
+                    <li key={tag} className="ai-rec-characteristic__tag">
+                      {tag}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </div>
+          ) : null}
+
           {/* 숫자를 뺀 대신 이유가 본문이 된다. 다만 다 펼치면 카드가 다시 길어지므로 3개까지. */}
           <ul className="ai-rec-reasons">
             {item.recommendationReasons.slice(0, 3).map((reason) => (

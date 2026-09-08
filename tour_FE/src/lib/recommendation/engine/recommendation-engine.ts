@@ -1,4 +1,5 @@
 import { ISLAND_RECOMMENDATION_FEATURES } from "@/data/island-recommendation-features";
+import { getIslandEditorial } from "@/data/island-editorial";
 import { getUniqueIslandIdsFromEarnedStamps } from "@/lib/passport/stamp-island-link";
 import { buildMockIslandTravelContexts } from "@/lib/recommendation/context/travel-context.mock";
 import { scoreContextFactors } from "@/lib/recommendation/engine/context-scorer";
@@ -174,6 +175,8 @@ export function runRecommendationEngine(
         insights,
       ),
       tags: buildRecommendationTags(partialScores, visitedIslandIds.has(island.islandId)),
+      // 직접 수집한 섬 특징 — "이 섬은 원래 이런 곳이라 추천"의 근거로 카드에 얹는다.
+      islandCharacteristic: getIslandEditorial(island.islandId) ?? undefined,
       estimatedBudget: island.averageBudget,
       recommendedActivities: pickRecommendedActivities(
         island.activities,
