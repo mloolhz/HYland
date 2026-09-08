@@ -165,34 +165,53 @@ export function Safety() {
           </div>
 
           {facilities.length > 0 ? (
-            <ul className="sf-facility-cards">
-              {facilities.map((facility) => (
-                <li key={`${facility.name}-${facility.phone ?? ""}`} className="sf-facility-card">
-                  <div className="sf-facility-card__main">
-                    <p className="sf-facility-card__name">
-                      {facility.name}
-                      {facility.verified === false ? (
-                        <span className="sf-facility-card__badge" title="공식 출처 기준 초안 — 확인 필요">
-                          확인 필요
-                        </span>
-                      ) : null}
-                    </p>
-                    {facility.address ? (
-                      <p className="sf-facility-card__addr">{facility.address}</p>
-                    ) : null}
-                    {facility.note ? (
-                      <p className="sf-facility-card__note">{facility.note}</p>
-                    ) : null}
-                  </div>
-                  {facility.phone ? (
-                    <a className="sf-facility-card__tel" href={telHref(facility.phone)}>
-                      <span aria-hidden="true">📞</span>
-                      {facility.phone}
-                    </a>
-                  ) : null}
-                </li>
-              ))}
-            </ul>
+            <div className="sf-table-wrap">
+              <table className="sf-table">
+                <caption className="sf-sr-only">
+                  {selectedIsland.name} {selectedFacility.label} 목록 ({facilities.length}곳)
+                </caption>
+                <thead>
+                  <tr>
+                    <th scope="col">시설명</th>
+                    <th scope="col">주소</th>
+                    <th scope="col">연락처</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {facilities.map((facility) => (
+                    <tr key={`${facility.name}-${facility.phone ?? ""}`}>
+                      <td>
+                        <span className="sf-table__name">{facility.name}</span>
+                        {facility.verified === false ? (
+                          <span className="sf-table__badge" title="공식 출처 기준 초안 — 확인 필요">
+                            확인 필요
+                          </span>
+                        ) : null}
+                      </td>
+                      <td>
+                        {facility.address ? (
+                          facility.address
+                        ) : (
+                          <span className="sf-table__muted">—</span>
+                        )}
+                        {facility.note ? (
+                          <span className="sf-table__note">{facility.note}</span>
+                        ) : null}
+                      </td>
+                      <td>
+                        {facility.phone ? (
+                          <a className="sf-table__tel" href={telHref(facility.phone)}>
+                            {facility.phone}
+                          </a>
+                        ) : (
+                          <span className="sf-table__muted">—</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           ) : (
             <div className="sf-result-empty">
               <p className="sf-result-empty__msg">

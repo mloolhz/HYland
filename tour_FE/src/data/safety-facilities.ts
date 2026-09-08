@@ -113,30 +113,91 @@ export const ISLAND_SAFETY: Record<string, SafetyFacility[]> = {
       verified: false,
     },
   ],
-  daech: [],
+  daech: [], // 자료 없음 (수집 필요)
   // 연평도권역
-  yeonp: [],
-  // 강화도권역
-  gangh: [],
-  gyo: [],
-  seok: [],
+  yeonp: [], // 자료 없음 (수집 필요)
+  // 강화도권역 — 팀 조사 자료. 병원은 치과·한의원을 빼고 일반 진료 위주로 정리(트리밍).
+  gangh: [
+    // 일반병원
+    { type: "hospital", name: "의료법인해인강화병원", address: "인천 강화군 강화읍 강화대로312번길 11", verified: true },
+    { type: "hospital", name: "해주병원", address: "인천 강화군 하점면 창후로 286", phone: "032-933-7114", verified: true },
+    { type: "hospital", name: "강화요양병원", address: "인천 강화군 길상면 강화동로 181", phone: "032-937-0639", verified: true },
+    { type: "hospital", name: "남궁내과의원", address: "인천 강화군 강화읍 강화대로 422", verified: true },
+    { type: "hospital", name: "임성식내과의원", address: "인천 강화군 강화읍 강화대로 395, 준프라자빌딩 3층", verified: true },
+    { type: "hospital", name: "중앙의원", address: "인천 강화군 강화읍 강화대로 412", verified: true },
+    { type: "hospital", name: "유여성의원", address: "인천 강화군 강화읍 강화대로 410, 302호", verified: true },
+    { type: "hospital", name: "온수의원", address: "인천 강화군 길상면 온수길36번길 2", phone: "032-937-6835", verified: true },
+    { type: "hospital", name: "유안과의원", address: "인천 강화군 강화읍 강화대로 412-1", verified: true },
+    { type: "hospital", name: "강화연세안과의원", address: "인천 강화군 강화읍 중앙로 23", verified: true },
+    { type: "hospital", name: "강화튼튼신경외과의원", address: "인천 강화군 강화읍 강화대로 387, 이레빌딩", verified: true },
+    { type: "hospital", name: "임용철마취통증의학과의원", address: "인천 강화군 강화읍 강화대로 395, 5층 502호", verified: true },
+    // 응급의료센터
+    { type: "emergency", name: "비에스종합병원", phone: "032-290-0001", verified: true },
+    // 약국
+    { type: "pharmacy", name: "부흥생명약국", phone: "032-932-5918", verified: true },
+    { type: "pharmacy", name: "바다약국", phone: "032-934-0010", verified: true },
+    { type: "pharmacy", name: "전등약국", phone: "032-937-8219", verified: true },
+    { type: "pharmacy", name: "유신약국", phone: "032-937-0020", verified: true },
+    { type: "pharmacy", name: "세광약국", phone: "032-934-2249", verified: true },
+    { type: "pharmacy", name: "남산약국", phone: "032-934-5670", verified: true },
+    { type: "pharmacy", name: "신세계약국", phone: "032-934-5424", verified: true },
+    { type: "pharmacy", name: "다나약국", phone: "032-932-8575", verified: true },
+    { type: "pharmacy", name: "감초약국", phone: "032-934-3806", verified: true },
+    // 소방서(119안전센터)
+    { type: "fire-station", name: "강화119안전센터", phone: "032-930-5894", verified: true },
+    { type: "fire-station", name: "내가119안전센터", phone: "032-930-5823", verified: true },
+    { type: "fire-station", name: "불은119안전센터", phone: "032-930-5811", verified: true },
+    { type: "fire-station", name: "길상119안전센터", phone: "032-930-5822", verified: true },
+    // 경찰서(지구대·파출소)
+    { type: "police", name: "심도지구대", phone: "032-930-0301", verified: true },
+    { type: "police", name: "선원파출소", phone: "032-930-0302", verified: true },
+    { type: "police", name: "불은파출소", phone: "032-930-0303", verified: true },
+    { type: "police", name: "길상파출소", phone: "032-930-0304", verified: true },
+    { type: "police", name: "화도파출소", phone: "032-930-0305", verified: true },
+    { type: "police", name: "양도파출소", phone: "032-930-0306", verified: true },
+    { type: "police", name: "송해파출소", phone: "032-930-0307", verified: true },
+    { type: "police", name: "하점파출소", phone: "032-930-0308", verified: true },
+    { type: "police", name: "양사파출소", phone: "032-930-0309", verified: true },
+    { type: "police", name: "내가파출소", phone: "032-930-0311", verified: true },
+    // 해양경찰서
+    { type: "coast-guard", name: "강화파출소", phone: "032-650-2226", verified: true },
+    { type: "coast-guard", name: "창후리출장소", phone: "032-650-2134", verified: true },
+    { type: "coast-guard", name: "선수출장소", phone: "032-650-2135", verified: true },
+  ],
+  gyo: [
+    { type: "police", name: "교동파출소", phone: "032-930-0313", verified: true },
+    { type: "pharmacy", name: "교동약국", phone: "032-933-8358", verified: true },
+  ],
+  seok: [
+    { type: "police", name: "삼산파출소", phone: "032-930-0312", verified: true },
+    { type: "coast-guard", name: "삼산출장소", phone: "032-650-2734", verified: true },
+  ],
   // 북도권역
-  jang: [],
-  sinsi: [],
+  jang: [{ type: "coast-guard", name: "장봉출장소", phone: "032-650-2133", verified: true }],
+  sinsi: [{ type: "police", name: "북도파출소", phone: "032-760-8312", verified: true }],
   // 영종구·서해구권역
-  yeongj: [],
-  muui: [],
+  yeongj: [], // 자료 없음 (수집 필요)
+  muui: [], // 자료 없음 (수집 필요)
   // 영흥도권역
-  yheung: [],
+  yheung: [
+    { type: "hospital", name: "하나의료조합영흥우리의원", phone: "032-886-9411", verified: true },
+    { type: "pharmacy", name: "영흥우리약국", phone: "032-888-3634", verified: true },
+    { type: "fire-station", name: "영흥119안전센터", phone: "032-810-6692", verified: true },
+    { type: "police", name: "영흥파출소", phone: "032-760-8311", verified: true },
+    { type: "coast-guard", name: "영흥파출소", phone: "032-650-2227", verified: true },
+  ],
   // 자월도권역
-  jawol: [],
-  seungb: [],
-  ijak: [],
+  jawol: [], // 자료 없음 (수집 필요)
+  seungb: [], // 시설 없음으로 확인됨
+  ijak: [], // 시설 없음으로 확인됨
   // 덕적도권역
-  deokj: [],
-  soya: [],
-  mungap: [],
-  gureop: [],
+  deokj: [
+    { type: "police", name: "덕적파출소", phone: "032-760-8313", verified: true },
+    { type: "coast-guard", name: "덕적출장소", phone: "032-650-2735", verified: true },
+  ],
+  soya: [], // 시설 없음으로 확인됨
+  mungap: [{ type: "health-center", name: "문갑보건진료소", phone: "032-833-8373", verified: true }],
+  gureop: [], // 시설 없음으로 확인됨
 };
 
 /** 섬 + 시설종류로 보여줄 시설 목록. 섬 자체 시설을 먼저, 없으면 거점 시설로 채운다. */
