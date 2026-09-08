@@ -200,6 +200,16 @@ export const ISLAND_SAFETY: Record<string, SafetyFacility[]> = {
   gureop: [], // 시설 없음으로 확인됨
 };
 
+/**
+ * 안전시설이 "진짜로 없는" 섬 (팀 현장 확인). 자료 미수집과 구분한다.
+ * 이 섬들은 어떤 시설을 선택해도 "섬 내 시설 없음"으로 안내하고 긴급번호로 유도한다.
+ */
+export const NO_FACILITY_ISLANDS = new Set<string>(["seungb", "ijak", "soya", "gureop"]);
+
+export function isNoFacilityIsland(islandId: string): boolean {
+  return NO_FACILITY_ISLANDS.has(islandId);
+}
+
 /** 섬 + 시설종류로 보여줄 시설 목록. 섬 자체 시설을 먼저, 없으면 거점 시설로 채운다. */
 export function getSafetyFacilities(
   islandId: string,

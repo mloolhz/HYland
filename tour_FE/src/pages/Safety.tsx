@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { CONTAINER } from "@/constants/layout";
 import { ISLANDS, ISLAND_REGIONS } from "@/lib/island-data";
-import { getSafetyFacilities } from "@/data/safety-facilities";
+import { getSafetyFacilities, isNoFacilityIsland } from "@/data/safety-facilities";
 
 const SAFE_KOREA_URL =
   "https://www.safekorea.go.kr/safekorea-kor/flsm/flsm/facilitiesSafteyMap.do";
@@ -76,6 +76,7 @@ export function Safety() {
     [selectedIsland.id, district, selectedFacility.id],
   );
   const fallbackEmergency = FALLBACK_EMERGENCY[selectedFacility.id];
+  const noFacilityIsland = isNoFacilityIsland(selectedIsland.id);
 
   const updateSelection = (key: "island" | "facility", value: string) => {
     const next = new URLSearchParams(searchParams);
@@ -215,10 +216,22 @@ export function Safety() {
           ) : (
             <div className="sf-result-empty">
               <p className="sf-result-empty__msg">
-                {selectedIsland.name}의 {selectedFacility.label} 정보는 아직 정리 중이에요.
-                {fallbackEmergency
-                  ? ` 위급하면 아래 ${fallbackEmergency.label} 번호로 먼저 연락하세요.`
-                  : " 아래 국민안전24 지도에서 위치를 확인하세요."}
+                {noFacilityIsland ? (
+                  <>
+                    {selectedIsland.name}에는 병원·약국·파출소 같은 안전시설이 없어요. 위급 시
+                    {fallbackEmergency
+                      ? ` 아래 ${fallbackEmergency.label} 번호로 연락하고,`
+                      : " 119·112·122로 연락하고,"}{" "}
+                    가까운 거점 섬이나 육지의 시설을 이용하세요.
+                  </>
+                ) : (
+                  <>
+                    {selectedIsland.name}의 {selectedFacility.label} 정보는 아직 정리 중이에요.
+                    {fallbackEmergency
+                      ? ` 위급하면 아래 ${fallbackEmergency.label} 번호로 먼저 연락하세요.`
+                      : " 아래 국민안전24 지도에서 위치를 확인하세요."}
+                  </>
+                )}
               </p>
               {fallbackEmergency ? (
                 <a className="sf-facility-card__tel" href={telHref(fallbackEmergency.number)}>
