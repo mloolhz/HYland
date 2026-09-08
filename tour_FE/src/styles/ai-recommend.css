@@ -1844,3 +1844,52 @@ body:has(.ai-page)::-webkit-scrollbar-button {
 .ai-course-list--plain .ai-course-step {
   margin-bottom: 14px;
 }
+
+/* 섬BTI 인기 섬 고정 칩 — 예시 칩과 구분되게 살짝 강조 */
+.ai-example-chip--bti {
+  color: #0e2b52;
+  background: #eaf1fb;
+  border-color: #bcd2f0;
+  font-weight: 700;
+}
+
+.ai-example-chip--bti:hover {
+  background: #dbe8f8;
+  border-color: #9fbde8;
+}
+
+/* 섬BTI 유형별 인기 섬 목록 (대화 답변) */
+.ai-bti-islands {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ai-bti-islands__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a3a6b;
+  background: #f4f7fc;
+  border: 1px solid #dbe4ef;
+  border-radius: 6px;
+  padding: 6px 11px 6px 6px;
+}
+
+.ai-bti-islands__rank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  background: #2563eb;
+  border-radius: 5px;
+}

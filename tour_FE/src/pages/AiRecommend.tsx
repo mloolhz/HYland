@@ -12,9 +12,10 @@ import {
 } from "@/api/ai-recommend";
 import { postRecommendations } from "@/api/recommendation";
 import { loadPosts } from "@/lib/post-store";
+import { getBtiPreferences, type BtiIslandPreference } from "@/api/bti-preferences";
+import { getIslandBtiResult } from "@/data/island-bti/results";
 import { AiRecommendComposer } from "@/components/ai-recommend/AiRecommendComposer";
 import { AiResponseContent } from "@/components/ai-recommend/AiResponseContent";
-import { IslandBtiPreferenceCard } from "@/components/ai-recommend/IslandBtiPreferenceCard";
 import { RecommendationResultsPanel } from "@/components/ai-recommend/RecommendationResultsPanel";
 import type { TripIntentFormValue } from "@/components/ai-recommend/AiTripSettingsPanel";
 import { buildApplyMessage } from "@/lib/ai-trip-labels";
@@ -59,11 +60,22 @@ type AiTurn = {
   suggestedQuestions: string[] | null;
   /** 재시도 시 원래 출처를 그대로 다시 보내기 위해 보관 */
   questionSource?: QuestionSource;
+  /** 섬BTI 인기 섬 칩 응답 (null=조회 중, []=데이터 부족) */
+  btiIslands?: BtiIslandPreference[] | null;
 };
 
 function createId() {
   return `msg-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
 }
+
+/**
+ * 대화 내용을 모듈 레벨에 캐시한다.
+ * AI추천 → 커뮤니티 → 다시 AI추천으로 이동하면 컴포넌트가 언마운트·리마운트되며
+ * 보던 대화가 사라졌다. 라우터를 건드리지 않고, 화면 이동(SPA) 사이에는 대화를
+ * 유지한다. 전체 새로고침에서는 초기화된다(세션의 자연스러운 종료로 본다).
+ */
+let cachedTurns: AiTurn[] = [];
+let cachedTripForm: TripIntentFormValue | null = null;
 
 function prefersReducedMotion(): boolean {
   return window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
@@ -152,8 +164,8 @@ export function AiRecommend() {
   const { hasResult, islandBtiResultCode } = useIslandBti();
   const [sessionId] = useState(() => getAiSessionId());
 
-  const [tripForm, setTripForm] = useState<TripIntentFormValue>(() => defaultTripForm());
-  const [turns, setTurns] = useState<AiTurn[]>([]);
+  const [tripForm, setTripForm] = useState<TripIntentFormValue>(() => cachedTripForm ?? defaultTripForm());
+  const [turns, setTurns] = useState<AiTurn[]>(() => cachedTurns);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [bootstrapped, setBootstrapped] = useState(false);
@@ -184,6 +196,14 @@ export function AiRecommend() {
   const introOuterRef = useRef<HTMLElement>(null);
   const introRef = useRef<HTMLDivElement>(null);
   const [introTopOffset, setIntroTopOffset] = useState<number | null>(null);
+
+  // 대화·조건을 모듈 캐시에 동기화 — 화면을 떠났다 돌아와도 보던 내용이 유지된다.
+  useEffect(() => {
+    cachedTurns = turns;
+  }, [turns]);
+  useEffect(() => {
+    cachedTripForm = tripForm;
+  }, [tripForm]);
 
   // StrictMode의 개발 모드 mount→unmount→remount 시뮬레이션에서 cleanup만 있으면
   // remount 시 true로 복구되지 않아 이후 모든 타이핑이 첫 틱에서 즉시 중단된다.
@@ -517,6 +537,50 @@ export function AiRecommend() {
     [executeTurn],
   );
 
+  // 섬BTI 별칭(예: "파도 작전대장")을 넣은 인기 섬 칩. 검사 전이면 검사로 유도한다.
+  const btiResultData = islandBtiResultCode ? getIslandBtiResult(islandBtiResultCode) : null;
+  const btiChipLabel =
+    hasResult && btiResultData
+      ? `${btiResultData.name} 유형의 인기 섬 확인하기`
+      : "섬BTI로 인기 섬 확인하기";
+
+  // 칩 클릭 → 섬BTI 유형별 인기 섬을 백엔드에서 받아 대화에 답변으로 띄운다.
+  const handleBtiPopularChip = useCallback(() => {
+    if (!hasResult || !islandBtiResultCode) {
+      navigate("/island-bti/test");
+      return;
+    }
+    setBootstrapped(true);
+    setSettingsOpen(false);
+    const turnId = createId();
+    const label = btiResultData
+      ? `${btiResultData.name} 유형이 좋아하는 섬은?`
+      : "내 섬BTI 유형이 좋아하는 섬은?";
+    setTurns((prev) => [
+      ...prev,
+      {
+        id: turnId,
+        displayText: label,
+        promptText: label,
+        hasTop3: false,
+        phase: "detail-loading",
+        recommendation: null,
+        weather: null,
+        assistant: null,
+        streamText: "",
+        suggestedQuestions: null,
+        questionSource: "chip",
+        btiIslands: null,
+      },
+    ]);
+    void getBtiPreferences(islandBtiResultCode).then((entries) => {
+      const islands = entries[0]?.topIslands ?? [];
+      setTurns((prev) =>
+        prev.map((t) => (t.id === turnId ? { ...t, phase: "done", btiIslands: islands } : t)),
+      );
+    });
+  }, [hasResult, islandBtiResultCode, navigate, btiResultData]);
+
   // turns 배열이 바뀔 때(새 턴 추가) 그 턴의 질문 말풍선을 채팅 영역 최상단에 한 번
   // 스냅한다. 그 아래로 답변이 채워지는 동안은 자동으로 따라 스크롤하지 않으며,
   // 사용자는 언제든 자유롭게 스크롤할 수 있다.
@@ -616,6 +680,14 @@ export function AiRecommend() {
                   {q}
                 </button>
               ))}
+              {/* 섬BTI 인기 섬 — 고정 칩 (별칭 반영). 예전엔 입력창 아래 별도 버튼이었다. */}
+              <button
+                type="button"
+                className="ai-example-chip ai-example-chip--bti"
+                onClick={handleBtiPopularChip}
+              >
+                {btiChipLabel}
+              </button>
             </div>
 
             <AiRecommendComposer
@@ -629,8 +701,6 @@ export function AiRecommend() {
               settingsOpen={settingsOpen}
               onSettingsOpenChange={handleSettingsOpenChange}
             />
-
-            <IslandBtiPreferenceCard />
           </div>
         ) : (
           <>
@@ -681,7 +751,31 @@ export function AiRecommend() {
                         </div>
                       )}
 
-                    {turn.phase === "detail-loading" && <LoadingDots label={AI_RECOMMEND_COPY.loading} />}
+                    {turn.phase === "detail-loading" && (
+                      <LoadingDots
+                        label={turn.btiIslands === null ? "인기 섬을 찾고 있어요" : AI_RECOMMEND_COPY.loading}
+                      />
+                    )}
+
+                    {turn.btiIslands != null && (
+                      <div className="ai-bubble ai-bubble--assistant ai-fade-up">
+                        {turn.btiIslands.length > 0 ? (
+                          <>
+                            <p className="ai-rec-lead">같은 섬BTI 유형이 특히 많이 찾은 섬이에요.</p>
+                            <ol className="ai-bti-islands">
+                              {turn.btiIslands.map((it, i) => (
+                                <li key={it.islandName} className="ai-bti-islands__item">
+                                  <span className="ai-bti-islands__rank">{i + 1}</span>
+                                  {it.islandName}
+                                </li>
+                              ))}
+                            </ol>
+                          </>
+                        ) : (
+                          <p className="ai-response-text">아직 같은 유형의 추천 데이터가 부족해요.</p>
+                        )}
+                      </div>
+                    )}
 
                     {turn.assistant ? (
                       <div className="ai-bubble ai-bubble--assistant">
