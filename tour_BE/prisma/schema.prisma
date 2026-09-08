@@ -544,7 +544,8 @@ model LeisureSport {
   description  String?            @db.Text
   imageUrl     String?            @map("image_url")
   phone        String?
-  reservationUrl String?          @map("reservation_url")
+  /** 예약·홈페이지 주소. 관광공사 상세 URL 은 191자를 넘는 경우가 있어 TEXT 로 둔다 */
+  reservationUrl String?          @map("reservation_url") @db.Text
   active       Boolean            @default(true)
   verification VerificationStatus @default(UNVERIFIED)
   createdAt    DateTime           @default(now()) @map("created_at")

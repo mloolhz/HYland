@@ -56,6 +56,14 @@ export function fetchFacilitiesByActivity(
   return getJson(`/leisure-sports?activity=${encodeURIComponent(sportName)}`, signal);
 }
 
+/** 섬 하나에 있는 시설 목록 (섬 상세 패널에서 쓴다) */
+export function fetchFacilitiesByIsland(
+  islandId: string,
+  signal?: AbortSignal,
+): Promise<LeisureFacility[]> {
+  return getJson(`/leisure-sports?island=${encodeURIComponent(islandId)}`, signal);
+}
+
 /** 시설 상세 */
 export function fetchFacilityById(
   id: string,

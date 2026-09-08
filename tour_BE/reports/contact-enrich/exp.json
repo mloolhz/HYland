@@ -1,0 +1,331 @@
+{
+  "category": "exp",
+  "found": [
+    {
+      "id": 300,
+      "name": "강화도 황청낚시터",
+      "activity": "낚시",
+      "island": "강화도",
+      "matchedTitle": "강화도 황청낚시터",
+      "exactMatch": true,
+      "contentId": "1516091",
+      "tel": null,
+      "homepage": "http://hwangcheongfish.com",
+      "addr": "인천광역시 강화군 내가면 황청포구로443번길 82",
+      "usetime": null,
+      "restdate": null
+    },
+    {
+      "id": 306,
+      "name": "국화지낚시터",
+      "activity": "낚시",
+      "island": "강화도",
+      "matchedTitle": "국화지낚시터",
+      "exactMatch": true,
+      "contentId": "1615657",
+      "tel": null,
+      "homepage": "http://www.kukwha.com",
+      "addr": "인천광역시 강화군 강화읍 국화길 51",
+      "usetime": null,
+      "restdate": null
+    },
+    {
+      "id": 308,
+      "name": "길상가족낚시터",
+      "activity": "낚시",
+      "island": "강화도",
+      "matchedTitle": "길상가족낚시터",
+      "exactMatch": true,
+      "contentId": "2755854",
+      "tel": "032-937-6497",
+      "homepage": "https://cafe.naver.com/cjjuny",
+      "addr": "인천광역시 강화군 길상면 초지로 453",
+      "usetime": null,
+      "restdate": null
+    },
+    {
+      "id": 309,
+      "name": "길정 낚시터",
+      "activity": "낚시",
+      "island": "강화도",
+      "matchedTitle": "길정 낚시터",
+      "exactMatch": true,
+      "contentId": "2757130",
+      "tel": null,
+      "homepage": null,
+      "addr": "인천광역시 강화군 양도면 고려왕릉로 209",
+      "usetime": null,
+      "restdate": null
+    },
+    {
+      "id": 317,
+      "name": "선두바다낚시터",
+      "activity": "낚시",
+      "island": "강화도",
+      "matchedTitle": "선두바다낚시터",
+      "exactMatch": true,
+      "contentId": "2768057",
+      "tel": null,
+      "homepage": "https://m.cafe.naver.com/ca-fe/ganghwa939.cafe/",
+      "addr": "인천광역시 강화군 길상면 해안남로 673-15",
+      "usetime": null,
+      "restdate": null
+    },
+    {
+      "id": 318,
+      "name": "선두포저수지",
+      "activity": "낚시",
+      "island": "강화도",
+      "matchedTitle": "선두포저수지",
+      "exactMatch": true,
+      "contentId": "2013518",
+      "tel": null,
+      "homepage": null,
+      "addr": "인천광역시 강화군 길상면 보리고개로 13",
+      "usetime": null,
+      "restdate": null
+    },
+    {
+      "id": 320,
+      "name": "신선낚시터",
+      "activity": "낚시",
+      "island": "강화도",
+      "matchedTitle": "신선낚시터",
+      "exactMatch": true,
+      "contentId": "1615829",
+      "tel": null,
+      "homepage": "http://www.sinsungi.co.kr/",
+      "addr": "인천광역시 강화군 내가면 고비고개로741번길 37-48",
+      "usetime": null,
+      "restdate": null
+    },
+    {
+      "id": 326,
+      "name": "인산낚시터",
+      "activity": "낚시",
+      "island": "강화도",
+      "matchedTitle": "인산낚시터",
+      "exactMatch": true,
+      "contentId": "1615967",
+      "tel": null,
+      "homepage": "https://insan.quv.kr/",
+      "addr": "인천광역시 강화군 양도면 중앙로787번길 8-1",
+      "usetime": null,
+      "restdate": null
+    },
+    {
+      "id": 335,
+      "name": "황청낚시터",
+      "activity": "낚시",
+      "island": "강화도",
+      "matchedTitle": "강화도 황청낚시터",
+      "exactMatch": false,
+      "contentId": "1516091",
+      "tel": null,
+      "homepage": "http://hwangcheongfish.com",
+      "addr": "인천광역시 강화군 내가면 황청포구로443번길 82",
+      "usetime": null,
+      "restdate": null
+    },
+    {
+      "id": 376,
+      "name": "항포낚시터",
+      "activity": "낚시",
+      "island": "석모도",
+      "matchedTitle": "항포낚시터",
+      "exactMatch": true,
+      "contentId": "2768065",
+      "tel": null,
+      "homepage": "https://cafe.naver.com/chamiik/",
+      "addr": "인천광역시 강화군 삼산면 삼산서로310번길 21",
+      "usetime": null,
+      "restdate": null
+    },
+    {
+      "id": 388,
+      "name": "연평평화안보수련원",
+      "activity": "수련단체활동",
+      "island": "연평도",
+      "matchedTitle": "연평평화안보수련원",
+      "exactMatch": true,
+      "contentId": "2710985",
+      "tel": null,
+      "homepage": "https://www.ongjin.go.kr/open_content/security/",
+      "addr": "인천광역시 옹진군 연평면 연평중앙로24번길 25",
+      "usetime": null,
+      "restdate": null
+    },
+    {
+      "id": 393,
+      "name": "만정바다좌대낚시터",
+      "activity": "낚시",
+      "island": "영종도",
+      "matchedTitle": "만정바다좌대낚시터",
+      "exactMatch": true,
+      "contentId": "2768151",
+      "tel": null,
+      "homepage": null,
+      "addr": "인천광역시 영종구 영종순환로 279-20 (중산동)",
+      "usetime": null,
+      "restdate": null
+    },
+    {
+      "id": 394,
+      "name": "만정사계절바다낚시터",
+      "activity": "낚시",
+      "island": "영종도",
+      "matchedTitle": "만정사계절바다낚시터",
+      "exactMatch": true,
+      "contentId": "2768158",
+      "tel": null,
+      "homepage": "http://cafe.naver.com/yj4season",
+      "addr": "인천광역시 영종구 영종순환로 279-20",
+      "usetime": null,
+      "restdate": null
+    },
+    {
+      "id": 425,
+      "name": "영흥바다낚시터",
+      "activity": "낚시",
+      "island": "영흥도",
+      "matchedTitle": "영흥바다낚시터",
+      "exactMatch": true,
+      "contentId": "2767615",
+      "tel": null,
+      "homepage": null,
+      "addr": "인천광역시 옹진군 영흥면 영흥로176번길 21",
+      "usetime": null,
+      "restdate": null
+    },
+    {
+      "id": 426,
+      "name": "용담바다낚시터",
+      "activity": "낚시",
+      "island": "영흥도",
+      "matchedTitle": "용담바다낚시터",
+      "exactMatch": true,
+      "contentId": "2767616",
+      "tel": null,
+      "homepage": null,
+      "addr": "인천광역시 옹진군 영흥면 외리 21",
+      "usetime": null,
+      "restdate": null
+    }
+  ],
+  "notFound": [
+    {
+      "id": 302,
+      "name": "강화루지",
+      "activity": "루지",
+      "address": null
+    },
+    {
+      "id": 303,
+      "name": "강화바다낚시터",
+      "activity": "낚시",
+      "address": null
+    },
+    {
+      "id": 305,
+      "name": "강화화개산모노레일",
+      "activity": "모노레일",
+      "address": null
+    },
+    {
+      "id": 343,
+      "name": "대이작도 해양생태관",
+      "activity": "풀등 체험",
+      "address": "인천광역시 옹진군 자월면 이작리"
+    },
+    {
+      "id": 347,
+      "name": "풀등",
+      "activity": "풀등 체험",
+      "address": "인천광역시 옹진군 자월면 이작리"
+    },
+    {
+      "id": 361,
+      "name": "하나개해수욕장 짚라인",
+      "activity": "짚라인",
+      "address": "인천광역시 영종구 무의동"
+    },
+    {
+      "id": 392,
+      "name": "만정바다낚시터",
+      "activity": "낚시",
+      "address": null
+    },
+    {
+      "id": 396,
+      "name": "베르힐컨트리클럽/영종",
+      "activity": "골프",
+      "address": null
+    },
+    {
+      "id": 397,
+      "name": "삼성호낚시슈퍼",
+      "activity": "낚시",
+      "address": null
+    },
+    {
+      "id": 402,
+      "name": "영종씨사이드레일바이크",
+      "activity": "모노레일",
+      "address": null
+    },
+    {
+      "id": 403,
+      "name": "오렌지듄스영종골프클럽",
+      "activity": "골프",
+      "address": null
+    },
+    {
+      "id": 408,
+      "name": "천혜바다낚시터",
+      "activity": "낚시",
+      "address": null
+    },
+    {
+      "id": 409,
+      "name": "천혜사랑바다낚시터",
+      "activity": "낚시",
+      "address": null
+    },
+    {
+      "id": 410,
+      "name": "클럽72CC/레이크코스",
+      "activity": "골프",
+      "address": null
+    },
+    {
+      "id": 411,
+      "name": "클럽72CC/바다코스",
+      "activity": "골프",
+      "address": null
+    },
+    {
+      "id": 412,
+      "name": "클럽72CC/오션코스",
+      "activity": "골프",
+      "address": null
+    },
+    {
+      "id": 413,
+      "name": "클럽72CC/클래식코스",
+      "activity": "골프",
+      "address": null
+    },
+    {
+      "id": 414,
+      "name": "클럽72CC/하늘코스",
+      "activity": "골프",
+      "address": null
+    },
+    {
+      "id": 423,
+      "name": "영흥도 해루질 포인트",
+      "activity": "해루질",
+      "address": "인천광역시 옹진군 영흥면"
+    }
+  ]
+}
