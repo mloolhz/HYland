@@ -64,19 +64,18 @@ export function RecommendationResultsPanel({ response, weather }: Recommendation
             <p className="ai-rec-island-card__bti-note">당신의 섬BTI 성향을 반영했어요.</p>
           ) : null}
 
-          {/* 직접 수집한 섬 특징 — "이 섬은 원래 이런 곳이라 추천"의 근거. 점수·후기보다 먼저. */}
-          {item.islandCharacteristic ? (
+          {/* 직접 수집한 섬 특징 — 요약 문장은 아래 설명(aiDescription)에 녹였고,
+              여기서는 한눈에 보이는 특징 키워드만 칩으로 보여준다. */}
+          {item.islandCharacteristic && item.islandCharacteristic.highlights.length > 0 ? (
             <div className="ai-rec-characteristic">
-              <p className="ai-rec-characteristic__summary">{item.islandCharacteristic.summary}</p>
-              {item.islandCharacteristic.highlights.length > 0 ? (
-                <ul className="ai-rec-characteristic__tags">
-                  {item.islandCharacteristic.highlights.map((tag) => (
-                    <li key={tag} className="ai-rec-characteristic__tag">
-                      {tag}
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
+              <span className="ai-rec-characteristic__label">섬 특징</span>
+              <ul className="ai-rec-characteristic__tags">
+                {item.islandCharacteristic.highlights.map((tag) => (
+                  <li key={tag} className="ai-rec-characteristic__tag">
+                    {tag}
+                  </li>
+                ))}
+              </ul>
             </div>
           ) : null}
 

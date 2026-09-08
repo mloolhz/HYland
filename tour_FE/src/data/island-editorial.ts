@@ -12,6 +12,8 @@
  * 부정 후기는 담지 않는다. 다만 "자차 권장", "1박 이상 권장"처럼 여행 계획에
  * 실제로 도움이 되는 접근성·일정 정보는 특징으로 함께 적는다.
  */
+import { ISLANDS } from "@/lib/island-data";
+
 export type IslandEditorial = {
   summary: string;
   highlights: string[];
@@ -64,4 +66,15 @@ export const ISLAND_EDITORIAL: Record<string, IslandEditorial> = {
 
 export function getIslandEditorial(islandId: string): IslandEditorial | undefined {
   return ISLAND_EDITORIAL[islandId];
+}
+
+// AI 채팅 스트림 응답의 추천 항목은 islandId 없이 islandName만 담겨 온다.
+// 그 이름으로도 특징을 찾을 수 있게 섬 이름 → id 매핑을 만들어 둔다.
+const NAME_TO_ID: Record<string, string> = Object.fromEntries(
+  ISLANDS.map((island) => [island.name, island.id]),
+);
+
+export function getIslandEditorialByName(islandName: string): IslandEditorial | undefined {
+  const id = NAME_TO_ID[islandName];
+  return id ? ISLAND_EDITORIAL[id] : undefined;
 }

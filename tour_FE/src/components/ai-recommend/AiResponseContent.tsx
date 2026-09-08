@@ -1,4 +1,5 @@
 import type { AiResponse } from "@/types/ai-recommend";
+import { getIslandEditorialByName } from "@/data/island-editorial";
 import { renderBoldText } from "@/lib/render-bold-text";
 import { AiCourseTimeline } from "./AiCourseTimeline";
 import { AiRecCard } from "./AiRecCard";
@@ -9,6 +10,20 @@ type AiResponseContentProps = {
 };
 
 export function AiResponseContent({ response, onFollowup }: AiResponseContentProps) {
+  // 답변이 추천한 활동이 걸린 섬들 중, 직접 수집한 특징이 있는 섬을 골라
+  // "이 섬은 이런 곳이라 추천"을 채팅 답변에도 함께 설명한다. (같은 섬 중복 제거)
+  // 스트림 응답 추천 항목은 islandId 없이 islandName만 담겨 오므로 이름으로 조회한다.
+  const islandCharacteristics = [
+    ...new Map(
+      response.recommendations
+        .map((r) => {
+          const editorial = getIslandEditorialByName(r.islandName);
+          return editorial ? ([r.islandName, { name: r.islandName, editorial }] as const) : null;
+        })
+        .filter((entry): entry is NonNullable<typeof entry> => entry !== null),
+    ).values(),
+  ];
+
   const infoOnly = response.recommendations.every(
     (r) =>
       r.reservationType === "free" ||
@@ -31,6 +46,28 @@ export function AiResponseContent({ response, onFollowup }: AiResponseContentPro
       )}
 
       <p className="ai-response-text" style={{ whiteSpace: "pre-line" }}>{renderBoldText(response.text)}</p>
+
+      {islandCharacteristics.length > 0 && (
+        <div className="ai-response-islands ai-fade-up">
+          {islandCharacteristics.map(({ name, editorial }) => (
+            <div key={name} className="ai-island-note">
+              <p className="ai-island-note__summary">
+                <span className="ai-island-note__name">{name}</span>
+                {editorial.summary}
+              </p>
+              {editorial.highlights.length > 0 && (
+                <ul className="ai-island-note__tags">
+                  {editorial.highlights.map((tag) => (
+                    <li key={tag} className="ai-island-note__tag">
+                      {tag}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
 
       {response.recommendations.length > 0 && (
         <div className="ai-rec-list ai-fade-up ai-fade-up-1">

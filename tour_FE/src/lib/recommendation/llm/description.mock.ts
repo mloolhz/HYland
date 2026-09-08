@@ -1,4 +1,5 @@
 import { getIslandBtiResult } from "@/data/island-bti/results";
+import { getIslandEditorial } from "@/data/island-editorial";
 import { ISLAND_MAP } from "@/lib/island-data";
 import type { IslandBtiResultCode } from "@/types/island-bti";
 import { buildRecommendationCourse } from "@/lib/recommendation/llm/course-builder";
@@ -43,7 +44,15 @@ export function buildMockLlmDescription(input: LlmDescriptionInput): string {
     reason.includes("여권"),
   );
 
-  const parts = [btiLine, traitLineSentence, activityLine];
+  // 직접 수집한 섬 특징을 설명의 첫 문장으로 녹인다 — "이 섬은 이런 곳이라 추천"을
+  // 카드 상단 태그가 아니라 사람이 읽는 설명 문장으로 먼저 말해준다.
+  // 특징이 있으면 그것이 곧 도입부라, 밋밋한 기본 문구(btiLine)는 성향(BTI) 안내가
+  // 있을 때만 뒤에 덧붙이고 일반 조건일 때는 뺀다.
+  const editorialLine = getIslandEditorial(input.item.islandId)?.summary ?? null;
+
+  const parts = editorialLine
+    ? [editorialLine, profile ? btiLine : null, traitLineSentence, activityLine]
+    : [btiLine, traitLineSentence, activityLine];
   if (explorationReason) parts.push(explorationReason);
 
   return parts.filter(Boolean).join("\n\n");
