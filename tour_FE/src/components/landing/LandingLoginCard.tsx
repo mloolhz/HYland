@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ApiError, login as loginRequest } from "@/api/auth";
+import { SocialButtons } from "@/components/auth/SocialButtons";
 import { useSession } from "@/store/session";
 
 /**
@@ -98,6 +99,9 @@ export function LandingLoginCard() {
           {loading ? "로그인 중…" : "로그인"}
         </button>
       </form>
+
+      {/* 로그인 화면과 같은 간편 로그인 — 켜진 제공사가 없으면 스스로 감춘다 */}
+      <SocialButtons />
 
       <div className="lg-links">
         <Link to="/find-account">아이디 찾기</Link>

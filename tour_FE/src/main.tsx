@@ -8,6 +8,8 @@ import { CommunityLayout } from "@/layouts/CommunityLayout";
 import { Community } from "@/pages/Community";
 import { FindAccount } from "@/pages/FindAccount";
 import { Login } from "@/pages/Login";
+import { OAuthCallback } from "@/pages/OAuthCallback";
+import { OAuthNickname } from "@/pages/OAuthNickname";
 import { MyActivity } from "@/pages/MyActivity";
 import { MyCommentsPage } from "@/pages/MyCommentsPage";
 import { MyLikedPage } from "@/pages/MyLikedPage";
@@ -93,6 +95,10 @@ const router = createBrowserRouter([
       { path: "login", element: <Login /> },
       { path: "signup", element: <Signup /> },
       { path: "find-account", element: <FindAccount /> },
+      // 간편 로그인 — 제공사가 code 를 들고 돌아오는 자리
+      { path: "oauth/callback/:provider", element: <OAuthCallback /> },
+      // 간편 로그인으로 처음 가입한 사람의 닉네임 확인
+      { path: "signup/nickname", element: <RequireAuth><OAuthNickname /></RequireAuth> },
     ],
   },
   { path: "*", element: <NotFound /> },

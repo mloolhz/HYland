@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { prisma } from "./prisma";
 import { levelSnapshot } from "./level";
+import { sendSms, smsEnabled, verificationText } from "./sms";
 
 const router = Router();
 const JWT_SECRET = process.env.JWT_SECRET || "dev-secret";
@@ -180,26 +181,52 @@ router.delete("/me", requireAuth, async (req: Request, res: Response) => {
   res.json({ ok: true });
 });
 
-// ── 휴대폰 인증코드 요청 (실제 SMS 연동 전 — 개발용으로 코드 반환) ──
+/**
+ * 휴대폰 인증코드 요청
+ *
+ * SOLAPI 키가 있으면 문자로 보내고, 없으면 개발 모드로 코드를 응답에 담아
+ * 화면이 안내로 띄운다. 키를 넣는 순간 devCode 는 사라진다.
+ */
 router.post("/phone/request", async (req: Request, res: Response) => {
   const { phone } = req.body ?? {};
-  if (!phone) return res.status(400).json({ error: "휴대폰 번호를 입력해주세요" });
+  const digits = String(phone ?? "").replace(/\D/g, "");
+  if (!digits) return res.status(400).json({ error: "휴대폰 번호를 입력해주세요" });
+  if (digits.length < 10 || digits.length > 11) {
+    return res.status(400).json({ error: "올바른 휴대폰 번호를 입력해주세요" });
+  }
+
+  // 같은 번호로 마구 보내지 못하게 — 1분에 3통까지
+  const recent = await prisma.phoneVerification.count({
+    where: { phone: digits, createdAt: { gt: new Date(Date.now() - 60 * 1000) } },
+  });
+  if (recent >= 3) {
+    return res.status(429).json({ error: "잠시 후 다시 시도해주세요" });
+  }
 
   const code = String(Math.floor(100000 + Math.random() * 900000)); // 6자리
   const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5분
-  await prisma.phoneVerification.create({ data: { phone, code, expiresAt } });
+  await prisma.phoneVerification.create({ data: { phone: digits, code, expiresAt } });
 
-  // TODO: 실제 문자 발송(예: NHN Cloud, 알리고). 지금은 개발용으로 코드 직접 반환.
-  res.json({ ok: true, devCode: code });
+  if (!smsEnabled()) {
+    // 개발 모드 — 문자 대신 화면에 띄운다
+    return res.json({ ok: true, devCode: code });
+  }
+
+  const sent = await sendSms(digits, verificationText(code));
+  if (!sent.sent) {
+    return res.status(502).json({ error: sent.error ?? "인증번호를 보내지 못했어요" });
+  }
+  res.json({ ok: true });
 });
 
 // ── 휴대폰 인증코드 확인 ──
 router.post("/phone/verify", async (req: Request, res: Response) => {
   const { phone, code } = req.body ?? {};
   if (!phone || !code) return res.status(400).json({ error: "번호와 인증코드를 입력해주세요" });
+  const digits = String(phone).replace(/\D/g, "");
 
   const record = await prisma.phoneVerification.findFirst({
-    where: { phone, code, verified: false, expiresAt: { gt: new Date() } },
+    where: { phone: digits, code: String(code), verified: false, expiresAt: { gt: new Date() } },
     orderBy: { createdAt: "desc" },
   });
   if (!record) return res.status(400).json({ error: "인증코드가 올바르지 않거나 만료되었어요" });

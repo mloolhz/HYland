@@ -99,7 +99,23 @@ npm run db:seed:accounts
 > ⚠ 데모용이라 비밀번호가 코드에 그대로 있습니다. 실제 서비스로 올릴 때는
 > `prisma/seed-accounts.ts` 와 `db:seed:accounts` 스크립트를 반드시 지우세요.
 
-### 7. 개발 서버 실행
+### 7. 간편 로그인·문자 발송 (선택)
+
+키가 없어도 서비스는 그대로 돌아갑니다.
+
+| | 키 없을 때 | 키 넣으면 |
+|---|---|---|
+| 구글·카카오 | 로그인 화면에 버튼이 안 뜸 | 버튼이 뜨고 실제 로그인 |
+| 휴대폰 인증 | 인증번호가 화면에 표시됨 | 실제 문자 발송 |
+
+`.env.example` 의 주석을 참고해 채우면 됩니다. 콘솔에 등록할 리디렉션 URI:
+
+```
+http://localhost:5173/oauth/callback/google
+http://localhost:5173/oauth/callback/kakao
+```
+
+### 8. 개발 서버 실행
 
 ```bash
 npm run dev

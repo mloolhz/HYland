@@ -150,3 +150,32 @@ export function resetPassword(input: {
     body: JSON.stringify(input),
   });
 }
+
+// ─────────────── 간편 로그인 (구글 · 카카오) ───────────────
+
+export type OAuthProvider = { id: string; label: string };
+
+/** 키가 설정된 제공사만 내려온다 — 버튼을 그만큼만 보여준다 */
+export async function fetchOAuthProviders(): Promise<OAuthProvider[]> {
+  const r = await request<{ providers: OAuthProvider[] }>("/auth/oauth/providers");
+  return r.providers;
+}
+
+/** 동의 화면 주소 (state 는 돌아왔을 때 대조한다) */
+export async function fetchOAuthUrl(provider: string, state: string): Promise<string> {
+  const r = await request<{ url: string }>(
+    `/auth/oauth/${provider}/url?state=${encodeURIComponent(state)}`,
+  );
+  return r.url;
+}
+
+/** 제공사가 준 code 를 우리 토큰으로 바꾼다 */
+export function exchangeOAuthCode(
+  provider: string,
+  code: string,
+): Promise<AuthResult & { isNew: boolean }> {
+  return request(`/auth/oauth/${provider}`, {
+    method: "POST",
+    body: JSON.stringify({ code }),
+  });
+}
