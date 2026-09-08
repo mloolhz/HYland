@@ -19,13 +19,11 @@
 /** 시설 종류 id — Safety 페이지의 FACILITIES와 동일하게 맞춘다. */
 export type SafetyFacilityType =
   | "hospital"
-  | "emergency"
   | "health-center"
   | "pharmacy"
   | "fire-station"
   | "police"
-  | "coast-guard"
-  | "aed";
+  | "coast-guard";
 
 export type SafetyFacility = {
   type: SafetyFacilityType;
@@ -87,7 +85,7 @@ export const DISTRICT_SAFETY: Record<string, SafetyFacility[]> = {
       verified: false,
     },
     {
-      type: "emergency",
+      type: "health-center",
       name: "옹진군보건소 보건행정과",
       phone: "032-899-3110",
       note: "섬 보건지소 위치·연락처 문의처.",
@@ -141,8 +139,7 @@ export const ISLAND_SAFETY: Record<string, SafetyFacility[]> = {
     { type: "hospital", name: "강화연세안과의원", address: "인천 강화군 강화읍 중앙로 23", verified: true },
     { type: "hospital", name: "강화튼튼신경외과의원", address: "인천 강화군 강화읍 강화대로 387, 이레빌딩", verified: true },
     { type: "hospital", name: "임용철마취통증의학과의원", address: "인천 강화군 강화읍 강화대로 395, 5층 502호", verified: true },
-    // 응급의료센터
-    { type: "emergency", name: "비에스종합병원", address: "인천 강화군 강화읍 충렬사로 31", phone: "032-290-0001", verified: true },
+    { type: "hospital", name: "비에스종합병원", address: "인천 강화군 강화읍 충렬사로 31", phone: "032-290-0001", verified: true },
     // 약국
     { type: "pharmacy", name: "부흥생명약국", address: "인천 강화군 내가면 강화서로 223", phone: "032-932-5918", verified: true },
     { type: "pharmacy", name: "바다약국", address: "인천 강화군 내가면 중앙로 1314-1, 1층", phone: "032-934-0010", verified: true },

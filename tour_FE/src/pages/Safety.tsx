@@ -9,13 +9,11 @@ const SAFE_KOREA_URL =
 
 const FACILITIES = [
   { id: "hospital", label: "일반병원", icon: "🏥", title: "일반병원" },
-  { id: "emergency", label: "응급의료센터", icon: "🚑", title: "응급의료센터" },
   { id: "health-center", label: "보건소", icon: "🩺", title: "보건소" },
   { id: "pharmacy", label: "약국", icon: "💊", title: "약국" },
   { id: "fire-station", label: "소방서", icon: "🚒", title: "소방서" },
   { id: "police", label: "경찰서", icon: "🚓", title: "경찰서" },
   { id: "coast-guard", label: "해양경찰서", icon: "⚓", title: "해양경찰서" },
-  { id: "aed", label: "자동심장충격기", icon: "❤️", title: "자동심장충격기" },
 ] as const;
 
 type FacilityId = (typeof FACILITIES)[number]["id"];
@@ -40,7 +38,6 @@ function telHref(phone: string) {
 
 /** 시설별로 우선 안내할 긴급번호 — 구체적 시설 정보가 없을 때의 폴백. */
 const FALLBACK_EMERGENCY: Partial<Record<FacilityId, { label: string; number: string }>> = {
-  emergency: { label: "구급·소방", number: "119" },
   hospital: { label: "구급·소방", number: "119" },
   "fire-station": { label: "구급·소방", number: "119" },
   police: { label: "경찰", number: "112" },
