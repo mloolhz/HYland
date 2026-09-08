@@ -64,20 +64,7 @@ export function RecommendationResultsPanel({ response, weather }: Recommendation
             <p className="ai-rec-island-card__bti-note">당신의 섬BTI 성향을 반영했어요.</p>
           ) : null}
 
-          {/* 직접 수집한 섬 특징 — 요약 문장은 아래 설명(aiDescription)에 녹였고,
-              여기서는 한눈에 보이는 특징 키워드만 칩으로 보여준다. */}
-          {item.islandCharacteristic && item.islandCharacteristic.highlights.length > 0 ? (
-            <div className="ai-rec-characteristic">
-              <span className="ai-rec-characteristic__label">섬 특징</span>
-              <ul className="ai-rec-characteristic__tags">
-                {item.islandCharacteristic.highlights.map((tag) => (
-                  <li key={tag} className="ai-rec-characteristic__tag">
-                    {tag}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
+          {/* 섬 특징은 카드/칩이 아니라 아래 설명 글(aiDescription) 첫 문장으로 보여준다. */}
 
           {/* 숫자를 뺀 대신 이유가 본문이 된다. 다만 다 펼치면 카드가 다시 길어지므로 3개까지. */}
           <ul className="ai-rec-reasons">

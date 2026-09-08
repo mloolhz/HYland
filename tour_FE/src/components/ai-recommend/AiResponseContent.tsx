@@ -50,21 +50,10 @@ export function AiResponseContent({ response, onFollowup }: AiResponseContentPro
       {islandCharacteristics.length > 0 && (
         <div className="ai-response-islands ai-fade-up">
           {islandCharacteristics.map(({ name, editorial }) => (
-            <div key={name} className="ai-island-note">
-              <p className="ai-island-note__summary">
-                <span className="ai-island-note__name">{name}</span>
-                {editorial.summary}
-              </p>
-              {editorial.highlights.length > 0 && (
-                <ul className="ai-island-note__tags">
-                  {editorial.highlights.map((tag) => (
-                    <li key={tag} className="ai-island-note__tag">
-                      {tag}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
+            <p key={name} className="ai-island-note-text">
+              <span className="ai-island-note-text__name">{name}</span>
+              {editorial.summary}
+            </p>
           ))}
         </div>
       )}

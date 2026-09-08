@@ -1373,95 +1373,25 @@ body:has(.ai-page) {
   font-weight: 600;
 }
 
-/* 섬 특징 — 직접 수집한 자료 기반. 요약 문장은 설명(aiDescription)에 녹이고
-   여기서는 한눈에 보이는 특징 키워드만 칩으로 보여준다. */
-.ai-rec-characteristic {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
-  border-radius: 12px;
-  background: #f0f9ff;
-  border: 1px solid #cfe8f6;
-  border-left: 4px solid #0e7490;
-}
-
-.ai-rec-characteristic__label {
-  flex-shrink: 0;
-  font-size: 12px;
-  font-weight: 700;
-  color: #0e7490;
-}
-
-.ai-rec-characteristic__tags {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.ai-rec-characteristic__tag {
-  font-size: 12px;
-  font-weight: 600;
-  color: #0e7490;
-  background: #dff2fb;
-  border: 1px solid #bfe3f2;
-  border-radius: 999px;
-  padding: 3px 10px;
-}
-
-/* AI 채팅 답변에 함께 붙는 섬 특징 설명 */
+/* AI 채팅 답변에 함께 붙는 섬 특징 — 카드/칩이 아니라 설명 글로 보여준다. */
 .ai-response-islands {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
   margin-top: 4px;
 }
 
-.ai-island-note {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 12px 14px;
-  border-radius: 12px;
-  background: #f0f9ff;
-  border: 1px solid #cfe8f6;
-  border-left: 4px solid #0e7490;
-}
-
-.ai-island-note__summary {
+.ai-island-note-text {
   margin: 0;
   font-size: 14px;
   line-height: 1.6;
-  color: #0f3b47;
+  color: #334155;
 }
 
-.ai-island-note__name {
+.ai-island-note-text__name {
   font-weight: 700;
   color: #0e7490;
   margin-right: 6px;
-}
-
-.ai-island-note__tags {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.ai-island-note__tag {
-  font-size: 12px;
-  font-weight: 600;
-  color: #0e7490;
-  background: #dff2fb;
-  border: 1px solid #bfe3f2;
-  border-radius: 999px;
-  padding: 3px 10px;
 }
 
 .ai-rec-score-list {
