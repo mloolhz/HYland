@@ -143,22 +143,87 @@ export function TripDateRangePicker({ startDate, endDate, onChange }: TripDateRa
     });
   };
 
-  const handleDayClick = (date: string) => {
+  /** 출발일 기준 종료 가능 상한 (출발일 + 최대기간-1일) */
+  const windowEndOf = (anchor: string) => {
+    const d = parseYmd(anchor);
+    d.setDate(d.getDate() + MAX_TRIP_DURATION_DAYS - 1);
+    return formatYmd(d);
+  };
+
+  // 선택은 화면(draft)에 바로 반영하고 부모에도 즉시 커밋한다.
+  // 예전엔 종료일 클릭 시 창을 닫아버렸지만, 이제 "완료" 버튼으로만 닫는다.
+  const applySelection = (start: string, end: string) => {
+    setDraftStart(start);
+    setDraftEnd(end);
+    commitRange(start, end);
+  };
+
+  // ── 드래그 선택 ──────────────────────────────────────────
+  // 셀에서 마우스를 누르고 끌면 그 범위가 선택된다. 움직임 없이 누르기만 하면
+  // 기존처럼 "출발일 → 종료일" 두 번 클릭으로도 고를 수 있다.
+  const mouseDownDateRef = useRef<string | null>(null);
+  const draggedRef = useRef(false);
+
+  const handleDayMouseDown = (date: string) => {
+    mouseDownDateRef.current = date;
+    draggedRef.current = false;
+  };
+
+  const handleDayMouseEnter = (date: string) => {
+    const anchor = mouseDownDateRef.current;
+    if (anchor === null) return; // 버튼을 누른 채 이동할 때만 드래그로 본다
+
+    if (!draggedRef.current) {
+      // 첫 이동 순간 드래그 시작: 누른 날을 출발일로 확정
+      draggedRef.current = true;
+      setPhase("end");
+      applySelection(anchor, anchor);
+    }
+    // 출발일 이후 방향으로만, 최대 기간 안에서 종료일을 늘린다
+    const maxEnd = windowEndOf(anchor);
+    let end = date;
+    if (end < anchor) end = anchor;
+    if (end > maxEnd) end = maxEnd;
+    applySelection(anchor, end);
+  };
+
+  // 클릭(움직임 없는 누르기) 처리 — 드래그였으면 무시
+  const finishTap = (date: string) => {
+    if (draggedRef.current) {
+      draggedRef.current = false;
+      mouseDownDateRef.current = null;
+      setPhase("start");
+      return;
+    }
+    mouseDownDateRef.current = null;
+
     if (phase === "start") {
-      setDraftStart(date);
-      setDraftEnd(date);
+      applySelection(date, date);
       setPhase("end");
       return;
     }
-
-    const nextEnd = clampTripEndDate(draftStart, date);
-    const normalized = normalizeTripRange(draftStart, nextEnd);
-    setDraftStart(normalized.start);
-    setDraftEnd(normalized.end);
-    commitRange(normalized.start, normalized.end);
+    // 종료일 클릭: 출발일보다 이르면 새 출발일로, 아니면 종료일로
+    if (date < draftStart) {
+      applySelection(date, date);
+      setPhase("end");
+      return;
+    }
+    const maxEnd = windowEndOf(draftStart);
+    applySelection(draftStart, date > maxEnd ? maxEnd : date);
     setPhase("start");
-    setOpen(false);
   };
+
+  // 드래그 중 셀 밖에서 손을 떼도 상태를 정리한다.
+  useEffect(() => {
+    if (!open) return;
+    const onUp = () => {
+      if (draggedRef.current) setPhase("start");
+      draggedRef.current = false;
+      mouseDownDateRef.current = null;
+    };
+    window.addEventListener("mouseup", onUp);
+    return () => window.removeEventListener("mouseup", onUp);
+  }, [open]);
 
   const openCalendar = () => {
     setPhase("start");
@@ -200,8 +265,8 @@ export function TripDateRangePicker({ startDate, endDate, onChange }: TripDateRa
 
       <p className="ai-trip-date-popover__hint">
         {phase === "start"
-          ? "출발일을 선택하세요."
-          : "종료일을 선택하세요. 같은 날을 다시 누르면 당일치기예요."}
+          ? "출발일을 누르거나, 눌러서 드래그하면 기간이 선택돼요."
+          : "종료일을 누르세요. 선택이 끝나면 완료를 눌러주세요."}
       </p>
 
       <div className="ai-trip-date-weekdays">
@@ -248,7 +313,13 @@ export function TripDateRangePicker({ startDate, endDate, onChange }: TripDateRa
                 .filter(Boolean)
                 .join(" ")}
               disabled={disabled}
-              onClick={() => handleDayClick(cell.date)}
+              onMouseDown={() => handleDayMouseDown(cell.date)}
+              onMouseEnter={() => handleDayMouseEnter(cell.date)}
+              onMouseUp={() => finishTap(cell.date)}
+              // 키보드(Enter/Space)로 누른 경우만 처리 — 마우스는 위 핸들러가 담당
+              onClick={(e) => {
+                if (e.detail === 0) finishTap(cell.date);
+              }}
             >
               <span className="ai-trip-date-cell__day">{cell.day}</span>
               {tag ? <span className="ai-trip-date-cell__tag">{tag}</span> : null}
@@ -258,8 +329,21 @@ export function TripDateRangePicker({ startDate, endDate, onChange }: TripDateRa
       </div>
 
       <div className="ai-trip-date-popover__footer">
-        <span>{summaryLabel}</span>
-        <span className="ai-trip-date-popover__limit">최대 {MAX_TRIP_DURATION_DAYS}일</span>
+        <div className="ai-trip-date-popover__info">
+          <span>{summaryLabel}</span>
+          <span className="ai-trip-date-popover__limit">최대 {MAX_TRIP_DURATION_DAYS}일</span>
+        </div>
+        <button
+          type="button"
+          className="ai-trip-date-done"
+          onClick={() => {
+            commitRange(draftStart, draftEnd);
+            setPhase("start");
+            setOpen(false);
+          }}
+        >
+          완료
+        </button>
       </div>
     </div>
   ) : null;

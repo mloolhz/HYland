@@ -664,7 +664,10 @@ body:has(.ai-page) {
 .ai-settings-panel-wrap {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 0.28s ease, margin-top 0.28s ease, opacity 0.2s ease;
+  transition:
+    grid-template-rows 0.26s cubic-bezier(0.4, 0, 0.2, 1),
+    margin-top 0.26s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.26s cubic-bezier(0.4, 0, 0.2, 1);
   margin-top: 0;
   opacity: 0;
   pointer-events: none;
@@ -677,10 +680,9 @@ body:has(.ai-page) {
   pointer-events: auto;
 }
 
-.ai-settings-panel-wrap--open .ai-settings-panel-wrap__inner {
-  overflow: visible;
-}
-
+/* inner는 열림·닫힘 내내 overflow:hidden을 유지해야 그리드 0fr↔1fr 클립이
+   양방향으로 매끈하다. 예전엔 열림 상태에서만 visible이라 닫는 순간 뚝 잘렸다.
+   날짜 팝오버는 body로 포털되므로 hidden이어도 안 잘린다. */
 .ai-settings-panel-wrap__inner {
   overflow: hidden;
   min-height: 0;
@@ -1181,10 +1183,39 @@ body:has(.ai-page) {
   padding-top: 8px;
   border-top: 1px solid #e2e8f0;
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  gap: 6px;
+  gap: 8px;
   font-size: 11px;
   color: #475569;
+}
+
+.ai-trip-date-popover__info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.ai-trip-date-done {
+  flex-shrink: 0;
+  border: none;
+  border-radius: 8px;
+  background: var(--navy, #0e2b52);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 7px 16px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.ai-trip-date-done:hover {
+  background: #14386b;
+}
+
+.ai-trip-date-done:active {
+  background: #0a2144;
 }
 
 .ai-trip-bti-nudge {
