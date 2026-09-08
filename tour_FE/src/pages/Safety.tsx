@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { CONTAINER } from "@/constants/layout";
 import { ISLANDS, ISLAND_REGIONS } from "@/lib/island-data";
+import { getSafetyFacilities } from "@/data/safety-facilities";
 
 const SAFE_KOREA_URL =
   "https://www.safekorea.go.kr/safekorea-kor/flsm/flsm/facilitiesSafteyMap.do";
@@ -32,6 +33,20 @@ function isFacilityId(value: string | null): value is FacilityId {
   return FACILITIES.some((facility) => facility.id === value);
 }
 
+/** tel: 링크용 — 하이픈·공백을 뺀 숫자만 남긴다. */
+function telHref(phone: string) {
+  return `tel:${phone.replace(/[^0-9]/g, "")}`;
+}
+
+/** 시설별로 우선 안내할 긴급번호 — 구체적 시설 정보가 없을 때의 폴백. */
+const FALLBACK_EMERGENCY: Partial<Record<FacilityId, { label: string; number: string }>> = {
+  emergency: { label: "구급·소방", number: "119" },
+  hospital: { label: "구급·소방", number: "119" },
+  "fire-station": { label: "구급·소방", number: "119" },
+  police: { label: "경찰", number: "112" },
+  "coast-guard": { label: "해양사고", number: "122" },
+};
+
 export function Safety() {
   const [searchParams, setSearchParams] = useSearchParams();
   const islandId = ISLANDS.some((island) => island.id === searchParams.get("island"))
@@ -56,6 +71,12 @@ export function Safety() {
     return `${SAFE_KOREA_URL}?${params.toString()}`;
   }, [selectedFacility.title]);
 
+  const facilities = useMemo(
+    () => getSafetyFacilities(selectedIsland.id, district, selectedFacility.id),
+    [selectedIsland.id, district, selectedFacility.id],
+  );
+  const fallbackEmergency = FALLBACK_EMERGENCY[selectedFacility.id];
+
   const updateSelection = (key: "island" | "facility", value: string) => {
     const next = new URLSearchParams(searchParams);
     next.set(key, value);
@@ -68,7 +89,7 @@ export function Safety() {
         <div className={`${CONTAINER} sf-hero-inner`}>
           <p className="sf-eyebrow">ISLAND SAFETY GUIDE</p>
           <h1>섬별 안전정보</h1>
-          <p>여행할 섬과 필요한 시설을 선택하고 국민안전24 안전지도에서 위치를 확인하세요.</p>
+          <p>여행할 섬과 필요한 시설을 선택하면 주소·연락처를 바로 확인할 수 있어요.</p>
         </div>
       </header>
 
@@ -112,7 +133,7 @@ export function Safety() {
             <span className="sf-step">2</span>
             <div>
               <h2 id="sf-facility-title">안전시설 선택</h2>
-              <p>공식 안전지도에서 바로 확인할 시설 종류를 선택하세요.</p>
+              <p>확인하고 싶은 시설 종류를 선택하세요.</p>
             </div>
           </div>
 
@@ -136,32 +157,67 @@ export function Safety() {
         </section>
 
         <section className="sf-result" aria-labelledby="sf-result-title">
-          <div className="sf-result-main">
+          <div className="sf-result-head">
             <p className="sf-result-label">선택한 안전정보</p>
             <h2 id="sf-result-title">
               {selectedIsland.name} · {selectedFacility.label}
             </h2>
-            <div className="sf-route" aria-label="국민안전24에서 선택할 지역">
-              <span>인천광역시</span>
-              <b aria-hidden="true">›</b>
-              <span>{district}</span>
-              <b aria-hidden="true">›</b>
-              <strong>{selectedFacility.label}</strong>
-            </div>
-            <p className="sf-map-note">
-              국민안전24는 외부 링크에 시·군·구 값을 전달하는 기능을 제공하지 않습니다. 지도에서
-              <strong> 인천광역시 → {district}</strong>를 선택하면 {selectedIsland.name} 권역이 확대되고,
-              <strong> {selectedFacility.label}</strong>은 자동으로 표시됩니다.
-            </p>
           </div>
+
+          {facilities.length > 0 ? (
+            <ul className="sf-facility-cards">
+              {facilities.map((facility) => (
+                <li key={`${facility.name}-${facility.phone ?? ""}`} className="sf-facility-card">
+                  <div className="sf-facility-card__main">
+                    <p className="sf-facility-card__name">
+                      {facility.name}
+                      {facility.verified === false ? (
+                        <span className="sf-facility-card__badge" title="공식 출처 기준 초안 — 확인 필요">
+                          확인 필요
+                        </span>
+                      ) : null}
+                    </p>
+                    {facility.address ? (
+                      <p className="sf-facility-card__addr">{facility.address}</p>
+                    ) : null}
+                    {facility.note ? (
+                      <p className="sf-facility-card__note">{facility.note}</p>
+                    ) : null}
+                  </div>
+                  {facility.phone ? (
+                    <a className="sf-facility-card__tel" href={telHref(facility.phone)}>
+                      <span aria-hidden="true">📞</span>
+                      {facility.phone}
+                    </a>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="sf-result-empty">
+              <p className="sf-result-empty__msg">
+                {selectedIsland.name}의 {selectedFacility.label} 정보는 아직 정리 중이에요.
+                {fallbackEmergency
+                  ? ` 위급하면 아래 ${fallbackEmergency.label} 번호로 먼저 연락하세요.`
+                  : " 아래 국민안전24 지도에서 위치를 확인하세요."}
+              </p>
+              {fallbackEmergency ? (
+                <a className="sf-facility-card__tel" href={telHref(fallbackEmergency.number)}>
+                  <span aria-hidden="true">📞</span>
+                  {fallbackEmergency.label} {fallbackEmergency.number}
+                </a>
+              ) : null}
+            </div>
+          )}
+
           <a
-            className="sf-map-link"
+            className="sf-map-link sf-map-link--secondary"
             href={officialMapUrl}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`국민안전24에서 ${selectedIsland.name} ${selectedFacility.label} 확인하기 (새 창)`}
+            aria-label={`국민안전24에서 ${selectedIsland.name} ${selectedFacility.label} 위치 확인하기 (새 창)`}
           >
-            국민안전24 안전지도 열기
+            국민안전24 안전지도에서 위치 보기
             <span aria-hidden="true">↗</span>
           </a>
         </section>
