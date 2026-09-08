@@ -63,6 +63,7 @@ function buildNavItems(
   onSports: boolean,
   onAiRecommend: boolean,
   onMissionsHub: boolean,
+  onSafety: boolean,
   onCommunity: boolean,
   communityHref: string,
 ): NavItem[] {
@@ -106,6 +107,14 @@ function buildNavItems(
         { label: "섬 탐험 미션", href: "/missions" },
         { label: "리더보드", href: "/leaderboard" },
       ],
+    },
+    {
+      id: "safety",
+      label: "안전정보",
+      href: "/safety",
+      isRoute: true,
+      active: onSafety,
+      subItems: [],
     },
     {
       id: "community",
@@ -351,6 +360,7 @@ export function SiteHeader() {
   const onCommunity = location.pathname.startsWith("/community");
   const onIslands = location.pathname.startsWith("/islands");
   const onSports = location.pathname.startsWith("/sports");
+  const onSafety = location.pathname.startsWith("/safety");
   const onAiRecommend = location.pathname.startsWith("/ai-recommend");
   const onMissionsHub =
     location.pathname.startsWith("/missions") || location.pathname.startsWith("/leaderboard");
@@ -361,8 +371,8 @@ export function SiteHeader() {
    */
   const communityHref = resolveCommunityHref(location.pathname, location.search);
   const navItems = useMemo(
-    () => buildNavItems(onIslands, onSports, onAiRecommend, onMissionsHub, onCommunity, communityHref),
-    [onIslands, onSports, onAiRecommend, onMissionsHub, onCommunity, communityHref],
+    () => buildNavItems(onIslands, onSports, onAiRecommend, onMissionsHub, onSafety, onCommunity, communityHref),
+    [onIslands, onSports, onAiRecommend, onMissionsHub, onSafety, onCommunity, communityHref],
   );
   const headerSolid = headerScrolled || navMegaOpen;
   const closeNavMega = useCallback(() => {
