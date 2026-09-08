@@ -125,6 +125,14 @@ export function TripDateRangePicker({ startDate, endDate, onChange }: TripDateRa
   const calendarCells = useMemo(() => buildCalendarCells(month), [month]);
   const summaryLabel = formatTripDateRangeLabel(draftStart, draftEnd);
 
+  // 종료일 선택 단계에선 출발일부터 최대 기간(5일)까지만 고를 수 있게 한다.
+  // 그 바깥 날짜는 비활성(회색)으로 막아, 클릭 후 조용히 잘리는 대신 미리 보여준다.
+  const maxEndDate = useMemo(() => {
+    const d = parseYmd(draftStart);
+    d.setDate(d.getDate() + MAX_TRIP_DURATION_DAYS - 1);
+    return formatYmd(d);
+  }, [draftStart]);
+
   const commitRange = (start: string, end: string) => {
     const clampedEnd = clampTripEndDate(start, end);
     const normalized = normalizeTripRange(start, clampedEnd);
@@ -209,10 +217,22 @@ export function TripDateRangePicker({ startDate, endDate, onChange }: TripDateRa
           }
 
           const cellDate = parseYmd(cell.date);
-          const disabled = cellDate.getTime() < today.getTime();
+          const isPast = cellDate.getTime() < today.getTime();
+          // 종료일 단계: 출발일 이전이거나 최대 기간을 넘는 날짜는 막는다.
+          const outOfWindow =
+            phase === "end" && (cell.date < draftStart || cell.date > maxEndDate);
+          const disabled = isPast || outOfWindow;
           const inRange = isDateInRange(cell.date, draftStart, draftEnd);
           const isStart = cell.date === draftStart;
           const isEnd = cell.date === draftEnd;
+          const isMultiDay = draftStart !== draftEnd;
+          // 출발/복귀 라벨: 여러 날 선택 중일 때만 (당일치기는 라벨 없이 날짜만)
+          const tag =
+            isStart && (isMultiDay || phase === "end")
+              ? "출발"
+              : isEnd && isMultiDay
+                ? "복귀"
+                : null;
 
           return (
             <button
@@ -230,7 +250,8 @@ export function TripDateRangePicker({ startDate, endDate, onChange }: TripDateRa
               disabled={disabled}
               onClick={() => handleDayClick(cell.date)}
             >
-              {cell.day}
+              <span className="ai-trip-date-cell__day">{cell.day}</span>
+              {tag ? <span className="ai-trip-date-cell__tag">{tag}</span> : null}
             </button>
           );
         })}

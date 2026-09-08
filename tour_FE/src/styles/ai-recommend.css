@@ -1088,7 +1088,8 @@ body:has(.ai-page) {
 .ai-trip-date-grid {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 2px;
+  column-gap: 0; /* 선택 범위가 가로로 이어지도록 셀 사이 간격 제거 */
+  row-gap: 3px;
 }
 
 .ai-trip-date-weekdays {
@@ -1103,14 +1104,30 @@ body:has(.ai-page) {
 }
 
 .ai-trip-date-cell {
-  height: 28px;
+  height: 34px;
   border: none;
-  border-radius: 6px;
+  border-radius: 0;
   background: transparent;
-  font-size: 11px;
   color: #334155;
   cursor: pointer;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.05;
+}
+
+.ai-trip-date-cell__day {
+  font-size: 11px;
+}
+
+.ai-trip-date-cell__tag {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-top: 1px;
+  opacity: 0.85;
 }
 
 .ai-trip-date-cell--empty {
@@ -1118,7 +1135,7 @@ body:has(.ai-page) {
 }
 
 .ai-trip-date-cell--in-range {
-  background: #e8f4ff;
+  background: #dcecff; /* 연결되는 범위 배경 (각진 사각형으로 이어짐) */
 }
 
 .ai-trip-date-cell--start,
@@ -1128,9 +1145,35 @@ body:has(.ai-page) {
   font-weight: 700;
 }
 
+/* 범위 양 끝만 바깥쪽으로 둥글게 — 가운데는 각져서 자연스럽게 연결된다 */
+.ai-trip-date-cell--start {
+  border-radius: 9px 0 0 9px;
+}
+
+.ai-trip-date-cell--end {
+  border-radius: 0 9px 9px 0;
+}
+
+/* 당일치기(시작=끝)는 사방을 둥글게 */
+.ai-trip-date-cell--start.ai-trip-date-cell--end {
+  border-radius: 9px;
+}
+
+.ai-trip-date-cell--start .ai-trip-date-cell__tag,
+.ai-trip-date-cell--end .ai-trip-date-cell__tag {
+  color: #cfe0ff;
+  opacity: 1;
+}
+
+/* 비활성(과거·최대 기간 초과)은 회색으로 흐리게 */
 .ai-trip-date-cell--disabled {
   color: #cbd5e1;
   cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.ai-trip-date-cell--disabled .ai-trip-date-cell__tag {
+  display: none;
 }
 
 .ai-trip-date-popover__footer {
