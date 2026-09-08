@@ -208,6 +208,15 @@ router.post("/phone/request", async (req: Request, res: Response) => {
   await prisma.phoneVerification.create({ data: { phone: digits, code, expiresAt } });
 
   if (!smsEnabled()) {
+    /**
+     * 운영에서는 코드를 절대 응답에 담지 않는다.
+     * 계정 찾기·비밀번호 재설정이 휴대폰 인증만으로 통과되므로, 코드가
+     * 응답으로 나가면 남의 번호를 넣어 비밀번호를 바꿀 수 있다.
+     * 키가 없으면 기능을 아예 막는 편이 맞다.
+     */
+    if (process.env.NODE_ENV === "production") {
+      return res.status(503).json({ error: "문자 인증을 사용할 수 없어요. 관리자에게 문의해주세요." });
+    }
     // 개발 모드 — 문자 대신 화면에 띄운다
     return res.json({ ok: true, devCode: code });
   }

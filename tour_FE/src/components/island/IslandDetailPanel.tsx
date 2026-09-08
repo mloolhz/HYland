@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { fetchFacilitiesByIsland, type LeisureFacility } from "@/api/leisure";
 import { useVisitedIslands } from "@/store/visited-islands";
 import type { IslandInfo } from "@/lib/island-data";
 import { getIslandPortalUrl } from "@/lib/island-portal-links";
@@ -14,6 +16,27 @@ export function IslandDetailPanel({ island, onClose }: IslandDetailPanelProps) {
   // 훅은 조기 반환보다 앞에서 부른다
   const { isVisited } = useVisitedIslands();
   const visited = isVisited(island?.id);
+
+  /**
+   * 이 섬에 실제로 있는 레저 시설.
+   * 예전에는 island-data 의 leisureCourses("두무진 해안 트레킹" 같은 문구)를
+   * 보여줬는데, 그건 지어낸 코스 이름이라 눌러도 갈 곳이 없었다.
+   */
+  const [facilities, setFacilities] = useState<LeisureFacility[]>([]);
+
+  useEffect(() => {
+    if (!island) return;
+    const ac = new AbortController();
+    fetchFacilitiesByIsland(island.id, ac.signal)
+      .then(setFacilities)
+      .catch((err: unknown) => {
+        if ((err as Error)?.name !== "AbortError") {
+          console.error("[islands] 시설 조회 실패:", err);
+        }
+        setFacilities([]);
+      });
+    return () => ac.abort();
+  }, [island]);
 
   if (!island) {
     return (
@@ -63,12 +86,26 @@ export function IslandDetailPanel({ island, onClose }: IslandDetailPanelProps) {
           <IslandBadgeList island={island} />
 
           <section className="isl-detail-block">
-            <h4>추천 코스</h4>
-            <ul className="isl-course-tags">
-              {island.leisureCourses.map((course) => (
-                <li key={course}>{course}</li>
-              ))}
-            </ul>
+            <h4>추천 시설</h4>
+            {facilities.length > 0 ? (
+              <ul className="isl-facility-list">
+                {facilities.slice(0, 6).map((f) => (
+                  <li key={f.id}>
+                    <Link to={`/sports/facility/${f.id}`} className="isl-facility-item">
+                      <span className="isl-facility-name">{f.name}</span>
+                      <span className="isl-facility-activity">{f.activity}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="isl-facility-empty">아직 등록된 시설이 없어요.</p>
+            )}
+            {facilities.length > 6 && (
+              <Link className="isl-facility-more" to={`/sports?island=${island.id}`}>
+                {island.name} 시설 {facilities.length}곳 모두 보기 →
+              </Link>
+            )}
           </section>
 
           {portalUrl && (
@@ -89,11 +126,6 @@ export function IslandDetailPanel({ island, onClose }: IslandDetailPanelProps) {
           )}
 
           <div className="isl-detail-actions">
-            {island.bookingLabel && (
-              <a className="btn btn-navy" href="/#booking">
-                {island.bookingLabel}
-              </a>
-            )}
             <Link
               className="isl-detail-link"
               to={`/community?islands=${serializeIslandsQuery(new Set([island.name]))}`}

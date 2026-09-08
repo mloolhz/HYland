@@ -610,23 +610,24 @@ model LeisureActivityType {
 }
 
 model LeisureSport {
-  id             Int                @id @default(autoincrement())
-  name           String
-  categoryId     String             @map("category_id") // sport_categories.id (water/land/exp/heal/unique)
-  activityId     String             @map("activity_id") // leisure_activity_types.id
-  islandId       String?            @map("island_id")
-  address        String?
-  addressLevel   AddressLevel       @default(UNKNOWN) @map("address_level")
-  latitude       Float?
-  longitude      Float?
-  description    String?            @db.Text
-  imageUrl       String?            @map("image_url")
-  phone          String?
-  reservationUrl String?            @map("reservation_url")
-  active         Boolean            @default(true)
-  verification   VerificationStatus @default(UNVERIFIED)
-  createdAt      DateTime           @default(now()) @map("created_at")
-  updatedAt      DateTime           @updatedAt @map("updated_at")
+  id           Int                @id @default(autoincrement())
+  name         String
+  categoryId   String             @map("category_id") // sport_categories.id (water/land/exp/heal/unique)
+  activityId   String             @map("activity_id") // leisure_activity_types.id
+  islandId     String?            @map("island_id")
+  address      String?
+  addressLevel AddressLevel       @default(UNKNOWN) @map("address_level")
+  latitude     Float?
+  longitude    Float?
+  description  String?            @db.Text
+  imageUrl     String?            @map("image_url")
+  phone        String?
+  /** 예약·홈페이지 주소. 관광공사 상세 URL 은 191자를 넘는 경우가 있어 TEXT 로 둔다 */
+  reservationUrl String?          @map("reservation_url") @db.Text
+  active       Boolean            @default(true)
+  verification VerificationStatus @default(UNVERIFIED)
+  createdAt    DateTime           @default(now()) @map("created_at")
+  updatedAt    DateTime           @updatedAt @map("updated_at")
 
   category     SportCategory        @relation(fields: [categoryId], references: [id])
   activityType LeisureActivityType  @relation(fields: [activityId], references: [id])
