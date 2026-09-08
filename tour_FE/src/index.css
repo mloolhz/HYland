@@ -329,7 +329,7 @@ html.site-menu-open{overflow:hidden;overscroll-behavior:none}
 .map-card{background:#fff;border-radius:var(--r);border:1px solid var(--line);box-shadow:var(--shadow);padding:12px}
 .map-card--preview{padding:0;overflow:hidden}
 .map-card--preview .isl-map-interactive{pointer-events:none}
-.map-card--preview .isl-map-wrap{height:min(52vw,400px);min-height:280px;border-radius:var(--r);overflow:hidden}
+.map-card--preview .isl-map-wrap{width:100%;aspect-ratio:1024/642;height:auto;min-height:280px;border-radius:var(--r);overflow:hidden}
 .map-card--preview .isl-map-svg .isl-hit-area{pointer-events:none}
 .map-card--preview .isl-map-wrap svg{height:100%}
 .map-card svg{width:100%;height:auto;display:block;font-family:var(--font)}

@@ -66,7 +66,7 @@
 .sf-choice:hover { border-color: #27809a; color: #17657a; }
 .sf-choice.is-active { border-color: #17657a; background: #17657a; color: #fff; font-weight: 700; }
 
-.sf-facility-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.sf-facility-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .sf-facility {
   display: flex;
   align-items: center;
