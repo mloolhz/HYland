@@ -242,6 +242,91 @@ async function filterRelevantQuestions(questions: string[]): Promise<string[]> {
   }
 }
 
+/** 문자열/이스케이프를 존중하며 openIdx의 여는 괄호와 짝이 맞는 곳까지의 부분 문자열을 돌려준다. */
+function extractBalanced(src: string, openIdx: number): string | null {
+  const open = src[openIdx];
+  const close = open === "{" ? "}" : "]";
+  let depth = 0;
+  let inStr = false;
+  for (let i = openIdx; i < src.length; i += 1) {
+    const ch = src[i];
+    if (inStr) {
+      if (ch === "\\") {
+        i += 1; // 이스케이프된 다음 글자는 건너뛴다
+        continue;
+      }
+      if (ch === '"') inStr = false;
+      continue;
+    }
+    if (ch === '"') inStr = true;
+    else if (ch === open) depth += 1;
+    else if (ch === close) {
+      depth -= 1;
+      if (depth === 0) return src.slice(openIdx, i + 1);
+    }
+  }
+  return null;
+}
+
+/** "text": "..." 값만 이스케이프를 풀어 뽑는다 (FE extractPartialText와 같은 규칙). */
+function extractTextField(src: string): string {
+  const marker = src.match(/"text"\s*:\s*"/);
+  if (!marker || marker.index === undefined) return "";
+  let i = marker.index + marker[0].length;
+  let result = "";
+  while (i < src.length) {
+    const ch = src[i];
+    if (ch === "\\") {
+      const next = src[i + 1];
+      if (next === undefined) break;
+      result += next === "n" ? "\n" : next === "t" ? "\t" : next === "r" ? "\r" : next;
+      i += 2;
+      continue;
+    }
+    if (ch === '"') break;
+    result += ch;
+    i += 1;
+  }
+  return result;
+}
+
+/** key의 값이 객체/배열이면 그 부분만 잘라 파싱한다. 못 찾거나 깨지면 undefined. */
+function extractJsonField(src: string, key: string): unknown {
+  const marker = src.match(new RegExp(`"${key}"\\s*:\\s*`));
+  if (!marker || marker.index === undefined) return undefined;
+  const valStart = marker.index + marker[0].length;
+  const ch = src[valStart];
+  if (ch !== "{" && ch !== "[") return undefined;
+  const slice = extractBalanced(src, valStart);
+  if (!slice) return undefined;
+  try {
+    return JSON.parse(slice);
+  } catch {
+    return undefined;
+  }
+}
+
+/**
+ * JSON 전체 파싱이 실패했을 때(모델이 tips/followups 같은 키를 빠뜨려 JSON이 깨지는 경우 등)
+ * 필드를 하나씩 최대한 건져낸다. 최소한 text·recommendations·course는 살려
+ * 사용자에게 원본 JSON이 그대로 노출되지 않게 한다.
+ */
+function salvageGeminiResponse(cleaned: string) {
+  const recommendations = extractJsonField(cleaned, "recommendations");
+  const course = extractJsonField(cleaned, "course");
+  const tips = extractJsonField(cleaned, "tips");
+  const followups = extractJsonField(cleaned, "followups");
+  const weather = extractJsonField(cleaned, "weather");
+  return {
+    text: extractTextField(cleaned) || cleaned,
+    recommendations: Array.isArray(recommendations) ? recommendations : [],
+    course: course ?? undefined,
+    tips: Array.isArray(tips) ? tips : [],
+    followups: Array.isArray(followups) ? followups : [],
+    ...(weather ? { weather } : {}),
+  };
+}
+
 function parseGeminiResponse(raw: string) {
   const cleaned = raw.replace(/```json|```/g, "").trim();
   try {
@@ -255,16 +340,11 @@ function parseGeminiResponse(raw: string) {
       try {
         return JSON.parse(cleaned.slice(start, end + 1));
       } catch {
-        // fall through to raw-text fallback below
+        // fall through to field-level salvage below
       }
     }
-    return {
-      text: raw,
-      recommendations: [],
-      course: undefined,
-      tips: [],
-      followups: [],
-    };
+    // 최후: 필드를 개별적으로 살려낸다 (원본 JSON 통째로 노출 방지)
+    return salvageGeminiResponse(cleaned);
   }
 }
 
