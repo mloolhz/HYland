@@ -242,13 +242,18 @@ export function isNoFacilityIsland(islandId: string): boolean {
   return NO_FACILITY_ISLANDS.has(islandId);
 }
 
+/** 주소·전화가 둘 다 있는 항목만 노출한다(하나라도 없으면 표시에서 제외). */
+function isComplete(f: SafetyFacility): boolean {
+  return Boolean(f.address?.trim()) && Boolean(f.phone?.trim());
+}
+
 /** 섬 + 시설종류로 보여줄 시설 목록. 섬 자체 시설을 먼저, 없으면 거점 시설로 채운다. */
 export function getSafetyFacilities(
   islandId: string,
   district: string,
   type: SafetyFacilityType,
 ): SafetyFacility[] {
-  const onIsland = (ISLAND_SAFETY[islandId] ?? []).filter((f) => f.type === type);
+  const onIsland = (ISLAND_SAFETY[islandId] ?? []).filter((f) => f.type === type && isComplete(f));
   if (onIsland.length > 0) return onIsland;
-  return (DISTRICT_SAFETY[district] ?? []).filter((f) => f.type === type);
+  return (DISTRICT_SAFETY[district] ?? []).filter((f) => f.type === type && isComplete(f));
 }
