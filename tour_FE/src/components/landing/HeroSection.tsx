@@ -9,7 +9,6 @@ import { AnimatedWidthBar } from "@/components/mypage/AnimatedWidthBar";
 import { CountUpNumber } from "@/components/mypage/CountUpNumber";
 import { getLevelPercent, isMaxLevel } from "@/lib/user-profile";
 import { scrollToSection } from "@/utils/layout";
-import { demoProps } from "./ToastProvider";
 import {
   HERO_SLIDE_DURATION_MS,
   HERO_SLIDE_FADE_MS,
@@ -219,9 +218,9 @@ export function HeroSection() {
               <Link className="q" to="/island-bti">
                 <i>🏝️</i>섬BTI
               </Link>
-              <span className="q" {...demoProps("안전 정보 페이지는 준비 중이에요")}>
+              <Link className="q" to="/safety">
                 <i>🛟</i>안전 정보
-              </span>
+              </Link>
             </div>
           </aside>
           )}

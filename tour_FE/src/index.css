@@ -161,7 +161,7 @@ html.site-menu-open{overflow:hidden;overscroll-behavior:none}
 .logo{display:flex;align-items:center;flex:none}
 .logo-img{display:block;height:36px;width:auto;max-width:min(220px,42vw);object-fit:contain;transform:translateY(-3px);transition:filter .25s,transform .25s}
 .site-head.scrolled .logo-img{filter:none}
-.nav-links-wrap{position:relative;align-self:center;display:grid;grid-template-columns:repeat(5,max-content);column-gap:8px;flex:none;overflow:visible;height:74px}
+.nav-links-wrap{position:relative;align-self:center;display:grid;grid-template-columns:repeat(6,max-content);column-gap:8px;flex:none;overflow:visible;height:74px}
 .nav-links-wrap::before{content:"";position:fixed;top:74px;left:0;right:0;height:0;opacity:0;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid transparent;box-shadow:0 8px 18px rgba(45,46,107,.08);transition:height .34s cubic-bezier(.22,.7,.3,1),opacity .24s ease,border-color .22s ease;pointer-events:none;z-index:0}
 .nav-links-wrap.is-open::before{height:220px;opacity:1;border-top-color:var(--line);pointer-events:auto}
 .nav-links{display:contents}
