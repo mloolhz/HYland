@@ -105,17 +105,27 @@ export const DISTRICT_SAFETY: Record<string, SafetyFacility[]> = {
 export const ISLAND_SAFETY: Record<string, SafetyFacility[]> = {
   // 백령·대청도권역
   baek: [
-    {
-      type: "health-center",
-      name: "백령보건지소",
-      phone: "032-899-3183",
-      source: "ongjin.go.kr",
-      verified: false,
-    },
+    { type: "health-center", name: "백령보건지소", phone: "032-899-3183", source: "ongjin.go.kr", verified: false },
+    { type: "hospital", name: "백령한의원", address: "인천 옹진군 백령면 백령로 273", verified: true },
+    { type: "fire-station", name: "백령119안전센터", address: "인천 옹진군 백령면 백령남로 30", verified: true },
+    { type: "police", name: "백령파출소", address: "인천 옹진군 백령면 백령로278번길 57", verified: true },
+    { type: "coast-guard", name: "백령파출소", address: "인천 옹진군 백령면 백령로 68-81", verified: true },
+    { type: "coast-guard", name: "용기포출장소", address: "인천 옹진군 백령면 백령로 12", verified: true },
   ],
-  daech: [], // 자료 없음 (수집 필요)
+  daech: [
+    { type: "health-center", name: "대청보건지소", address: "인천 옹진군 대청면 대청로 3", verified: true },
+    { type: "police", name: "대청파출소", address: "인천 옹진군 대청면 대청로7번길 9", verified: true },
+    { type: "coast-guard", name: "대청파출소", address: "인천 옹진군 대청면 대청로 22-1", verified: true },
+    { type: "coast-guard", name: "소청출장소", address: "인천 옹진군 대청면 소청동로 88-44", verified: true },
+  ],
   // 연평도권역
-  yeonp: [], // 자료 없음 (수집 필요)
+  yeonp: [
+    { type: "health-center", name: "연평보건지소", address: "인천 옹진군 연평면 연평중앙로 34-22", verified: true },
+    { type: "health-center", name: "소연평보건진료소", address: "인천 옹진군 연평면 소연평로19번길 28", verified: true },
+    { type: "police", name: "연평파출소", address: "인천 옹진군 연평면 연평로137번길 5", verified: true },
+    { type: "coast-guard", name: "연평파출소", address: "인천 옹진군 연평면 연평로 152", verified: true },
+    { type: "coast-guard", name: "소연평출장소", address: "인천 옹진군 연평면 소연평로 14", verified: true },
+  ],
   // 강화도권역 — 팀 조사 자료. 병원은 치과·한의원을 빼고 일반 진료 위주로 정리(트리밍).
   gangh: [
     // 일반병원
@@ -185,30 +195,43 @@ export const ISLAND_SAFETY: Record<string, SafetyFacility[]> = {
     { type: "coast-guard", name: "삼산출장소", address: "인천 강화군 삼산면 어류정길 177번길 76-83", phone: "032-650-2734", verified: true },
   ],
   // 북도권역
-  jang: [{ type: "coast-guard", name: "장봉출장소", phone: "032-650-2133", verified: true }],
-  sinsi: [{ type: "police", name: "북도파출소", phone: "032-760-8312", verified: true }],
+  jang: [
+    { type: "health-center", name: "장봉보건지소", address: "인천 옹진군 북도면 장봉로 554", verified: true },
+    { type: "coast-guard", name: "장봉출장소", address: "인천 옹진군 북도면 장봉로519번길 56", phone: "032-650-2133", verified: true },
+  ],
+  sinsi: [
+    { type: "police", name: "북도파출소", address: "인천 옹진군 북도면 시도로61번길 91", phone: "032-760-8312", verified: true },
+  ],
   // 영종구·서해구권역
   yeongj: [], // 자료 없음 (수집 필요)
   muui: [], // 자료 없음 (수집 필요)
   // 영흥도권역
   yheung: [
-    { type: "hospital", name: "하나의료조합영흥우리의원", phone: "032-886-9411", verified: true },
-    { type: "pharmacy", name: "영흥우리약국", phone: "032-888-3634", verified: true },
-    { type: "fire-station", name: "영흥119안전센터", phone: "032-810-6692", verified: true },
-    { type: "police", name: "영흥파출소", phone: "032-760-8311", verified: true },
-    { type: "coast-guard", name: "영흥파출소", phone: "032-650-2227", verified: true },
+    { type: "hospital", name: "하나의료조합영흥우리의원", address: "인천 옹진군 영흥면 영흥로176번길 8, 영흥늘푸른센터", phone: "032-886-9411", verified: true },
+    { type: "hospital", name: "하나의료조합영흥치과의원", address: "인천 옹진군 영흥면 영흥로176번길 8, 영흥늘푸른센터", verified: true },
+    { type: "health-center", name: "선재리보건진료소", address: "인천 옹진군 영흥면 선재로 150-9", verified: true },
+    { type: "pharmacy", name: "영흥우리약국", address: "인천 옹진군 영흥면 영흥로156번길 12-15", phone: "032-888-3634", verified: true },
+    { type: "pharmacy", name: "섬약국", address: "인천 옹진군 영흥면 선재로116번길 6, 1층", verified: true },
+    { type: "fire-station", name: "영흥119안전센터", address: "인천 옹진군 영흥면 영흥로 283-32", phone: "032-810-6692", verified: true },
+    { type: "police", name: "영흥파출소", address: "인천 옹진군 영흥면 영흥북로 29", phone: "032-760-8311", verified: true },
+    { type: "coast-guard", name: "영흥파출소", address: "인천 옹진군 영흥면 영흥로 109-18", phone: "032-650-2227", verified: true },
   ],
   // 자월도권역
   jawol: [], // 자료 없음 (수집 필요)
-  seungb: [], // 시설 없음으로 확인됨
+  seungb: [{ type: "health-center", name: "승봉보건진료소", address: "인천 옹진군 자월면 승봉로 90-2", verified: true }],
   ijak: [], // 시설 없음으로 확인됨
   // 덕적도권역
   deokj: [
-    { type: "police", name: "덕적파출소", phone: "032-760-8313", verified: true },
-    { type: "coast-guard", name: "덕적출장소", phone: "032-650-2735", verified: true },
+    { type: "health-center", name: "덕적보건지소", address: "인천 옹진군 덕적면 덕적남로 7-1", verified: true },
+    { type: "health-center", name: "백아보건진료소", address: "인천 옹진군 덕적면 백아로 88", verified: true },
+    { type: "health-center", name: "서포리보건진료소", address: "인천 옹진군 덕적면 덕적남로625번길 9", verified: true },
+    { type: "police", name: "덕적파출소", address: "인천 옹진군 덕적면 덕적북로 117번길", phone: "032-760-8313", verified: true },
+    { type: "coast-guard", name: "덕적출장소", address: "인천 옹진군 덕적면 덕적북로518번길 3", phone: "032-650-2735", verified: true },
   ],
-  soya: [], // 시설 없음으로 확인됨
-  mungap: [{ type: "health-center", name: "문갑보건진료소", phone: "032-833-8373", verified: true }],
+  soya: [{ type: "health-center", name: "소야보건진료소", address: "인천 옹진군 덕적면 소야로 257-1", verified: true }],
+  mungap: [
+    { type: "health-center", name: "문갑보건진료소", address: "인천 옹진군 덕적면 문갑2길 16", phone: "032-833-8373", verified: true },
+  ],
   gureop: [], // 시설 없음으로 확인됨
 };
 
@@ -216,7 +239,7 @@ export const ISLAND_SAFETY: Record<string, SafetyFacility[]> = {
  * 안전시설이 "진짜로 없는" 섬 (팀 현장 확인). 자료 미수집과 구분한다.
  * 이 섬들은 어떤 시설을 선택해도 "섬 내 시설 없음"으로 안내하고 긴급번호로 유도한다.
  */
-export const NO_FACILITY_ISLANDS = new Set<string>(["seungb", "ijak", "soya", "gureop"]);
+export const NO_FACILITY_ISLANDS = new Set<string>(["ijak", "gureop"]);
 
 export function isNoFacilityIsland(islandId: string): boolean {
   return NO_FACILITY_ISLANDS.has(islandId);
