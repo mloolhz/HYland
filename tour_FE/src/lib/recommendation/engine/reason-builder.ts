@@ -15,6 +15,7 @@ import {
   subjectParticle,
   topicParticle,
 } from "@/lib/recommendation/vocabulary/korean-particle";
+import { buildIslandProfileReason, scoreIslandProfileMatch } from "@/lib/recommendation/engine/island-profile-match";
 import type {
   IslandRecommendationItem,
   RecommendationScoreBreakdown,
@@ -157,6 +158,9 @@ export function buildRecommendationReasons(
 ): string[] {
   const reasons: string[] = [];
 
+  const profileReason = buildIslandProfileReason(scoreIslandProfileMatch(islandName, ctx.trip));
+  if (profileReason) reasons.push(profileReason);
+
   // 여러 방문객이 같은 시기·동행을 좋았다고 하면, 그건 개인 취향이 아니라 합의다.
   // "N명이 그랬다"고 수를 밝혀 근거의 무게를 보여준다.
   if (insights?.seasonMatch) {
@@ -277,6 +281,11 @@ export function buildRecommendationTags(
  * 만들어 정렬이 데이터 배열 순서에 좌우될 위험만 남아 제거했다.
  * (140개 조건으로 확인: 3위 자리가 상한에 닿는 경우 0건 — 결과는 동일하다)
  */
-export function pickTopIslands(items: IslandRecommendationItem[]): IslandRecommendationItem[] {
-  return [...items].sort((a, b) => b.finalScore - a.finalScore).slice(0, 3);
+export function pickTopIslands(
+  items: IslandRecommendationItem[],
+  compareByProfile?: (a: IslandRecommendationItem, b: IslandRecommendationItem) => number,
+): IslandRecommendationItem[] {
+  return [...items]
+    .sort((a, b) => compareByProfile?.(a, b) || b.finalScore - a.finalScore)
+    .slice(0, 3);
 }

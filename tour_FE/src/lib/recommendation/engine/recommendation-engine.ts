@@ -12,6 +12,11 @@ import {
   pickRecommendedActivities,
 } from "@/lib/recommendation/engine/reason-builder";
 import { scoreCurrentTripMatch } from "@/lib/recommendation/engine/trip-intent-scorer";
+import {
+  compareIslandProfileMatch,
+  hasIslandProfileConditions,
+  scoreIslandProfileMatch,
+} from "@/lib/recommendation/engine/island-profile-match";
 import { aggregateCommunityInsights } from "@/lib/recommendation/community/community-insights";
 import { getPostsSnapshot } from "@/lib/post-store";
 import { scoreCommunityMatch } from "@/lib/recommendation/community/community-signal";
@@ -227,7 +232,18 @@ export function runRecommendationEngine(
     });
   }
 
-  const recommendations = pickTopIslands(candidates);
+  // 조건 패널 TOP3는 블랙키위 프로필의 계절 → 동행/유형 → 활동 우선순위를 먼저 적용한다.
+  // 프로필이 없는 섬끼리는 기존 종합 점수로 정렬된다.
+  const recommendations = pickTopIslands(
+    candidates,
+    hasIslandProfileConditions(request.trip)
+      ? (a, b) =>
+          compareIslandProfileMatch(
+            scoreIslandProfileMatch(a.islandName, request.trip),
+            scoreIslandProfileMatch(b.islandName, request.trip),
+          )
+      : undefined,
+  );
 
   const userTraits =
     useIslandBti && userPreference

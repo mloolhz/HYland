@@ -42,7 +42,7 @@ export type SafetyFacility = {
 };
 
 /**
- * 행정구역 거점 시설 (초안 — 공식 홈페이지 기준, 팀 검증 필요).
+ * 행정구역 거점 시설.
  * 키는 Safety 페이지 districtOf()가 돌려주는 값과 같다: "강화군" · "영종구" · "옹진군".
  */
 export const DISTRICT_SAFETY: Record<string, SafetyFacility[]> = {
@@ -51,38 +51,38 @@ export const DISTRICT_SAFETY: Record<string, SafetyFacility[]> = {
       type: "health-center",
       name: "강화군보건소",
       address: "인천 강화군 강화읍 충렬사로 26-1",
-      phone: "032-930-4080",
+      phone: "032-930-4061",
       source: "ganghwa.go.kr",
-      verified: false,
+      verified: true,
     },
   ],
   영종구: [
     {
       type: "health-center",
       name: "중구보건소",
-      address: "인천 중구 참외전로 100 (전동)",
-      phone: "032-772-4001",
+      address: "인천광역시 중구 참외전로 72번길 21(전동)",
+      phone: "032-760-6010",
       source: "icjg.go.kr",
-      verified: false,
+      verified: true,
     },
     {
       type: "health-center",
       name: "영종보건지소",
-      address: "인천 중구 운남서로 100-1",
-      phone: "032-760-6885",
+      address: "인천광역시 영종구 운남서로 100-1",
+      phone: "032-760-6806",
       source: "icjg.go.kr",
-      verified: false,
+      verified: true,
     },
   ],
   옹진군: [
     {
       type: "health-center",
       name: "옹진군보건소",
-      address: "인천 미추홀구 매소홀로 120 (용현동)",
-      phone: "032-899-3120",
+      address: "인천광역시 미추홀구 용현동 627 608번지",
+      phone: "032-721-0580",
       note: "옹진군보건소는 섬이 아닌 인천 시내(미추홀구)에 있어요. 섬 안에서는 각 보건지소를 이용하세요.",
       source: "ongjin.go.kr",
-      verified: false,
+      verified: true,
     },
     {
       type: "health-center",
@@ -90,7 +90,7 @@ export const DISTRICT_SAFETY: Record<string, SafetyFacility[]> = {
       phone: "032-899-3110",
       note: "섬 보건지소 위치·연락처 문의처.",
       source: "ongjin.go.kr",
-      verified: false,
+      verified: true,
     },
   ],
 };
@@ -242,9 +242,9 @@ export function isNoFacilityIsland(islandId: string): boolean {
   return NO_FACILITY_ISLANDS.has(islandId);
 }
 
-/** 주소·전화가 둘 다 있는 항목만 노출한다(하나라도 없으면 표시에서 제외). */
-function isComplete(f: SafetyFacility): boolean {
-  return Boolean(f.address?.trim()) && Boolean(f.phone?.trim());
+/** 주소 또는 전화가 확인된 항목은 모두 노출한다. */
+function hasContactInfo(f: SafetyFacility): boolean {
+  return Boolean(f.address?.trim()) || Boolean(f.phone?.trim());
 }
 
 /** 섬 + 시설종류로 보여줄 시설 목록. 섬 자체 시설을 먼저, 없으면 거점 시설로 채운다. */
@@ -253,7 +253,9 @@ export function getSafetyFacilities(
   district: string,
   type: SafetyFacilityType,
 ): SafetyFacility[] {
-  const onIsland = (ISLAND_SAFETY[islandId] ?? []).filter((f) => f.type === type && isComplete(f));
+  const onIsland = (ISLAND_SAFETY[islandId] ?? []).filter(
+    (f) => f.type === type && hasContactInfo(f),
+  );
   if (onIsland.length > 0) return onIsland;
-  return (DISTRICT_SAFETY[district] ?? []).filter((f) => f.type === type && isComplete(f));
+  return (DISTRICT_SAFETY[district] ?? []).filter((f) => f.type === type && hasContactInfo(f));
 }

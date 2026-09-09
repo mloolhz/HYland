@@ -224,14 +224,9 @@ export function HeroSection() {
             </div>
           </aside>
           )}
-          <a
-            className="btn-ipass"
-            href="https://island.theksa.co.kr/page/main"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span className="ip-badge">인천시민</span>인천 i 바다패스로 예매하기<span className="ip-arrow">→</span>
-          </a>
+          <Link className="hero-safety-link" to="/safety">
+            섬 안전정보
+          </Link>
         </div>
       </div>
 

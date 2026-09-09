@@ -3,6 +3,7 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "../prisma";
 import { askGemini, askGeminiStream } from "../services/gemini";
 import { buildCommunityTips, findIslandNamesInText } from "../services/community-tips";
+import { ISLAND_PROFILES } from "../data/islandProfiles";
 
 // 커넥션 풀을 하나만 쓰도록 앱 공용 Prisma 클라이언트(../prisma)를 재사용한다.
 // DATABASE_URL 파싱과 driver adapter 구성은 그쪽에 모여 있다.
@@ -152,6 +153,22 @@ ${JSON.stringify(persona.weather)}
 날씨 검색에 실패했거나 신뢰할 만한 정보를 찾지 못하면 "weather" 필드를 아예 생략하세요(추측으로 채우지 마세요).`;
 }
 
+function buildPersonaSection(persona?: PersonaInput): string {
+  if (!persona) return "";
+
+  const { weather: _weather, islandBti: _islandBti, ...travelConditions } = persona;
+  const conditions = Object.fromEntries(
+    Object.entries(travelConditions).filter(([, value]) => value !== undefined),
+  );
+  if (Object.keys(conditions).length === 0) return "";
+
+  return `
+
+[사용자 여행 조건]
+${JSON.stringify(conditions, null, 2)}
+위 조건이 설정된 TOP3/섬 추천에서는 섬별 특징 데이터의 일치도를 반드시 다음 우선순위로 반영하세요: 계절 매칭 > 동행·연령/여행유형 매칭 > 관심 활동 매칭.`;
+}
+
 function buildRecommendPrompt(
   question: string,
   history?: HistoryItem[],
@@ -168,8 +185,20 @@ function buildRecommendPrompt(
 
 종목 목록:
 ${JSON.stringify(SPORTS, null, 2)}
+
+[섬별 특징 데이터] (네이버 검색 데이터 기반)
+${JSON.stringify(ISLAND_PROFILES, null, 2)}
+
+위 데이터를 활용해 추천하세요:
+- 사용자 여행 날짜/계절이 섬의 season과 맞는 곳을 우선 추천하세요 (예: 7월 여행이면 여름 성수기 섬).
+- 사용자 동행/연령이 섬의 travelType과 맞는 곳을 우선 추천하세요 (가족→가족형, 커플·친구→친구·연인형, 시니어·휴양→휴양형).
+- 관심 활동이 섬의 activities와 겹치는 곳을 우선 추천하세요.
+- 조건(persona)이 설정된 TOP3 섬 추천은 계절 매칭 > 동행/연령 매칭 > 활동 매칭 순으로 순위를 정하세요.
+- 추천 시 프로필 데이터가 있는 섬에는 "이 섬은 OO철에 인기 있고 OO 활동이 대표적"처럼 데이터 근거를 자연스럽게 녹이세요.
+- 이 데이터는 섬 선택·추천 근거 강화용입니다. recommendations와 course의 종목·섬은 반드시 위 종목 목록(SPORTS)만 사용하세요. 프로필에 없는 섬은 기존 규칙대로 추천하되 프로필 근거를 억지로 만들지 마세요.
 ${buildHistorySection(history)}
 ${buildExcludedSportsSection(excludedSportIds)}
+${buildPersonaSection(persona)}
 ${buildWeatherSection(persona)}
 
 조건 기반 필터: 질문에 아래와 같은 조건이 있으면 반드시 반영해서 추천하세요.

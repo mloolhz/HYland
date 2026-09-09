@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { AiCourseTimeline } from "@/components/ai-recommend/AiCourseTimeline";
 import { ISLAND_BTI_RESULTS } from "@/data/island-bti/results";
+import { getIslandProfile } from "@/data/island-profiles";
 import type { RecommendationResponse } from "@/types/recommendation";
 import type { WeatherInfo } from "@/types/ai-recommend";
 
@@ -54,7 +55,10 @@ export function RecommendationResultsPanel({ response, weather }: Recommendation
         </p>
       )}
 
-      {response.recommendations.map((item) => (
+      {response.recommendations.map((item) => {
+        const profile = getIslandProfile(item.islandName);
+
+        return (
         <article key={item.islandId} className="ai-rec-island-card">
           <header className="ai-rec-island-card__head">
             <h3>{item.islandName}</h3>
@@ -68,6 +72,11 @@ export function RecommendationResultsPanel({ response, weather }: Recommendation
 
           {/* 숫자를 뺀 대신 이유가 본문이 된다. 다만 다 펼치면 카드가 다시 길어지므로 3개까지. */}
           <ul className="ai-rec-reasons">
+            {profile ? (
+              <li>
+                ✓ 주요 방문 연령대는 {profile.ageMain[0]?.replace("+", "")}이고, {profile.season.join("·")}철에 인기 있어요. 방문 수요가 가장 높은 달은 {profile.peakMonth}이에요.
+              </li>
+            ) : null}
             {item.recommendationReasons.slice(0, 3).map((reason) => (
               <li key={reason}>✓ {reason}</li>
             ))}
@@ -159,7 +168,8 @@ export function RecommendationResultsPanel({ response, weather }: Recommendation
             </Link>
           </div>
         </article>
-      ))}
+        );
+      })}
     </div>
   );
 }
