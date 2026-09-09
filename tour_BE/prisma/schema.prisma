@@ -731,6 +731,8 @@ model Post {
   summary    String?    @db.Text
   island     String
   activity   String
+  /// 방문자가 직접 선택한 특징 ID (기존 후기는 null)
+  tags       Json?
   badge      PostBadge?
   /**
    * 공지는 목록 최상단 고정

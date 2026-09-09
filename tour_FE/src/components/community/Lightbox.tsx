@@ -3,6 +3,7 @@ import { ISLAND_BTI, getIslandColors } from "@/constants/island";
 import { commentCount } from "@/lib/posts";
 import { formatRelativeTime } from "@/lib/time";
 import type { Post } from "@/types/community";
+import { ReviewTagChips } from "./ReviewTags";
 
 type LightboxProps = {
   posts: Post[];
@@ -163,6 +164,7 @@ export function Lightbox({
           <h2 className="cm-lightbox-title">{post.title}</h2>
           {post.badge && <span className="cm-badge-rare cm-lightbox-badge">{post.badge}</span>}
           <p className="cm-lightbox-content">{post.content}</p>
+          {post.type === "review" && <ReviewTagChips tags={post.tags} />}
           <div className="cm-lightbox-stats">
             ♡ {post.likes} · 💬 {commentCount(post)}
           </div>

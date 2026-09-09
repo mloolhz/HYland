@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { AuthorAvatar } from "@/components/community/AuthorAvatar";
+import { ReviewTagChips } from "@/components/community/ReviewTags";
+import { normalizeReviewTags } from "@/constants/review-tags";
 import { CommentThread } from "@/components/community/CommentThread";
 import { Lightbox } from "@/components/community/Lightbox";
 import { CommentIcon, HeartIcon } from "@/components/community/PostActionIcons";
@@ -100,7 +102,9 @@ export function PostDetail() {
     const islands = parseIslandsQuery(listParams.get("islands"));
     const activities = parseActivitiesQuery(listParams.get("activities"));
     const query = listParams.get("q") ?? "";
-    return sortPosts(filterPosts(posts, { category, islands, activities, query }), sort);
+    const tags = islands.size === 1 && (category === "all" || category === "review")
+      ? normalizeReviewTags(listParams.getAll("tag")) : [];
+    return sortPosts(filterPosts(posts, { category, islands, activities, query, tags }), sort);
   }, [posts, listParams]);
 
   const { prevPost, nextPost } = useMemo(() => {
@@ -339,7 +343,10 @@ export function PostDetail() {
                     </div>
                   </div>
                 ) : (
-                <p className="cm-detail-content">{post.content}</p>
+                  <>
+                    <p className="cm-detail-content">{post.content}</p>
+                    {post.type === "review" && <ReviewTagChips tags={post.tags} />}
+                  </>
                 )}
                 {images.length > 0 && (
                   <div className="cm-detail-images">

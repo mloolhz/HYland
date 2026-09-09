@@ -11,6 +11,8 @@ import { submitMissionProof } from "@/api/submissions";
 import { useMissionQuests } from "@/hooks/useMissionQuests";
 import { ApiError } from "@/api/auth";
 import type { PostType } from "@/types/community";
+import { ReviewTagPicker } from "@/components/community/ReviewTags";
+import { isValidReviewTags, type ReviewTagId } from "@/constants/review-tags";
 
 const TYPE_OPTIONS: { value: PostType; label: string }[] = [
   { value: "review", label: "후기" },
@@ -48,6 +50,7 @@ export function WritePost() {
   const [island, setIsland] = useState(prefill?.island ?? "");
   const [activity, setActivity] = useState(prefill?.activity ?? "");
   const [content, setContent] = useState("");
+  const [tags, setTags] = useState<ReviewTagId[]>([]);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const [imageError, setImageError] = useState("");
@@ -114,6 +117,10 @@ export function WritePost() {
       setError("어느 섬을 다녀왔는지 선택해주세요.");
       return;
     }
+    if (type === "review" && !isValidReviewTags(tags)) {
+      setError("이 섬에서 느낀 특징을 1개 이상, 최대 5개까지 선택해주세요.");
+      return;
+    }
     if (asMissionProof && !imageFile) {
       setError("미션 인증에는 인증샷이 필요해요.");
       return;
@@ -130,6 +137,7 @@ export function WritePost() {
         island,
         activity,
         images,
+        tags: type === "review" ? tags : undefined,
       });
       // 미션 인증으로 냈으면 검수 대기로 보낸다.
       // 섬은 필수, 레저 배지는 골랐을 때만 — 한 글로 두 건을 낼 수 있다.
@@ -253,6 +261,8 @@ export function WritePost() {
                 rows={8}
               />
             </div>
+
+            {type === "review" && <ReviewTagPicker value={tags} onChange={setTags} />}
 
             <div className="cm-write-field cm-write-proof">
               <label className="cm-write-proof-toggle">
