@@ -1,4 +1,5 @@
 import type { Comment, Post } from "@/types/community";
+import type { ReviewTagId } from "@/constants/review-tags";
 
 export function countComments(comments: Comment[]): number {
   return comments.reduce((n, c) => n + 1 + (c.replies?.length ?? 0), 0);
@@ -37,9 +38,14 @@ export function filterPosts(
     islands: Set<string>;
     activities: Set<string>;
     query: string;
+    tags?: ReviewTagId[];
   },
 ): Post[] {
   let arr = posts.filter((p) => !p.isNotice);
+  const tags = opts.tags ?? [];
+  if (tags.length) {
+    arr = arr.filter((p) => p.type === "review" && tags.every((tag) => p.tags?.includes(tag)));
+  }
   if (opts.category !== "all") {
     arr = arr.filter((p) => p.type === opts.category);
   }

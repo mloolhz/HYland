@@ -23,6 +23,7 @@ import { prisma } from "./prisma";
 import { requireAuth, optionalAuth } from "./auth";
 import { notify } from "./notifications";
 import { syncAutoQuests } from "./achievements";
+import { isValidReviewTags, normalizeReviewTags } from "../../tour_FE/src/constants/review-tags";
 
 const router = Router();
 
@@ -120,6 +121,7 @@ router.get("/posts", optionalAuth, async (req: Request, res: Response) => {
         summary: p.summary ?? undefined,
         island: p.island,
         activity: p.activity,
+        tags: normalizeReviewTags(p.tags),
         images: p.images.map((i) => i.url),
         badge: p.badge ? BADGE_TO_FE[p.badge] : undefined,
         isNotice: p.isNotice,
@@ -150,13 +152,16 @@ router.get("/posts", optionalAuth, async (req: Request, res: Response) => {
 router.post("/posts", requireAuth, async (req: Request, res: Response) => {
   try {
     const me = userId(req)!;
-    const { type, title, content, island, activity, images, badge, summary } = req.body ?? {};
+    const { type, title, content, island, activity, images, badge, summary, tags } = req.body ?? {};
 
     if (!title?.trim() || !content?.trim()) {
       return res.status(400).json({ error: "제목과 내용을 입력해주세요" });
     }
     if (!type || !(type in TYPE_TO_DB)) {
       return res.status(400).json({ error: "글 종류가 올바르지 않아요" });
+    }
+    if (type === "review" && !isValidReviewTags(tags)) {
+      return res.status(400).json({ error: "이 섬에서 느낀 특징을 1개 이상, 최대 5개까지 선택해주세요." });
     }
 
     // 작성 즉시 본문 분석을 붙인다(무료·즉시). AI 추천이 이 값을 근거로 쓴다.
@@ -180,6 +185,7 @@ router.post("/posts", requireAuth, async (req: Request, res: Response) => {
         summary: summary?.trim() || null,
         island: island?.trim() || "인천 섬",
         activity: activity?.trim() || "기타",
+        tags: type === "review" ? tags : [],
         badge: badge && badge in BADGE_TO_DB ? BADGE_TO_DB[badge as keyof typeof BADGE_TO_DB] : null,
         images: Array.isArray(images)
           ? {
@@ -267,6 +273,7 @@ router.get("/posts/:id", optionalAuth, async (req: Request, res: Response) => {
       summary: post.summary ?? undefined,
       island: post.island,
       activity: post.activity,
+      tags: normalizeReviewTags(post.tags),
       images: post.images.map((i) => i.url),
       badge: post.badge ? BADGE_TO_FE[post.badge] : undefined,
       isNotice: post.isNotice,
@@ -512,6 +519,7 @@ router.get("/me/posts", requireAuth, async (req: Request, res: Response) => {
       content: p.content,
       island: p.island,
       activity: p.activity,
+      tags: normalizeReviewTags(p.tags),
       images: p.images.map((i) => i.url),
       author: shapeAuthor(p.author),
       createdAt: p.createdAt,
@@ -573,6 +581,7 @@ router.get("/me/liked", requireAuth, async (req: Request, res: Response) => {
       content: p.content,
       island: p.island,
       activity: p.activity,
+      tags: normalizeReviewTags(p.tags),
       images: p.images.map((i) => i.url),
       author: shapeAuthor(p.author),
       createdAt: p.createdAt,

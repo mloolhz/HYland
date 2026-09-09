@@ -1,3 +1,78 @@
+/* ── Review experience tags ── */
+.cm-review-summary {
+  margin-bottom: 12px;
+  padding: 16px;
+  border: 0.5px solid var(--cm-line);
+  border-radius: 8px;
+  background: #fff;
+}
+.cm-review-summary h2 {
+  margin: 0 0 8px;
+  font-size: var(--ts-sub);
+  font-weight: 600;
+  color: var(--cm-ink);
+}
+.cm-review-note {
+  margin: 6px 0;
+  color: var(--cm-muted);
+  font-size: var(--ts-meta);
+  line-height: 1.6;
+}
+.cm-review-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0;
+}
+.cm-review-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 0.5px solid var(--cm-line);
+  border-radius: 20px;
+  background: var(--cm-surface);
+  color: var(--cm-muted);
+  font-family: inherit;
+  font-size: var(--ts-meta);
+  line-height: 1.5;
+}
+button.cm-review-tag { min-height: 44px; cursor: pointer; }
+button.cm-review-tag:hover:not(:disabled) { border-color: var(--cm-brand); }
+.cm-review-tag.is-active {
+  border-color: var(--cm-brand);
+  background: var(--cm-brand);
+  color: #fff;
+}
+.cm-review-tag:disabled { opacity: 0.45; cursor: not-allowed; }
+.cm-review-tag:focus-visible, .cm-review-clear:focus-visible {
+  outline: 2px solid var(--cm-brand);
+  outline-offset: 3px;
+}
+.cm-review-tags--quiet { gap: 4px 6px; margin: 6px 0 0; }
+.cm-review-tags--quiet .cm-review-tag {
+  padding: 2px 7px;
+  border: 0;
+  border-radius: 6px;
+  font-size: var(--ts-chip);
+  overflow-wrap: anywhere;
+}
+.cm-review-picker { min-width: 0; margin: 0; padding: 0; border: 0; }
+.cm-review-tag-group { min-width: 0; margin: 14px 0 0; padding: 0; border: 0; }
+.cm-review-tag-group legend { font-size: var(--ts-meta); font-weight: 600; color: var(--cm-body); }
+.cm-review-tag-group .cm-review-tags { margin: 8px 0 0; }
+.cm-review-clear {
+  min-height: 44px;
+  padding: 6px 0;
+  border: 0;
+  background: transparent;
+  color: var(--cm-brand);
+  font: inherit;
+  font-size: var(--ts-meta);
+  cursor: pointer;
+}
+
 /* ── Community design tokens ── */
 :root {
   --cm-navy: var(--navy);

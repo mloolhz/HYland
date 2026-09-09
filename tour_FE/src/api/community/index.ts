@@ -8,6 +8,7 @@ import { API_BASE } from "@/lib/api-base";
 import { ApiError } from "@/api/auth";
 import { readToken } from "@/lib/token";
 import type { Comment, MyComment, Post } from "@/types/community";
+import { normalizeReviewTags, type ReviewTagId } from "@/constants/review-tags";
 
 async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   const token = readToken();
@@ -31,6 +32,7 @@ function toPost(raw: Record<string, unknown>): Post {
     createdAt: String(raw.createdAt),
     images: (raw.images as string[]) ?? [],
     comments: (raw.comments as Comment[]) ?? [],
+    tags: normalizeReviewTags(raw.tags),
   };
 }
 
@@ -76,6 +78,7 @@ export function createPost(input: {
   island?: string;
   activity?: string;
   images?: string[];
+  tags?: ReviewTagId[];
 }): Promise<{ id: string; title: string }> {
   return request("/community/posts", { method: "POST", body: JSON.stringify(input) });
 }

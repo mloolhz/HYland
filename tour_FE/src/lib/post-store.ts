@@ -39,7 +39,14 @@ export async function loadPosts(force = false): Promise<void> {
   notifyPostsChanged();
   try {
     const res = await fetchPosts();
-    posts = res.posts;
+    const allPosts = [...res.posts];
+    // The API caps each page at 50. Statistics must include every review.
+    for (let page = 2; allPosts.length < res.total; page += 1) {
+      const next = await fetchPosts({ page });
+      if (!next.posts.length) throw new Error("Incomplete community post list");
+      allPosts.push(...next.posts);
+    }
+    posts = [...new Map(allPosts.map((post) => [post.id, post])).values()];
     status = "ready";
   } catch (err) {
     console.error("[community] 글 목록 조회 실패:", err);

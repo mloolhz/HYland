@@ -10,7 +10,9 @@ import { ProfileCard } from "@/components/community/ProfileCard";
 import { SelectedIslands } from "@/components/community/SelectedIslands";
 import { SelectedActivities } from "@/components/community/SelectedActivities";
 import { CONTAINER } from "@/constants/layout";
-import { usePosts } from "@/lib/post-store";
+import { usePosts, usePostsStatus } from "@/lib/post-store";
+import { ReviewTagSummary } from "@/components/community/ReviewTagSummary";
+import { normalizeReviewTags, type ReviewTagId } from "@/constants/review-tags";
 import {
   filterPosts,
   GALLERY_PAGE_SIZE,
@@ -46,6 +48,7 @@ type LightboxState = {
 
 export function Community() {
   const posts = usePosts();
+  const postsStatus = usePostsStatus();
   const location = useLocation();
   const enterFade = Boolean((location.state as CommunityEnterFadeState | null)?.communityEnterFade);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -60,6 +63,11 @@ export function Community() {
   const activities = useMemo(() => parseActivitiesQuery(searchParams.get("activities")), [searchParams]);
   const query = searchParams.get("q") ?? "";
   const page = parsePageQuery(searchParams.get("page"));
+  const tags = useMemo(
+    () => islands.size === 1 && (category === "all" || category === "review")
+      ? normalizeReviewTags(searchParams.getAll("tag")) : [],
+    [searchParams, islands, category],
+  );
 
   useEffect(() => {
     saveCommunityListSearch(searchParams.toString() ? `?${searchParams.toString()}` : "");
@@ -94,10 +102,16 @@ export function Community() {
       q?: string;
       page?: number;
       resetPage?: boolean;
+      tags?: ReviewTagId[];
     }) => {
       setSearchParams(
         (prev) => {
           const next = new URLSearchParams(prev);
+          if (patch.islands !== undefined || patch.category === "photo" || patch.category === "question") next.delete("tag");
+          if (patch.tags !== undefined) {
+            next.delete("tag");
+            normalizeReviewTags(patch.tags).forEach((id) => next.append("tag", id));
+          }
           if (patch.view !== undefined) {
             if (patch.view === "list") next.delete("view");
             else next.set("view", patch.view);
@@ -138,8 +152,8 @@ export function Community() {
   );
 
   const filtered = useMemo(
-    () => filterPosts(posts, { category, islands, activities, query }),
-    [posts, category, islands, activities, query],
+    () => filterPosts(posts, { category, islands, activities, query, tags }),
+    [posts, category, islands, activities, query, tags],
   );
   const sorted = useMemo(() => sortPosts(filtered, sort), [filtered, sort]);
   const galleryPosts = useMemo(
@@ -148,10 +162,10 @@ export function Community() {
   );
   const listPages = totalPages(sorted.length);
   const galleryPages = totalPages(galleryPosts.length, GALLERY_PAGE_SIZE);
-  const paged = useMemo(() => paginate(sorted, page), [sorted, page]);
+  const paged = useMemo(() => paginate(sorted, Math.min(page, listPages)), [sorted, page, listPages]);
   const pagedGallery = useMemo(
-    () => paginate(galleryPosts, page, GALLERY_PAGE_SIZE),
-    [galleryPosts, page],
+    () => paginate(galleryPosts, Math.min(page, galleryPages), GALLERY_PAGE_SIZE),
+    [galleryPosts, page, galleryPages],
   );
 
   const openLightbox = (index: number, trigger: HTMLButtonElement | null) => {
@@ -168,7 +182,9 @@ export function Community() {
     updateQuery({ islands: new Set(), activities: new Set(), q: "", category: "all", resetPage: true });
   };
 
-  const emptyMessage = query.trim()
+  const emptyMessage = tags.length > 0
+    ? "선택한 특징과 검색·필터 조건에 맞는 후기가 없습니다. 특징 필터를 해제하거나 검색 조건을 바꿔주세요."
+    : query.trim()
     ? "검색 결과가 없습니다."
     : islands.size > 0 && activities.size > 0
       ? "선택한 섬·종목에 해당하는 글이 아직 없습니다."
@@ -263,8 +279,15 @@ export function Community() {
 
         <div className="cm-layout">
           <section className="cm-feed" aria-label="커뮤니티 피드">
+            {(category === "all" || category === "review") && <ReviewTagSummary
+              posts={posts}
+              island={islands.size === 1 ? [...islands][0] : undefined}
+              selected={tags}
+              status={postsStatus}
+              onSelect={(next) => updateQuery({ tags: next, resetPage: true })}
+            />}
             <div
-              key={`${view}-${category}-${sort}-${[...islands].join(",")}-${query}-${safePage}`}
+              key={`${view}-${category}-${sort}-${[...islands].join(",")}-${[...activities].join(",")}-${tags.join(",")}-${query}-${safePage}`}
               className="cm-results-fade"
             >
               {feedContent}

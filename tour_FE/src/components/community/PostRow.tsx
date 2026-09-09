@@ -4,6 +4,7 @@ import { commentCount, postSummary } from "@/lib/posts";
 import { formatListDate } from "@/lib/time";
 import type { Post } from "@/types/community";
 import type { ListColumns } from "./PostList";
+import { ReviewTagChips } from "./ReviewTags";
 
 function PhotoIcon() {
   return (
@@ -164,6 +165,7 @@ export function PostRow({
         {replies > 0 && <span className="cm-list-comment-count">{replies}</span>}
       </div>
       {showSummary && <p className="cm-list-summary truncate">{summary}</p>}
+      {post.type === "review" && <ReviewTagChips tags={post.tags} />}
       {columns === "community" && (
         <p className="cm-list-meta-mobile truncate">
           {post.author.nickname} · {formatListDate(post.createdAt)}

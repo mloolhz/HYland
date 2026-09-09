@@ -1,3 +1,5 @@
+import type { ReviewTagId } from "../constants/review-tags";
+
 export type PostType = "review" | "photo" | "question";
 export type IslandBti = "파도형" | "등대형" | "갯벌형" | "해류형";
 
@@ -31,6 +33,7 @@ export interface Post {
   summary?: string;
   island: string;
   activity: string;
+  tags?: ReviewTagId[];
   images?: string[];
   badge?: "레어카드" | "스탬프";
   isNotice?: boolean;
