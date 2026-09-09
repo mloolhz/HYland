@@ -3224,7 +3224,7 @@ div.cm-post-row[role="link"] {
 
 /* ── 글쓰기: 미션 인증 제출 ── */
 .cm-write-proof {
-  padding: 16px 18px;
+  padding: 20px 21px;
   border: 1px solid #cbd5e1;
   background: #f8fafc;
 }
@@ -3234,6 +3234,7 @@ div.cm-post-row[role="link"] {
   align-items: flex-start;
   gap: 10px;
   font-size: 14px;
+  line-height: 1.7;
   color: #1a3a6b;
   cursor: pointer;
 }
@@ -3244,12 +3245,12 @@ div.cm-post-row[role="link"] {
 }
 
 .cm-write-proof-body {
-  margin-top: 14px;
+  margin-top: 19px;
   padding-left: 26px;
 }
 
 .cm-write-proof-note {
-  margin: 8px 0 0;
+  margin: 16px 0 0;
   font-size: 12px;
   line-height: 1.7;
   color: #64748b;
@@ -3360,19 +3361,41 @@ div.cm-post-row[role="link"] {
 .cm-write-proof-step {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 11px;
 }
 
 .cm-write-proof-step + .cm-write-proof-step {
-  margin-top: 16px;
-  padding-top: 16px;
+  margin-top: 22px;
+  padding-top: 20px;
   border-top: 1px dashed #cbd5e1;
 }
 
 .cm-write-proof-step-label {
   font-size: 13px;
   font-weight: 700;
+  line-height: 1.7;
   color: #1a3a6b;
+}
+
+.cm-write-proof .cm-write-select {
+  min-height: 40px;
+  padding: 8px 12px;
+  width: 100%;
+  min-width: 0;
+}
+
+.cm-write-proof .cm-filter-pills {
+  gap: 10px;
+}
+
+@media (max-width: 640px) {
+  .cm-write-proof {
+    padding: 18px 16px;
+  }
+
+  .cm-write-proof-body {
+    padding-left: 0;
+  }
 }
 
 .cm-write-required {
