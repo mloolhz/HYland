@@ -3,3 +3,6 @@ tour_FE/*.tsbuildinfo
 /.claude/
 
 tour_FE/.vite/
+.env
+*.pem
+.DS_Store

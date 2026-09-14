@@ -1,0 +1,8 @@
+node_modules
+.env
+.env.*
+public/uploads
+*.md
+.agents
+.claude
+.windsurf

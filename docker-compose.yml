@@ -1,0 +1,50 @@
+# HYland EC2 배포용 (프로젝트 루트에서 실행)
+# 사전 준비:
+#   1) tour_BE/.env — DATABASE_URL 호스트는 mysql (@mysql:3306)
+#   2) 루트 .env — MYSQL_ROOT_PASSWORD (DATABASE_URL 비번과 동일)
+#   3) OAUTH_REDIRECT_BASE 는 http://<퍼블릭IP 또는 도메인>
+
+services:
+  mysql:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?루트 .env 에 MYSQL_ROOT_PASSWORD 를 넣으세요}
+      MYSQL_DATABASE: hyland
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$$MYSQL_ROOT_PASSWORD\" || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+      start_period: 30s
+
+  api:
+    build:
+      context: ./tour_BE
+    restart: unless-stopped
+    env_file:
+      - ./tour_BE/.env
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - uploads_data:/app/public/uploads
+    expose:
+      - "4000"
+
+  web:
+    build:
+      context: ./tour_FE
+      args:
+        VITE_API_BASE: ""
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+
+volumes:
+  mysql_data:
+  uploads_data:
