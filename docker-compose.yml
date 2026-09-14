@@ -22,7 +22,8 @@ services:
 
   api:
     build:
-      context: ./tour_BE
+      context: .
+      dockerfile: tour_BE/Dockerfile
     restart: unless-stopped
     env_file:
       - ./tour_BE/.env

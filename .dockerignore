@@ -1,0 +1,13 @@
+.git
+**/.env
+**/.env.*
+**/node_modules
+**/public/uploads
+**/.DS_Store
+*.pem
+**/*.md
+tour_BE/.agents
+tour_BE/.claude
+tour_BE/.windsurf
+tour_BE/reports
+tour_FE/dist
