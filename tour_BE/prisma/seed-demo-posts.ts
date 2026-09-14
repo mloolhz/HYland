@@ -9,7 +9,7 @@
  */
 import { prisma } from "../src/prisma";
 import { analyzeWithLexicon } from "../src/services/community-analysis";
-import type { ReviewTagId } from "../../tour_FE/src/constants/review-tags";
+import type { ReviewTagId } from "../src/constants/review-tags";
 
 const TYPE_TO_DB = { review: "REVIEW", photo: "PHOTO", question: "QUESTION" } as const;
 

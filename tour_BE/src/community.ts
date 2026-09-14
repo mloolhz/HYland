@@ -23,7 +23,7 @@ import { prisma } from "./prisma";
 import { requireAuth, optionalAuth } from "./auth";
 import { notify } from "./notifications";
 import { syncAutoQuests } from "./achievements";
-import { isValidReviewTags, normalizeReviewTags } from "../../tour_FE/src/constants/review-tags";
+import { isValidReviewTags, normalizeReviewTags } from "./constants/review-tags";
 
 const router = Router();
 
