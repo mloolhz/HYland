@@ -2,11 +2,11 @@ import { prisma } from "../prisma";
 import {
   aggregateCommunityInsights,
   type InsightPost,
-} from "@/lib/recommendation/community/community-insights";
+} from "../lib/recommendation/community/community-insights";
 import {
   ISLAND_NAME_TO_ID,
   resolveIslandId,
-} from "@/lib/recommendation/vocabulary/activity-vocabulary";
+} from "../lib/recommendation/vocabulary/activity-vocabulary";
 
 /**
  * 자유 질문(Gemini) 답변에 커뮤니티 후기 합의를 얹는다.
