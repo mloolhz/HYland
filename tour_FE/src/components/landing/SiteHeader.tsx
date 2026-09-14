@@ -244,15 +244,15 @@ function DesktopNav({
               )}
               <div className="nav-dropdown-col" aria-hidden={!isOpen || !hasSubItems}>
                 {item.subItems.map((sub) => (
-                  <a
+                  <Link
                     key={sub.label}
-                    href={sub.href}
+                    to={sub.href}
                     className="nav-dropdown-link"
                     onClick={onNavigate}
                     tabIndex={isOpen && hasSubItems ? 0 : -1}
                   >
                     {sub.label}
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -321,14 +321,14 @@ function DrawerNav({ items, onNavigate }: DrawerNavProps) {
             {hasSubItems && (
               <div className={`nav-drawer-sub${expanded ? " is-open" : ""}`}>
                 {item.subItems.map((sub) => (
-                  <a
+                  <Link
                     key={sub.label}
-                    href={sub.href}
+                    to={sub.href}
                     className="nav-drawer-sublink"
                     onClick={onNavigate}
                   >
                     {sub.label}
-                  </a>
+                  </Link>
                 ))}
               </div>
             )}
