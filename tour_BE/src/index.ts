@@ -20,7 +20,13 @@ import recommendRouter from "./routes/recommend";
 const app = express();
 app.use(cors()); // 프론트(다른 포트)에서 호출 허용
 app.use(express.json({ limit: "8mb" })); // 인증샷 업로드가 base64 로 온다
-app.use(express.static("public")); // 테스트 콘솔 (http://localhost:4000)
+// 로컬 개발용 테스트 콘솔(public/index.html). 배포에서는 /index.html 이 SPA 로 가야 하고,
+// nginx 오설정 시에도 BE 루트 HTML 이 노출되지 않게 index 는 서빙하지 않는다.
+app.use(
+  express.static("public", {
+    index: process.env.NODE_ENV === "production" ? false : "index.html",
+  }),
+);
 
 // 상태 확인용
 app.get("/health", (_req, res) => {

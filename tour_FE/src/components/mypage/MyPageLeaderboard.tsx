@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { CountUpNumber } from "@/components/mypage/CountUpNumber";
 import { useOverallRank } from "@/hooks/useLeaderboard";
 
@@ -15,9 +16,9 @@ export function MyPageLeaderboard() {
       <div className="mp-rank-head">
         <div className="mp-rank-head-top">
           <p className="mp-section-label">리더보드</p>
-          <a href="/leaderboard" className="mp-section-link">
+          <Link to="/leaderboard" className="mp-section-link">
             전체 리더보드 보기 →
-          </a>
+          </Link>
         </div>
         <div className="mp-rank-value-row">
           <h2 className="mp-rank-value">
