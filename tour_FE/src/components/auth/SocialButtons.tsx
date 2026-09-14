@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchOAuthProviders, fetchOAuthUrl, type OAuthProvider } from "@/api/auth";
+import { randomId } from "@/lib/random-id";
 
 const OAUTH_STATE_KEY = "hyland-oauth-state";
 
@@ -35,7 +36,7 @@ export function SocialButtons() {
     setError("");
     try {
       // 돌아왔을 때 대조할 값 (CSRF 방지)
-      const state = crypto.randomUUID();
+      const state = randomId();
       sessionStorage.setItem(OAUTH_STATE_KEY, state);
       window.location.href = await fetchOAuthUrl(provider, state);
     } catch (err) {

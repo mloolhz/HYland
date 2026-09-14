@@ -163,7 +163,7 @@ export function RecommendationResultsPanel({ response, weather }: Recommendation
           ) : null}
 
           <div className="ai-rec-island-card__actions">
-            <Link to={`/islands/${item.islandId}`} className="ai-rec-island-card__link">
+            <Link to={`/islands?island=${item.islandId}`} className="ai-rec-island-card__link">
               {item.islandName} 자세히 보기
             </Link>
           </div>
