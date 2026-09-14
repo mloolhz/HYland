@@ -8,6 +8,7 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends openssl ca-c
 COPY tour_BE/package.json tour_BE/package-lock.json ./
 COPY tour_BE/prisma ./prisma
 COPY tour_BE/prisma.config.ts ./
+COPY tour_BE/tsconfig.json ./
 
 RUN npm ci
 

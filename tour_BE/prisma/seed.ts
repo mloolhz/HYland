@@ -3,14 +3,23 @@
 // Prisma 7은 driver adapter가 필수라 앱 공용 클라이언트(src/prisma.ts)를 그대로 쓴다.
 import { prisma } from "../src/prisma";
 import { Prisma, BookingType } from "@prisma/client";
-import { ISLANDS } from "@/lib/island-data";
-import { SPORTS_CATEGORIES, SPORTS_DATA } from "@/data/sports";
+import { ISLANDS } from "../../tour_FE/src/lib/island-data.ts";
+import { SPORTS_CATEGORIES, SPORTS_DATA } from "../../tour_FE/src/data/sports.ts";
 // 예약/안내처 정보는 예전 data/sport-booking.ts에서 data/sport-info.ts로 옮겨졌다.
 // 종목의 reservationType도 SPORTS_DATA가 아니라 이쪽에 있다(Omit으로 빠져 있음).
-import { SPORT_INFO_BY_ID, getSportInfo, type InfoSource, type ReservationType } from "@/data/sport-info";
-import { CATEGORY_META, MISSION_CATEGORIES, MISSION_QUESTS } from "@/mocks/missions";
-import { ISLAND_BTI_QUESTIONS } from "@/data/island-bti/questions";
-import { ISLAND_BTI_RESULTS } from "@/data/island-bti/results";
+import {
+  SPORT_INFO_BY_ID,
+  getSportInfo,
+  type InfoSource,
+  type ReservationType,
+} from "../../tour_FE/src/data/sport-info.ts";
+import {
+  CATEGORY_META,
+  MISSION_CATEGORIES,
+  MISSION_QUESTS,
+} from "../../tour_FE/src/mocks/missions.ts";
+import { ISLAND_BTI_QUESTIONS } from "../../tour_FE/src/data/island-bti/questions.ts";
+import { ISLAND_BTI_RESULTS } from "../../tour_FE/src/data/island-bti/results.ts";
 import { LEISURE_ACTIVITIES } from "./seed-data/leisure-activities";
 
 const RES: Record<string, string> = {

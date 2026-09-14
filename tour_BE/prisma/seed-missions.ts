@@ -10,7 +10,11 @@
  *
  * 실행: npm run db:seed:missions
  */
-import { CATEGORY_META, MISSION_CATEGORIES, MISSION_QUESTS } from "@/mocks/missions";
+import {
+  CATEGORY_META,
+  MISSION_CATEGORIES,
+  MISSION_QUESTS,
+} from "../../tour_FE/src/mocks/missions.ts";
 import { prisma } from "../src/prisma";
 
 const TIER: Record<string, "COMMON" | "RARE" | "LEGEND"> = {
