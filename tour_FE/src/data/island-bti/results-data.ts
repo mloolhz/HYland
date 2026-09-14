@@ -1,6 +1,4 @@
 import type { IslandBtiResultCode, IslandBtiResultData } from "@/types/island-bti";
-import { ISLAND_BTI_AXIS_VALUES } from "@/types/island-bti";
-import type { IslandBtiScoreMap } from "@/lib/island-bti";
 
 export const ISLAND_BTI_RESULT_CODES: IslandBtiResultCode[] = [
   "AWCP",
