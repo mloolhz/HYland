@@ -2,7 +2,8 @@
 # 사전 준비:
 #   1) tour_BE/.env — DATABASE_URL 호스트는 mysql (@mysql:3306)
 #   2) 루트 .env — MYSQL_ROOT_PASSWORD (DATABASE_URL 비번과 동일)
-#   3) OAUTH_REDIRECT_BASE 는 http://<퍼블릭IP 또는 도메인>
+#   3) OAUTH_REDIRECT_BASE 는 https://<도메인> (HTTPS 이후)
+#   4) HTTPS: deploy/init-letsencrypt.sh (최초) · deploy/renew-cert.sh (갱신)
 
 services:
   mysql:
@@ -43,6 +44,10 @@ services:
     restart: unless-stopped
     ports:
       - "80:80"
+      - "443:443"
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - ./deploy/certbot/www:/var/www/certbot
     depends_on:
       - api
 
