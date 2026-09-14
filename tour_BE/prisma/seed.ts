@@ -19,7 +19,7 @@ import {
   MISSION_QUESTS,
 } from "../../tour_FE/src/mocks/missions.ts";
 import { ISLAND_BTI_QUESTIONS } from "../../tour_FE/src/data/island-bti/questions.ts";
-import { ISLAND_BTI_RESULTS } from "../../tour_FE/src/data/island-bti/results.ts";
+import { ISLAND_BTI_RESULTS } from "../../tour_FE/src/data/island-bti/results-data.ts";
 import { LEISURE_ACTIVITIES } from "./seed-data/leisure-activities";
 
 const RES: Record<string, string> = {
