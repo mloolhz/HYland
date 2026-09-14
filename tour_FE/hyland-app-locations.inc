@@ -1,4 +1,4 @@
-# HYland 앱/API location — default.conf 의 :443 server 에서 include
+# HYland 앱/API location — conf.d/*.conf 자동 include 대상이 아님 (.inc)
 
 root /usr/share/nginx/html;
 index index.html;
