@@ -119,7 +119,7 @@ export function TermsAgreement({ terms, privacy, marketing, onChange }: TermsAgr
           </>
         }
       />
-      {modal && <TermsModal title={modal} onClose={() => setModal(null)} />}
+      {modal && <TermsModal kind={modal} onClose={() => setModal(null)} />}
     </div>
   );
 }
