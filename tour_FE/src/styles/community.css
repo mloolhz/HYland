@@ -3419,3 +3419,159 @@ div.cm-post-row[role="link"] {
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+/* ───────────── 신고 모달 ───────────── */
+
+.rp-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.rp-dialog {
+  width: 100%;
+  max-width: 420px;
+  max-height: 88vh;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 18px 44px rgba(15, 23, 42, 0.24);
+}
+
+.rp-dialog__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.rp-dialog__head h2 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--cm-ink, #1b2a41);
+}
+
+.rp-dialog__close {
+  border: 0;
+  background: none;
+  font-size: 16px;
+  line-height: 1;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px;
+}
+
+/* 무엇을 신고하는지 — 잘못 누른 사람이 여기서 알아챈다 */
+.rp-dialog__summary {
+  margin: 0 0 14px;
+  font-size: 13px;
+  color: #64748b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rp-reasons {
+  border: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.rp-reasons__legend {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1b2a41;
+  margin-bottom: 8px;
+}
+
+.rp-reason {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #334155;
+  cursor: pointer;
+}
+
+.rp-reason.is-on {
+  border-color: #b91c1c;
+  background: #fef2f2;
+  color: #991b1b;
+  font-weight: 700;
+}
+
+.rp-reason input {
+  accent-color: #b91c1c;
+}
+
+.rp-detail {
+  display: block;
+  font-size: 13px;
+  color: #475569;
+  position: relative;
+}
+
+.rp-detail textarea {
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.rp-detail__count {
+  display: block;
+  text-align: right;
+  font-size: 11.5px;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+.rp-dialog__error {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: #b91c1c;
+}
+
+.rp-dialog__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.rp-btn {
+  flex: 1;
+  padding: 11px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  color: #475569;
+  cursor: pointer;
+}
+
+.rp-btn--danger {
+  background: #b91c1c;
+  border-color: #b91c1c;
+  color: #fff;
+}
+
+.rp-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}

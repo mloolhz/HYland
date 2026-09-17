@@ -13,6 +13,7 @@ import weatherRouter from "./weather";
 import leisureRouter from "./leisure";
 import communityRouter from "./community";
 import submissionsRouter from "./submissions";
+import reportsRouter from "./reports";
 import uploadsRouter from "./uploads";
 import notificationsRouter from "./notifications";
 import recommendRouter from "./routes/recommend";
@@ -64,6 +65,7 @@ app.use("/community", communityRouter);
 
 // 미션 인증 검수 (인증샷 → 관리자 승인 → 진행도·배지)
 app.use("/submissions", submissionsRouter);
+app.use("/reports", reportsRouter);
 
 // 인증샷 이미지 업로드 (public/uploads 에 저장 → express.static 이 서빙)
 app.use("/uploads", uploadsRouter);

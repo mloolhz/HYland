@@ -21,12 +21,14 @@ function CommentMenu({
   canModerate,
   onDelete,
   onEdit,
+  onReport,
 }: {
   isOwner: boolean;
   /** 관리자 — 남의 댓글도 지울 수 있다 (신고 처리·부적절한 글 정리) */
   canModerate?: boolean;
   onDelete?: () => void;
   onEdit?: () => void;
+  onReport?: () => void;
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -54,6 +56,7 @@ function CommentMenu({
       if (window.confirm(ask)) onDelete?.();
     }
     if (item === "수정") onEdit?.();
+    if (item === "신고") onReport?.();
   };
 
   return (
@@ -149,6 +152,7 @@ type CommentBubbleProps = {
   onReply?: () => void;
   onDelete?: () => void;
   onEdit?: (content: string) => Promise<void>;
+  onReport?: () => void;
   showReplyButton?: boolean;
 };
 
@@ -158,6 +162,7 @@ export function CommentBubble({
   onReply,
   onDelete,
   onEdit,
+  onReport,
   showReplyButton,
 }: CommentBubbleProps) {
   const { isLoggedIn, user } = useSession();
@@ -219,6 +224,7 @@ export function CommentBubble({
         <CommentMenu
           isOwner={isOwner}
           canModerate={canModerate}
+          onReport={onReport}
           onDelete={onDelete}
           onEdit={() => setEditing(true)}
         />
@@ -282,6 +288,7 @@ type CommentGroupProps = {
   onReply: (id: string) => void;
   onCancelReply: () => void;
   onDeleteComment: (id: string) => void;
+  onReportComment?: (id: string) => void;
   /** 답글 등록 — 부모 댓글 id 와 내용 */
   onSubmitReply?: (parentId: string, content: string) => Promise<void>;
   onEditComment?: (id: string, content: string) => Promise<void>;
@@ -294,6 +301,7 @@ export function CommentGroup({
   onReply,
   onCancelReply,
   onDeleteComment,
+  onReportComment,
   onSubmitReply,
   onEditComment,
   isLoggedIn,
@@ -305,6 +313,7 @@ export function CommentGroup({
         showReplyButton={isLoggedIn}
         onReply={() => onReply(comment.id)}
         onDelete={() => onDeleteComment(comment.id)}
+        onReport={onReportComment && (() => onReportComment(comment.id))}
         onEdit={onEditComment && ((content) => onEditComment(comment.id, content))}
       />
       {replyingTo === comment.id && (
@@ -324,6 +333,7 @@ export function CommentGroup({
                 showReplyButton={isLoggedIn}
                 onReply={() => onReply(reply.id)}
                 onDelete={() => onDeleteComment(reply.id)}
+                onReport={onReportComment && (() => onReportComment(reply.id))}
                 onEdit={onEditComment && ((content) => onEditComment(reply.id, content))}
               />
               {replyingTo === reply.id && (

@@ -28,6 +28,7 @@ import { AiRecommend } from "@/pages/AiRecommend";
 import { Sports } from "@/pages/Sports";
 import { FacilityDetail } from "@/pages/FacilityDetail";
 import { AdminSubmissions } from "@/pages/AdminSubmissions";
+import { AdminReports } from "@/pages/AdminReports";
 import { WritePost } from "@/pages/WritePost";
 import { IslandBtiIntro } from "@/pages/IslandBtiIntro";
 import { IslandBtiTest } from "@/pages/IslandBtiTest";
@@ -86,6 +87,7 @@ const router = createBrowserRouter([
       { path: "notifications", element: <Notifications /> },
       // 검수 권한은 서버가 확인한다 (ADMIN 아니면 403)
       { path: "admin/submissions", element: <RequireAuth><AdminSubmissions /></RequireAuth> },
+      { path: "admin/reports", element: <RequireAuth><AdminReports /></RequireAuth> },
       { path: "mypage", element: <RequireAuth><MyPage /></RequireAuth> },
       { path: "mypage/settings", element: <RequireAuth><MyPageSettings /></RequireAuth> },
       { path: "mypage/settings/profile", element: <RequireAuth><MyPageProfileEdit /></RequireAuth> },

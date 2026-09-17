@@ -557,13 +557,22 @@ export function SiteHeader() {
               </span>
             </a>
             {user?.role === "ADMIN" && (
-              <Link
-                to="/admin/submissions"
-                className="btn-admin"
-                title="미션 인증 검수"
-              >
-                검수
-              </Link>
+              <>
+                <Link
+                  to="/admin/submissions"
+                  className="btn-admin"
+                  title="미션 인증 검수"
+                >
+                  검수
+                </Link>
+                <Link
+                  to="/admin/reports"
+                  className="btn-admin btn-admin--report"
+                  title="커뮤니티 신고 관리"
+                >
+                  신고
+                </Link>
+              </>
             )}
             {isLoggedIn ? (
               <Link

@@ -11,6 +11,7 @@ type CommentThreadProps = {
   comments: Comment[];
   isLoggedIn?: boolean;
   onDeleteComment?: (id: string) => void;
+  onReportComment?: (id: string) => void;
   /** 댓글 등록 — 서버 저장은 상위(PostDetail)가 맡는다 */
   onSubmitComment?: (content: string) => Promise<void>;
   onSubmitReply?: (parentId: string, content: string) => Promise<void>;
@@ -95,6 +96,7 @@ export function CommentThread({
   comments,
   isLoggedIn = false,
   onDeleteComment,
+  onReportComment,
   onSubmitComment,
   onSubmitReply,
   onEditComment,
@@ -125,6 +127,7 @@ export function CommentThread({
               onReply={handleReply}
               onCancelReply={() => setReplyingTo(null)}
               onDeleteComment={handleDeleteComment}
+              onReportComment={onReportComment}
               onSubmitReply={onSubmitReply}
               onEditComment={onEditComment}
               isLoggedIn={isLoggedIn}

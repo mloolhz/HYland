@@ -5,6 +5,7 @@ import { ReviewTagChips } from "@/components/community/ReviewTags";
 import { normalizeReviewTags } from "@/constants/review-tags";
 import { CommentThread } from "@/components/community/CommentThread";
 import { Lightbox } from "@/components/community/Lightbox";
+import { ReportDialog } from "@/components/community/ReportDialog";
 import { CommentIcon, HeartIcon } from "@/components/community/PostActionIcons";
 import { isCurrentUser } from "@/constants/auth";
 import { getIslandColors } from "@/constants/island";
@@ -41,6 +42,8 @@ export function PostDetail() {
   const canModerate = user?.role === "ADMIN";
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
+  /** 신고 모달 — 글이면 "post", 댓글이면 그 댓글 id */
+  const [reporting, setReporting] = useState<{ target: "POST" | "COMMENT"; id: string; summary: string } | null>(null);
   const [editing, setEditing] = useState(false);
   const [editTitle, setEditTitle] = useState("");
   const [editContent, setEditContent] = useState("");
@@ -401,7 +404,17 @@ export function PostDetail() {
                     </>
                   ) : (
                     <>
-                      <button type="button" className="cm-action-btn cm-action-btn--report">
+                      <button
+                        type="button"
+                        className="cm-action-btn cm-action-btn--report"
+                        onClick={() => {
+                          if (!isLoggedIn) {
+                            window.alert("로그인 후 신고할 수 있어요.");
+                            return;
+                          }
+                          setReporting({ target: "POST", id: post.id, summary: post.title });
+                        }}
+                      >
                         신고
                       </button>
                       {/* 관리자는 남의 글도 정리할 수 있어야 한다 */}
@@ -423,6 +436,18 @@ export function PostDetail() {
                 comments={comments}
                 isLoggedIn={isLoggedIn}
                 onDeleteComment={handleDeleteComment}
+                onReportComment={(commentId) => {
+                  if (!isLoggedIn) {
+                    window.alert("로그인 후 신고할 수 있어요.");
+                    return;
+                  }
+                  const found = findComment(comments, commentId);
+                  setReporting({
+                    target: "COMMENT",
+                    id: commentId,
+                    summary: found?.content.slice(0, 60) ?? "",
+                  });
+                }}
                 onSubmitComment={handleAddComment}
                 onSubmitReply={handleAddReply}
                 onEditComment={handleEditComment}
@@ -433,6 +458,15 @@ export function PostDetail() {
           </article>
         </div>
       </div>
+
+      {reporting && (
+        <ReportDialog
+          target={reporting.target}
+          targetId={reporting.id}
+          summary={reporting.summary}
+          onClose={() => setReporting(null)}
+        />
+      )}
 
       {lightboxOpen && images.length > 0 && (
         <Lightbox

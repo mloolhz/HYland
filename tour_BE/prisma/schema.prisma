@@ -109,6 +109,8 @@ model User {
   reviewedSubmissions MissionSubmission[]   @relation("SubmissionReviewer")
   postLikes           PostLike[]
   commentLikes        CommentLike[]
+  reports             Report[]              @relation("ReportReporter")
+  handledReports      Report[]              @relation("ReportHandler")
 
   @@map("users")
 }
@@ -769,6 +771,7 @@ model Post {
   comments    Comment[]
   likes       PostLike[]
   submissions MissionSubmission[]
+  reports     Report[]
 
   @@index([type, createdAt])
   @@index([island])
@@ -805,6 +808,7 @@ model Comment {
   parent  Comment?      @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
   replies Comment[]     @relation("CommentReplies")
   likes   CommentLike[]
+  reports Report[]
 
   @@index([postId, createdAt])
   @@index([authorId])
@@ -928,4 +932,58 @@ model Notification {
   @@index([userId, read])
   @@index([userId, createdAt])
   @@map("notifications")
+}
+
+// ═══════════════ Phase 7 — 커뮤니티 신고 ═══════════════
+// 글·댓글을 신고하면 관리자 화면(/admin/reports)에 모인다.
+// 대상 글이 지워지면 신고도 같이 사라진다 (onDelete: Cascade) —
+// 이미 정리된 내용을 목록에 남겨 둘 이유가 없다.
+
+enum ReportTarget {
+  POST
+  COMMENT
+}
+
+enum ReportStatus {
+  PENDING // 접수 — 관리자 확인 전
+  RESOLVED // 조치함
+  DISMISSED // 문제 없음으로 종결
+}
+
+model Report {
+  id     String       @id @default(cuid())
+  target ReportTarget
+  /**
+   * target 에 따라 둘 중 하나만 채워진다
+   */
+  postId     String?      @map("post_id")
+  commentId  String?      @map("comment_id")
+  reporterId String       @map("reporter_id")
+  /**
+   * 사유 코드 (spam/abuse/ad/false/etc)
+   */
+  reason     String
+  /**
+   * 직접 적은 설명 (선택)
+   */
+  detail     String?      @db.Text
+  status     ReportStatus @default(PENDING)
+  /**
+   * 처리한 관리자와 시각
+   */
+  handledBy  String?      @map("handled_by")
+  handledAt  DateTime?    @map("handled_at")
+  handleNote String?      @map("handle_note") @db.Text
+  createdAt  DateTime     @default(now()) @map("created_at")
+
+  post     Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  comment  Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  reporter User     @relation("ReportReporter", fields: [reporterId], references: [id], onDelete: Cascade)
+  handler  User?    @relation("ReportHandler", fields: [handledBy], references: [id])
+
+  @@index([status, createdAt])
+  @@index([postId])
+  @@index([commentId])
+  @@index([reporterId])
+  @@map("reports")
 }
