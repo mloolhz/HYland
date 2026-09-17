@@ -1,9 +1,8 @@
 /**
  * 레저스포츠 시설 시드 (leisure_sports / leisure_sport_sources / leisure_candidates)
  *
- * 입력: reports/leisure-candidates/seed-input.json
- *   ↳ scripts/tour/export-to-frontend.mjs 가 관광공사 API + 웹 조사 1·2구역을
- *     병합해 만든다. 프론트 정적 데이터와 완전히 같은 145곳이다.
+ * 입력: prisma/seed-data/leisure-seed-input.json
+ *   (원본 생성: reports/leisure-candidates/seed-input.json ← export-to-frontend.mjs)
  *
  * 적재 방침
  *   - 145곳을 모두 leisure_sports 에 넣는다. 화면에 이미 145곳이 나오고 있어서,
@@ -48,7 +47,7 @@ type SeedFacility = {
   sources: SeedSource[];
 };
 
-const SRC = "reports/leisure-candidates/seed-input.json";
+const SRC = "prisma/seed-data/leisure-seed-input.json";
 
 async function main() {
   const facilities: SeedFacility[] = JSON.parse(readFileSync(SRC, "utf8"));
