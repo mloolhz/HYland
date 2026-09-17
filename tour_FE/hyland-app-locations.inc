@@ -24,7 +24,8 @@ location ~ ^/(islands|sports|missions|leaderboard|community)(/|$) {
     proxy_set_header X-Forwarded-Proto $scheme;
 }
 
-location ~ ^/(auth|bti|visits|profile|weather|leisure-sports|submissions|notifications|api|health) {
+# leisure-sports 뒤에 (/|$) 없으면 /leisure-sports-hero.png 같은 정적 파일이 API 로 프록시됨
+location ~ ^/(auth|bti|visits|profile|weather|leisure-sports|submissions|notifications|api|health)(/|$) {
     proxy_pass http://api:4000;
     proxy_http_version 1.1;
     proxy_set_header Host $host;
