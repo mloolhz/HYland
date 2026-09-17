@@ -35,11 +35,10 @@
   --page-intro-band-h:168px;
   --font:"IncheonMICEOTF", sans-serif;
   --font-header:"Pretendard Variable", Pretendard, sans-serif;
-  --ph1: url("/landing-1.png");
-  --ph2: url("/landing-2.png");
+  /* ph1·ph2(랜딩 이미지)와 ph5 는 AI 카드가 전용 사진을 쓰면서 안 쓰게 됐다.
+     랜딩 히어로는 lib/landing-images.ts 의 HERO_SLIDES 가 직접 들고 있다. */
   --ph3: url('https://i.postimg.cc/TP4xqZnN/baegyeong3.jpg');
   --ph4: url('https://i.postimg.cc/8C0GBqLK/baegyeong4.jpg');
-  --ph5: url('https://i.postimg.cc/wBGzcSD0/baegyeong1.jpg');
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:var(--head-h);overscroll-behavior-y:none;overscroll-behavior-x:none;overflow-x:clip;overflow-y:auto;font-family:var(--font)}
@@ -365,9 +364,12 @@ html.site-menu-open{overflow:hidden;overscroll-behavior:none}
 .ai-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
 .thumb{height:168px;background-size:cover;background-position:center;position:relative}
 .thumb::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,20,42,0) 55%,rgba(6,20,42,.28) 100%)}
-.thumb.t1{background-image:var(--ph1)}
-.thumb.t2{background-image:var(--ph2)}
-.thumb.t3{background-image:var(--ph5)}
+/* AI 추천 카드 — 코스 내용과 맞는 전용 사진.
+   예전에는 히어로 슬라이드용 --ph1/--ph2 와 외부 핫링크(--ph5)를 돌려 썼는데,
+   카약 카드에 자전거, 트레일 러닝 카드에 서핑 사진이 걸려 있었다. */
+.thumb.t1{background-image:url("/ai/kayak.jpg")}
+.thumb.t2{background-image:url("/ai/trail.jpg")}
+.thumb.t3{background-image:url("/ai/snorkel.jpg")}
 .lv{position:absolute;left:12px;bottom:12px;z-index:2;font-size:11.5px;font-weight:800;color:#fff;border-radius:5px;padding:4px 10px}
 .lv.easy{background:rgba(46,158,104,.95)}
 .lv.mid{background:rgba(211,147,42,.97)}
