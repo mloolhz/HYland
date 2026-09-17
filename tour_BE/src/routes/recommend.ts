@@ -4,6 +4,7 @@ import { prisma } from "../prisma";
 import { askGemini, askGeminiStream } from "../services/gemini";
 import { buildCommunityTips, findIslandNamesInText } from "../services/community-tips";
 import { ISLAND_PROFILES } from "../data/islandProfiles";
+import { ISLAND_EDITORIALS } from "../data/islandEditorial";
 
 // 커넥션 풀을 하나만 쓰도록 앱 공용 Prisma 클라이언트(../prisma)를 재사용한다.
 // DATABASE_URL 파싱과 driver adapter 구성은 그쪽에 모여 있다.
@@ -196,6 +197,11 @@ ${JSON.stringify(ISLAND_PROFILES, null, 2)}
 - 조건(persona)이 설정된 TOP3 섬 추천은 계절 매칭 > 동행/연령 매칭 > 활동 매칭 순으로 순위를 정하세요.
 - 추천 시 프로필 데이터가 있는 섬에는 "이 섬은 OO철에 인기 있고 OO 활동이 대표적"처럼 데이터 근거를 자연스럽게 녹이세요.
 - 이 데이터는 섬 선택·추천 근거 강화용입니다. recommendations와 course의 종목·섬은 반드시 위 종목 목록(SPORTS)만 사용하세요. 프로필에 없는 섬은 기존 규칙대로 추천하되 프로필 근거를 억지로 만들지 마세요.
+
+[섬별 현지 특징] (웹 조사 + 현지 전화 인터뷰 기반)
+${JSON.stringify(ISLAND_EDITORIALS, null, 2)}
+
+위 [섬별 현지 특징]은 현장에서 직접 확인한 정성적 근거입니다. 추천·설명하는 섬이 이 목록에 있으면, 해당 summary의 핵심(특히 "현지 인터뷰에 따르면 …" 같은 문구)을 답변 text에 자연스럽게 녹여 근거로 제시하세요. 목록에 없는 섬은 이 근거를 지어내지 마세요.
 ${buildHistorySection(history)}
 ${buildExcludedSportsSection(excludedSportIds)}
 ${buildPersonaSection(persona)}
