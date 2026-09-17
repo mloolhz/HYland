@@ -106,7 +106,9 @@ export function InlineReplyInput({
     if (!draft.trim() || saving || !onSubmit) return;
     setSaving(true);
     try {
-      await onSubmit(draft.trim());
+      // 등록되는 답글 앞에 "@작성자닉네임"을 실제로 붙여서, 누구에게 단 답글인지
+      // 저장·표시에 남는다. (입력창의 칩은 작성 중 안내용, 본문에는 이 접두어가 들어간다)
+      await onSubmit(`@${mention} ${draft.trim()}`);
       setDraft("");
       onCancel();
     } finally {
