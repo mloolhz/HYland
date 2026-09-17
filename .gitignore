@@ -6,3 +6,9 @@ tour_FE/.vite/
 .env
 *.pem
 .DS_Store
+
+# macOS Finder duplicate copies (e.g. "file 2.ts")
+**/* 2.*
+**/* 3.*
+**/* 2
+**/* 3
