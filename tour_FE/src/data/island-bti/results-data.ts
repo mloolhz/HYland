@@ -31,7 +31,7 @@ export const ISLAND_BTI_RESULTS: Record<IslandBtiResultCode, IslandBtiResultData
       "활동을 미리 예약하고 효율적으로 움직이는 편",
       "경쟁이나 협동 미션이 있으면 몰입도가 높아짐",
     ],
-    recommendedActivities: ["단체 카약", "SUP 챌린지", "패들보트", "해변 팀 미션", "선상낚시"],
+    recommendedActivities: ["단체 카약", "SUP 챌린지", "패들보드", "해변 팀 미션", "선상낚시"],
     recommendedIslands: ["대무의도", "영종·용유도", "덕적도"],
     recommendationReason:
       "활동적인 해양레저를 선호하고 친구들과 함께 목표를 달성할 때 만족도가 높은 유형입니다. 이동과 예약을 미리 준비하는 성향이 강해 여러 코스를 연결하는 여행에 잘 맞습니다.",
@@ -51,7 +51,7 @@ export const ISLAND_BTI_RESULTS: Record<IslandBtiResultCode, IslandBtiResultData
       "일행의 반응이 좋으면 새로운 체험에도 적극적",
       "재미와 추억이 최우선",
     ],
-    recommendedActivities: ["현장형 물놀이", "패들보트", "비치게임", "갯벌 팀 체험", "즉석 낚시 체험"],
+    recommendedActivities: ["현장형 물놀이", "패들보드", "비치게임", "갯벌 팀 체험", "즉석 낚시 체험"],
     recommendedIslands: ["영종·용유도", "대무의도", "덕적도"],
     recommendationReason:
       "함께하는 분위기와 현장의 재미를 중요하게 여겨, 선택지가 많고 즉석에서 활동을 바꾸기 쉬운 섬 여행과 잘 맞습니다.",
@@ -191,7 +191,7 @@ export const ISLAND_BTI_RESULTS: Record<IslandBtiResultCode, IslandBtiResultData
       "식사, 사진, 휴식 장소를 미리 챙기는 편",
       "일행 중 체력이 약한 사람까지 고려함",
     ],
-    recommendedActivities: ["해변 피크닉", "갯벌체험", "패들보트", "가벼운 낚시", "노을 감상"],
+    recommendedActivities: ["해변 피크닉", "갯벌체험", "패들보드", "가벼운 낚시", "노을 감상"],
     recommendedIslands: ["영종·용유도", "대무의도", "덕적도"],
     recommendationReason:
       "함께 편안하게 즐길 수 있는 바다 일정과 휴식 동선을 중요하게 여겨 기반시설과 선택지가 비교적 다양한 섬에 잘 맞습니다.",

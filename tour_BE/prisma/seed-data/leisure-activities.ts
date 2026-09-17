@@ -24,7 +24,7 @@ export const LEISURE_ACTIVITIES: LeisureActivitySeed[] = [
   // 해상 레저
   { id: "YACHT", label: "요트", categoryId: "water" },
   { id: "CRUISE", label: "유람선", categoryId: "water" },
-  { id: "PADDLE_BOAT", label: "패들보트", categoryId: "water" },
+  { id: "PADDLE_BOAT", label: "패들보드", categoryId: "water" },
   { id: "MUDFLAT", label: "갯벌체험", categoryId: "water" },
   { id: "COASTAL_WALK", label: "해안 산책", categoryId: "water" },
   { id: "BEACH", label: "해수욕장", categoryId: "water" },

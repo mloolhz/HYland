@@ -1408,7 +1408,7 @@ export const LEISURE_FACILITIES: LeisureFacility[] = [
   {
     "id": "web2-1",
     "name": "을왕리 수상레저",
-    "activity": "패들보트",
+    "activity": "패들보드",
     "category": "water",
     "islandId": "yeongj",
     "islandName": "영종도",

@@ -26,7 +26,7 @@ export const WEB_FACILITIES = [
   },
   {
     name: "을왕리 수상레저",
-    activity: "패들보트",
+    activity: "패들보드",
     category: "SEA",
     islandId: "yeongj",
     islandName: "영종도",
@@ -487,7 +487,7 @@ export const WEB_FACILITIES = [
 
 /** 요청받은 카테고리별 활동 목록 (커버리지 점검용) */
 export const REQUIRED_ACTIVITIES = {
-  SEA: ["요트", "유람선", "패들보트", "갯벌체험", "해안 산책", "해수욕장"],
+  SEA: ["요트", "유람선", "패들보드", "갯벌체험", "해안 산책", "해수욕장"],
   LAND: ["트레킹", "자전거", "캠핑", "백패킹"],
   EXPERIENCE: ["낚시", "풀등 체험", "해루질", "짚라인", "모노레일", "루지", "골프", "수련단체활동"],
   HEALING: ["산림욕", "일몰 감상", "물범 관찰", "은하수 체험", "섬마을 투어", "온천-스파"],

@@ -84,7 +84,7 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
     },
     {
       id: "paddle",
-      name: "패들보트",
+      name: "패들보드",
       photo: "/sports/paddle.jpg",
       diff: "누구나",
       price: "1만원대~",
