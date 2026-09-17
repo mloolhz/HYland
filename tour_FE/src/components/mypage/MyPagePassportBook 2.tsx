@@ -1,0 +1,93 @@
+import { useMemo, useRef, useState } from "react";
+import { PassportBook, type PassportBookHandle } from "@/components/landing/PassportBook";
+import { MyPagePassportProfilePage } from "@/components/mypage/MyPagePassportProfilePage";
+import { buildMissionBookSpreads, type BookNavState } from "@/components/landing/passport-book-spreads";
+import { useMissionProgress } from "@/store/mission-progress";
+import { useOptionalProfileCharacter } from "@/context/ProfileCharacterContext";
+import type { UserProfile } from "@/lib/user-profile";
+
+
+type MyPagePassportBookProps = {
+  profile: UserProfile;
+};
+
+export function MyPagePassportBook({ profile }: MyPagePassportBookProps) {
+  const { quests } = useMissionProgress();
+  const spreads = useMemo(() => buildMissionBookSpreads(quests), [quests]);
+  const [nav, setNav] = useState<BookNavState>({
+    spread: 0,
+    totalSpreads: spreads.length,
+    canPrev: false,
+    canNext: spreads.length > 1,
+    flipping: false,
+  });
+  const bookRef = useRef<PassportBookHandle>(null);
+  const profileCharacterContext = useOptionalProfileCharacter();
+  const isProfileSelectModalOpen = profileCharacterContext?.isProfileSelectModalOpen ?? false;
+
+  return (
+    <div className="mp-passport-book" aria-label="섬 여권">
+      <div className="passport-book passport-book--open passport-book--embedded">
+        <div className="passport-book__shell">
+          <div className="passport-book__frame">
+            <div className="passport-book__scene">
+              <PassportBook
+                ref={bookRef}
+                spreads={spreads}
+                profile={profile}
+                titleId="mp-passport-title"
+                ProfilePage={MyPagePassportProfilePage}
+                onNavStateChange={setNav}
+              />
+
+              <div className="passport-book__back-board" aria-hidden="true" />
+              <div className="passport-book__cover-shadow" aria-hidden="true" />
+            </div>
+          </div>
+
+          <div className="passport-book__controls">
+            {nav.canPrev && (
+              <button
+                type="button"
+                className="passport-book__tab passport-book__tab--prev"
+                aria-label="이전 페이지"
+                disabled={nav.flipping || isProfileSelectModalOpen}
+                onClick={() => bookRef.current?.goPrev()}
+              >
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path
+                    d="M14 7L9 12L14 17"
+                    stroke="currentColor"
+                    strokeWidth="2.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+            )}
+
+            {nav.canNext && (
+              <button
+                type="button"
+                className="passport-book__tab passport-book__tab--next"
+                aria-label="다음 페이지"
+                disabled={nav.flipping || isProfileSelectModalOpen}
+                onClick={() => bookRef.current?.goNext()}
+              >
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path
+                    d="M10 7L15 12L10 17"
+                    stroke="currentColor"
+                    strokeWidth="2.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,3880 @@
+[
+  {
+    "id": "tour-1028474",
+    "name": "[강화 나들길 제2코스] 호국돈대길",
+    "activity": "트레킹",
+    "activityId": "TREKKING",
+    "category": "land",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 강화읍 해안동로1366번길 18",
+    "addressLevel": "EXACT",
+    "lat": 37.7336321177,
+    "lng": 126.5160613555,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/05/1895205_image2_1.jpg",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "1028474",
+        "rawCategory": "LS/LS01/LS011900",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-1028544",
+    "name": "[강화 나들길 제3코스] 고려왕릉 가는 길",
+    "activity": "트레킹",
+    "activityId": "TREKKING",
+    "category": "land",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 강화읍 청하동길 24",
+    "addressLevel": "EXACT",
+    "lat": 37.7458245442,
+    "lng": 126.4822613345,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/11/1895211_image2_1.jpg",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "1028544",
+        "rawCategory": "LS/LS01/LS011900",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-1028565",
+    "name": "[강화 나들길 제4코스] 해가 지는 마을 길",
+    "activity": "트레킹",
+    "activityId": "TREKKING",
+    "category": "land",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 강화읍 청하동길 24",
+    "addressLevel": "EXACT",
+    "lat": 37.7458245442,
+    "lng": 126.4822613345,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/98/3393698_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "1028565",
+        "rawCategory": "LS/LS01/LS011900",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-1075972",
+    "name": "[강화 나들길 제8코스] 철새 보러 가는 길",
+    "activity": "트레킹",
+    "activityId": "TREKKING",
+    "category": "land",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 강화읍 청하동길 24",
+    "addressLevel": "EXACT",
+    "lat": 37.7458245442,
+    "lng": 126.4822613345,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/27/3393727_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "1075972",
+        "rawCategory": "LS/LS01/LS011900",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "web1-12",
+    "name": "강화 용두레마을",
+    "activity": "섬마을 투어",
+    "activityId": "VILLAGE_TOUR",
+    "category": "heal",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 내가면 황청포구로385번길 8",
+    "addressLevel": "EXACT",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web1-12",
+        "rawCategory": null,
+        "sourceName": "관광공사 관광정보"
+      }
+    ]
+  },
+  {
+    "id": "tour-1074812",
+    "name": "강화 자전거 관광코스",
+    "activity": "자전거",
+    "activityId": "CYCLING",
+    "category": "land",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 강화읍",
+    "addressLevel": "VILLAGE",
+    "lat": 37.7464579051,
+    "lng": 126.4880330099,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/96/3350596_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "1074812",
+        "rawCategory": "LS/LS01/LS010200",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "web1-11",
+    "name": "강화 화문석마을",
+    "activity": "섬마을 투어",
+    "activityId": "VILLAGE_TOUR",
+    "category": "heal",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 송해면 전망대로468번길 11",
+    "addressLevel": "EXACT",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web1-11",
+        "rawCategory": null,
+        "sourceName": "관광공사 관광정보"
+      }
+    ]
+  },
+  {
+    "id": "tour-1eb15f227e3e0c777a89f37393242229",
+    "name": "강화경찰수련원",
+    "activity": "수련단체활동",
+    "activityId": "GROUP_TRAINING",
+    "category": "exp",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "",
+    "addressLevel": "UNKNOWN",
+    "lat": 37.624092349352,
+    "lng": 126.534550623264,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "1eb15f227e3e0c777a89f37393242229",
+        "rawCategory": "관광지/레저스포츠",
+        "sourceName": null
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "1eb15f227e3e0c777a89f37393242229",
+        "rawCategory": "관광지/레저스포츠/육상레저스포츠",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2733991",
+    "name": "강화고인돌캠핑장",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 하점면 강화대로 994-40",
+    "addressLevel": "EXACT",
+    "lat": 37.776228512,
+    "lng": 126.4358508522,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/94/2734694_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2733991",
+        "rawCategory": "AC/AC05/AC050100",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-1516091",
+    "name": "강화도 황청낚시터",
+    "activity": "낚시",
+    "activityId": "FISHING",
+    "category": "exp",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 내가면 황청포구로443번길 82",
+    "addressLevel": "EXACT",
+    "lat": 37.7141928345,
+    "lng": 126.3647035503,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/76/3042376_image2_1.jpg",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "1516091",
+        "rawCategory": "LS/LS02/LS020500",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-5136ed5c50dc1afba4f5cc296a28b6dd",
+    "name": "강화도자연체험농장",
+    "activity": "갯벌체험",
+    "activityId": "MUDFLAT",
+    "category": "water",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "",
+    "addressLevel": "UNKNOWN",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "5136ed5c50dc1afba4f5cc296a28b6dd",
+        "rawCategory": "관광지/체험관광/농/산/어촌체험",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-1cb08f34acaa7cbb018cb7da8fbe4d5b",
+    "name": "강화루지",
+    "activity": "루지",
+    "activityId": "LUGE",
+    "category": "exp",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "",
+    "addressLevel": "UNKNOWN",
+    "lat": 37.6168259959393,
+    "lng": 126.497949211366,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "1cb08f34acaa7cbb018cb7da8fbe4d5b",
+        "rawCategory": "관광지/레저스포츠",
+        "sourceName": null
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "1cb08f34acaa7cbb018cb7da8fbe4d5b",
+        "rawCategory": "관광지/레저스포츠/기타레저스포츠",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-a0ec80fc79e61284a6034c11c6245f6b",
+    "name": "강화바다낚시터",
+    "activity": "낚시",
+    "activityId": "FISHING",
+    "category": "exp",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "",
+    "addressLevel": "UNKNOWN",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "a0ec80fc79e61284a6034c11c6245f6b",
+        "rawCategory": "관광지/레저스포츠/수상레저스포츠",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2792634",
+    "name": "강화카라반해변",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 화도면 해안남로 2669",
+    "addressLevel": "EXACT",
+    "lat": 37.6359187923,
+    "lng": 126.3740437533,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/90/2799490_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2792634",
+        "rawCategory": "AC/AC05/AC050300",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-cbfad777f6f23a8823b843d6d21537e3",
+    "name": "강화화개산모노레일",
+    "activity": "모노레일",
+    "activityId": "MONORAIL",
+    "category": "exp",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "",
+    "addressLevel": "UNKNOWN",
+    "lat": 37.7836214191138,
+    "lng": 126.290224138038,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "cbfad777f6f23a8823b843d6d21537e3",
+        "rawCategory": "관광지/레저스포츠",
+        "sourceName": null
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "cbfad777f6f23a8823b843d6d21537e3",
+        "rawCategory": "관광지/레저스포츠/기타레저스포츠",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-1615657",
+    "name": "국화지낚시터",
+    "activity": "낚시",
+    "activityId": "FISHING",
+    "category": "exp",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 강화읍 국화길 51",
+    "addressLevel": "EXACT",
+    "lat": 37.747374113,
+    "lng": 126.4680820355,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/61/1575661_image2_1.jpg",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "1615657",
+        "rawCategory": "LS/LS02/LS020500",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2847197",
+    "name": "글램조이",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 해안서로 689",
+    "addressLevel": "EXACT",
+    "lat": 37.6888351221,
+    "lng": 126.3898602814,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/79/2847179_image2_1.jpg",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2847197",
+        "rawCategory": "AC/AC05/AC050100",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2755854",
+    "name": "길상가족낚시터",
+    "activity": "낚시",
+    "activityId": "FISHING",
+    "category": "exp",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 길상면 초지로 453",
+    "addressLevel": "EXACT",
+    "lat": 37.6245528757,
+    "lng": 126.4996186818,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/23/3588423_image2_1.jpg",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2755854",
+        "rawCategory": "LS/LS02/LS020500",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2757130",
+    "name": "길정 낚시터",
+    "activity": "낚시",
+    "activityId": "FISHING",
+    "category": "exp",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 양도면 고려왕릉로 209",
+    "addressLevel": "EXACT",
+    "lat": 37.6638171566,
+    "lng": 126.4661845393,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/41/3566241_image2_1.jpg",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2757130",
+        "rawCategory": "LS/LS02/LS020500",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2740108",
+    "name": "노을캠핑장",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 양도면 해안서로 695",
+    "addressLevel": "EXACT",
+    "lat": 37.6893628284,
+    "lng": 126.3892880966,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/86/2740286_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2740108",
+        "rawCategory": "AC/AC05/AC050100",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2755743",
+    "name": "더숲캠핑장",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 길상면 보리고개로 187-5",
+    "addressLevel": "EXACT",
+    "lat": 37.6275411986,
+    "lng": 126.487228066,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/18/2756518_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2755743",
+        "rawCategory": "AC/AC05/AC050100",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "web1-9",
+    "name": "동막해변 갯벌체험",
+    "activity": "갯벌체험",
+    "activityId": "MUDFLAT",
+    "category": "water",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 화도면 동막리",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web1-9",
+        "rawCategory": null,
+        "sourceName": "강화군 문화관광"
+      }
+    ]
+  },
+  {
+    "id": "tour-2758006",
+    "name": "렛츠고 강화캠핑",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 화도면 동녘말길 238-13",
+    "addressLevel": "EXACT",
+    "lat": 37.62009344,
+    "lng": 126.4072411501,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/70/2758570_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2758006",
+        "rawCategory": "AC/AC05/AC050100",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2908217",
+    "name": "바다다 캠핑장",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 화도면 내리 2146-2",
+    "addressLevel": "EXACT",
+    "lat": 37.6363855057,
+    "lng": 126.379829321,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/05/2908205_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2908217",
+        "rawCategory": "AC/AC05/AC050100",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2747245",
+    "name": "바다로글램핑",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 화도면 해안남로 2421-228",
+    "addressLevel": "EXACT",
+    "lat": 37.6218232624,
+    "lng": 126.3768772162,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/29/2747429_image2_1.jpg",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2747245",
+        "rawCategory": "AC/AC05/AC050400",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2740138",
+    "name": "바다캠핑장",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 화도면 해안남로 2355-7",
+    "addressLevel": "EXACT",
+    "lat": 37.6133882279,
+    "lng": 126.3822130724,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/35/2740335_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2740138",
+        "rawCategory": "AC/AC05/AC050100",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2768057",
+    "name": "선두바다낚시터",
+    "activity": "낚시",
+    "activityId": "FISHING",
+    "category": "exp",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 길상면 해안남로 673-15",
+    "addressLevel": "EXACT",
+    "lat": 37.6000472647,
+    "lng": 126.4921061611,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/34/3563634_image2_1.jpg",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2768057",
+        "rawCategory": "LS/LS02/LS020600",
+        "sourceName": null
+      },
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "5698de6c2cef06a7f20c1b40e4ebdfb8",
+        "rawCategory": "관광지/레저스포츠",
+        "sourceName": null
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "5698de6c2cef06a7f20c1b40e4ebdfb8",
+        "rawCategory": "관광지/레저스포츠/수상레저스포츠",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2013518",
+    "name": "선두포저수지",
+    "activity": "낚시",
+    "activityId": "FISHING",
+    "category": "exp",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 길상면 보리고개로 13",
+    "addressLevel": "EXACT",
+    "lat": 37.6215055124,
+    "lng": 126.4714046821,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/22/3477022_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2013518",
+        "rawCategory": "LS/LS02/LS020500",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2908169",
+    "name": "스톤캠핑장",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 하점면 고려산로377번길 31",
+    "addressLevel": "EXACT",
+    "lat": 37.7546972188,
+    "lng": 126.4089844729,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/47/2908147_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2908169",
+        "rawCategory": "AC/AC05/AC050100",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-1615829",
+    "name": "신선낚시터",
+    "activity": "낚시",
+    "activityId": "FISHING",
+    "category": "exp",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 내가면 고비고개로741번길 37-48",
+    "addressLevel": "EXACT",
+    "lat": 37.719923613,
+    "lng": 126.4155126209,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/50/3566750_image2_1.jpg",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "1615829",
+        "rawCategory": "LS/LS02/LS020500",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2728912",
+    "name": "씨사이드힐캠핑장",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 화도면 해안남로 2680-12",
+    "addressLevel": "EXACT",
+    "lat": 37.634752281,
+    "lng": 126.3751686824,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/65/2728965_image2_1.jpg",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2728912",
+        "rawCategory": "AC/AC05/AC050100",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2740055",
+    "name": "아르보리아 캠핑장",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 길상면 장흥로101번길 65",
+    "addressLevel": "EXACT",
+    "lat": 37.6104713201,
+    "lng": 126.5074461346,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/64/2740164_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2740055",
+        "rawCategory": "AC/AC05/AC050100",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2730787",
+    "name": "오크힐글램핑",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 화도면 해안남로1998번길 8-28",
+    "addressLevel": "EXACT",
+    "lat": 37.6042953393,
+    "lng": 126.410588504,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/72/2730772_image2_1.jpg",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2730787",
+        "rawCategory": "AC/AC05/AC050400",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "web1-10",
+    "name": "외포리선착장",
+    "activity": "유람선",
+    "activityId": "CRUISE",
+    "category": "water",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 내가면 해안서로 883",
+    "addressLevel": "EXACT",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web1-10",
+        "rawCategory": null,
+        "sourceName": "관광공사 관광정보"
+      }
+    ]
+  },
+  {
+    "id": "tour-1e672d4e864e03808a7792520635d260",
+    "name": "유니아일랜드골프앤스파리조트",
+    "activity": "온천-스파",
+    "activityId": "SPA",
+    "category": "heal",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "",
+    "addressLevel": "UNKNOWN",
+    "lat": 37.6550598904551,
+    "lng": 126.346123005315,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "1e672d4e864e03808a7792520635d260",
+        "rawCategory": "관광지/레저스포츠",
+        "sourceName": null
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "1e672d4e864e03808a7792520635d260",
+        "rawCategory": "관광지/레저스포츠/육상레저스포츠",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-1615967",
+    "name": "인산낚시터",
+    "activity": "낚시",
+    "activityId": "FISHING",
+    "category": "exp",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 양도면 중앙로787번길 8-1",
+    "addressLevel": "EXACT",
+    "lat": 37.6989596685,
+    "lng": 126.4312617608,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/10/3350610_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "1615967",
+        "rawCategory": "LS/LS02/LS020500",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-f5b20b7edc2af4955771a003c6fa961c",
+    "name": "인천광역시교육청난정평화교육원",
+    "activity": "수련단체활동",
+    "activityId": "GROUP_TRAINING",
+    "category": "exp",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "",
+    "addressLevel": "UNKNOWN",
+    "lat": 37.77044706674366,
+    "lng": 126.2394832445824,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "f5b20b7edc2af4955771a003c6fa961c",
+        "rawCategory": "관광지/체험관광",
+        "sourceName": null
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "f5b20b7edc2af4955771a003c6fa961c",
+        "rawCategory": "관광지/체험관광/체험관광기타",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "web1-13",
+    "name": "정족산 삼랑성 트레킹",
+    "activity": "트레킹",
+    "activityId": "TREKKING",
+    "category": "land",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 길상면 온수리",
+    "addressLevel": "EXACT",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web1-13",
+        "rawCategory": null,
+        "sourceName": "관광공사 관광정보"
+      }
+    ]
+  },
+  {
+    "id": "tour-2734080",
+    "name": "쥬라기카라반",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 길상면 해안남로 627-5",
+    "addressLevel": "EXACT",
+    "lat": 37.6003250674,
+    "lng": 126.4953669667,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/91/2734791_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2734080",
+        "rawCategory": "AC/AC05/AC050300",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2791856",
+    "name": "크로바캠핑장",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 길상면 해안남로 497-4",
+    "addressLevel": "EXACT",
+    "lat": 37.5969423739,
+    "lng": 126.509351892,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/92/2799392_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2791856",
+        "rawCategory": "AC/AC05/AC050100",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2754977",
+    "name": "프랭클리 글램핑",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 선원면 시리미로237번길 32",
+    "addressLevel": "EXACT",
+    "lat": 37.728517678,
+    "lng": 126.4509535767,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/64/2755264_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2754977",
+        "rawCategory": "AC/AC05/AC050400",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2755488",
+    "name": "하랑캠핑장",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 내가면 고천리 1259-14번지",
+    "addressLevel": "EXACT",
+    "lat": 37.711388047,
+    "lng": 126.3898540998,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/68/2756268_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2755488",
+        "rawCategory": "AC/AC05/AC050100",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-131489",
+    "name": "함허동천야영장",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 화도면 해안남로1196번길 38",
+    "addressLevel": "EXACT",
+    "lat": 37.6115119045,
+    "lng": 126.4527594435,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/81/3535281_image2_1.jpg",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "131489",
+        "rawCategory": "AC/AC05/AC050100",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2734083",
+    "name": "행복한 소풍캠핑장",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "인천광역시 강화군 화도면 마니산로 902-15",
+    "addressLevel": "EXACT",
+    "lat": 37.6387967037,
+    "lng": 126.4008328859,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/98/2734798_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2734083",
+        "rawCategory": "AC/AC05/AC050100",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-f5fd2936ecf9208bc6c8716102f97679",
+    "name": "황청낚시터",
+    "activity": "낚시",
+    "activityId": "FISHING",
+    "category": "exp",
+    "islandId": "gangh",
+    "islandName": "강화도",
+    "address": "",
+    "addressLevel": "UNKNOWN",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "f5fd2936ecf9208bc6c8716102f97679",
+        "rawCategory": "관광지/레저스포츠/수상레저스포츠",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "web1-16",
+    "name": "교동 화개산 트레킹 코스",
+    "activity": "트레킹",
+    "activityId": "TREKKING",
+    "category": "land",
+    "islandId": "gyo",
+    "islandName": "교동도",
+    "address": "인천광역시 강화군 교동면",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web1-16",
+        "rawCategory": null,
+        "sourceName": "강화군 문화관광"
+      }
+    ]
+  },
+  {
+    "id": "web1-15",
+    "name": "난정리 해바라기마을 정원",
+    "activity": "섬마을 투어",
+    "activityId": "VILLAGE_TOUR",
+    "category": "heal",
+    "islandId": "gyo",
+    "islandName": "교동도",
+    "address": "인천광역시 강화군 교동면 난정리 741-3",
+    "addressLevel": "EXACT",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web1-15",
+        "rawCategory": null,
+        "sourceName": "관광공사 관광정보"
+      }
+    ]
+  },
+  {
+    "id": "web1-14",
+    "name": "대룡시장",
+    "activity": "섬마을 투어",
+    "activityId": "VILLAGE_TOUR",
+    "category": "heal",
+    "islandId": "gyo",
+    "islandName": "교동도",
+    "address": "인천광역시 강화군 교동면 대룡리",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web1-14",
+        "rawCategory": null,
+        "sourceName": "강화군 문화관광"
+      }
+    ]
+  },
+  {
+    "id": "web2-37",
+    "name": "개머리언덕",
+    "activity": "백패킹",
+    "activityId": "BACKPACKING",
+    "category": "land",
+    "islandId": "gureop",
+    "islandName": "굴업도",
+    "address": "인천광역시 옹진군 덕적면 굴업리",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-37",
+        "rawCategory": null,
+        "sourceName": "대한민국 구석구석 / 텔트립"
+      }
+    ]
+  },
+  {
+    "id": "web2-38",
+    "name": "굴업도 웰니스 코스",
+    "activity": "트레킹",
+    "activityId": "TREKKING",
+    "category": "land",
+    "islandId": "gureop",
+    "islandName": "굴업도",
+    "address": "인천광역시 옹진군 굴업로 39",
+    "addressLevel": "EXACT",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-38",
+        "rawCategory": null,
+        "sourceName": "관광공사 관광정보(여행코스)"
+      }
+    ]
+  },
+  {
+    "id": "web2-39",
+    "name": "굴업도 은하수 관측지",
+    "activity": "은하수 체험",
+    "activityId": "STARGAZING",
+    "category": "heal",
+    "islandId": "gureop",
+    "islandName": "굴업도",
+    "address": "인천광역시 옹진군 덕적면 굴업리",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-39",
+        "rawCategory": null,
+        "sourceName": "KKday / 대한민국 구석구석"
+      }
+    ]
+  },
+  {
+    "id": "web2-40",
+    "name": "큰마을해변",
+    "activity": "해안 산책",
+    "activityId": "COASTAL_WALK",
+    "category": "water",
+    "islandId": "gureop",
+    "islandName": "굴업도",
+    "address": "인천광역시 옹진군 덕적면 굴업리",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-40",
+        "rawCategory": null,
+        "sourceName": "대한민국 구석구석"
+      }
+    ]
+  },
+  {
+    "id": "web2-24",
+    "name": "대이작도 해양생태관",
+    "activity": "풀등 체험",
+    "activityId": "PULDEUNG",
+    "category": "exp",
+    "islandId": "ijak",
+    "islandName": "대이작도",
+    "address": "인천광역시 옹진군 자월면 이작리",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-24",
+        "rawCategory": null,
+        "sourceName": "인천섬발전지원센터"
+      }
+    ]
+  },
+  {
+    "id": "web2-25",
+    "name": "부아산 트레킹 코스",
+    "activity": "트레킹",
+    "activityId": "TREKKING",
+    "category": "land",
+    "islandId": "ijak",
+    "islandName": "대이작도",
+    "address": "인천광역시 옹진군 자월면 이작리",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-25",
+        "rawCategory": null,
+        "sourceName": "옹진군 / 대한민국 구석구석"
+      }
+    ]
+  },
+  {
+    "id": "web2-27",
+    "name": "삼신할미약수터",
+    "activity": "섬마을 투어",
+    "activityId": "VILLAGE_TOUR",
+    "category": "heal",
+    "islandId": "ijak",
+    "islandName": "대이작도",
+    "address": "인천광역시 옹진군 자월면 이작리",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-27",
+        "rawCategory": null,
+        "sourceName": "인천섬발전지원센터"
+      }
+    ]
+  },
+  {
+    "id": "web2-26",
+    "name": "작은풀안해변",
+    "activity": "해수욕장",
+    "activityId": "BEACH",
+    "category": "water",
+    "islandId": "ijak",
+    "islandName": "대이작도",
+    "address": "인천광역시 옹진군 자월면 이작리",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-26",
+        "rawCategory": null,
+        "sourceName": "대한민국 구석구석"
+      }
+    ]
+  },
+  {
+    "id": "web2-23",
+    "name": "풀등",
+    "activity": "풀등 체험",
+    "activityId": "PULDEUNG",
+    "category": "exp",
+    "islandId": "ijak",
+    "islandName": "대이작도",
+    "address": "인천광역시 옹진군 자월면 이작리",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-23",
+        "rawCategory": null,
+        "sourceName": "대한민국 구석구석 / 텔트립"
+      }
+    ]
+  },
+  {
+    "id": "web1-7",
+    "name": "농여해변",
+    "activity": "해안 산책",
+    "activityId": "COASTAL_WALK",
+    "category": "water",
+    "islandId": "daech",
+    "islandName": "대청도",
+    "address": "인천광역시 옹진군 대청면",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web1-7",
+        "rawCategory": null,
+        "sourceName": "관광공사 관광정보"
+      }
+    ]
+  },
+  {
+    "id": "web1-6",
+    "name": "서풍받이 트레킹 코스",
+    "activity": "트레킹",
+    "activityId": "TREKKING",
+    "category": "land",
+    "islandId": "daech",
+    "islandName": "대청도",
+    "address": "인천광역시 옹진군 대청면",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web1-6",
+        "rawCategory": null,
+        "sourceName": "백령·대청 국가지질공원"
+      }
+    ]
+  },
+  {
+    "id": "web1-5",
+    "name": "옥죽동 해안사구",
+    "activity": "해안 산책",
+    "activityId": "COASTAL_WALK",
+    "category": "water",
+    "islandId": "daech",
+    "islandName": "대청도",
+    "address": "인천광역시 옹진군 대청면",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web1-5",
+        "rawCategory": null,
+        "sourceName": "관광공사 관광정보 / 한국경제"
+      }
+    ]
+  },
+  {
+    "id": "web2-30",
+    "name": "능동자갈마당",
+    "activity": "산림욕",
+    "activityId": "FOREST_BATH",
+    "category": "heal",
+    "islandId": "deokj",
+    "islandName": "덕적도",
+    "address": "인천광역시 옹진군 덕적면 북리",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-30",
+        "rawCategory": null,
+        "sourceName": "경기신문"
+      }
+    ]
+  },
+  {
+    "id": "web2-31",
+    "name": "밧지름해변",
+    "activity": "해수욕장",
+    "activityId": "BEACH",
+    "category": "water",
+    "islandId": "deokj",
+    "islandName": "덕적도",
+    "address": "인천광역시 옹진군 덕적면 덕적남로 209-1",
+    "addressLevel": "EXACT",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-31",
+        "rawCategory": null,
+        "sourceName": "관광공사 관광정보"
+      }
+    ]
+  },
+  {
+    "id": "web2-29",
+    "name": "비조봉 등산 코스",
+    "activity": "트레킹",
+    "activityId": "TREKKING",
+    "category": "land",
+    "islandId": "deokj",
+    "islandName": "덕적도",
+    "address": "인천광역시 옹진군 덕적면 진리",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-29",
+        "rawCategory": null,
+        "sourceName": "덕적도 공식"
+      }
+    ]
+  },
+  {
+    "id": "tour-2782235",
+    "name": "서포리웰빙삼림욕산책로",
+    "activity": "산림욕",
+    "activityId": "FOREST_BATH",
+    "category": "heal",
+    "islandId": "deokj",
+    "islandName": "덕적도",
+    "address": "인천광역시 옹진군 덕적면 덕적남로606번길 6",
+    "addressLevel": "EXACT",
+    "lat": 37.2230790346,
+    "lng": 126.1171673725,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/52/2786852_image2_1.jpg",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2782235",
+        "rawCategory": "LS/LS01/LS011900",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "web2-28",
+    "name": "서포리해수욕장 오토캠핑장",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "deokj",
+    "islandName": "덕적도",
+    "address": "인천광역시 옹진군 덕적면 서포리",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-28",
+        "rawCategory": null,
+        "sourceName": "덕적도 공식 / 경기신문"
+      }
+    ]
+  },
+  {
+    "id": "web2-11",
+    "name": "무의도 국사봉",
+    "activity": "트레킹",
+    "activityId": "TREKKING",
+    "category": "land",
+    "islandId": "muui",
+    "islandName": "무의도",
+    "address": "인천광역시 영종구 무의동",
+    "addressLevel": "EXACT",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-11",
+        "rawCategory": null,
+        "sourceName": "관광공사 관광정보"
+      }
+    ]
+  },
+  {
+    "id": "web2-12",
+    "name": "무의도 해상관광탐방로",
+    "activity": "해안 산책",
+    "activityId": "COASTAL_WALK",
+    "category": "water",
+    "islandId": "muui",
+    "islandName": "무의도",
+    "address": "인천광역시 영종구 무의동",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-12",
+        "rawCategory": null,
+        "sourceName": "텔트립 / 인천 중구청"
+      }
+    ]
+  },
+  {
+    "id": "web2-10",
+    "name": "무의바다누리길",
+    "activity": "트레킹",
+    "activityId": "TREKKING",
+    "category": "land",
+    "islandId": "muui",
+    "islandName": "무의도",
+    "address": "인천광역시 영종구 무의동",
+    "addressLevel": "EXACT",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-10",
+        "rawCategory": null,
+        "sourceName": "관광공사 관광정보"
+      }
+    ]
+  },
+  {
+    "id": "web2-8",
+    "name": "큰무리어촌체험마을",
+    "activity": "해안 산책",
+    "activityId": "COASTAL_WALK",
+    "category": "water",
+    "islandId": "muui",
+    "islandName": "무의도",
+    "address": "인천광역시 영종구 대무의로 26-9",
+    "addressLevel": "EXACT",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-8",
+        "rawCategory": null,
+        "sourceName": "관광공사 관광정보"
+      }
+    ]
+  },
+  {
+    "id": "web2-7",
+    "name": "하나개해수욕장 갯벌체험",
+    "activity": "해수욕장",
+    "activityId": "BEACH",
+    "category": "water",
+    "islandId": "muui",
+    "islandName": "무의도",
+    "address": "인천광역시 영종구 무의동",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-7",
+        "rawCategory": null,
+        "sourceName": "인천 중구청 관광"
+      }
+    ]
+  },
+  {
+    "id": "web2-6",
+    "name": "하나개해수욕장 짚라인",
+    "activity": "짚라인",
+    "activityId": "ZIPLINE",
+    "category": "exp",
+    "islandId": "muui",
+    "islandName": "무의도",
+    "address": "인천광역시 영종구 무의동",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-6",
+        "rawCategory": null,
+        "sourceName": "인천in / 하나개유원지"
+      }
+    ]
+  },
+  {
+    "id": "web2-9",
+    "name": "호룡곡산 트레킹 코스",
+    "activity": "트레킹",
+    "activityId": "TREKKING",
+    "category": "land",
+    "islandId": "muui",
+    "islandName": "무의도",
+    "address": "인천광역시 영종구 대무의로 464",
+    "addressLevel": "EXACT",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-9",
+        "rawCategory": null,
+        "sourceName": "관광공사 관광정보"
+      }
+    ]
+  },
+  {
+    "id": "web2-34",
+    "name": "깃대봉 트레킹 코스",
+    "activity": "트레킹",
+    "activityId": "TREKKING",
+    "category": "land",
+    "islandId": "mungap",
+    "islandName": "문갑도",
+    "address": "인천광역시 옹진군 덕적면 문갑리",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-34",
+        "rawCategory": null,
+        "sourceName": "텔트립"
+      }
+    ]
+  },
+  {
+    "id": "web2-36",
+    "name": "문갑도 벽화마을",
+    "activity": "섬마을 투어",
+    "activityId": "VILLAGE_TOUR",
+    "category": "heal",
+    "islandId": "mungap",
+    "islandName": "문갑도",
+    "address": "인천광역시 옹진군 덕적면 문갑리",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-36",
+        "rawCategory": null,
+        "sourceName": "텔트립"
+      }
+    ]
+  },
+  {
+    "id": "web2-35",
+    "name": "한월리해변 야영장",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "mungap",
+    "islandName": "문갑도",
+    "address": "인천광역시 옹진군 덕적면 문갑리",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-35",
+        "rawCategory": null,
+        "sourceName": "텔트립"
+      }
+    ]
+  },
+  {
+    "id": "web1-0",
+    "name": "두무진 유람선",
+    "activity": "유람선",
+    "activityId": "CRUISE",
+    "category": "water",
+    "islandId": "baek",
+    "islandName": "백령도",
+    "address": "인천광역시 옹진군 백령면 연화리 1026-9",
+    "addressLevel": "EXACT",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web1-0",
+        "rawCategory": null,
+        "sourceName": "관광공사 관광정보 / 백령·대청 국가지질공원"
+      }
+    ]
+  },
+  {
+    "id": "web1-4",
+    "name": "두무진 트레킹 코스",
+    "activity": "트레킹",
+    "activityId": "TREKKING",
+    "category": "land",
+    "islandId": "baek",
+    "islandName": "백령도",
+    "address": "인천광역시 옹진군 백령면 연화리",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web1-4",
+        "rawCategory": null,
+        "sourceName": "백령·대청 국가지질공원"
+      }
+    ]
+  },
+  {
+    "id": "web1-1",
+    "name": "백령도 점박이물범 관찰지",
+    "activity": "물범 관찰",
+    "activityId": "SEAL_WATCHING",
+    "category": "heal",
+    "islandId": "baek",
+    "islandName": "백령도",
+    "address": "인천광역시 옹진군 백령면 진촌리",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web1-1",
+        "rawCategory": null,
+        "sourceName": "한국경제 / 국가지질공원"
+      }
+    ]
+  },
+  {
+    "id": "web1-2",
+    "name": "사곶해변",
+    "activity": "해수욕장",
+    "activityId": "BEACH",
+    "category": "water",
+    "islandId": "baek",
+    "islandName": "백령도",
+    "address": "인천광역시 옹진군 백령면 사곶로 139",
+    "addressLevel": "EXACT",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web1-2",
+        "rawCategory": null,
+        "sourceName": "관광공사 관광정보"
+      }
+    ]
+  },
+  {
+    "id": "web1-3",
+    "name": "콩돌해변",
+    "activity": "해안 산책",
+    "activityId": "COASTAL_WALK",
+    "category": "water",
+    "islandId": "baek",
+    "islandName": "백령도",
+    "address": "인천광역시 옹진군 백령면",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web1-3",
+        "rawCategory": null,
+        "sourceName": "관광공사 관광정보"
+      }
+    ]
+  },
+  {
+    "id": "tour-2908228",
+    "name": "돌담캠핑가든",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "seok",
+    "islandName": "석모도",
+    "address": "인천광역시 강화군 삼산북로 397-1",
+    "addressLevel": "EXACT",
+    "lat": 37.7012575941,
+    "lng": 126.3282433636,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/18/2908218_image2_1.jpg",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2908228",
+        "rawCategory": "AC/AC05/AC050100",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "web1-17",
+    "name": "민머루해변",
+    "activity": "해수욕장",
+    "activityId": "BEACH",
+    "category": "water",
+    "islandId": "seok",
+    "islandName": "석모도",
+    "address": "인천광역시 강화군 삼산면 어류정길212번길",
+    "addressLevel": "EXACT",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web1-17",
+        "rawCategory": null,
+        "sourceName": "관광공사 관광정보"
+      }
+    ]
+  },
+  {
+    "id": "web1-19",
+    "name": "보문사",
+    "activity": "섬마을 투어",
+    "activityId": "VILLAGE_TOUR",
+    "category": "heal",
+    "islandId": "seok",
+    "islandName": "석모도",
+    "address": "인천광역시 강화군 삼산면 삼산남로",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web1-19",
+        "rawCategory": null,
+        "sourceName": "강화군 문화관광"
+      }
+    ]
+  },
+  {
+    "id": "tour-d7e358e84284921cb594b68bf618698e",
+    "name": "석모도미네랄스파",
+    "activity": "온천-스파",
+    "activityId": "SPA",
+    "category": "heal",
+    "islandId": "seok",
+    "islandName": "석모도",
+    "address": "",
+    "addressLevel": "UNKNOWN",
+    "lat": 37.685614772500486,
+    "lng": 126.31188401213183,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "d7e358e84284921cb594b68bf618698e",
+        "rawCategory": "관광지/체험관광",
+        "sourceName": null
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "d7e358e84284921cb594b68bf618698e",
+        "rawCategory": "관광지/체험관광/웰니스관광",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2743847",
+    "name": "원스캠핑장",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "seok",
+    "islandName": "석모도",
+    "address": "인천광역시 강화군 삼산면 삼산남로604번길 37",
+    "addressLevel": "EXACT",
+    "lat": 37.6769411696,
+    "lng": 126.3387291872,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/93/2744393_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2743847",
+        "rawCategory": "AC/AC05/AC050100",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2768065",
+    "name": "항포낚시터",
+    "activity": "낚시",
+    "activityId": "FISHING",
+    "category": "exp",
+    "islandId": "seok",
+    "islandName": "석모도",
+    "address": "인천광역시 강화군 삼산면 삼산서로310번길 21",
+    "addressLevel": "EXACT",
+    "lat": 37.7060813071,
+    "lng": 126.2868053649,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/74/3395374_image2_1.jpg",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2768065",
+        "rawCategory": "LS/LS02/LS020500",
+        "sourceName": null
+      },
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "261c6067d0d2c6f7413b3b74b19d57d9",
+        "rawCategory": "관광지/레저스포츠",
+        "sourceName": null
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "261c6067d0d2c6f7413b3b74b19d57d9",
+        "rawCategory": "관광지/레저스포츠/수상레저스포츠",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "web1-18",
+    "name": "해명산 트레킹 코스",
+    "activity": "트레킹",
+    "activityId": "TREKKING",
+    "category": "land",
+    "islandId": "seok",
+    "islandName": "석모도",
+    "address": "인천광역시 강화군 삼산면 석포리 산 185",
+    "addressLevel": "EXACT",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web1-18",
+        "rawCategory": null,
+        "sourceName": "관광공사 관광정보"
+      }
+    ]
+  },
+  {
+    "id": "tour-2755691",
+    "name": "헬로 카라반",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "seok",
+    "islandName": "석모도",
+    "address": "인천광역시 강화군 삼산면 어류정길198번길 8",
+    "addressLevel": "EXACT",
+    "lat": 37.6533522146,
+    "lng": 126.3365133764,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/51/2756451_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2755691",
+        "rawCategory": "AC/AC05/AC050300",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "web2-32",
+    "name": "떼뿌루야영장",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "soya",
+    "islandName": "소야도",
+    "address": "인천광역시 옹진군 덕적면 소야리",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-32",
+        "rawCategory": null,
+        "sourceName": "브런치 트래비"
+      }
+    ]
+  },
+  {
+    "id": "web2-33",
+    "name": "소야도 떼뿌리해변",
+    "activity": "해수욕장",
+    "activityId": "BEACH",
+    "category": "water",
+    "islandId": "soya",
+    "islandName": "소야도",
+    "address": "인천광역시 옹진군 덕적면 소야리",
+    "addressLevel": "EXACT",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-33",
+        "rawCategory": null,
+        "sourceName": "관광공사 관광정보 / 브런치 트래비"
+      }
+    ]
+  },
+  {
+    "id": "web2-21",
+    "name": "이일레해수욕장",
+    "activity": "해수욕장",
+    "activityId": "BEACH",
+    "category": "water",
+    "islandId": "seungb",
+    "islandName": "승봉도",
+    "address": "인천광역시 옹진군 자월면 승봉로116번길",
+    "addressLevel": "EXACT",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-21",
+        "rawCategory": null,
+        "sourceName": "관광공사 관광정보 / 옹진군"
+      }
+    ]
+  },
+  {
+    "id": "web2-22",
+    "name": "촛대바위",
+    "activity": "섬마을 투어",
+    "activityId": "VILLAGE_TOUR",
+    "category": "heal",
+    "islandId": "seungb",
+    "islandName": "승봉도",
+    "address": "인천광역시 옹진군 자월면 승봉리",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-22",
+        "rawCategory": null,
+        "sourceName": "옹진군 관광"
+      }
+    ]
+  },
+  {
+    "id": "web1-25",
+    "name": "배미꾸미해변 조각공원",
+    "activity": "섬마을 투어",
+    "activityId": "VILLAGE_TOUR",
+    "category": "heal",
+    "islandId": "sinsi",
+    "islandName": "신도·시도·모도",
+    "address": "인천광역시 옹진군 북도면 모도리",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web1-25",
+        "rawCategory": null,
+        "sourceName": "대한민국 구석구석"
+      }
+    ]
+  },
+  {
+    "id": "web1-24",
+    "name": "수기해변",
+    "activity": "해수욕장",
+    "activityId": "BEACH",
+    "category": "water",
+    "islandId": "sinsi",
+    "islandName": "신도·시도·모도",
+    "address": "인천광역시 옹진군 북도면 시도로86번길 291-49",
+    "addressLevel": "EXACT",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web1-24",
+        "rawCategory": null,
+        "sourceName": "관광공사 관광정보"
+      }
+    ]
+  },
+  {
+    "id": "web1-26",
+    "name": "시도염전",
+    "activity": "섬마을 투어",
+    "activityId": "VILLAGE_TOUR",
+    "category": "heal",
+    "islandId": "sinsi",
+    "islandName": "신도·시도·모도",
+    "address": "인천광역시 옹진군 북도면 시도리",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web1-26",
+        "rawCategory": null,
+        "sourceName": "대한민국 구석구석"
+      }
+    ]
+  },
+  {
+    "id": "web1-23",
+    "name": "신·시·모도 자전거길",
+    "activity": "자전거",
+    "activityId": "CYCLING",
+    "category": "land",
+    "islandId": "sinsi",
+    "islandName": "신도·시도·모도",
+    "address": "인천광역시 옹진군 북도면",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web1-23",
+        "rawCategory": null,
+        "sourceName": "대한민국 구석구석"
+      }
+    ]
+  },
+  {
+    "id": "web1-8",
+    "name": "연평도 안보 여행코스",
+    "activity": "섬마을 투어",
+    "activityId": "VILLAGE_TOUR",
+    "category": "heal",
+    "islandId": "yeonp",
+    "islandName": "연평도",
+    "address": "인천광역시 옹진군 연평중앙로24번길 3",
+    "addressLevel": "EXACT",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web1-8",
+        "rawCategory": null,
+        "sourceName": "관광공사 여행코스"
+      }
+    ]
+  },
+  {
+    "id": "tour-2710985",
+    "name": "연평평화안보수련원",
+    "activity": "수련단체활동",
+    "activityId": "GROUP_TRAINING",
+    "category": "exp",
+    "islandId": "yeonp",
+    "islandName": "연평도",
+    "address": "인천광역시 옹진군 연평면 연평중앙로24번길 25",
+    "addressLevel": "EXACT",
+    "lat": 37.6654510122,
+    "lng": 125.7040350309,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/50/2710950_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2710985",
+        "rawCategory": "VE/VE10/VE100200",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "web2-4",
+    "name": "거잠포해변",
+    "activity": "해안 산책",
+    "activityId": "COASTAL_WALK",
+    "category": "water",
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "address": "인천광역시 영종구 잠진도길 11",
+    "addressLevel": "EXACT",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-4",
+        "rawCategory": null,
+        "sourceName": "관광공사 관광정보"
+      }
+    ]
+  },
+  {
+    "id": "tour-2733992",
+    "name": "락인뜰",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "address": "인천광역시 영종구 늘목로 38 (을왕동)",
+    "addressLevel": "EXACT",
+    "lat": 37.4542097734,
+    "lng": 126.3958189907,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/65/2734265_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2733992",
+        "rawCategory": "AC/AC05/AC050100",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "web2-5",
+    "name": "마시안해변",
+    "activity": "해안 산책",
+    "activityId": "COASTAL_WALK",
+    "category": "water",
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "address": "인천광역시 영종구 덕교동",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-5",
+        "rawCategory": null,
+        "sourceName": "인천 중구청 관광"
+      }
+    ]
+  },
+  {
+    "id": "tour-952a98d2a8955a6f09bd0d45f810ca9a",
+    "name": "만정바다낚시터",
+    "activity": "낚시",
+    "activityId": "FISHING",
+    "category": "exp",
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "address": "",
+    "addressLevel": "UNKNOWN",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "952a98d2a8955a6f09bd0d45f810ca9a",
+        "rawCategory": "관광지/레저스포츠/수상레저스포츠",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2768151",
+    "name": "만정바다좌대낚시터",
+    "activity": "낚시",
+    "activityId": "FISHING",
+    "category": "exp",
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "address": "인천광역시 영종구 영종순환로 279-20 (중산동)",
+    "addressLevel": "EXACT",
+    "lat": 37.5158969367,
+    "lng": 126.5483200237,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/25/2790225_image2_1.jpg",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2768151",
+        "rawCategory": "LS/LS02/LS020600",
+        "sourceName": null
+      },
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "db958bac74a48b2d656c9f41844275ff",
+        "rawCategory": "관광지/레저스포츠",
+        "sourceName": null
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "db958bac74a48b2d656c9f41844275ff",
+        "rawCategory": "관광지/레저스포츠/수상레저스포츠",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2768158",
+    "name": "만정사계절바다낚시터",
+    "activity": "낚시",
+    "activityId": "FISHING",
+    "category": "exp",
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "address": "인천광역시 영종구 영종순환로 279-20 (중산동)",
+    "addressLevel": "EXACT",
+    "lat": 37.5150026654,
+    "lng": 126.5522724652,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/48/3565648_image2_1.jpg",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2768158",
+        "rawCategory": "LS/LS02/LS020600",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "web2-3",
+    "name": "백운산전망대",
+    "activity": "트레킹",
+    "activityId": "TREKKING",
+    "category": "land",
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "address": "인천광역시 영종구 운서동 산1-1",
+    "addressLevel": "EXACT",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-3",
+        "rawCategory": null,
+        "sourceName": "관광공사 관광정보"
+      }
+    ]
+  },
+  {
+    "id": "tour-48316cd2819d17d5a464e3eb5fdc5b88",
+    "name": "베르힐컨트리클럽/영종",
+    "activity": "골프",
+    "activityId": "GOLF",
+    "category": "exp",
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "address": "",
+    "addressLevel": "UNKNOWN",
+    "lat": 37.52581334756877,
+    "lng": 126.56279424562064,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "48316cd2819d17d5a464e3eb5fdc5b88",
+        "rawCategory": "관광지/레저스포츠",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-675c60f451bdd0140886221781a909ce",
+    "name": "삼성호낚시슈퍼",
+    "activity": "낚시",
+    "activityId": "FISHING",
+    "category": "exp",
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "address": "",
+    "addressLevel": "UNKNOWN",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "675c60f451bdd0140886221781a909ce",
+        "rawCategory": "관광지/레저스포츠/수상레저스포츠",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2744549",
+    "name": "서해캠핑장",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "address": "인천광역시 영종구 용유서로423번길 41 (을왕동)",
+    "addressLevel": "EXACT",
+    "lat": 37.4576977742,
+    "lng": 126.3681519792,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/65/2744865_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2744549",
+        "rawCategory": "AC/AC05/AC050100",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "web2-2",
+    "name": "선녀바위해변",
+    "activity": "일몰 감상",
+    "activityId": "SUNSET",
+    "category": "heal",
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "address": "인천광역시 영종구 용유로380번길 21",
+    "addressLevel": "EXACT",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-2",
+        "rawCategory": null,
+        "sourceName": "관광공사 관광정보"
+      }
+    ]
+  },
+  {
+    "id": "tour-61cc7feaa89c5b97b077e74dbb0f961a",
+    "name": "씨사이드파크해수족욕장",
+    "activity": "온천-스파",
+    "activityId": "SPA",
+    "category": "heal",
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "address": "",
+    "addressLevel": "UNKNOWN",
+    "lat": 37.47045437406631,
+    "lng": 126.51950895416206,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "61cc7feaa89c5b97b077e74dbb0f961a",
+        "rawCategory": "관광지/레저스포츠",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2e5f670b16be8f604ed3fd69eb886ef2",
+    "name": "영종구평생학습관",
+    "activity": "수련단체활동",
+    "activityId": "GROUP_TRAINING",
+    "category": "exp",
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "address": "",
+    "addressLevel": "UNKNOWN",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "2e5f670b16be8f604ed3fd69eb886ef2",
+        "rawCategory": "관광지/체험관광/체험관광기타",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-a820025a35df9b48118470edc219f622",
+    "name": "영종씨사이드레일바이크",
+    "activity": "모노레일",
+    "activityId": "MONORAIL",
+    "category": "exp",
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "address": "",
+    "addressLevel": "UNKNOWN",
+    "lat": 37.4883583174538,
+    "lng": 126.57660361673,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "a820025a35df9b48118470edc219f622",
+        "rawCategory": "관광지/레저스포츠",
+        "sourceName": null
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "a820025a35df9b48118470edc219f622",
+        "rawCategory": "관광지/레저스포츠/기타레저스포츠",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-4f1a8e07596db2c9e46f1ba8e00980a8",
+    "name": "오렌지듄스영종골프클럽",
+    "activity": "골프",
+    "activityId": "GOLF",
+    "category": "exp",
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "address": "",
+    "addressLevel": "UNKNOWN",
+    "lat": 37.434283,
+    "lng": 126.4552032,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "4f1a8e07596db2c9e46f1ba8e00980a8",
+        "rawCategory": "관광지/레저스포츠",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2731145",
+    "name": "왕산가족오토캠핑장",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "address": "인천광역시 영종구 용유서로423번길 60 (을왕동)",
+    "addressLevel": "EXACT",
+    "lat": 37.4582032371,
+    "lng": 126.3662160311,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/00/2731500_image2_1.jpg",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2731145",
+        "rawCategory": "AC/AC05/AC050200",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "web2-0",
+    "name": "왕산마리나",
+    "activity": "요트",
+    "activityId": "YACHT",
+    "category": "water",
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "address": "인천광역시 영종구 왕산마리나길 143",
+    "addressLevel": "EXACT",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-0",
+        "rawCategory": null,
+        "sourceName": "관광공사 관광정보 / 인천 중구청"
+      }
+    ]
+  },
+  {
+    "id": "web2-1",
+    "name": "을왕리 수상레저",
+    "activity": "패들보트",
+    "activityId": "PADDLE_BOAT",
+    "category": "water",
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "address": "인천광역시 영종구 을왕동",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-1",
+        "rawCategory": null,
+        "sourceName": "인천 중구청 관광 / 현지 업체"
+      }
+    ]
+  },
+  {
+    "id": "tour-5e712ece3128d613157c0a99e219f92e",
+    "name": "인천광역시교육청교직원수련원",
+    "activity": "수련단체활동",
+    "activityId": "GROUP_TRAINING",
+    "category": "exp",
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "address": "",
+    "addressLevel": "UNKNOWN",
+    "lat": 37.450278229205,
+    "lng": 126.373955648,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "5e712ece3128d613157c0a99e219f92e",
+        "rawCategory": "관광지/레저스포츠",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-d1d66c921b64bde22bff57ccc4b82518",
+    "name": "천혜바다낚시터",
+    "activity": "낚시",
+    "activityId": "FISHING",
+    "category": "exp",
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "address": "",
+    "addressLevel": "UNKNOWN",
+    "lat": 37.508744790179,
+    "lng": 126.56690986312,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "d1d66c921b64bde22bff57ccc4b82518",
+        "rawCategory": "관광지/레저스포츠",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-f5dd2fca738179175e39ef0d3de49032",
+    "name": "천혜사랑바다낚시터",
+    "activity": "낚시",
+    "activityId": "FISHING",
+    "category": "exp",
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "address": "",
+    "addressLevel": "UNKNOWN",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "f5dd2fca738179175e39ef0d3de49032",
+        "rawCategory": "관광지/레저스포츠/수상레저스포츠",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-f6c9979a8f880e865656bdac19e19544",
+    "name": "클럽72CC/레이크코스",
+    "activity": "골프",
+    "activityId": "GOLF",
+    "category": "exp",
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "address": "",
+    "addressLevel": "UNKNOWN",
+    "lat": 37.47477599185,
+    "lng": 126.479029243505,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "f6c9979a8f880e865656bdac19e19544",
+        "rawCategory": "관광지/레저스포츠",
+        "sourceName": null
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "f6c9979a8f880e865656bdac19e19544",
+        "rawCategory": "관광지/레저스포츠/육상레저스포츠",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-04bdb27729c4b7841aabe7665b964ad2",
+    "name": "클럽72CC/바다코스",
+    "activity": "골프",
+    "activityId": "GOLF",
+    "category": "exp",
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "address": "",
+    "addressLevel": "UNKNOWN",
+    "lat": 37.483441596862,
+    "lng": 126.468835644143,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "04bdb27729c4b7841aabe7665b964ad2",
+        "rawCategory": "관광지/레저스포츠",
+        "sourceName": null
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "04bdb27729c4b7841aabe7665b964ad2",
+        "rawCategory": "관광지/레저스포츠/육상레저스포츠",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-42fd1174288dd242e7b853a2317ff01a",
+    "name": "클럽72CC/오션코스",
+    "activity": "골프",
+    "activityId": "GOLF",
+    "category": "exp",
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "address": "",
+    "addressLevel": "UNKNOWN",
+    "lat": 37.48991303909735,
+    "lng": 126.46347496024373,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "42fd1174288dd242e7b853a2317ff01a",
+        "rawCategory": "관광지/레저스포츠",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-f8c8c69118aa4e589af66ac9f98e8434",
+    "name": "클럽72CC/클래식코스",
+    "activity": "골프",
+    "activityId": "GOLF",
+    "category": "exp",
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "address": "",
+    "addressLevel": "UNKNOWN",
+    "lat": 37.47752563784576,
+    "lng": 126.47280755999705,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "f8c8c69118aa4e589af66ac9f98e8434",
+        "rawCategory": "관광지/레저스포츠",
+        "sourceName": null
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "f8c8c69118aa4e589af66ac9f98e8434",
+        "rawCategory": "관광지/레저스포츠/육상레저스포츠",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-3963b252b8609f35383805076af8a634",
+    "name": "클럽72CC/하늘코스",
+    "activity": "골프",
+    "activityId": "GOLF",
+    "category": "exp",
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "address": "",
+    "addressLevel": "UNKNOWN",
+    "lat": 37.4470570002769,
+    "lng": 126.482973581004,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "3963b252b8609f35383805076af8a634",
+        "rawCategory": "관광지/레저스포츠",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-7ca706eda3e5a6f2c6b063aef77a7cc1",
+    "name": "파라다이스시티/씨메르",
+    "activity": "온천-스파",
+    "activityId": "SPA",
+    "category": "heal",
+    "islandId": "yeongj",
+    "islandName": "영종도",
+    "address": "",
+    "addressLevel": "UNKNOWN",
+    "lat": 37.435669279858,
+    "lng": 126.456892711471,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "7ca706eda3e5a6f2c6b063aef77a7cc1",
+        "rawCategory": "관광지/체험관광",
+        "sourceName": null
+      },
+      {
+        "sourceType": "RELATED_TOURISM",
+        "externalId": "7ca706eda3e5a6f2c6b063aef77a7cc1",
+        "rawCategory": "관광지/체험관광/웰니스관광",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2734162",
+    "name": "농어바위캠핑장",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "yheung",
+    "islandName": "영흥도",
+    "address": "인천광역시 옹진군 영흥면 영흥서로 420-19",
+    "addressLevel": "EXACT",
+    "lat": 37.2818503398,
+    "lng": 126.4587846299,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/14/2735714_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2734162",
+        "rawCategory": "AC/AC05/AC050100",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2755756",
+    "name": "명성가족캠핑촌",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "yheung",
+    "islandName": "영흥도",
+    "address": "인천광역시 옹진군 영흥면 영흥로722번길 43",
+    "addressLevel": "EXACT",
+    "lat": 37.273095758,
+    "lng": 126.4563739778,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/29/2756529_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2755756",
+        "rawCategory": "AC/AC05/AC050100",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2792621",
+    "name": "모모카라반",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "yheung",
+    "islandName": "영흥도",
+    "address": "인천광역시 옹진군 영흥면 영흥로757번길 176",
+    "addressLevel": "EXACT",
+    "lat": 37.2670602097,
+    "lng": 126.4484748618,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/30/2799530_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2792621",
+        "rawCategory": "AC/AC05/AC050300",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2734307",
+    "name": "블랙트리캠핑",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "yheung",
+    "islandName": "영흥도",
+    "address": "인천광역시 옹진군 영흥면 영흥로757번길 234-13",
+    "addressLevel": "EXACT",
+    "lat": 37.2642771882,
+    "lng": 126.4478444395,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/77/2735977_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2734307",
+        "rawCategory": "AC/AC05/AC050100",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2734755",
+    "name": "솔바다캠핑장",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "yheung",
+    "islandName": "영흥도",
+    "address": "인천광역시 옹진군 영흥면 영흥서로 527-14",
+    "addressLevel": "EXACT",
+    "lat": 37.2746816309,
+    "lng": 126.453276994,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/89/2735989_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2734755",
+        "rawCategory": "AC/AC05/AC050100",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "web2-13",
+    "name": "십리포해수욕장 소사나무 군락지",
+    "activity": "산림욕",
+    "activityId": "FOREST_BATH",
+    "category": "heal",
+    "islandId": "yheung",
+    "islandName": "영흥도",
+    "address": "인천광역시 옹진군 영흥면 영흥북로 420-26",
+    "addressLevel": "EXACT",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-13",
+        "rawCategory": null,
+        "sourceName": "관광공사 관광정보 / 인천in"
+      }
+    ]
+  },
+  {
+    "id": "web2-15",
+    "name": "영흥도 국사봉 임도",
+    "activity": "자전거",
+    "activityId": "CYCLING",
+    "category": "land",
+    "islandId": "yheung",
+    "islandName": "영흥도",
+    "address": "인천광역시 옹진군 영흥면 내리",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-15",
+        "rawCategory": null,
+        "sourceName": "인천in"
+      }
+    ]
+  },
+  {
+    "id": "web2-16",
+    "name": "영흥도 해루질 포인트",
+    "activity": "해루질",
+    "activityId": "NIGHT_GATHERING",
+    "category": "exp",
+    "islandId": "yheung",
+    "islandName": "영흥도",
+    "address": "인천광역시 옹진군 영흥면",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-16",
+        "rawCategory": null,
+        "sourceName": "힐링포인트 해루팡"
+      }
+    ]
+  },
+  {
+    "id": "tour-2908042",
+    "name": "영흥도어울림캠핑장",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "yheung",
+    "islandName": "영흥도",
+    "address": "인천광역시 옹진군 영흥면 영흥서로 452-67",
+    "addressLevel": "EXACT",
+    "lat": 37.2827640609,
+    "lng": 126.4552293736,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/19/2908019_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2908042",
+        "rawCategory": "AC/AC05/AC050100",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2767615",
+    "name": "영흥바다낚시터",
+    "activity": "낚시",
+    "activityId": "FISHING",
+    "category": "exp",
+    "islandId": "yheung",
+    "islandName": "영흥도",
+    "address": "인천광역시 옹진군 영흥면 영흥로176번길 21",
+    "addressLevel": "EXACT",
+    "lat": 37.2608061423,
+    "lng": 126.492234935,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/12/2780912_image2_1.jpg",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2767615",
+        "rawCategory": "LS/LS02/LS020600",
+        "sourceName": null
+      },
+      {
+        "sourceType": "LOCAL_HUB",
+        "externalId": "adf3078abaf9e577fa166e12d01174a0",
+        "rawCategory": "관광지/레저스포츠",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2767616",
+    "name": "용담바다낚시터",
+    "activity": "낚시",
+    "activityId": "FISHING",
+    "category": "exp",
+    "islandId": "yheung",
+    "islandName": "영흥도",
+    "address": "인천광역시 옹진군 영흥면 외리 21",
+    "addressLevel": "EXACT",
+    "lat": 37.2415525238,
+    "lng": 126.475237008,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/86/2790486_image2_1.jpg",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2767616",
+        "rawCategory": "LS/LS02/LS020600",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "tour-2741533",
+    "name": "장경리해변야영장",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "yheung",
+    "islandName": "영흥도",
+    "address": "인천광역시 옹진군 영흥면 영흥로757번길 6",
+    "addressLevel": "EXACT",
+    "lat": 37.2727206897,
+    "lng": 126.4499606833,
+    "tel": null,
+    "homepage": null,
+    "photo": "https://tong.visitkorea.or.kr/cms/resource/89/2741689_image2_1.JPG",
+    "origin": "관광공사",
+    "verification": "UNVERIFIED",
+    "sources": [
+      {
+        "sourceType": "TOUR_CONTENT",
+        "externalId": "2741533",
+        "rawCategory": "AC/AC05/AC050100",
+        "sourceName": null
+      }
+    ]
+  },
+  {
+    "id": "web2-14",
+    "name": "장경리해수욕장",
+    "activity": "일몰 감상",
+    "activityId": "SUNSET",
+    "category": "heal",
+    "islandId": "yheung",
+    "islandName": "영흥도",
+    "address": "인천광역시 옹진군 영흥면 영흥로757번길 6",
+    "addressLevel": "EXACT",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-14",
+        "rawCategory": null,
+        "sourceName": "관광공사 관광정보 / 대한민국 구석구석"
+      }
+    ]
+  },
+  {
+    "id": "web2-17",
+    "name": "통일사",
+    "activity": "섬마을 투어",
+    "activityId": "VILLAGE_TOUR",
+    "category": "heal",
+    "islandId": "yheung",
+    "islandName": "영흥도",
+    "address": "인천광역시 옹진군 영흥면 영흥로722번길 146",
+    "addressLevel": "EXACT",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-17",
+        "rawCategory": null,
+        "sourceName": "관광공사 관광정보"
+      }
+    ]
+  },
+  {
+    "id": "web2-19",
+    "name": "자월도 국사봉",
+    "activity": "트레킹",
+    "activityId": "TREKKING",
+    "category": "land",
+    "islandId": "jawol",
+    "islandName": "자월도",
+    "address": "인천광역시 옹진군 자월면 자월리",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-19",
+        "rawCategory": null,
+        "sourceName": "옹진군 관광"
+      }
+    ]
+  },
+  {
+    "id": "web2-18",
+    "name": "장골해수욕장 야영장",
+    "activity": "캠핑",
+    "activityId": "CAMPING",
+    "category": "land",
+    "islandId": "jawol",
+    "islandName": "자월도",
+    "address": "인천광역시 옹진군 자월면 자월리",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-18",
+        "rawCategory": null,
+        "sourceName": "옹진군 관광"
+      }
+    ]
+  },
+  {
+    "id": "web2-20",
+    "name": "큰말해변",
+    "activity": "해수욕장",
+    "activityId": "BEACH",
+    "category": "water",
+    "islandId": "jawol",
+    "islandName": "자월도",
+    "address": "인천광역시 옹진군 자월면 자월리",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web2-20",
+        "rawCategory": null,
+        "sourceName": "옹진군 관광"
+      }
+    ]
+  },
+  {
+    "id": "web1-20",
+    "name": "옹암해변",
+    "activity": "해수욕장",
+    "activityId": "BEACH",
+    "category": "water",
+    "islandId": "jang",
+    "islandName": "장봉도",
+    "address": "인천광역시 옹진군 북도면 장봉로 227",
+    "addressLevel": "EXACT",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web1-20",
+        "rawCategory": null,
+        "sourceName": "관광공사 관광정보"
+      }
+    ]
+  },
+  {
+    "id": "web1-21",
+    "name": "장봉도 갯벌체험장",
+    "activity": "갯벌체험",
+    "activityId": "MUDFLAT",
+    "category": "water",
+    "islandId": "jang",
+    "islandName": "장봉도",
+    "address": "인천광역시 옹진군 북도면 장봉리",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web1-21",
+        "rawCategory": null,
+        "sourceName": "북도면사랑 / 옹진군"
+      }
+    ]
+  },
+  {
+    "id": "web1-22",
+    "name": "장봉도 국사봉 트레킹",
+    "activity": "트레킹",
+    "activityId": "TREKKING",
+    "category": "land",
+    "islandId": "jang",
+    "islandName": "장봉도",
+    "address": "인천광역시 옹진군 북도면 장봉리",
+    "addressLevel": "VILLAGE",
+    "lat": null,
+    "lng": null,
+    "tel": null,
+    "homepage": null,
+    "photo": null,
+    "origin": "웹 조사",
+    "verification": "VERIFIED",
+    "sources": [
+      {
+        "sourceType": "WEB_RESEARCH",
+        "externalId": "web1-22",
+        "rawCategory": null,
+        "sourceName": "북도면사랑"
+      }
+    ]
+  }
+]

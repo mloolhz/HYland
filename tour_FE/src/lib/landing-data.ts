@@ -136,19 +136,20 @@ export type Review = {
   text: string;
 };
 
-export const REVIEWS: Review[] = [
-  { isl: "백령도", name: "김OO", act: "사이클", text: "자전거로 섬 한바퀴 도니깐 기분이 너무 좋았어요~" },
-  { isl: "무의도", name: "이OO", act: "카약", text: "하나개 해수욕장에서 카약 체험! 물이 맑아서 최고였어요" },
-  { isl: "덕적도", name: "박OO", act: "SUP", text: "SUP 처음 타봤는데 강사님이 친절하게 알려주셨어요" },
-  { isl: "영종도", name: "최OO", act: "사이클", text: "해안 사이클 코스 노을 뷰가 진짜 예술입니다…" },
-  { isl: "소무의도", name: "정OO", act: "러닝", text: "무의바다누리길 트레일 러닝, 코스 난이도 딱 좋아요!" },
-  { isl: "장봉도", name: "강OO", act: "갯벌체험", text: "아이들이랑 갯벌체험 다녀왔는데 온 가족이 대만족!" },
-  { isl: "승봉도", name: "윤OO", act: "캠핑", text: "캠핑하면서 본 일몰이 아직도 눈에 아른거리네요" },
-  { isl: "자월도", name: "한OO", act: "낚시", text: "방파제 낚시 포인트 추천받아 갔는데 손맛 제대로!" },
-  { isl: "대이작도", name: "조OO", act: "하이킹", text: "풀등 모래섬 산책하고 부아산 전망대까지, 인생샷 건졌어요" },
-  { isl: "신도", name: "오OO", act: "사이클", text: "신도-시도-모도 자전거길 강추! 평지라 초보도 OK" },
-  { isl: "백령도", name: "서OO", act: "하이킹", text: "두무진 해안 트레킹, 서해의 해금강이라는 말이 실감나요" },
-  { isl: "무의도", name: "임OO", act: "패들보드", text: "패들보드 타고 바다 위에서 본 섬, 잊지 못할 거예요" },
+/** 랜딩 커뮤니티 카드용 고정 예시(실제 게시글 아님). 섬명은 플레이스홀더. */
+export const COMMUNITY_LANDING_EXAMPLE_REVIEWS: Review[] = [
+  {
+    isl: "OO도",
+    name: "김OO",
+    act: "사이클",
+    text: "섬 일주 사이클 코스가 평지라 초보도 편하게 달릴 수 있었어요.",
+  },
+  {
+    isl: "△△도",
+    name: "이OO",
+    act: "하이킹",
+    text: "해안 트레킹 하며 바다 풍경이 정말 인상적이었어요.",
+  },
 ];
 
 export const AVA_COLORS = [

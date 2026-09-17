@@ -1,19 +1,10 @@
 
 import { Link } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
-import { avaColor, REVIEWS, type Review } from "@/lib/landing-data";
+import { avaColor, COMMUNITY_LANDING_EXAMPLE_REVIEWS, type Review } from "@/lib/landing-data";
 
-function ReviewItem({ review }: { review: Review }) {
-  const ref = useRef<HTMLLIElement>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add("show")));
-  }, []);
-
+function ExampleReviewItem({ review }: { review: Review }) {
   return (
-    <li className="review-item" ref={ref}>
+    <li className="review-item review-item--example">
       <span className="r-ava" style={{ background: avaColor(review.name + review.isl) }}>
         {review.name[0]}
       </span>
@@ -30,41 +21,6 @@ function ReviewItem({ review }: { review: Review }) {
 }
 
 export function CommunitySection() {
-  const [items, setItems] = useState<{ id: number; review: Review }[]>([]);
-  const indexRef = useRef(0);
-  const idRef = useRef(0);
-
-  useEffect(() => {
-    const pushReview = () => {
-      const review = REVIEWS[indexRef.current++ % REVIEWS.length];
-      const id = idRef.current++;
-      setItems((prev) => {
-        const next = [...prev, { id, review }];
-        return next.length > 2 ? next.slice(-2) : next;
-      });
-    };
-
-    pushReview();
-    const t1 = setTimeout(pushReview, 500);
-    let tick = setInterval(pushReview, 3000);
-
-    const card = document.getElementById("liveCard");
-    const pause = () => clearInterval(tick);
-    const resume = () => {
-      clearInterval(tick);
-      tick = setInterval(pushReview, 3000);
-    };
-    card?.addEventListener("mouseenter", pause);
-    card?.addEventListener("mouseleave", resume);
-
-    return () => {
-      clearTimeout(t1);
-      clearInterval(tick);
-      card?.removeEventListener("mouseenter", pause);
-      card?.removeEventListener("mouseleave", resume);
-    };
-  }, []);
-
   return (
     <section className="sec" id="community">
       <div className="container com-wrap">
@@ -74,20 +30,6 @@ export function CommunitySection() {
           <p>
             다른 탐험가들의 생생한 후기가 올라오는 곳이에요.
           </p>
-          <div className="com-stats">
-            <div className="cs">
-              <b>1,248</b>
-              <span>누적 후기</span>
-            </div>
-            <div className="cs">
-              <b>+86</b>
-              <span>이번 주 새 후기</span>
-            </div>
-            <div className="cs">
-              <b>4.8 ★</b>
-              <span>평균 만족도</span>
-            </div>
-          </div>
           <div className="com-btns">
             <Link to="/community/write" className="btn btn-gold">
               후기 남기기
@@ -97,13 +39,11 @@ export function CommunitySection() {
             </Link>
           </div>
         </div>
-        <div className="live-card reveal rv-r" id="liveCard">
-          <div className="live-head">
-            <b>주요 탐험 후기</b>
-          </div>
-          <ul className="feed" aria-live="polite">
-            {items.map(({ id, review }) => (
-              <ReviewItem key={id} review={review} />
+        <div className="live-card live-card--example reveal rv-r">
+          <p className="live-card-example-label">예시 후기</p>
+          <ul className="feed feed--example">
+            {COMMUNITY_LANDING_EXAMPLE_REVIEWS.map((review) => (
+              <ExampleReviewItem key={review.isl + review.act} review={review} />
             ))}
           </ul>
         </div>

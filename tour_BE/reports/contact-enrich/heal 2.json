@@ -1,0 +1,185 @@
+{
+  "category": "heal",
+  "found": [
+    {
+      "id": 295,
+      "name": "강화 용두레마을",
+      "activity": "섬마을 투어",
+      "island": "강화도",
+      "matchedTitle": "강화 용두레마을",
+      "exactMatch": true,
+      "contentId": "128385",
+      "tel": "032-933-5711",
+      "homepage": "https://itour.incheon.go.kr/ssst/ssst/detail.do?pgListMode=S&cotId=ITD21122714555284277",
+      "addr": "인천광역시 강화군 내가면 황청포구로385번길 8",
+      "usetime": "상시 개방",
+      "restdate": "연중무휴"
+    },
+    {
+      "id": 297,
+      "name": "강화 화문석마을",
+      "activity": "섬마을 투어",
+      "island": "강화도",
+      "matchedTitle": "강화 화문석마을",
+      "exactMatch": true,
+      "contentId": "129291",
+      "tel": "032-934-2290",
+      "homepage": "https://itour.incheon.go.kr/ssst/ssst/detail.do?pgListMode=S&cotId=ITD21121610485525595",
+      "addr": "인천광역시 강화군 송해면 전망대로468번길 11",
+      "usetime": "상시 개방",
+      "restdate": "연중무휴"
+    },
+    {
+      "id": 337,
+      "name": "난정리 해바라기마을 정원",
+      "activity": "섬마을 투어",
+      "island": "교동도",
+      "matchedTitle": "난정리 해바라기마을 정원",
+      "exactMatch": true,
+      "contentId": "2765312",
+      "tel": "032-832-3031",
+      "homepage": "https://itour.incheon.go.kr/ssst/ssst/detail.do?pgListMode=S&cotId=APD21112609135816163",
+      "addr": "인천광역시 강화군 교동면 난정리 741-3",
+      "usetime": "상시 개방",
+      "restdate": "연중무휴"
+    },
+    {
+      "id": 354,
+      "name": "서포리웰빙삼림욕산책로",
+      "activity": "산림욕",
+      "island": "덕적도",
+      "matchedTitle": "서포리웰빙삼림욕산책로",
+      "exactMatch": true,
+      "contentId": "2782235",
+      "tel": null,
+      "homepage": "https://itour.incheon.go.kr/ssst/ssst/detail.do?cotId=APD21120710052220112#guide",
+      "addr": "인천광역시 옹진군 덕적면 덕적남로606번길 6",
+      "usetime": null,
+      "restdate": null
+    },
+    {
+      "id": 429,
+      "name": "통일사",
+      "activity": "섬마을 투어",
+      "island": "영흥도",
+      "matchedTitle": "통일사",
+      "exactMatch": true,
+      "contentId": "2605529",
+      "tel": "032-886-7529",
+      "homepage": "https://www.ongjin.go.kr/open_content/tour/#",
+      "addr": "인천광역시 옹진군 영흥면 영흥로722번길 146",
+      "usetime": "상시 개방",
+      "restdate": "연중무휴"
+    }
+  ],
+  "notFound": [
+    {
+      "id": 325,
+      "name": "유니아일랜드골프앤스파리조트",
+      "activity": "온천-스파",
+      "address": null
+    },
+    {
+      "id": 338,
+      "name": "대룡시장",
+      "activity": "섬마을 투어",
+      "address": "인천광역시 강화군 교동면 대룡리"
+    },
+    {
+      "id": 341,
+      "name": "굴업도 은하수 관측지",
+      "activity": "은하수 체험",
+      "address": "인천광역시 옹진군 덕적면 굴업리"
+    },
+    {
+      "id": 345,
+      "name": "삼신할미약수터",
+      "activity": "섬마을 투어",
+      "address": "인천광역시 옹진군 자월면 이작리"
+    },
+    {
+      "id": 351,
+      "name": "능동자갈마당",
+      "activity": "산림욕",
+      "address": "인천광역시 옹진군 덕적면 북리"
+    },
+    {
+      "id": 364,
+      "name": "문갑도 벽화마을",
+      "activity": "섬마을 투어",
+      "address": "인천광역시 옹진군 덕적면 문갑리"
+    },
+    {
+      "id": 368,
+      "name": "백령도 점박이물범 관찰지",
+      "activity": "물범 관찰",
+      "address": "인천광역시 옹진군 백령면 진촌리"
+    },
+    {
+      "id": 373,
+      "name": "보문사",
+      "activity": "섬마을 투어",
+      "address": "인천광역시 강화군 삼산면 삼산남로"
+    },
+    {
+      "id": 374,
+      "name": "석모도미네랄스파",
+      "activity": "온천-스파",
+      "address": null
+    },
+    {
+      "id": 382,
+      "name": "촛대바위",
+      "activity": "섬마을 투어",
+      "address": "인천광역시 옹진군 자월면 승봉리"
+    },
+    {
+      "id": 383,
+      "name": "배미꾸미해변 조각공원",
+      "activity": "섬마을 투어",
+      "address": "인천광역시 옹진군 북도면 모도리"
+    },
+    {
+      "id": 385,
+      "name": "시도염전",
+      "activity": "섬마을 투어",
+      "address": "인천광역시 옹진군 북도면 시도리"
+    },
+    {
+      "id": 387,
+      "name": "연평도 안보 여행코스",
+      "activity": "섬마을 투어",
+      "address": "인천광역시 옹진군 연평중앙로24번길 3"
+    },
+    {
+      "id": 399,
+      "name": "선녀바위해변",
+      "activity": "일몰 감상",
+      "address": "인천광역시 영종구 용유로380번길 21"
+    },
+    {
+      "id": 400,
+      "name": "씨사이드파크해수족욕장",
+      "activity": "온천-스파",
+      "address": null
+    },
+    {
+      "id": 415,
+      "name": "파라다이스시티/씨메르",
+      "activity": "온천-스파",
+      "address": null
+    },
+    {
+      "id": 421,
+      "name": "십리포해수욕장 소사나무 군락지",
+      "activity": "산림욕",
+      "address": "인천광역시 옹진군 영흥면 영흥북로 420-26"
+    },
+    {
+      "id": 428,
+      "name": "장경리해수욕장",
+      "activity": "일몰 감상",
+      "address": "인천광역시 옹진군 영흥면 영흥로757번길 6"
+    }
+  ]
+}

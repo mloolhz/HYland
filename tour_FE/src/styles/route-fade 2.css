@@ -1,0 +1,24 @@
+.route-fade-root {
+  transition: opacity 280ms ease;
+}
+
+.route-fade-root.is-route-fading-out {
+  opacity: 0;
+}
+
+.page-fade {
+  opacity: 0;
+  transition: opacity 280ms ease;
+}
+
+.page-fade.is-visible {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-fade-root,
+  .page-fade {
+    opacity: 1;
+    transition: none;
+  }
+}

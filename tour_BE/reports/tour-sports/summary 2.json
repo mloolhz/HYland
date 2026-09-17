@@ -1,0 +1,108 @@
+{
+  "generatedAt": "2026-08-21T16:56:34.595Z",
+  "source": "한국관광공사 국문 관광정보 서비스_GW / areaBasedList2",
+  "filters": {
+    "areaCode": 2,
+    "contentTypeId": 28
+  },
+  "apiTotalCount": 84,
+  "fetchedCount": 84,
+  "counts": {
+    "matched": 58,
+    "reviewRequired": 0,
+    "mainland": 19,
+    "outOfScope": 7
+  },
+  "byIsland": {
+    "baek": {
+      "name": "백령도",
+      "region": "백령·대청도권역",
+      "count": 0
+    },
+    "daech": {
+      "name": "대청도",
+      "region": "백령·대청도권역",
+      "count": 0
+    },
+    "yeonp": {
+      "name": "연평도",
+      "region": "연평도권역",
+      "count": 1
+    },
+    "gangh": {
+      "name": "강화도",
+      "region": "강화도권역",
+      "count": 34
+    },
+    "gyo": {
+      "name": "교동도",
+      "region": "강화도권역",
+      "count": 1
+    },
+    "seok": {
+      "name": "석모도",
+      "region": "강화도권역",
+      "count": 5
+    },
+    "jang": {
+      "name": "장봉도",
+      "region": "북도권역",
+      "count": 0
+    },
+    "sinsi": {
+      "name": "신도·시도·모도",
+      "region": "북도권역",
+      "count": 0
+    },
+    "yeongj": {
+      "name": "영종도",
+      "region": "영종구·서해구권역",
+      "count": 6
+    },
+    "muui": {
+      "name": "무의도",
+      "region": "영종구·서해구권역",
+      "count": 0
+    },
+    "yheung": {
+      "name": "영흥도",
+      "region": "영흥도권역",
+      "count": 10
+    },
+    "jawol": {
+      "name": "자월도",
+      "region": "자월도권역",
+      "count": 0
+    },
+    "seungb": {
+      "name": "승봉도",
+      "region": "자월도권역",
+      "count": 0
+    },
+    "ijak": {
+      "name": "대이작도",
+      "region": "자월도권역",
+      "count": 0
+    },
+    "deokj": {
+      "name": "덕적도",
+      "region": "덕적도권역",
+      "count": 1
+    },
+    "soya": {
+      "name": "소야도",
+      "region": "덕적도권역",
+      "count": 0
+    },
+    "mungap": {
+      "name": "문갑도",
+      "region": "덕적도권역",
+      "count": 0
+    },
+    "gureop": {
+      "name": "굴업도",
+      "region": "덕적도권역",
+      "count": 0
+    }
+  }
+}

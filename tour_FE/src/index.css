@@ -481,20 +481,18 @@ html.site-menu-open{overflow:hidden;overscroll-behavior:none}
 .com-wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:44px;align-items:center}
 .com-info h2{font-size:28px;font-weight:800;letter-spacing:-.02em;margin:12px 0 12px;color:var(--navy)}
 .com-info p{color:var(--muted);font-size:15px;margin-bottom:20px}
-.com-stats{display:flex;gap:0;margin-bottom:24px;border:1px solid var(--line);border-radius:10px;background:#fff;overflow:hidden}
-.cs{flex:1;text-align:center;padding:14px 8px}
-.cs+.cs{border-left:1px solid var(--line)}
-.cs b{display:block;font-size:21px;font-weight:900;color:var(--navy)}
-.cs span{font-size:12px;color:var(--muted);font-weight:600}
 .com-btns{display:flex;gap:10px}
 .live-card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 24px rgba(45,46,107,.1);padding:20px 20px 16px}
+.live-card-example-label{margin:0 0 12px;font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.02em}
 .live-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
 .live-badge{display:inline-flex;align-items:center;gap:6px;background:#FDECEC;color:#D42B2B;font-size:11px;font-weight:900;border-radius:5px;padding:5px 11px;letter-spacing:.05em}
 .live-dot{width:7px;height:7px;border-radius:50%;background:#D42B2B;animation:blink 1.1s ease-in-out infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
 .live-head b{font-size:15.5px;font-weight:800;color:var(--navy)}
 .feed{height:172px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;gap:9px;position:relative;isolation:isolate}
+.feed--example{height:auto;overflow:visible;justify-content:flex-start}
 .review-item{display:flex;gap:11px;background:#F4F7FB;border:1px solid #E8EEF5;border-radius:10px;padding:11px 14px;opacity:0;transform:translateY(16px);transition:opacity .4s,transform .4s;flex:none}
+.review-item--example{opacity:1;transform:none}
 .review-item.show{opacity:1;transform:none}
 .review-item.hide{opacity:0;transform:translateY(-16px)}
 .r-ava{width:36px;height:36px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;font-weight:900}
