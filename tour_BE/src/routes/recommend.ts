@@ -3,6 +3,10 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "../prisma";
 import { askGemini, askGeminiStream } from "../services/gemini";
 import { buildCommunityTips, findIslandNamesInText } from "../services/community-tips";
+import {
+  buildOutOfScopeRecommendResponse,
+  evaluateQuestionScope,
+} from "../services/recommend-question-scope";
 import { ISLAND_PROFILES } from "../data/islandProfiles";
 import { ISLAND_EDITORIALS } from "../data/islandEditorial";
 
@@ -178,7 +182,7 @@ function buildRecommendPrompt(
   const excludedSportIds = extractRecommendedSportIds(history);
 
   return `
-당신은 인천 섬 여행 도우미입니다. 레저 활동 추천뿐 아니라 각 섬의 특산물·향토음식·교통·숙소 등 인천 섬 여행과 관련된 질문에도 아는 대로 성실하게 답변하세요.
+당신은 **인천 섬**(강화·영흥·무의·덕적·자월·석모·백령 등 서비스 섬) 전용 여행 도우미입니다. 레저 추천뿐 아니라 해당 섬의 특산물·향토음식·배편·교통·숙소 등 **섬 여행** 질문에만 답하세요. 제주·부산 등 타 지역이나 송도·차이나타운 등 **인천 내륙만** 다루는 관광·코스 질문은 정중히 범위 밖임을 알리세요.
 다만 실제로 존재하는지 확인할 수 없는 특정 음식점 이름·주소·전화번호 등은 절대 지어내지 마세요. 그런 질문에는 지역 특산물·음식 종류처럼 일반적으로 알려진 정보 위주로 안내하고, 구체적인 상호는 직접 검색해보시라고 안내하세요.
 
 레저 활동을 추천해야 하는 질문(활동·코스 추천 등)이면 "recommendations"·"course"는 아래 종목 목록에서만 채우세요. 목록에 없는 종목·섬은 절대 만들지 마세요.
@@ -217,8 +221,8 @@ ${buildWeatherSection(persona)}
 
 사용자 질문: "${question}"
 
-레저 활동 추천과 무관한 질문(맛집·특산물, 일반 상식, 날씨만 단순히 묻는 질문, 예약 취소, 길 안내, 정치 등)이어도 회피하지 말고
-"text" 필드에 아는 대로 성실하게 답변하세요. 이 경우 "recommendations"는 빈 배열, "course"는 null로 두세요.
+**인천 섬** 레저·여행 계획(맛집·특산물, 배편·교통, 날씨, 섬 정보 등)은 "text"에 성실히 답하세요. 이 경우 "recommendations"는 빈 배열, "course"는 null로 두세요.
+타 지역·인천 내륙만·프로그래밍·과제 등 **인천 섬 여행과 무관한** 요청은 답하지 말고, text에 정중히 범위 밖임을 알리고 recommendations·course·tips·followups는 비우세요.
 
 마크다운(\`\`\`) 없이 순수 JSON만 출력하세요:
 {
@@ -246,8 +250,8 @@ course.steps의 "time"은 선택 필드입니다. 하루 일정 전체를 시간
 function buildQuestionRelevanceFilterPrompt(questions: string[]): string {
   return `
 아래는 "인천 섬 레저·여행 추천" 서비스에서 실제 사용자들이 입력했던 질문 목록입니다.
-이 중 인천 섬 여행·레저 활동·코스·교통·숙소·맛집/특산물 등 이 서비스와 관련 있는 질문만 골라주세요.
-"안녕", "테스트"처럼 인사말·잡담이거나 서비스와 무관한 질문은 제외하세요.
+이 중 **인천 섬**(강화·영흥·무의 등) 여행·레저·코스·배편·숙소·맛집/특산물과 관련 있는 질문만 골라주세요.
+제주·부산 등 타 지역, 송도·차이나타운 등 **인천 내륙만** 다루는 질문, "안녕"·"테스트" 같은 잡담·무관 질문은 제외하세요.
 
 질문 목록:
 ${JSON.stringify(questions)}
@@ -437,6 +441,23 @@ router.post("/recommend/stream", async (req, res) => {
     return res.status(400).json({ error: "question이 필요합니다." });
   }
 
+  const scope = await evaluateQuestionScope(question, history);
+  if (scope && !scope.inScope) {
+    console.log("[stream] 범위 밖 질문:", scope.summary, "|", scope.reason);
+    const refused = buildOutOfScopeRecommendResponse();
+    res.setHeader("Content-Type", "text/event-stream; charset=utf-8");
+    res.setHeader("Cache-Control", "no-cache, no-transform");
+    res.setHeader("Connection", "keep-alive");
+    res.setHeader("X-Accel-Buffering", "no");
+    if (typeof res.flushHeaders === "function") {
+      res.flushHeaders();
+    }
+    writeSSE(res, "chunk", { text: refused.text });
+    writeSSE(res, "done", refused);
+    res.end();
+    return;
+  }
+
   res.setHeader("Content-Type", "text/event-stream; charset=utf-8");
   res.setHeader("Cache-Control", "no-cache, no-transform");
   res.setHeader("Connection", "keep-alive");
@@ -508,6 +529,12 @@ router.post("/recommend", async (req, res) => {
 
     if (!question || typeof question !== "string") {
       return res.status(400).json({ error: "question이 필요합니다." });
+    }
+
+    const scope = await evaluateQuestionScope(question, history);
+    if (scope && !scope.inScope) {
+      console.log("[recommend] 범위 밖 질문:", scope.summary, "|", scope.reason);
+      return res.json(buildOutOfScopeRecommendResponse());
     }
 
     const prompt = buildRecommendPrompt(question, history, persona);

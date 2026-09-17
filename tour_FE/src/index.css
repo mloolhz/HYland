@@ -532,8 +532,9 @@ footer{background:var(--sea-dark);color:#B6C4D8;margin-top:92px}
 .foot-main{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;padding:28px 0;flex-wrap:wrap}
 .foot-info{display:flex;flex-direction:column;gap:5px;font-size:12.5px;color:#7E90A8}
 .foot-links{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
-.foot-links a{font-size:13.5px;color:#9DAEC5;transition:.15s}
-.foot-links a:hover{color:#fff}
+.foot-links a,.foot-links .foot-link-btn{font-size:13.5px;color:#9DAEC5;transition:.15s}
+.foot-links a:hover,.foot-links .foot-link-btn:hover{color:#fff}
+.foot-links .foot-link-btn{margin:0;padding:0;border:none;background:none;font:inherit;cursor:pointer;text-decoration:none}
 
 /* ---------- misc ---------- */
 .toast{position:fixed;left:50%;bottom:34px;transform:translate(-50%,16px);background:var(--navy);color:#fff;font-size:14px;font-weight:700;border-radius:10px;padding:13px 24px;box-shadow:0 14px 34px rgba(45,46,107,.35);opacity:0;pointer-events:none;transition:.3s;z-index:200}

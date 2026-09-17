@@ -771,6 +771,11 @@
   background: #f1f5f9;
 }
 
+.auth-modal--legal {
+  max-width: min(560px, 94vw);
+  max-height: min(85vh, 720px);
+}
+
 .auth-modal-body {
   padding: 16px 18px;
   overflow-y: auto;

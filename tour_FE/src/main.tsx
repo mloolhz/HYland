@@ -34,6 +34,7 @@ import { IslandBtiIntro } from "@/pages/IslandBtiIntro";
 import { IslandBtiTest } from "@/pages/IslandBtiTest";
 import { IslandBtiResult } from "@/pages/IslandBtiResult";
 import { Safety } from "@/pages/Safety";
+import { LegalDocumentPage } from "@/pages/LegalDocumentPage";
 import { ProfileCharacterProvider } from "@/context/ProfileCharacterContext";
 import { SessionProvider } from "@/store/session";
 import { VisitedIslandsProvider } from "@/store/visited-islands";
@@ -59,6 +60,7 @@ import "./styles/island-bti-promo.css";
 import "./styles/admin.css";
 import "./styles/route-fade.css";
 import "./styles/safety.css";
+import "./styles/legal.css";
 
 const router = createBrowserRouter([
   { path: "/", element: <LandingPage />, errorElement: <RouterError /> },
@@ -75,6 +77,7 @@ const router = createBrowserRouter([
       { path: "sports", element: <Sports /> },
       { path: "sports/facility/:facilityId", element: <FacilityDetail /> },
       { path: "safety", element: <Safety /> },
+      { path: "legal/:doc", element: <LegalDocumentPage /> },
       { path: "ai-recommend", element: <AiRecommend /> },
       { path: "community", element: <Community /> },
       { path: "community/write", element: <RequireAuth><WritePost /></RequireAuth> },

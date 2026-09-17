@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { LegalDocumentBody } from "@/components/legal/LegalDocumentBody";
+import { getLegalDocument } from "@/content/legal";
 
 type TermsAgreementProps = {
   terms: boolean;
@@ -7,11 +9,12 @@ type TermsAgreementProps = {
   onChange: (next: { terms: boolean; privacy: boolean; marketing: boolean }) => void;
 };
 
-function TermsModal({ title, onClose }: { title: string; onClose: () => void }) {
+function TermsModal({ kind, onClose }: { kind: "terms" | "privacy"; onClose: () => void }) {
+  const { title, sections } = getLegalDocument(kind);
   return (
     <div className="auth-modal-backdrop" onClick={onClose} role="presentation">
       <div
-        className="auth-modal"
+        className="auth-modal auth-modal--legal"
         role="dialog"
         aria-modal="true"
         aria-label={title}
@@ -24,16 +27,7 @@ function TermsModal({ title, onClose }: { title: string; onClose: () => void }) 
           </button>
         </div>
         <div className="auth-modal-body">
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut
-            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-            laboris nisi ut aliquip ex ea commodo consequat.
-          </p>
-          <p>
-            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-            mollit anim id est laborum.
-          </p>
+          <LegalDocumentBody sections={sections} compact />
         </div>
       </div>
     </div>
@@ -69,7 +63,7 @@ function AuthCheckbox({
 }
 
 export function TermsAgreement({ terms, privacy, marketing, onChange }: TermsAgreementProps) {
-  const [modal, setModal] = useState<string | null>(null);
+  const [modal, setModal] = useState<"terms" | "privacy" | null>(null);
   const allChecked = terms && privacy && marketing;
 
   const setAll = (checked: boolean) => {
@@ -96,7 +90,7 @@ export function TermsAgreement({ terms, privacy, marketing, onChange }: TermsAgr
             </>
           }
         />
-        <button type="button" className="auth-terms-view" onClick={() => setModal("이용약관")}>
+        <button type="button" className="auth-terms-view" onClick={() => setModal("terms")}>
           보기 →
         </button>
       </div>
@@ -111,7 +105,7 @@ export function TermsAgreement({ terms, privacy, marketing, onChange }: TermsAgr
             </>
           }
         />
-        <button type="button" className="auth-terms-view" onClick={() => setModal("개인정보 처리방침")}>
+        <button type="button" className="auth-terms-view" onClick={() => setModal("privacy")}>
           보기 →
         </button>
       </div>
