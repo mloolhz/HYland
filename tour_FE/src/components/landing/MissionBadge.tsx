@@ -1,7 +1,13 @@
 import type { CSSProperties } from "react";
 import { useMissionProgress } from "@/store/mission-progress";
 import { ISLANDS } from "@/lib/island-data";
-import { CATEGORY_META, missionQuestPercent, missionQuestState, type MissionQuest } from "@/mocks/missions";
+import {
+  CATEGORY_META,
+  missionQuestPercent,
+  missionQuestState,
+  type MissionBadgeState,
+  type MissionQuest,
+} from "@/mocks/missions";
 import { IslandVisitStamp } from "./IslandVisitStamp";
 import { SPORT_BADGE_ICONS } from "./sport-badge-icons";
 
@@ -11,12 +17,22 @@ type MissionBadgeProps = {
   size?: number;
   /** 호버 시 배지 정보 툴팁 표시 */
   tooltip?: boolean;
+  /**
+   * 상태를 직접 지정한다. 랜딩 프리뷰처럼 "내가 받은 배지"가 아니라 견본으로
+   * 보여줄 때 쓴다 — 기본값은 미션 진행도에서 계산한 실제 상태다.
+   */
+  state?: MissionBadgeState;
 };
 
 /** 수집 배지 — 섬은 타원형 여권 스탬프, 그 외는 원형 메달 */
-export function MissionBadge({ quest, size = 96, tooltip = true }: MissionBadgeProps) {
+export function MissionBadge({
+  quest,
+  size = 96,
+  tooltip = true,
+  state: stateOverride,
+}: MissionBadgeProps) {
   const { completedAt } = useMissionProgress();
-  const state = missionQuestState(quest);
+  const state = stateOverride ?? missionQuestState(quest);
   const percent = missionQuestPercent(quest);
   const { color } = CATEGORY_META[quest.category];
   const isIslandBadge = quest.category === "섬";

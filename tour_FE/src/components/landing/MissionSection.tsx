@@ -1,19 +1,25 @@
 import { Link } from "react-router-dom";
 import { MissionBadge } from "./MissionBadge";
 import { MissionLeaderboardPreview } from "./MissionLeaderboardPreview";
-import { MISSION_QUESTS, missionQuestState, type MissionQuest } from "@/mocks/missions";
+import { MISSION_QUESTS, type MissionQuest } from "@/mocks/missions";
 
-/** 랜딩 프리뷰: 6개 카테고리 + 획득/진행/전설이 골고루 보이도록 큐레이션 */
-const PREVIEW_IDS = [1, 10, 15, 30, 35, 49, 34, 44];
+/**
+ * 랜딩 프리뷰 — 섬·해상·육상·힐링과 그랜드슬램이 고루 보이도록 고른 8개.
+ * 예전에는 35(존재하지 않는 id)가 섞여 있어 .filter 가 조용히 버리는 바람에
+ * 7칸만 나왔다. 카테고리를 재정비하며 육상이 30~34로 줄어든 탓이다.
+ */
+const PREVIEW_IDS = [1, 10, 15, 20, 30, 49, 34, 44];
 
 const PREVIEW_BADGES = PREVIEW_IDS.map((id) => MISSION_QUESTS.find((q) => q.id === id)).filter(
   (q): q is MissionQuest => Boolean(q),
 );
 
+/**
+ * 예시로 보여주는 배지라 진행 상태를 쓰지 않는다.
+ * mock 의 고정 상태를 그대로 쓰면 로그인도 안 한 사람에게 "획득 완료 ✨" 가
+ * 떠서 자기 기록으로 읽힌다.
+ */
 function badgeDesc(quest: MissionQuest): string {
-  const state = missionQuestState(quest);
-  if (state === "earned") return "획득 완료 ✨";
-  if (state === "doing") return `진행 중 · ${quest.current}/${quest.target}${quest.unit}`;
   return `${quest.target}${quest.unit} 달성 시 획득`;
 }
 
@@ -38,7 +44,9 @@ export function MissionSection() {
             <div className="mb-grid">
               {PREVIEW_BADGES.map((quest) => (
                 <div className="mb-item" key={quest.id}>
-                  <MissionBadge quest={quest} size={84} />
+                  {/* 랜딩 배지는 예시용이다. 툴팁을 끄고 상태도 미획득으로 고정한다 —
+                      mock 의 획득 상태를 그대로 그리면 내 기록처럼 보여 오해를 준다 */}
+                  <MissionBadge quest={quest} size={84} tooltip={false} state="locked" />
                   <b className="mb-item__title">{quest.title}</b>
                   <span className="mb-item__desc">{badgeDesc(quest)}</span>
                 </div>

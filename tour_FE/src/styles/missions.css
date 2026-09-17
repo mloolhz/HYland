@@ -1132,9 +1132,10 @@
   cursor: help;
 }
 
+/* .mb-item:hover 는 뺐다 — 랜딩 미션 배지는 예시라 호버 반응이 없어야 한다.
+   여권 쪽 배지는 tooltip 이 켜져 있어 .mbadge--interactive 로 그대로 동작한다. */
 .mbadge--interactive:hover,
 .mbadge--interactive:focus-visible,
-.mb-item:hover .mbadge,
 .ms-quest:hover .mbadge {
   transform: translateY(-4px) scale(1.06);
   filter: drop-shadow(0 8px 16px rgba(45, 46, 107, 0.18));
