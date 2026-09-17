@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import type { LeisureFacility } from "@/api/leisure";
+import { FACILITY_PLACEHOLDER } from "@/lib/facility-photo";
 import { resolveSportIslandAccent } from "@/lib/sports-region";
 
 /** 한 번에 보여줄 카드 수 — 넘치면 "더 보기"로 펼친다 */
@@ -8,31 +9,18 @@ const PAGE_SIZE = 8;
 
 function FacilityPhoto({ facility }: { facility: LeisureFacility }) {
   const [failed, setFailed] = useState(false);
-
-  if (!facility.photo || failed) {
-    return (
-      <div className="fc-photo fc-photo--empty" aria-hidden="true">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-          <rect x="3" y="5" width="18" height="14" stroke="currentColor" strokeWidth="1.6" />
-          <circle cx="9" cy="10" r="1.6" fill="currentColor" />
-          <path
-            d="M3 16l5-4 3 2 4-5 6 7"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </div>
-    );
-  }
+  /** 사진이 없거나 로딩에 실패하면 자리표시로 떨어진다 */
+  const placeholder = !facility.photo || failed;
 
   return (
     <img
-      className="fc-photo"
-      src={facility.photo}
-      alt={`${facility.name} 사진`}
+      className={`fc-photo${placeholder ? " fc-photo--placeholder" : ""}`}
+      src={placeholder ? FACILITY_PLACEHOLDER : (facility.photo ?? "")}
+      alt={placeholder ? "" : `${facility.name} 사진`}
+      aria-hidden={placeholder || undefined}
       loading="lazy"
-      onError={() => setFailed(true)}
+      /* 자리표시까지 실패하면 되돌릴 곳이 없으므로 실제 사진일 때만 감시한다 */
+      onError={placeholder ? undefined : () => setFailed(true)}
     />
   );
 }

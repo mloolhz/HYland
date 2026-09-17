@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { fetchFacilityById, type LeisureFacilityDetail } from "@/api/leisure";
 import { activityKey } from "@/lib/activity-key";
+import { FACILITY_PLACEHOLDER } from "@/lib/facility-photo";
 import { SPORTS_CATEGORIES, SPORTS_DATA } from "@/data/sports";
 import {
   resolveSportIslandAccent,
@@ -126,28 +127,14 @@ export function FacilityDetail() {
 
       <div className={`${CONTAINER} fd-body`}>
         <div className="fd-figure">
-          {showImage ? (
-            <img
-              className="fd-photo"
-              src={facility.photo ?? ""}
-              alt={`${facility.name} 사진`}
-              onError={() => setImageFailed(true)}
-            />
-          ) : (
-            <div className="fd-photo fd-photo--empty">
-              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <rect x="3" y="5" width="18" height="14" stroke="currentColor" strokeWidth="1.5" />
-                <circle cx="9" cy="10" r="1.6" fill="currentColor" />
-                <path
-                  d="M3 16l5-4 3 2 4-5 6 7"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <span>등록된 사진이 없습니다</span>
-            </div>
-          )}
+          {/* 사진이 없으면 빈 상자 대신 자리표시 이미지를 깐다 */}
+          <img
+            className={`fd-photo${showImage ? "" : " fd-photo--placeholder"}`}
+            src={showImage ? (facility.photo ?? "") : FACILITY_PLACEHOLDER}
+            alt={showImage ? `${facility.name} 사진` : ""}
+            aria-hidden={showImage ? undefined : true}
+            onError={showImage ? () => setImageFailed(true) : undefined}
+          />
         </div>
 
         <section className="fd-section" aria-labelledby="fd-detail-heading">
