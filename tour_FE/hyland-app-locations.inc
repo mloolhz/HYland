@@ -24,8 +24,8 @@ location ~ ^/(islands|sports|missions|leaderboard|community)(/|$) {
     proxy_set_header X-Forwarded-Proto $scheme;
 }
 
-# leisure-sports 뒤에 (/|$) 없으면 /leisure-sports-hero.png 같은 정적 파일이 API 로 프록시됨
-location ~ ^/(auth|bti|visits|profile|weather|leisure-sports|submissions|notifications|api|health)(/|$) {
+# API 하위 경로(/reports/count, /auth/login 등)까지 프록시. reports 가 빠지면 신고 API 가 SPA HTML 로 떨어진다.
+location ~ ^/(auth|bti|visits|profile|weather|leisure-sports|submissions|notifications|reports|api|health)(/.*|$) {
     proxy_pass http://api:4000;
     proxy_http_version 1.1;
     proxy_set_header Host $host;

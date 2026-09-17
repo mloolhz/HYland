@@ -649,6 +649,20 @@ export function SiteHeader() {
               ↗
             </span>
           </a>
+          {user?.role === "ADMIN" && (
+            <div className="nav-drawer-admin">
+              <Link to="/admin/submissions" className="btn-admin" onClick={closeMenu}>
+                검수
+              </Link>
+              <Link
+                to="/admin/reports"
+                className="btn-admin btn-admin--report"
+                onClick={closeMenu}
+              >
+                신고
+              </Link>
+            </div>
+          )}
           <div className="nav-drawer-icons">
             <Link
               to="/mypage"
