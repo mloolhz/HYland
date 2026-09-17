@@ -878,6 +878,17 @@
   filter: drop-shadow(0 0 5px color-mix(in srgb, var(--isl-region-color) 55%, transparent));
 }
 
+/* 랜딩 프리뷰 지도 — 클릭도 툴팁도 없으므로 호버 반응까지 없애 그림처럼 둔다.
+   포인터 이벤트를 끊으면 아래 :hover 규칙이 아예 발동하지 않는다. */
+.isl-map-svg--readonly .isl-explorer,
+.isl-map-svg--readonly .isl-explorer .isl-hit-area,
+/* 위 .isl-map-svg .isl-explorer.todo/.done .isl-hit-area 가 pointer-events:fill 로
+   되돌리므로 같은 개수의 클래스로 맞춰 준다 */
+.isl-map-svg--readonly .isl-explorer.todo .isl-hit-area,
+.isl-map-svg--readonly .isl-explorer.done .isl-hit-area {
+  pointer-events: none;
+}
+
 .isl-map-svg .isl-explorer:hover .isl-hit-area,
 .isl-map-svg .isl-explorer:focus-visible .isl-hit-area {
   fill: color-mix(in srgb, var(--isl-region-color) 44%, transparent);

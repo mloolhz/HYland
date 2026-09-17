@@ -439,52 +439,63 @@
   background: #e2e8f0;
 }
 
+/* 각 사 브랜드 버튼 — 가로로 꽉 차게 위아래로 쌓는다 */
 .auth-social {
   display: flex;
-  gap: 9px;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .auth-social-btn {
-  flex: 1;
-  border: 0.5px solid #e2e8f0;
-  border-radius: 6px;
-  padding: 11px 8px;
+  width: 100%;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 10px;
+  padding: 12px 14px;
+  /* 검정 테두리는 쓰지 않는다 — 흰 카드 위에서 구글 버튼만 보이게 할 정도로 옅게 */
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
   background: #fff;
+  color: #191919;
   cursor: pointer;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
 }
 
 .auth-social-btn:hover {
-  border-color: #cbd5e1;
+  box-shadow: 0 2px 8px rgba(25, 25, 25, 0.12);
 }
 
-.auth-social-icon {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  font-weight: 800;
+.auth-social-btn:active {
+  transform: translateY(1px);
 }
 
-.auth-social-google {
-  background: #f1f5f9;
-  color: #5f6b7c;
-}
-
-.auth-social-kakao {
+.auth-social-btn--kakao {
   background: #fee500;
-  color: #3c1e1e;
+  border-color: #fee500;
 }
 
+.auth-social-mark {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+}
+
+.auth-social-mark svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* 마크는 왼쪽에 두되 글자는 버튼 한가운데 오도록 — 마크 폭(+gap)만큼 오른쪽을 비운다 */
 .auth-social-label {
-  font-size: 13px;
-  color: #5f6b7c;
+  flex: 1;
+  text-align: center;
+  margin-right: 30px;
+  /* 로그인 버튼(.auth-submit)과 같은 굵기·크기로 맞춘다 */
+  font-size: 15px;
+  font-weight: 500;
+  color: inherit;
 }
 
 .auth-guest-btn {

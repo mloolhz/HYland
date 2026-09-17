@@ -4,7 +4,6 @@ import { CommunityHeader } from "@/components/community/CommunityHeader";
 import { FilterBar, type FilterValue, type ViewKey } from "@/components/community/FilterBar";
 import { GalleryGrid } from "@/components/community/GalleryGrid";
 import { Lightbox } from "@/components/community/Lightbox";
-import { PopularIslands } from "@/components/community/PopularIslands";
 import { PostList } from "@/components/community/PostList";
 import { ProfileCard } from "@/components/community/ProfileCard";
 import { SelectedIslands } from "@/components/community/SelectedIslands";
@@ -297,7 +296,6 @@ export function Community() {
           <aside className="cm-sidebar">
             <div className="cm-sidebar-sticky">
               <ProfileCard />
-              <PopularIslands />
             </div>
           </aside>
         </div>

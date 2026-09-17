@@ -298,6 +298,8 @@ export function IslandExplorerMap({
         aria-label={readonly ? undefined : "섬 클릭 영역"}
         className={[
           "isl-map-svg",
+          /* 랜딩 프리뷰는 클릭도 툴팁도 없다. CSS 의 :hover 까지 막아 그림처럼 둔다 */
+          readonly ? "isl-map-svg--readonly" : "",
           !readonly && selectedId ? "isl-map-has-selection" : "",
           !readonly && activeRegion ? "isl-map-has-region" : "",
         ]

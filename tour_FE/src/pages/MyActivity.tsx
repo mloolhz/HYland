@@ -5,7 +5,6 @@ import { demoProps } from "@/components/landing/ToastProvider";
 import { EmptyState } from "@/components/community/EmptyState";
 import { MyCommentCard } from "@/components/community/MyCommentCard";
 import { PostList } from "@/components/community/PostList";
-import { PopularIslands } from "@/components/community/PopularIslands";
 import { ProfileCard } from "@/components/community/ProfileCard";
 import { ISLAND_BTI } from "@/constants/island";
 import { isDemoLoggedIn } from "@/constants/auth";
@@ -212,7 +211,6 @@ export function MyActivity() {
           <aside className="cm-sidebar">
             <div className="cm-sidebar-sticky">
               <ProfileCard />
-              <PopularIslands />
             </div>
           </aside>
         </div>
