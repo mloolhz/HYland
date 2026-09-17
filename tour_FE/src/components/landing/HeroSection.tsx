@@ -224,9 +224,12 @@ export function HeroSection() {
             </div>
           </aside>
           )}
-          <Link className="hero-safety-link" to="/safety">
-            섬 안전정보
-          </Link>
+          {/* 로그인하면 여권 카드 안 "안전 정보" 버튼과 겹치므로 로그인 전에만 보인다 */}
+          {!isLoggedIn && (
+            <Link className="hero-safety-link" to="/safety">
+              섬 안전정보
+            </Link>
+          )}
         </div>
       </div>
 
