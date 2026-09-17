@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import {
   getAiRecommendation,
   getAiRecommendationStream,
-  getPopularQuestions,
   getSuggestedQuestions,
   getWeather,
   saveTop3Recommendation,
@@ -67,15 +66,6 @@ type AiTurn = {
 function createId() {
   return `msg-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
 }
-
-/**
- * 대화 내용을 모듈 레벨에 캐시한다.
- * AI추천 → 커뮤니티 → 다시 AI추천으로 이동하면 컴포넌트가 언마운트·리마운트되며
- * 보던 대화가 사라졌다. 라우터를 건드리지 않고, 화면 이동(SPA) 사이에는 대화를
- * 유지한다. 전체 새로고침에서는 초기화된다(세션의 자연스러운 종료로 본다).
- */
-let cachedTurns: AiTurn[] = [];
-let cachedTripForm: TripIntentFormValue | null = null;
 
 function prefersReducedMotion(): boolean {
   return window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
@@ -164,29 +154,13 @@ export function AiRecommend() {
   const { hasResult, islandBtiResultCode } = useIslandBti();
   const [sessionId] = useState(() => getAiSessionId());
 
-  const [tripForm, setTripForm] = useState<TripIntentFormValue>(() => cachedTripForm ?? defaultTripForm());
-  const [turns, setTurns] = useState<AiTurn[]>(() => cachedTurns);
+  const [tripForm, setTripForm] = useState<TripIntentFormValue>(defaultTripForm);
+  const [turns, setTurns] = useState<AiTurn[]>([]);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [bootstrapped, setBootstrapped] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [showConditionsSummary, setShowConditionsSummary] = useState(false);
-  // 인기질문은 "표시 중 교체"가 거슬리므로(정적 예시 → 서버 질문으로 갑자기 바뀜),
-  // 마운트 시 한 번만 정하고 그 뒤로는 안 바꾼다. 세션 캐시에 있으면 그걸 즉시
-  // 보여주고, 없으면 예시 질문을 보여준 뒤 백그라운드로 캐시만 갱신한다
-  // (stale-while-revalidate) — 갱신분은 다음 진입 때 반영된다.
-  const [popularQuestions] = useState<string[]>(() => {
-    try {
-      const cached = sessionStorage.getItem("ai-popular-questions");
-      if (cached) {
-        const parsed = JSON.parse(cached);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-      }
-    } catch {
-      // 세션스토리지 접근 불가(사생활 보호 모드 등) — 예시 질문으로 진행
-    }
-    return [];
-  });
 
   const chatScrollRef = useRef<HTMLDivElement>(null);
   const turnRefs = useRef<Map<string, HTMLDivElement>>(new Map());
@@ -196,14 +170,6 @@ export function AiRecommend() {
   const introOuterRef = useRef<HTMLElement>(null);
   const introRef = useRef<HTMLDivElement>(null);
   const [introTopOffset, setIntroTopOffset] = useState<number | null>(null);
-
-  // 대화·조건을 모듈 캐시에 동기화 — 화면을 떠났다 돌아와도 보던 내용이 유지된다.
-  useEffect(() => {
-    cachedTurns = turns;
-  }, [turns]);
-  useEffect(() => {
-    cachedTripForm = tripForm;
-  }, [tripForm]);
 
   // StrictMode의 개발 모드 mount→unmount→remount 시뮬레이션에서 cleanup만 있으면
   // remount 시 true로 복구되지 않아 이후 모든 타이핑이 첫 틱에서 즉시 중단된다.
@@ -244,7 +210,7 @@ export function AiRecommend() {
     settingsOpenRef.current = settingsOpen;
   }, [settingsOpen]);
 
-  // .ai-intro의 "닫힌" 높이는 폰트 로딩·인기질문 비동기 로딩 등으로 첫 렌더 이후에도
+  // .ai-intro의 "닫힌" 높이는 폰트 로딩 등으로 첫 렌더 이후에도
   // 계속 바뀔 수 있어, 의존성 배열로 트리거를 일일이 나열하는 대신 ResizeObserver로
   // 실제 크기 변화를 직접 감지해 패널이 닫혀 있는 동안 항상 최신 상태로 재측정한다.
   // (뷰포트 자체가 바뀌는 경우는 .ai-page의 min-height:100vh가 반응하므로 window
@@ -605,18 +571,6 @@ export function AiRecommend() {
   }, []);
 
   useEffect(() => {
-    // 화면은 그대로 두고 캐시만 갱신한다. 지금 보이는 칩을 갑자기 바꾸지 않으려는 것.
-    void getPopularQuestions().then((qs) => {
-      if (qs.length === 0) return;
-      try {
-        sessionStorage.setItem("ai-popular-questions", JSON.stringify(qs));
-      } catch {
-        // 저장 실패해도 무방 — 다음 진입 때 다시 시도한다
-      }
-    });
-  }, []);
-
-  useEffect(() => {
     if (initialHandled.current) return;
 
     if (initialMessage) {
@@ -667,10 +621,7 @@ export function AiRecommend() {
             <h1 className="ai-intro__title">어떤 섬 여행을 떠나볼까요?</h1>
 
             <div className="ai-example-chips">
-              {(popularQuestions.length > 0
-                ? popularQuestions
-                : AI_RECOMMEND_COPY.exampleQuestions
-              ).map((q) => (
+              {AI_RECOMMEND_COPY.exampleQuestions.map((q) => (
                 <button
                   key={q}
                   type="button"
