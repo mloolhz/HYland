@@ -472,14 +472,17 @@
   font-weight: 800;
 }
 
+.auth-social-icon svg {
+  display: block;
+}
+
 .auth-social-google {
-  background: #f1f5f9;
-  color: #5f6b7c;
+  background: #fff;
+  border: 1px solid #e2e8f0;
 }
 
 .auth-social-kakao {
   background: #fee500;
-  color: #3c1e1e;
 }
 
 .auth-social-label {
