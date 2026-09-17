@@ -14,6 +14,8 @@ RUN npm ci
 
 COPY tour_BE/src ./src
 COPY tour_BE/public ./public
+# db:seed:leisure — leisure_sports 145곳 입력
+COPY tour_BE/reports/leisure-candidates/seed-input.json ./reports/leisure-candidates/seed-input.json
 # prisma/seed.ts — @/* → ../tour_FE/src (tsconfig paths)
 COPY tour_FE/src /tour_FE/src
 
