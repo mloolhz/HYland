@@ -1,6 +1,7 @@
 import type { IslandBtiResultCode, IslandBtiResultData } from "@/types/island-bti";
 import { ISLAND_BTI_AXIS_VALUES } from "@/types/island-bti";
 import type { IslandBtiScoreMap } from "@/lib/island-bti";
+import { ISLAND_BTI_ISLAND_MATCHES } from "@/data/island-bti/island-matches";
 
 export const ISLAND_BTI_RESULT_CODES: IslandBtiResultCode[] = [
   "AWCP",
@@ -21,7 +22,7 @@ export const ISLAND_BTI_RESULT_CODES: IslandBtiResultCode[] = [
   "BLIF",
 ];
 
-export const ISLAND_BTI_RESULTS: Record<IslandBtiResultCode, IslandBtiResultData> = {
+const BASE_ISLAND_BTI_RESULTS: Record<IslandBtiResultCode, Omit<IslandBtiResultData, "recommendedIslandReasons">> = {
   AWCP: {
     code: "AWCP",
     themeColor: "#087E8B",
@@ -343,6 +344,17 @@ export const ISLAND_BTI_RESULTS: Record<IslandBtiResultCode, IslandBtiResultData
     cautionMatch: "AWCP",
   },
 };
+
+export const ISLAND_BTI_RESULTS: Record<IslandBtiResultCode, IslandBtiResultData> = Object.fromEntries(
+  Object.entries(BASE_ISLAND_BTI_RESULTS).map(([code, result]) => {
+    const matches = ISLAND_BTI_ISLAND_MATCHES[code as IslandBtiResultCode];
+    return [code, {
+      ...result,
+      recommendedIslands: matches.map((match) => match.island),
+      recommendedIslandReasons: matches.map((match) => match.reason),
+    }];
+  }),
+) as Record<IslandBtiResultCode, IslandBtiResultData>;
 
 export function isIslandBtiResultCode(code: string): code is IslandBtiResultCode {
   return Object.prototype.hasOwnProperty.call(ISLAND_BTI_RESULTS, code);

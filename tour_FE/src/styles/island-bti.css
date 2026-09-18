@@ -791,24 +791,10 @@
   gap: 8px;
 }
 
-.ibti-result-highlight--island {
-  margin-top: 4px;
-  padding: 14px 18px;
-  border-radius: 14px;
-  background: color-mix(in srgb, var(--island-bti-theme, var(--blue)) 8%, #fff);
-  border: 1px solid color-mix(in srgb, var(--island-bti-theme, var(--blue)) 22%, #fff);
-}
-
 .ibti-result-highlight__label {
   font-size: 12px;
   font-weight: 700;
   color: var(--muted);
-}
-
-.ibti-result-highlight__value {
-  font-size: 18px;
-  font-weight: 800;
-  color: var(--navy);
 }
 
 .ibti-tag-list--hero {
@@ -953,7 +939,7 @@
   color: var(--navy);
 }
 
-.ibti-island-rank {
+.ibti-island-cards {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -962,28 +948,39 @@
   gap: 10px;
 }
 
-.ibti-island-rank li {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 14px;
+.ibti-island-cards li {
+  padding: 16px 18px;
   border-radius: 12px;
   background: rgba(15, 95, 204, 0.04);
   border: 1px solid var(--line);
 }
 
-.ibti-island-rank__label {
-  flex-shrink: 0;
-  min-width: 52px;
+.ibti-island-card__name {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.ibti-island-card__feature {
+  margin: 5px 0 14px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.ibti-island-card__reason-label {
+  display: block;
+  margin-bottom: 5px;
   font-size: 12px;
   font-weight: 800;
   color: color-mix(in srgb, var(--island-bti-theme, var(--blue)) 70%, var(--navy));
 }
 
-.ibti-island-rank__name {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--navy);
+.ibti-island-card__reason {
+  margin: 0;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.65;
 }
 
 .ibti-result-text {
@@ -1109,7 +1106,4 @@
     padding: 16px;
   }
 
-  .ibti-result-highlight__value {
-    font-size: 16px;
-  }
 }
