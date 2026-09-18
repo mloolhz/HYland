@@ -55,10 +55,12 @@ function buildSafetyGroups(): SafetyFacilityGroup[] {
     hasSourceData: (ISLAND_SAFETY[island.id] ?? []).length > 0,
   })).filter((group) => group.facilities.length > 0 || group.hasSourceData);
 
-  const islandsWithInfo = islandGroups.filter((group) => group.facilities.length > 0);
-  const islandsWithoutInfo = islandGroups.filter((group) => group.facilities.length === 0);
+  const byName = (a: SafetyFacilityGroup, b: SafetyFacilityGroup) =>
+    a.name.localeCompare(b.name, "ko");
+  const islandsWithInfo = islandGroups.filter((group) => group.facilities.length > 0).sort(byName);
+  const islandsWithoutInfo = islandGroups.filter((group) => group.facilities.length === 0).sort(byName);
 
-  // 표시 가능한 시설이 있는 섬을 먼저, 정보가 없는 섬은 맨 뒤로 보낸다.
+  // 시설이 있는 섬을 먼저(이름순), 정보가 없는 섬은 맨 뒤로(이름순) 보낸다.
   return [...islandsWithInfo, ...islandsWithoutInfo];
 }
 

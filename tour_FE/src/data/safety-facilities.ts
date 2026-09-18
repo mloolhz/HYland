@@ -76,7 +76,7 @@ export const ISLAND_SAFETY: Record<string, SafetyFacility[]> = {
     // 보건소
     { type: "health-center", name: "강화군보건소", address: "인천 강화군 강화읍 충렬사로 26-1", phone: "032-930-4061", source: "ganghwa.go.kr", verified: true },
     // 일반병원
-    { type: "hospital", name: "의료법인해인강화병원", address: "인천 강화군 강화읍 강화대로312번길 11", phone: "032-930-8146", verified: true },
+    { type: "hospital", name: "의료법인해인강화병원", address: "인천 강화군 강화읍 강화대로312번길 11", phone: "032-933-8111", verified: true },
     { type: "hospital", name: "해주병원", address: "인천 강화군 하점면 창후로 286", phone: "032-933-7114", verified: true },
     { type: "hospital", name: "강화요양병원", address: "인천 강화군 길상면 강화동로 181", phone: "032-937-0639", verified: true },
     { type: "hospital", name: "남궁내과의원", address: "인천 강화군 강화읍 강화대로 422", phone: "032-934-2142", verified: true },
