@@ -133,16 +133,23 @@ export const ISLAND_SAFETY: Record<string, SafetyFacility[]> = {
     { type: "coast-guard", name: "선수출장소", address: "인천 강화군 화도면 해안남로 2845번길 22", phone: "032-650-2135", verified: true },
   ],
   gyo: [
+    { type: "health-center", name: "교동보건지소", phone: "032-930-3547", verified: true },
+    { type: "health-center", name: "난정보건진료소", phone: "032-934-7807", verified: true },
+    { type: "health-center", name: "삼선보건진료소", phone: "032-932-4808", verified: true },
+    { type: "health-center", name: "상용보건진료소", phone: "032-932-4381", verified: true },
     { type: "police", name: "교동파출소", address: "인천 강화군 교동면 대룡안길54번길 14", phone: "032-930-0313", verified: true },
     { type: "pharmacy", name: "교동약국", address: "인천 강화군 교동면 대룡안길 54-62", phone: "032-933-8358", verified: true },
   ],
   seok: [
+    { type: "health-center", name: "삼산보건지소", phone: "032-932-3020", verified: true },
+    { type: "health-center", name: "하리보건진료소", phone: "032-932-3653", verified: true },
+    { type: "health-center", name: "매음보건진료소", phone: "032-932-3564", verified: true },
     { type: "police", name: "삼산파출소", address: "인천 강화군 삼산면 삼산북로 465", phone: "032-930-0312", verified: true },
     { type: "coast-guard", name: "삼산출장소", address: "인천 강화군 삼산면 어류정길 177번길 76-83", phone: "032-650-2734", verified: true },
   ],
   // 북도권역
   jang: [
-    { type: "health-center", name: "장봉보건지소", address: "인천 옹진군 북도면 장봉로 554", verified: true },
+    { type: "health-center", name: "장봉보건지소", address: "인천 옹진군 북도면 장봉로 554", phone: "032-899-3391", verified: true },
     { type: "coast-guard", name: "장봉출장소", address: "인천 옹진군 북도면 장봉로519번길 56", phone: "032-650-2133", verified: true },
   ],
   sinsi: [
@@ -172,9 +179,9 @@ export const ISLAND_SAFETY: Record<string, SafetyFacility[]> = {
   ijak: [], // 시설 없음으로 확인됨
   // 덕적도권역
   deokj: [
-    { type: "health-center", name: "덕적보건지소", address: "인천 옹진군 덕적면 덕적남로 7-1", verified: true },
+    { type: "health-center", name: "덕적보건지소", address: "인천 옹진군 덕적면 덕적남로 7-1", phone: "032-899-3185", verified: true },
     { type: "health-center", name: "백아보건진료소", address: "인천 옹진군 덕적면 백아로 88", verified: true },
-    { type: "health-center", name: "서포리보건진료소", address: "인천 옹진군 덕적면 덕적남로625번길 9", verified: true },
+    { type: "health-center", name: "서포리보건진료소", address: "인천 옹진군 덕적면 덕적남로625번길 9", phone: "032-831-6665", verified: true },
     { type: "police", name: "덕적파출소", address: "인천 옹진군 덕적면 덕적북로 117번길", phone: "032-760-8313", verified: true },
     { type: "coast-guard", name: "덕적출장소", address: "인천 옹진군 덕적면 덕적북로518번길 3", phone: "032-650-2735", verified: true },
   ],
