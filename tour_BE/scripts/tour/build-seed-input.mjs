@@ -9,6 +9,13 @@
  * 만들었으나, 프론트가 GET /leisure-sports 를 쓰게 되면서 그 출력은 없앴다.
  * 이제 이 파일의 결과는 DB 시드(prisma/seed-leisure.ts)의 입력으로만 쓰인다.
  *
+ * ⚠ 이 스크립트의 출력에는 연락처·홈페이지가 거의 비어 있다. 실제 값은
+ *   enrich-contact / 웹 조사 / apply-contacts 를 거쳐 나중에 채워지고,
+ *   그 결과는 prisma/seed-data/leisure-seed-input.json 에 반영돼 있다.
+ *   따라서 이 출력을 그대로 prisma/seed-data 로 덮어쓰면 연락처가 전부
+ *   날아간다 (실제로 그렇게 배포돼 배포 DB 연락처가 0곳이었다).
+ *   덮어쓸 일이 있으면 반드시 연락처를 다시 병합한 뒤에 옮긴다.
+ *
  * 이 스크립트 자체는 DB에 붙지 않는다.
  * 실행: node scripts/tour/build-seed-input.mjs
  */
