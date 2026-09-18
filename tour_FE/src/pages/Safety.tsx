@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import { CONTAINER } from "@/constants/layout";
 import {
-  DISTRICT_SAFETY,
   ISLAND_SAFETY,
   type SafetyFacility,
   type SafetyFacilityType,
@@ -59,16 +58,8 @@ function buildSafetyGroups(): SafetyFacilityGroup[] {
   const islandsWithInfo = islandGroups.filter((group) => group.facilities.length > 0);
   const islandsWithoutInfo = islandGroups.filter((group) => group.facilities.length === 0);
 
-  const districtGroups = Object.entries(DISTRICT_SAFETY).map(([district, facilities]) => ({
-    id: `district-${district}`,
-    area: "행정구역 거점",
-    name: district,
-    facilities: uniqueFacilities(facilities.filter(canDisplayFacility)),
-    hasSourceData: facilities.length > 0,
-  })).filter((group) => group.facilities.length > 0 || group.hasSourceData);
-
   // 표시 가능한 시설이 있는 섬을 먼저, 정보가 없는 섬은 맨 뒤로 보낸다.
-  return [...islandsWithInfo, ...districtGroups, ...islandsWithoutInfo];
+  return [...islandsWithInfo, ...islandsWithoutInfo];
 }
 
 export function Safety() {
@@ -81,7 +72,7 @@ export function Safety() {
         <div className={`${CONTAINER} sf-hero-inner`}>
           <p className="sf-eyebrow">ISLAND SAFETY GUIDE</p>
           <h1>섬 안전정보</h1>
-          <p>인천 섬과 행정구역 거점의 안전시설 정보를 한눈에 확인하세요.</p>
+          <p>인천 섬별 안전시설 정보를 한눈에 확인하세요.</p>
         </div>
       </header>
 
