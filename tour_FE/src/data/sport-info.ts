@@ -82,7 +82,10 @@ export const SPORT_INFO_BY_ID: Record<string, SportInfoConfig> = {
   camp: {
     reservationType: "reservable",
     sources: [
-      { provider: "인천투어", url: "https://itour.incheon.go.kr/ssst/ssst/list.do" },
+      {
+        provider: "인천투어",
+        url: "https://itour.incheon.go.kr/ssst/ssst/list.do?pageNm=leport",
+      },
       {
         provider: "옹진문화관광",
         url: "https://www.ongjin.go.kr/open_content/tour/thema/camping.jsp",
@@ -124,7 +127,7 @@ export const SPORT_INFO_BY_ID: Record<string, SportInfoConfig> = {
       },
       {
         provider: "인천투어",
-        url: "https://itour.incheon.go.kr/ssst/ssst/list.do",
+        url: "https://itour.incheon.go.kr/ssst/ssst/list.do?pageNm=leport",
         linkType: "info",
       },
     ],
