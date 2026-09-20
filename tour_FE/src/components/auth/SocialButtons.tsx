@@ -1,6 +1,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { fetchOAuthProviders, fetchOAuthUrl, type OAuthProvider } from "@/api/auth";
 import { randomId } from "@/lib/random-id";
+import { oauthButtonLabel, OAUTH_BUTTON_LABELS } from "@/constants/oauth-button-labels";
 
 const OAUTH_STATE_KEY = "hyland-oauth-state";
 
@@ -42,8 +43,8 @@ function KakaoMark() {
 
 /** 제공사별 표시 — 버튼 문구는 각 사 브랜드 표기를 따른다 */
 const STYLE: Record<string, { label: string; className: string; icon: ReactNode }> = {
-  google: { label: "Google로 시작하기", className: "auth-social-btn--google", icon: <GoogleMark /> },
-  kakao: { label: "Kakao로 시작하기", className: "auth-social-btn--kakao", icon: <KakaoMark /> },
+  google: { label: OAUTH_BUTTON_LABELS.google, className: "auth-social-btn--google", icon: <GoogleMark /> },
+  kakao: { label: OAUTH_BUTTON_LABELS.kakao, className: "auth-social-btn--kakao", icon: <KakaoMark /> },
 };
 
 export function SocialButtons() {
@@ -104,7 +105,7 @@ export function SocialButtons() {
             >
               <span className="auth-social-mark">{style?.icon}</span>
               <span className="auth-social-label">
-                {pending === p.id ? "이동 중…" : (style?.label ?? `${p.label}로 시작하기`)}
+                {pending === p.id ? "이동 중…" : oauthButtonLabel(p.id, p.label)}
               </span>
             </button>
           );

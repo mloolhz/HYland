@@ -15,6 +15,7 @@
     "check:tour": "node scripts/tour/check-consistency.mjs",
     "db:seed:badges": "tsx prisma/seed-badges.ts",
     "db:seed:accounts": "tsx prisma/seed-accounts.ts",
+    "db:purge:judge-posts": "tsx prisma/scripts/purge-judge-community-posts.ts",
     "db:seed:demo-posts": "tsx prisma/seed-demo-posts.ts",
     "db:seed:missions": "tsx --tsconfig prisma/seed-tsconfig.json prisma/seed-missions.ts"
   },

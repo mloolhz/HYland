@@ -46,6 +46,13 @@ const ACCOUNTS: DemoAccount[] = [
     role: "USER",
     note: "일반 사용자 (댓글·좋아요 상대역)",
   },
+  {
+    username: "openapi",
+    password: "2026openapi!",
+    nickname: "openapi",
+    role: "USER",
+    note: "공모전 심사용 테스트 계정",
+  },
 ];
 
 async function main() {

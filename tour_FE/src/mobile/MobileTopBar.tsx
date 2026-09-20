@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useSession } from "@/store/session";
-import { useNotifications } from "@/store/notifications";
-import { useAuthSheet } from "./auth/AuthSheetProvider";
-import { BellIcon, ChevronLeftIcon, MenuIcon, UserIcon } from "./MobileIcons";
+import { ChevronLeftIcon, MenuIcon } from "./MobileIcons";
 
 const SITE_LOGO_SRC = "/incheon-island-leisure-nuri-logo.png";
 
@@ -56,10 +53,6 @@ const ROOT_PATHS = new Set([
 export function MobileTopBar({ onOpenMenu }: { onOpenMenu: () => void }) {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const { isLoggedIn } = useSession();
-  const { unreadCount } = useNotifications();
-  const { openAuth } = useAuthSheet();
-
   const isHome = pathname === "/";
   const isRoot = ROOT_PATHS.has(pathname);
 
@@ -108,23 +101,6 @@ export function MobileTopBar({ onOpenMenu }: { onOpenMenu: () => void }) {
       {!isRoot && <h1 className="m-top__title">{titleFor(pathname)}</h1>}
 
       <div className="m-top__right">
-        <Link to="/notifications" className="m-top__icon" aria-label="알림">
-          <BellIcon size={22} />
-          {unreadCount > 0 && (
-            <span className="m-top__badge">{unreadCount > 99 ? "99+" : unreadCount}</span>
-          )}
-        </Link>
-
-        {isLoggedIn ? (
-          <Link to="/mypage" className="m-top__icon" aria-label="내 정보">
-            <UserIcon size={22} />
-          </Link>
-        ) : (
-          <button type="button" className="m-top__login" onClick={() => openAuth("login")}>
-            로그인
-          </button>
-        )}
-
         <button type="button" className="m-top__icon" onClick={onOpenMenu} aria-label="메뉴 열기">
           <MenuIcon size={24} />
         </button>

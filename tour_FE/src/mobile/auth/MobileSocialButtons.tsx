@@ -2,6 +2,7 @@ import { useState } from "react";
 import { fetchOAuthUrl, type OAuthProvider } from "@/api/auth";
 import { randomId } from "@/lib/random-id";
 import { OAUTH_STATE_KEY } from "@/components/auth/SocialButtons";
+import { oauthButtonLabel } from "@/constants/oauth-button-labels";
 import { GoogleMark, KakaoMark } from "./SocialBrandMarks";
 
 /**
@@ -51,7 +52,7 @@ export function MobileSocialButtons({ providers }: { providers: OAuthProvider[] 
               {Mark ? <Mark /> : p.label[0]}
             </span>
             <span className="m-social__label">
-              {pending === p.id ? "이동 중…" : `${p.label}로 시작하기`}
+              {pending === p.id ? "이동 중…" : oauthButtonLabel(p.id, p.label)}
             </span>
           </button>
         );
