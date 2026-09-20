@@ -69,7 +69,7 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
       diff: "누구나",
       price: "5만원~",
       season: "3~11월",
-      desc: "왕산마리나에서 요트를 타고 서해 노을과 인천대교 전망을 감상하는 해양 레저.",
+      desc: "왕산마리나에서 요트를 타고 서해 노을과 인천대교 전망을 감상할 수 있습니다.",
       islands: [{ id: "yeongj", n: "영종도", c: "#0EA5E9" }],
     },
             {
@@ -102,7 +102,7 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
       diff: "누구나",
       price: "무료~4천원",
       season: "3~11월",
-      desc: "썰물 때 드러나는 갯벌에서 바지락·소라·동죽 등을 직접 캐보는 체험. 아이부터 어른까지 함께 즐깁니다.",
+      desc: "썰물 때 드러나는 갯벌에서 바지락·소라·동죽 등을 직접 캐보며, 아이부터 어른까지 함께 즐길 수 있습니다.",
       islands: [
         { id: "gangh", n: "강화도", c: "#F59E0B" },
         { id: "muui", n: "무의도", c: "#2563EB" },
@@ -123,7 +123,7 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
       diff: "누구나",
       price: "무료",
       season: "연중",
-      desc: "해안 둘레길과 해상 탐방로를 걸으며 파도 소리와 바다 풍경을 즐기는 여유로운 산책.",
+      desc: "해안 둘레길과 해상 탐방로를 걸으며 파도 소리와 바다 풍경을 여유롭게 즐길 수 있습니다.",
       islands: [
         island("baek", "백령도"),
         island("daech", "대청도"),
@@ -183,7 +183,7 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
       diff: "입문",
       price: "대여 1만원대~",
       season: "연중",
-      desc: "해안도로와 섬 일주도로를 따라 바닷바람을 맞으며 라이딩. 대여소가 운영되는 섬에서 즐길 수 있습니다.",
+      desc: "해안도로와 섬 일주도로를 따라 바닷바람을 맞으며 라이딩을 즐길 수 있으며, 대여소가 있는 섬에서 이용할 수 있습니다.",
       islands: [
         { id: "gangh", n: "강화도", c: "#F59E0B" },
         { id: "sinsi", n: "신시모도", c: "#2563EB" },
@@ -200,7 +200,7 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
       diff: "초보 가능",
       price: "무료~3만원 (야영장별 상이)",
       season: "3~11월",
-      desc: "데크·취사장·샤워장을 갖춘 섬 야영장에서 파도 소리와 별빛 아래 즐기는 캠핑. 오토캠핑·차박도 가능.",
+      desc: "데크·취사장·샤워장을 갖춘 섬 야영장에서 파도 소리와 별빛 아래 캠핑을 즐길 수 있으며, 오토캠핑과 차박도 가능합니다.",
       islands: [
         island("deokj", "덕적도"),
         island("jawol", "자월도"),
@@ -217,7 +217,7 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
       diff: "중급",
       price: "무료 (배편·식사비 별도)",
       season: "4~11월",
-      desc: "배낭을 메고 능선·초원 노지에서 하룻밤을 보내는 활동. 굴업도 개머리언덕은 국내 손꼽히는 백패킹 성지.",
+      desc: "배낭을 메고 능선·초원 노지에서 하룻밤을 보낼 수 있으며, 굴업도 개머리언덕은 국내 손꼽히는 백패킹 명소입니다.",
       islands: [island("gureop", "굴업도"), island("jawol", "자월도"), island("deokj", "덕적도")],
     },
   ],
@@ -250,7 +250,7 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
       diff: "누구나",
       price: "무료",
       season: "연중(썰물 시)",
-      desc: "하루 두 번 썰물 때만 나타나는 신비로운 모래섬. 대이작도에서만 경험할 수 있는 고유 체험입니다.",
+      desc: "하루 두 번 썰물 때만 나타나는 신비로운 모래섬을 대이작도에서만 경험할 수 있는 특별한 체험입니다.",
       islands: [{ id: "ijak", n: "대이작도", c: "#10B981" }],
     },
     {
@@ -260,7 +260,7 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
       diff: "초급",
       price: "무료",
       season: "4~10월",
-      desc: "밤에 랜턴을 들고 갯벌에서 참소라·고동 등 해산물을 직접 채취하는 활동.",
+      desc: "밤에 랜턴을 들고 갯벌에서 참소라·고동 등 해산물을 직접 채취하는 해루질을 즐길 수 있습니다.",
       islands: [
         { id: "seungb", n: "승봉도", c: "#10B981" },
         { id: "yheung", n: "영흥도", c: "#10B981" },
@@ -274,7 +274,7 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
       diff: "초급",
       price: "2만원대~",
       season: "3~11월",
-      desc: "높은 곳에서 와이어를 타고 바다 위를 활강하는 짜릿한 체험.",
+      desc: "높은 곳에서 와이어를 타고 바다 위를 활강하며 짜릿한 스릴을 느낄 수 있습니다.",
       islands: [
         { id: "gangh", n: "강화도", c: "#F59E0B" },
         { id: "muui", n: "무의도", c: "#2563EB" },
@@ -287,7 +287,7 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
       diff: "초급",
       price: "2만원대~",
       season: "연중",
-      desc: "강화도 해변 위를 달리는 모노레일 체험. 바다 전망을 즐기며 가족과 함께 탑승할 수 있습니다.",
+      desc: "강화도 해변 위를 달리는 모노레일에서 바다 전망을 즐기며 가족과 함께 탑승할 수 있습니다.",
       islands: [{ id: "gangh", n: "강화도", c: "#F59E0B" }],
     },
     {
@@ -297,7 +297,7 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
       diff: "누구나",
       price: "1만원대~",
       season: "연중",
-      desc: "무동력 카트를 타고 경사로를 달리는 스릴 있는 체험. 강화도에서 즐길 수 있습니다.",
+      desc: "무동력 카트를 타고 경사로를 달리는 스릴 있는 루지를 강화도에서 즐길 수 있습니다.",
       islands: [{ id: "gangh", n: "강화도", c: "#F59E0B" }],
     },
   
@@ -343,7 +343,7 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
       diff: "누구나",
       price: "무료",
       season: "연중",
-      desc: "서해 바다로 떨어지는 붉은 노을. 인천 섬 어디서든 만날 수 있는 최고의 힐링입니다.",
+      desc: "서해 바다로 떨어지는 붉은 노을을 인천 섬 어디서든 만날 수 있는 대표 힐링 코스입니다.",
       islands: [
         { id: "muui", n: "무의도", c: "#2563EB" },
         { id: "sinsi", n: "신시모도", c: "#2563EB" },
@@ -370,7 +370,7 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
       diff: "누구나",
       price: "프로그램 포함",
       season: "4~10월",
-      desc: "도심에서 볼 수 없는 은하수를 전문가 해설과 함께 감상하는 프로그램.",
+      desc: "도심에서는 보기 어려운 은하수를 전문가 해설과 함께 감상하는 프로그램입니다.",
       islands: [
         { id: null, n: "소이작도", c: "#10B981" },
         { id: "jawol", n: "자월도", c: "#10B981" },
@@ -383,7 +383,7 @@ const RAW_SPORTS_DATA: Record<CategoryKey, Omit<Sport, "reservationType" | "sour
       diff: "누구나",
       price: "프로그램 포함",
       season: "연중",
-      desc: "섬 주민 가이드와 함께 마을의 역사와 생활을 듣고 체험하는 문화 프로그램.",
+      desc: "섬 주민 가이드와 함께 마을의 역사와 생활을 듣고 체험하는 문화 프로그램입니다.",
       islands: [
         { id: null, n: "소이작도", c: "#10B981" },
         { id: "sinsi", n: "신시모도", c: "#2563EB" },
