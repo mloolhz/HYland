@@ -31,11 +31,23 @@ const TITLES: [prefix: string, title: string][] = [
   ["/admin/submissions", "검수"],
   ["/oauth/callback", "로그인 중"],
   ["/signup/nickname", "닉네임 설정"],
+  ["/legal/privacy", "개인정보 처리방침"],
+  ["/legal/terms", "이용약관"],
+  ["/login", "로그인"],
+  ["/signup", "회원가입"],
+  ["/admin/reports", "신고 관리"],
 ];
 
-function titleFor(pathname: string): string {
+function titleFor(pathname: string): string | null {
   const hit = TITLES.find(([prefix]) => pathname === prefix || pathname.startsWith(`${prefix}/`));
-  return hit ? hit[1] : "페이지를 찾을 수 없어요";
+  return hit ? hit[1] : null;
+}
+
+/** 가운데 제목 없이 좌측 로고만 — 메뉴 최상위·약관·매핑 없는 경로 */
+function isLogoHeaderPath(pathname: string, title: string | null): boolean {
+  if (ROOT_PATHS.has(pathname)) return true;
+  if (pathname.startsWith("/legal")) return true;
+  return title === null;
 }
 
 /** 메뉴에서 바로 갈 수 있는 최상위 화면 — 뒤로가기 대신 로고를 보여준다 */
@@ -54,7 +66,8 @@ export function MobileTopBar({ onOpenMenu }: { onOpenMenu: () => void }) {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const isHome = pathname === "/";
-  const isRoot = ROOT_PATHS.has(pathname);
+  const title = titleFor(pathname);
+  const logoHeader = isLogoHeaderPath(pathname, title);
 
   /**
    * 홈은 히어로 사진 위에 투명하게 얹혀 있다. 사진을 지나 내려가면
@@ -82,7 +95,7 @@ export function MobileTopBar({ onOpenMenu }: { onOpenMenu: () => void }) {
   return (
     <header className={`m-top${overHero ? " m-top--home" : ""}`}>
       <div className="m-top__left">
-        {isRoot ? (
+        {logoHeader ? (
           <Link to="/" className="m-top__logo" aria-label="인천섬 레저누리 홈">
             <img src={SITE_LOGO_SRC} alt="인천섬 레저누리" />
           </Link>
@@ -98,7 +111,7 @@ export function MobileTopBar({ onOpenMenu }: { onOpenMenu: () => void }) {
         )}
       </div>
 
-      {!isRoot && <h1 className="m-top__title">{titleFor(pathname)}</h1>}
+      {!logoHeader && title && <h1 className="m-top__title">{title}</h1>}
 
       <div className="m-top__right">
         <button type="button" className="m-top__icon" onClick={onOpenMenu} aria-label="메뉴 열기">
