@@ -6,6 +6,8 @@
 **/.DS_Store
 *.pem
 **/*.md
+# AI 추천 프롬프트 — island-guide.ts 가 기동 시 readFileSync
+!tour_BE/src/data/incheon-island-guide.md
 tour_BE/.agents
 tour_BE/.claude
 tour_BE/.windsurf
