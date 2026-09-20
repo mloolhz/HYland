@@ -369,11 +369,6 @@ export function MobileHome() {
         <AiRail />
         <RankBlock />
         <ReviewBlock />
-
-        <footer className="m-foot">
-          <p>© 2026 인천섬 레저누리</p>
-          <p>문의: contact@islandquest.kr · 제작: HYland 팀</p>
-        </footer>
       </div>
     </div>
   );

@@ -10,7 +10,6 @@
 
 html.is-mobile-app {
   --m-top-h: 54px;
-  --m-tab-h: 58px;
   --m-gutter: 16px;
   --m-radius: 16px;
   --m-safe-b: env(safe-area-inset-bottom, 0px);
@@ -29,10 +28,14 @@ html.is-mobile-app body {
   min-height: 100svh;
 }
 
+/* 홈 본문 아래쪽 여백은 푸터가 이어받는다 */
+.m-home__body {
+  padding-bottom: 4px;
+}
+
 .m-main {
   flex: 1;
   padding-top: var(--m-top-h);
-  padding-bottom: calc(var(--m-tab-h) + var(--m-safe-b) + 8px);
 }
 
 /* ───────────── 상단 바 ───────────── */
@@ -66,6 +69,13 @@ html.is-mobile-app body {
   display: flex;
   align-items: center;
   flex: none;
+}
+
+.m-top__logo {
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  padding-right: 6px;
 }
 
 .m-top__logo img {
@@ -141,7 +151,8 @@ html.is-mobile-app body {
 
 .m-top__login {
   margin-left: 2px;
-  padding: 7px 13px;
+  min-height: 38px;
+  padding: 8px 13px;
   border: 0;
   border-radius: 999px;
   background: var(--blue);
@@ -155,49 +166,6 @@ html.is-mobile-app body {
   background: rgba(255, 255, 255, 0.18);
   border: 1px solid rgba(255, 255, 255, 0.45);
   backdrop-filter: blur(6px);
-}
-
-/* ───────────── 하단 탭바 ───────────── */
-.m-tabbar {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 120;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  height: calc(var(--m-tab-h) + var(--m-safe-b));
-  padding-bottom: var(--m-safe-b);
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-top: 1px solid var(--line);
-}
-
-.m-tabbar__item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
-  color: #93a1b5;
-  text-decoration: none;
-  transition: color 0.15s;
-}
-
-.m-tabbar__item.is-active {
-  color: var(--navy);
-}
-
-.m-tabbar__icon {
-  display: flex;
-  line-height: 0;
-}
-
-.m-tabbar__label {
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
 }
 
 /* ───────────── 바텀시트 ───────────── */
@@ -1371,17 +1339,62 @@ html.is-mobile-app body {
   -webkit-box-orient: vertical;
 }
 
-/* ── 푸터 ── */
+/* ── 푸터 ──
+   좌우 여백 안에 떠 있던 네모가 아니라 화면 아래를 가로로 꽉 채운다.
+   화면이 짧아 내용이 위쪽에서 끝나도 남는 자리를 푸터가 메운다. */
 .m-foot {
-  padding: 18px 2px 0;
-  border-top: 1px solid var(--line);
-  color: #93a1b5;
-  font-size: 11.5px;
-  line-height: 1.8;
+  flex: none;
+  margin-top: auto;
+  width: 100%;
+  background: var(--sea-dark);
+  color: #9fb0c8;
+  padding-bottom: var(--m-safe-b);
 }
 
-.m-foot p {
+.m-foot__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 26px var(--m-gutter) 30px;
+}
+
+.m-foot__brand {
   margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+
+.m-foot__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 16px;
+  margin: -8px 0;
+}
+
+.m-foot__links a {
+  /* 손가락으로 누를 자리 — 글자만 두면 21px 밖에 안 나온다 */
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #b6c4d8;
+  text-decoration: none;
+}
+
+.m-foot__info,
+.m-foot__copy {
+  margin: 0;
+  font-size: 11.5px;
+  line-height: 1.75;
+  color: #7e90a8;
+}
+
+.m-foot__copy {
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1390,4 +1403,236 @@ html.is-mobile-app body {
   .m-passport__bar span {
     transition: none;
   }
+}
+
+/* ═══════════ 메뉴 서랍 (오른쪽 위 버튼) ═══════════ */
+.m-nav-root {
+  position: fixed;
+  inset: 0;
+  z-index: 260;
+  pointer-events: none;
+}
+
+.m-nav-root.is-open {
+  pointer-events: auto;
+}
+
+.m-nav-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 22, 44, 0.44);
+  opacity: 0;
+  transition: opacity 0.26s ease;
+}
+
+.m-nav-root.is-open .m-nav-backdrop {
+  opacity: 1;
+}
+
+.m-nav {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: min(320px, 86vw);
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  box-shadow: -14px 0 44px rgba(10, 25, 50, 0.24);
+  transform: translateX(100%);
+  transition: transform 0.28s cubic-bezier(0.22, 0.7, 0.3, 1);
+}
+
+.m-nav-root.is-open .m-nav {
+  transform: translateX(0);
+}
+
+.m-nav__head {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 8px 10px 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.m-nav__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.m-nav__close {
+  width: 42px;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 12px;
+  background: none;
+  color: #66748c;
+  cursor: pointer;
+}
+
+.m-nav__body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.m-nav__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.m-nav__row {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid var(--line);
+}
+
+.m-nav__link {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 0 8px 0 20px;
+  color: #33445f;
+  font-size: 15.5px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.m-nav__link.is-active {
+  color: var(--navy);
+  background: var(--sky);
+}
+
+.m-nav__icon {
+  width: 22px;
+  flex: none;
+  font-size: 16px;
+  text-align: center;
+}
+
+.m-nav__badge {
+  margin-left: auto;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: #e5484d;
+  color: #fff;
+  font-style: normal;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.m-nav__toggle {
+  flex: none;
+  width: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-left: 1px solid var(--line);
+  background: none;
+  color: #8b97a8;
+  cursor: pointer;
+}
+
+.m-nav__toggle svg {
+  transition: transform 0.22s ease;
+}
+
+.m-nav__toggle.is-open svg {
+  transform: rotate(180deg);
+}
+
+.m-nav__sub {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  background: #fafbfd;
+  transition: max-height 0.28s cubic-bezier(0.22, 0.7, 0.3, 1), opacity 0.2s ease;
+}
+
+.m-nav__sub.is-open {
+  max-height: 420px;
+  opacity: 1;
+}
+
+.m-nav__sublink {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 20px 0 52px;
+  border-bottom: 1px solid var(--line);
+  color: #667788;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.m-nav__divider {
+  height: 8px;
+  background: var(--alt);
+  border-bottom: 1px solid var(--line);
+}
+
+.m-nav__list--minor .m-nav__link {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #5b6a80;
+}
+
+.m-nav__foot {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 20px calc(16px + var(--m-safe-b));
+  border-top: 1px solid var(--line);
+}
+
+.m-nav__portal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--navy);
+  text-decoration: none;
+}
+
+.m-nav__portal img {
+  height: 22px;
+  width: auto;
+  max-width: 150px;
+  object-fit: contain;
+}
+
+/* ── 간편 로그인 심볼 ── */
+.m-social__mark {
+  background: transparent;
+}
+
+.m-social--google .m-social__mark,
+.m-social--kakao .m-social__mark {
+  background: transparent;
+}
+
+.m-social__mark svg {
+  display: block;
 }

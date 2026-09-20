@@ -124,7 +124,7 @@
 .m-fab {
   position: fixed;
   right: 16px;
-  bottom: calc(var(--m-tab-h) + var(--m-safe-b) + 16px);
+  bottom: calc(var(--m-safe-b) + 18px);
   z-index: 110;
   width: 52px;
   height: 52px;

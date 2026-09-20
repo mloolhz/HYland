@@ -47,6 +47,20 @@ html.is-mobile-app .container {
 }
 
 /* ───────────── 섬 탐험 ───────────── */
+/*
+  지도 래퍼가 height:400px 로 박혀 있다. 지도 그림은 1024x642(가로 1.6:1)라
+  폭 341px 화면에서는 214px 밖에 못 쓰고, 남는 126px 이 위아래 흰 여백으로
+  남아 지도가 실제보다 훨씬 작아 보였다. 높이를 그림 비율에 맡긴다.
+*/
+html.is-mobile-app .isl-map-wrap {
+  height: auto;
+  aspect-ratio: 1024 / 642;
+}
+
+html.is-mobile-app .isl-map-svg {
+  height: 100%;
+}
+
 /* 헤더 설명이 nowrap 이라 좁은 화면에서 옆으로 뚫고 나갔다 */
 html.is-mobile-app .isl-header-copy {
   min-width: 0;
@@ -171,7 +185,7 @@ html.is-mobile-app .cm-subpage {
    시작 화면은 위가 과하게 비었다. 셸이 남긴 높이에 맞춘다. */
 html.is-mobile-app .ai-page,
 html.is-mobile-app .ai-page--intro {
-  height: calc(100svh - var(--m-top-h) - var(--m-tab-h) - var(--m-safe-b) - 8px);
+  height: calc(100svh - var(--m-top-h) - var(--m-safe-b) - 8px);
   min-height: 0;
   max-height: none;
   padding-top: 12px;
@@ -192,7 +206,7 @@ html.is-mobile-app .ai-settings-panel__bti a {
 .m-404 {
   align-items: center;
   justify-content: center;
-  min-height: calc(100svh - var(--m-top-h) - var(--m-tab-h) - var(--m-safe-b));
+  min-height: calc(100svh - var(--m-top-h) - var(--m-safe-b) - 220px);
   text-align: center;
 }
 

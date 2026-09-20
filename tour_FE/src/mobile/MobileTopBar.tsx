@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSession } from "@/store/session";
 import { useNotifications } from "@/store/notifications";
 import { useAuthSheet } from "./auth/AuthSheetProvider";
-import { BellIcon, ChevronLeftIcon, UserIcon } from "./MobileIcons";
+import { BellIcon, ChevronLeftIcon, MenuIcon, UserIcon } from "./MobileIcons";
 
 const SITE_LOGO_SRC = "/incheon-island-leisure-nuri-logo.png";
 
@@ -41,10 +41,19 @@ function titleFor(pathname: string): string {
   return hit ? hit[1] : "페이지를 찾을 수 없어요";
 }
 
-/** 탭바에 있는 최상위 화면 — 뒤로가기 대신 로고를 보여준다 */
-const ROOT_PATHS = new Set(["/", "/islands", "/sports", "/community", "/mypage"]);
+/** 메뉴에서 바로 갈 수 있는 최상위 화면 — 뒤로가기 대신 로고를 보여준다 */
+const ROOT_PATHS = new Set([
+  "/",
+  "/islands",
+  "/sports",
+  "/ai-recommend",
+  "/missions",
+  "/leaderboard",
+  "/community",
+  "/mypage",
+]);
 
-export function MobileTopBar() {
+export function MobileTopBar({ onOpenMenu }: { onOpenMenu: () => void }) {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const { isLoggedIn } = useSession();
@@ -115,6 +124,10 @@ export function MobileTopBar() {
             로그인
           </button>
         )}
+
+        <button type="button" className="m-top__icon" onClick={onOpenMenu} aria-label="메뉴 열기">
+          <MenuIcon size={24} />
+        </button>
       </div>
     </header>
   );

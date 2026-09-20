@@ -1,12 +1,14 @@
-import { useCallback, useEffect, type ReactNode } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { useLocation } from "react-router-dom";
 import { AuthSheetProvider, useAuthSheet } from "./auth/AuthSheetProvider";
-import { MobileTabBar } from "./MobileTabBar";
+import { MobileFooter } from "./MobileFooter";
+import { MobileNavDrawer } from "./MobileNavDrawer";
 import { MobileTopBar } from "./MobileTopBar";
 
 function MobileShellInner({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
   const { openAuth } = useAuthSheet();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   /**
    * 화면 곳곳에 흩어진 "로그인" 링크(<Link to="/login">)를 한곳에서 가로챈다.
@@ -38,20 +40,22 @@ function MobileShellInner({ children }: { children: ReactNode }) {
 
   return (
     <div className="m-app" onClickCapture={interceptAuthLinks}>
-      <MobileTopBar />
+      <MobileTopBar onOpenMenu={() => setMenuOpen(true)} />
       <main className="m-main" key={pathname}>
         {children}
       </main>
-      <MobileTabBar />
+      <MobileFooter />
+      <MobileNavDrawer open={menuOpen} onClose={() => setMenuOpen(false)} />
     </div>
   );
 }
 
 /**
- * 모바일 전용 셸 — 얇은 상단바 + 내용 + 하단 고정 탭바.
+ * 모바일 전용 셸 — 얇은 상단바 + 내용 + 가로로 꽉 찬 푸터.
  *
- * 데스크톱의 SiteHeader/SiteFooter 는 쓰지 않는다. 로그인/회원가입은
- * 페이지가 아니라 바텀시트라서 AuthSheetProvider 를 여기서 깐다.
+ * 데스크톱의 SiteHeader/SiteFooter 는 쓰지 않는다. 메뉴는 오른쪽 위 버튼으로
+ * 여는 서랍이고, 로그인/회원가입은 페이지가 아니라 바텀시트라서
+ * AuthSheetProvider 를 여기서 깐다.
  */
 export function MobileShell({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();

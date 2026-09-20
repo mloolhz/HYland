@@ -2,14 +2,15 @@ import { useState } from "react";
 import { fetchOAuthUrl, type OAuthProvider } from "@/api/auth";
 import { randomId } from "@/lib/random-id";
 import { OAUTH_STATE_KEY } from "@/components/auth/SocialButtons";
+import { GoogleMark, KakaoMark } from "./SocialBrandMarks";
 
 /**
  * 모바일 간편 로그인 — 데스크톱의 작은 아이콘 버튼과 달리 손가락으로 누르는
  * 큼직한 가로 버튼이고, 시트에서 가장 위에 온다.
  */
-const BRAND: Record<string, { className: string; mark: string }> = {
-  kakao: { className: "m-social--kakao", mark: "K" },
-  google: { className: "m-social--google", mark: "G" },
+const BRAND: Record<string, { className: string; Mark: (props: { size?: number }) => React.ReactElement }> = {
+  kakao: { className: "m-social--kakao", Mark: KakaoMark },
+  google: { className: "m-social--google", Mark: GoogleMark },
 };
 
 export function MobileSocialButtons({ providers }: { providers: OAuthProvider[] }) {
@@ -36,17 +37,18 @@ export function MobileSocialButtons({ providers }: { providers: OAuthProvider[] 
   return (
     <div className="m-social">
       {providers.map((p) => {
-        const brand = BRAND[p.id] ?? { className: "", mark: p.label[0] };
+        const brand = BRAND[p.id];
+        const Mark = brand?.Mark;
         return (
           <button
             key={p.id}
             type="button"
-            className={`m-social__btn ${brand.className}`}
+            className={`m-social__btn ${brand?.className ?? ""}`}
             disabled={pending !== null}
             onClick={() => start(p.id)}
           >
             <span className="m-social__mark" aria-hidden="true">
-              {brand.mark}
+              {Mark ? <Mark /> : p.label[0]}
             </span>
             <span className="m-social__label">
               {pending === p.id ? "이동 중…" : `${p.label}로 시작하기`}

@@ -126,3 +126,11 @@ export function TrophyIcon({ size = 24 }: IconProps) {
     </svg>
   );
 }
+
+export function MenuIcon({ size = 24 }: IconProps) {
+  return (
+    <svg {...svgProps(size)}>
+      <path d="M4.5 7h15M4.5 12h15M4.5 17h15" {...STROKE} strokeWidth={2} />
+    </svg>
+  );
+}
