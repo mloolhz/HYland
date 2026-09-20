@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { SiteHeader } from "@/components/landing/SiteHeader";
 import { SiteFooter } from "@/components/landing/SiteFooter";
@@ -11,13 +12,18 @@ import { MobileShell } from "@/mobile/MobileShell";
 export function CommunityLayout() {
   const isMobile = useIsMobile();
 
+  // 데스크톱에서 길게 스크롤한 뒤 폭만 줄이면 모바일 셸 + 깊은 scrollY 가 겹친다
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+  }, [isMobile]);
+
   return (
     <ToastProvider>
       <NotificationProvider>
         {isMobile ? (
           // 모바일은 상단바 + 하단 탭바 셸을 쓴다 (SiteHeader/SiteFooter 없음)
           <MobileShell>
-            <div className="route-fade-root" data-route-fade-root>
+            <div key="mobile" className="route-fade-root" data-route-fade-root>
               <Outlet />
             </div>
           </MobileShell>
@@ -25,7 +31,7 @@ export function CommunityLayout() {
           <>
             <SiteHeader />
             <ScrollToTop />
-            <div className="route-fade-root" data-route-fade-root>
+            <div key="desktop" className="route-fade-root" data-route-fade-root>
               <Outlet />
             </div>
             <ScrollToTopButton />

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 /**
  * 모바일 전용 화면 전환 기준
@@ -8,22 +8,26 @@ import { useEffect, useState } from "react";
  */
 export const MOBILE_MEDIA_QUERY = "(max-width: 768px)";
 
-function readMatch(): boolean {
-  if (typeof window === "undefined" || !window.matchMedia) return false;
+function subscribe(onChange: () => void) {
+  const mq = window.matchMedia(MOBILE_MEDIA_QUERY);
+  mq.addEventListener("change", onChange);
+  return () => mq.removeEventListener("change", onChange);
+}
+
+function getSnapshot(): boolean {
   return window.matchMedia(MOBILE_MEDIA_QUERY).matches;
 }
 
+function getServerSnapshot(): boolean {
+  return false;
+}
+
+/**
+ * matchMedia 구독 — useState+effect 대신 useSyncExternalStore 로 같은 렌더에서
+ * CommunityLayout 과 ResponsiveRoutes 가 항상 같은 값을 본다.
+ * (창 가로를 줄일 때 셸만 모바일로 바뀌고 페이지는 데스크톱인 한 프레임이
+ *  useAuthSheet 등에서 터지던 원인을 막는다.)
+ */
 export function useIsMobile(): boolean {
-  const [isMobile, setIsMobile] = useState(readMatch);
-
-  useEffect(() => {
-    const mq = window.matchMedia(MOBILE_MEDIA_QUERY);
-    const onChange = () => setIsMobile(mq.matches);
-    // 첫 렌더와 실제 값이 어긋났을 수 있다 (개발 중 창 크기 변경 등)
-    onChange();
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  }, []);
-
-  return isMobile;
+  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }
