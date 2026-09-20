@@ -7,6 +7,7 @@ import { MobileSports } from "@/mobile/screens/MobileSports";
 import { MobileCommunity } from "@/mobile/screens/MobileCommunity";
 import { MobileMyPage } from "@/mobile/screens/MobileMyPage";
 import { MobileMissions } from "@/mobile/screens/MobileMissions";
+import { MobileSafety } from "@/mobile/screens/MobileSafety";
 import { MobileNotFound } from "@/mobile/screens/MobileNotFound";
 import { Login } from "@/pages/Login";
 import { Signup } from "@/pages/Signup";
@@ -16,6 +17,7 @@ import { Sports } from "@/pages/Sports";
 import { Community } from "@/pages/Community";
 import { MyPage } from "@/pages/MyPage";
 import { MissionHub } from "@/pages/MissionHub";
+import { Safety } from "@/pages/Safety";
 
 /**
  * 화면 폭에 따라 데스크톱 페이지와 모바일 전용 화면을 갈라 준다.
@@ -64,6 +66,10 @@ export function MyPageRoute() {
 
 export function MissionHubRoute() {
   return useIsMobile() ? <MobileMissions /> : <MissionHub />;
+}
+
+export function SafetyRoute() {
+  return useIsMobile() ? <MobileSafety /> : <Safety />;
 }
 
 /** 404 는 어느 레이아웃에도 안 들어가 있어, 모바일에선 셸을 씌워 돌아갈 길을 준다 */

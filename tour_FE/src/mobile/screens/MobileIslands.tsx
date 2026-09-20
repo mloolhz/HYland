@@ -10,8 +10,8 @@ import {
 import { useSession } from "@/store/session";
 import { useVisitedIslands } from "@/store/visited-islands";
 import { IslandDetailPanel } from "@/components/island/IslandDetailPanel";
-import { IslandExplorerMap } from "@/components/island/IslandExplorerMap";
 import { IslandWeatherPanel } from "@/components/island/IslandWeatherPanel";
+import { MobileIslandMap } from "./MobileIslandMap";
 import { useAuthSheet } from "../auth/AuthSheetProvider";
 import { ChevronRightIcon } from "../MobileIcons";
 
@@ -36,10 +36,18 @@ export function MobileIslands() {
   const { openAuth } = useAuthSheet();
 
   const [view, setView] = useState<ViewMode>("list");
+  /** 같은 권역을 다시 눌러도 지도가 다시 확대되도록 하는 신호 */
+  const [focusNonce, setFocusNonce] = useState(0);
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState<string | null>(() =>
     readIslandId(searchParams.get("island")),
   );
+  /**
+   * 섬 상세 시트가 열려 있는지.
+   * 목록에서는 섬을 누르면 바로 열리지만, 지도에서는 섬을 눌러 확대된 모습을 먼저 보여 주고
+   * "섬 정보 보기" 버튼을 눌러야 열린다 (시트가 지도를 가리면 확대가 의미 없어서).
+   */
+  const [detailOpen, setDetailOpen] = useState(() => readIslandId(searchParams.get("island")) !== null);
   const [region, setRegion] = useState<IslandRegionName | null>(() =>
     parseIslandRegion(searchParams.get("region")),
   );
@@ -84,9 +92,10 @@ export function MobileIslands() {
   );
 
   const selectIsland = useCallback(
-    (id: string) => {
+    (id: string, openDetail: boolean) => {
       const islandRegion = (ISLAND_MAP[id]?.region as IslandRegionName) ?? null;
       setSelectedId(id);
+      setDetailOpen(openDetail);
       setRegion(islandRegion);
       syncParams({ island: id, region: islandRegion });
     },
@@ -94,14 +103,19 @@ export function MobileIslands() {
   );
 
   const closeDetail = useCallback(() => {
+    setDetailOpen(false);
+    // 지도에서는 시트만 닫고 선택·확대는 그대로 둔다 (다시 "섬 정보 보기"를 누를 수 있게)
+    if (view === "map") return;
     setSelectedId(null);
     syncParams({ island: null });
-  }, [syncParams]);
+  }, [syncParams, view]);
 
   const changeRegion = useCallback(
     (next: IslandRegionName | null) => {
       setRegion(next);
       setSelectedId(null);
+      setDetailOpen(false);
+      setFocusNonce((n) => n + 1);
       syncParams({ region: next, island: null });
     },
     [syncParams],
@@ -197,15 +211,18 @@ export function MobileIslands() {
 
       {view === "map" ? (
         <>
-          <p className="m-isl__hint">지도에서 섬을 누르면 상세 정보가 열려요</p>
-          <div className="m-card m-isl__map">
-            <IslandExplorerMap
-              selectedId={selectedId}
-              activeRegion={region}
-              onSelect={selectIsland}
-              onBackgroundClick={() => changeRegion(null)}
-            />
-          </div>
+          <MobileIslandMap
+            selectedId={selectedId}
+            activeRegion={region}
+            focusNonce={focusNonce}
+            onSelect={(id) => selectIsland(id, false)}
+            onBackgroundClick={() => changeRegion(null)}
+          />
+          {selectedIsland && !detailOpen && (
+            <button type="button" className="m-btn m-btn--primary" onClick={() => setDetailOpen(true)}>
+              {selectedIsland.name} 섬 정보 보기
+            </button>
+          )}
           {selectedId && <IslandWeatherPanel islandId={selectedId} />}
         </>
       ) : (
@@ -243,7 +260,7 @@ export function MobileIslands() {
                     <button
                       type="button"
                       className="m-card m-isl__item"
-                      onClick={() => selectIsland(island.id)}
+                      onClick={() => selectIsland(island.id, true)}
                     >
                       <span className="m-isl__item-main">
                         <span className="m-isl__item-top">
@@ -267,7 +284,7 @@ export function MobileIslands() {
         </>
       )}
 
-      <IslandDetailPanel island={selectedIsland} onClose={closeDetail} />
+      <IslandDetailPanel island={detailOpen ? selectedIsland : null} onClose={closeDetail} />
     </div>
   );
 }

@@ -676,7 +676,9 @@
   position: absolute;
   z-index: 40;
   pointer-events: none;
-  transform: translate(-50%, calc(-100% - 14px));
+  /* 앵커(left/top) 기준으로 역스케일 — 확대된 지도 안에서도 화면상 크기가 일정하다 */
+  transform-origin: 0 0;
+  transform: scale(var(--isl-tip-scale, 1)) translate(-50%, calc(-100% - 14px));
   min-width: 128px;
   padding: 10px 12px 9px;
   border-radius: 12px;

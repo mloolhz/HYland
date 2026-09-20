@@ -1,6 +1,7 @@
 import {
   useCallback,
   useId,
+  useMemo,
   useRef,
   useState,
   type CSSProperties,
@@ -21,9 +22,27 @@ type IslandExplorerMapProps = {
   selectedId?: string | null;
   activeRegion?: string | null;
   onSelect?: (id: string) => void;
-  /** 섬 클릭 영역 밖(바다·미매핑) 클릭 시 — 권역 「전체」 등 */
-  onBackgroundClick?: () => void;
+  /**
+   * 섬 클릭 영역 밖(바다·미매핑) 클릭 시 — 권역 「전체」 등.
+   * 누른 자리를 지도 원본 좌표로 같이 넘긴다. 모바일 뷰어는 이 좌표로
+   * 근처 섬을 찾아 "섬 이름 글자"를 눌러도 그 섬이 잡히게 쓴다.
+   */
+  onBackgroundClick?: (point?: { x: number; y: number }) => void;
   readonly?: boolean;
+  /**
+   * 이 지도를 감싼 쪽에서 CSS transform 으로 확대한 배율 (모바일 지도 뷰어).
+   * 툴팁은 확대된 지도 안에 그려지므로 배율만큼 같이 커져 섬을 덮어 버린다.
+   * 이 값으로 좌표를 되돌리고 크기를 역보정해 화면에서는 늘 같은 크기로 보이게 한다.
+   */
+  viewScale?: number;
+  /**
+   * 툴팁을 어디에 붙일지.
+   * - "pointer" (기본): 마우스를 올린 섬에, 커서 자리에 붙는다 (데스크톱)
+   * - "selection": 선택된 섬에 고정된다 (터치 — 호버가 없으니 탭한 섬의 이름표 역할)
+   */
+  tooltipAnchor?: "pointer" | "selection";
+  /** 확대·이동이 끝날 때까지 툴팁을 감춘다 (움직이는 도중에 먼저 뜨지 않도록) */
+  tooltipHidden?: boolean;
 };
 
 function islandClass(
@@ -188,11 +207,12 @@ function RegionDimLayer({
 
 type MapHover = {
   id: string;
-  x: number;
-  y: number;
+  /** 지도 래퍼 기준 위치 — px(숫자) 또는 "%"(문자열) */
+  x: number | string;
+  y: number | string;
 };
 
-function IslandMapTooltip({ hover }: { hover: MapHover }) {
+function IslandMapTooltip({ hover, viewScale }: { hover: MapHover; viewScale: number }) {
   const { isVisited } = useVisitedIslands();
   const island = ISLAND_MAP[hover.id];
   const visited = isVisited(hover.id);
@@ -201,7 +221,13 @@ function IslandMapTooltip({ hover }: { hover: MapHover }) {
   return (
     <div
       className="isl-map-tooltip"
-      style={{ left: hover.x, top: hover.y }}
+      style={
+        {
+          left: hover.x,
+          top: hover.y,
+          "--isl-tip-scale": 1 / viewScale,
+        } as CSSProperties
+      }
       role="tooltip"
       aria-hidden="true"
     >
@@ -220,6 +246,9 @@ export function IslandExplorerMap({
   onSelect,
   onBackgroundClick,
   readonly = false,
+  viewScale = 1,
+  tooltipAnchor = "pointer",
+  tooltipHidden = false,
 }: IslandExplorerMapProps) {
   const { width, height } = ISLAND_MAP_VIEWBOX;
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -244,6 +273,8 @@ export function IslandExplorerMap({
 
   const handleHover = useCallback(
     (id: string | null, event?: PointerEvent<SVGGElement>) => {
+      // 선택 고정 모드(터치)에서는 손가락을 올렸다는 이유로 이름표를 띄우지 않는다
+      if (tooltipAnchor === "selection") return;
       if (!id || !wrapRef.current) {
         setHover(null);
         return;
@@ -266,23 +297,54 @@ export function IslandExplorerMap({
         }
       }
 
+      // rect·rawX/rawY 는 확대가 반영된 화면 px 이다. 툴팁은 확대되기 전 좌표계에
+      // 그려지므로 clamp 는 화면 px 로 하고, 마지막에 배율로 나눠 되돌린다.
       const padX = 96;
       const padTop = 8;
       const padBottom = 24;
-      const x = Math.min(Math.max(rawX, padX), rect.width - padX);
-      const y = Math.min(Math.max(rawY, padTop), rect.height - padBottom);
+      const x = Math.min(Math.max(rawX, padX), rect.width - padX) / viewScale;
+      const y = Math.min(Math.max(rawY, padTop), rect.height - padBottom) / viewScale;
 
       setHover({ id, x, y });
     },
-    [mapPointToLocal],
+    [mapPointToLocal, viewScale, tooltipAnchor],
   );
+
+  /**
+   * 선택된 섬에 고정하는 툴팁 위치.
+   * 래퍼 기준 % 라서 감싼 쪽이 CSS transform 으로 확대·이동해도 그대로 맞는다.
+   */
+  const selectionTip = useMemo<MapHover | null>(() => {
+    if (tooltipAnchor !== "selection" || !selectedId) return null;
+    const pos = ISLAND_MAP_AREA_BY_ID[selectedId]?.boatPosition;
+    if (!pos) return null;
+    return {
+      id: selectedId,
+      x: `${(pos.x / width) * 100}%`,
+      y: `${(pos.y / height) * 100}%`,
+    };
+  }, [tooltipAnchor, selectedId, width, height]);
+
+  const activeTip = tooltipAnchor === "selection" ? selectionTip : hover;
 
   const handleSvgClick = useCallback(
     (event: MouseEvent<SVGSVGElement>) => {
       if (readonly || !onBackgroundClick) return;
       const target = event.target as Element;
       if (target.closest(".isl-explorer")) return;
-      onBackgroundClick();
+
+      // 누른 자리를 지도 원본 좌표(1024×642)로 환산해 같이 넘긴다
+      const svg = event.currentTarget;
+      const matrix = svg.getScreenCTM();
+      if (!matrix) {
+        onBackgroundClick();
+        return;
+      }
+      const pt = svg.createSVGPoint();
+      pt.x = event.clientX;
+      pt.y = event.clientY;
+      const local = pt.matrixTransform(matrix.inverse());
+      onBackgroundClick({ x: local.x, y: local.y });
     },
     [onBackgroundClick, readonly],
   );
@@ -346,7 +408,9 @@ export function IslandExplorerMap({
         </svg>
       </div>
 
-      {hover && !readonly && <IslandMapTooltip hover={hover} />}
+      {activeTip && !readonly && !tooltipHidden && (
+        <IslandMapTooltip hover={activeTip} viewScale={viewScale} />
+      )}
     </div>
   );
 }

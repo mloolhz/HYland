@@ -10,6 +10,7 @@ import {
   MissionHubRoute,
   MyPageRoute,
   NotFoundRoute,
+  SafetyRoute,
   SignupRoute,
   SportsRoute,
 } from "@/routes/ResponsiveRoutes";
@@ -35,7 +36,6 @@ import { WritePost } from "@/pages/WritePost";
 import { IslandBtiIntro } from "@/pages/IslandBtiIntro";
 import { IslandBtiTest } from "@/pages/IslandBtiTest";
 import { IslandBtiResult } from "@/pages/IslandBtiResult";
-import { Safety } from "@/pages/Safety";
 import { LegalDocumentPage } from "@/pages/LegalDocumentPage";
 import { ProfileCharacterProvider } from "@/context/ProfileCharacterContext";
 import { SessionProvider } from "@/store/session";
@@ -82,7 +82,7 @@ const router = createBrowserRouter([
       { path: "leaderboard", element: <MissionHubRoute /> },
       { path: "sports", element: <SportsRoute /> },
       { path: "sports/facility/:facilityId", element: <FacilityDetail /> },
-      { path: "safety", element: <Safety /> },
+      { path: "safety", element: <SafetyRoute /> },
       { path: "legal/:doc", element: <LegalDocumentPage /> },
       { path: "ai-recommend", element: <AiRecommend /> },
       { path: "community", element: <CommunityRoute /> },

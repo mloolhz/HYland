@@ -1447,6 +1447,45 @@ html.is-mobile-app body {
   transform: translateX(0);
 }
 
+/*
+  서랍은 열릴 때 처음부터 is-open 을 단 채로 DOM 에 붙는다(닫힘 애니메이션을 위해
+  닫힌 뒤에도 잠깐 남겨 두는 구조). 그래서 transition 은 시작점 없이 끝값으로 바로
+  가 버려 열릴 때만 애니메이션이 없었다. 붙는 순간 재생되는 keyframes 로 채운다.
+  닫힐 때는 위의 transition 이 그대로 맡는다.
+*/
+@keyframes m-nav-slide-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes m-nav-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.m-nav-root.is-open .m-nav {
+  animation: m-nav-slide-in 0.34s cubic-bezier(0.22, 0.7, 0.3, 1);
+}
+
+.m-nav-root.is-open .m-nav-backdrop {
+  animation: m-nav-fade-in 0.3s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .m-nav-root.is-open .m-nav,
+  .m-nav-root.is-open .m-nav-backdrop {
+    animation: none;
+  }
+}
+
 .m-nav__head {
   flex: none;
   display: flex;

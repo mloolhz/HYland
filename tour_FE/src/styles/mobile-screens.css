@@ -963,3 +963,360 @@ html.is-mobile-app .isl-detail-backdrop {
   text-align: center;
   word-break: keep-all;
 }
+
+/* ═══════════ 지도 확대·이동 뷰어 (시안) ═══════════ */
+.m-map {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.m-map__viewport {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--m-radius);
+  background: #1657a8;
+  /* 브라우저 기본 팬/줌을 막아야 드래그가 지도에 온다 */
+  touch-action: none;
+  cursor: grab;
+}
+
+.m-map__viewport.is-zoomed {
+  cursor: grabbing;
+}
+
+.m-map__stage {
+  width: 100%;
+  height: 100%;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+/* 확대·이동은 JS 가 프레임마다 값을 넣는다 (MobileIslandMap.animateTo).
+   CSS transition 은 쓰지 않는다 — 트랜지션을 켜는 클래스와 transform 값이 같은
+   렌더에 바뀌면 트랜지션이 아예 시작되지 않고 transitionend 도 오지 않았다. */
+
+/* 뷰어 안에서는 지도 래퍼가 자리를 꽉 채운다 */
+.m-map__stage .isl-map-interactive,
+.m-map__stage .isl-map-wrap {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+  border-radius: 0;
+}
+
+.m-map__stage .isl-map-svg {
+  width: 100%;
+  height: 100%;
+}
+
+/*
+  확대된 지도 위의 방문/미방문 표시는 섬을 가리지 않도록 작은 알약으로 그린다.
+  (크기는 IslandExplorerMap 이 확대 배율을 역보정해서 화면에서 일정하다)
+*/
+.m-map__stage .isl-map-tooltip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 3px 7px;
+  border-radius: 8px;
+  box-shadow: 0 3px 10px rgba(45, 46, 107, 0.2);
+  transform: scale(var(--isl-tip-scale, 1)) translate(-50%, calc(-100% - 8px));
+}
+
+.m-map__stage .isl-map-tooltip::after {
+  width: 7px;
+  height: 7px;
+  bottom: -4px;
+}
+
+.m-map__stage .isl-map-tooltip__name {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.2;
+}
+
+.m-map__stage .isl-map-tooltip__status {
+  width: auto;
+  gap: 4px;
+  padding: 2px 6px;
+  font-size: 10px;
+}
+
+.m-map__stage .isl-map-tooltip__dot {
+  width: 5px;
+  height: 5px;
+}
+
+.m-map__controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.m-map__zoom {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.m-map__btns {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.m-map__btns button {
+  min-width: 42px;
+  min-height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--navy);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.m-map__btns button:disabled {
+  color: #c3ccd9;
+  border-color: #eceff4;
+}
+
+.m-map__reset {
+  font-size: 13px !important;
+}
+
+/* ═══════════ 섬 안전정보 ═══════════ */
+/* 왼쪽 섬 / 오른쪽 시설 유형 드롭다운 */
+.m-sf__filters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.m-sf__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.m-sf__label {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.m-sf__select {
+  position: relative;
+  display: block;
+}
+
+.m-sf__select::after {
+  content: "";
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid #5b6a80;
+  border-bottom: 2px solid #5b6a80;
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+
+.m-sf__select select {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 34px 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--navy);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+.m-sf__select select:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 1px;
+}
+
+.m-sf__select select:disabled {
+  color: #c3ccd9;
+  background: #f5f7fa;
+  cursor: not-allowed;
+}
+
+.m-sf__result {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.m-sf__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.m-sf__head p {
+  margin: 0 0 2px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #21748a;
+}
+
+.m-sf__head h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.m-sf__head span {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.m-sf__list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.m-sf__item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+
+.m-sf__item:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.m-sf__type {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #eaf5f8;
+  color: #21748a;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.m-sf__name {
+  font-size: 15px;
+  color: var(--navy);
+  word-break: keep-all;
+}
+
+.m-sf__addr {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #53667b;
+}
+
+.m-sf__note {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #7a8aa0;
+}
+
+.m-sf__tel {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  margin-top: 4px;
+  padding: 0 14px;
+  border-radius: 10px;
+  background: var(--blue);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.m-sf__empty {
+  margin: 0;
+  padding: 12px 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.m-sf__map-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 14px;
+  border: 1px solid #9fc6d0;
+  border-radius: 12px;
+  color: #17657a;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.m-sf__emergency {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--m-radius);
+  background: #fff;
+}
+
+.m-sf__emergency h2 {
+  margin: 0 0 12px;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.m-sf__emergency-links {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.m-sf__emergency-links a {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  text-decoration: none;
+}
+
+.m-sf__emergency-links span {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.m-sf__emergency-links strong {
+  font-size: 20px;
+  line-height: 1.25;
+  color: var(--navy);
+}
