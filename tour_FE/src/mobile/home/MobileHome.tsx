@@ -2,13 +2,12 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { HERO_SLIDES, HERO_SLIDE_DURATION_MS } from "@/lib/landing-images";
 import { SPORTS_DATA, type CategoryKey } from "@/data/sports";
-import {
-  avaColor,
-  COMMUNITY_LANDING_EXAMPLE_REVIEWS,
-  formatNumber,
-  LANDING_LEADERBOARD,
-  type Review,
-} from "@/lib/landing-data";
+import { avaColor } from "@/lib/landing-data";
+import { usePosts, usePostsStatus } from "@/lib/post-store";
+import { postSummary, sortPosts } from "@/lib/posts";
+import { formatRelativeTime } from "@/lib/time";
+import { getIslandColors } from "@/constants/island";
+import { useOverallRank } from "@/hooks/useLeaderboard";
 import { IncheonWeatherBar } from "@/components/landing/IncheonWeatherBar";
 import { useSession } from "@/store/session";
 import { useUserProfile } from "@/hooks/useUserProfile";
@@ -240,51 +239,96 @@ function AiRail() {
   );
 }
 
+/**
+ * 탐험가 순위 — 서버 리더보드(GET /leaderboard) 상위 3명.
+ * 순위 기준은 획득한 배지 수다(미션을 깨야 배지가 나온다).
+ */
 function RankBlock() {
-  const top3 = LANDING_LEADERBOARD.slice(0, 3);
+  const { ranking, loading } = useOverallRank();
+  const top3 = ranking.slice(0, 3);
 
   return (
     <section className="m-sec">
       <SectionHead title="탐험가 순위" to="/leaderboard" />
-      <ol className="m-card m-rank">
-        {top3.map(([name, pts], i) => (
-          <li key={name}>
-            <span className="m-rank__no">{i + 1}</span>
-            <span className="m-rank__ava" style={{ background: avaColor(name) }}>
-              {name[0]}
-            </span>
-            <span className="m-rank__name">{name}</span>
-            <span className="m-rank__pts">{formatNumber(pts)} P</span>
-          </li>
-        ))}
-      </ol>
+      {loading ? (
+        <p className="m-empty">순위를 불러오는 중…</p>
+      ) : top3.length === 0 ? (
+        <p className="m-empty">아직 배지를 모은 탐험가가 없어요. 미션을 깨고 1등이 돼보세요!</p>
+      ) : (
+        <ol className="m-card m-rank">
+          {top3.map((row) => (
+            <li key={row.userId}>
+              <span className="m-rank__no">{row.rank}</span>
+              <span className="m-rank__ava" style={{ background: avaColor(row.nickname) }}>
+                {row.nickname[0]}
+              </span>
+              <span className="m-rank__name">{row.nickname}</span>
+              <span className="m-rank__pts">배지 {row.badgeCount}</span>
+            </li>
+          ))}
+        </ol>
+      )}
     </section>
   );
 }
 
+/**
+ * 최근 탐험 후기 — 커뮤니티에 실제로 올라온 글.
+ * Q&A 는 후기가 아니라 빼고, 누르면 그 글 상세로 간다.
+ */
 function ReviewBlock() {
-  const items: Review[] = COMMUNITY_LANDING_EXAMPLE_REVIEWS;
+  const posts = usePosts();
+  const status = usePostsStatus();
+
+  const items = useMemo(() => {
+    const records = posts.filter((p) => !p.isNotice && (p.type === "review" || p.type === "photo"));
+    return sortPosts(records, "latest").slice(0, 3);
+  }, [posts]);
 
   return (
     <section className="m-sec">
       <SectionHead title="최근 탐험 후기" to="/community" />
-      <ul className="m-card m-reviews">
-        {items.map((review: Review) => (
-          <li key={`${review.name}-${review.isl}`}>
-            <span className="m-reviews__ava" style={{ background: avaColor(review.name + review.isl) }}>
-              {review.name[0]}
-            </span>
-            <div className="m-reviews__body">
-              <div className="m-reviews__line">
-                <span className="m-reviews__isl">{review.isl}</span>
-                <span className="m-reviews__name">{review.name}</span>
-                <span className="m-reviews__act">{review.act}</span>
-              </div>
-              <p className="m-reviews__text">{review.text}</p>
-            </div>
-          </li>
-        ))}
-      </ul>
+      {status === "loading" && items.length === 0 ? (
+        <p className="m-empty">후기를 불러오는 중…</p>
+      ) : status === "error" ? (
+        <p className="m-empty">후기를 불러오지 못했어요.</p>
+      ) : items.length === 0 ? (
+        <p className="m-empty">아직 올라온 후기가 없어요. 첫 기록을 남겨보세요!</p>
+      ) : (
+        <ul className="m-card m-reviews">
+          {items.map((post) => {
+            const colors = getIslandColors(post.island);
+            return (
+              <li key={post.id}>
+                <Link to={`/community/${post.id}`} className="m-reviews__link">
+                  <span
+                    className="m-reviews__ava"
+                    style={{ background: avaColor(post.author.nickname + post.island) }}
+                  >
+                    {post.author.nickname[0]}
+                  </span>
+                  <span className="m-reviews__body">
+                    <span className="m-reviews__line">
+                      <span
+                        className="m-reviews__isl"
+                        style={{ background: colors.bg, color: colors.text }}
+                      >
+                        {post.island}
+                      </span>
+                      <span className="m-reviews__name">{post.author.nickname}</span>
+                      <span className="m-reviews__act">{post.activity}</span>
+                      <span className="m-reviews__time">{formatRelativeTime(post.createdAt)}</span>
+                    </span>
+                    <span className="m-reviews__title">{post.title}</span>
+                    <span className="m-reviews__text">{postSummary(post, 50)}</span>
+                  </span>
+                  <ChevronRightIcon size={18} />
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      )}
     </section>
   );
 }

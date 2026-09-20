@@ -7,7 +7,8 @@ import {
   missionQuestState,
   type MissionCategory,
 } from "@/mocks/missions";
-import { CATEGORY_LEADERBOARD, avaColor, formatNumber } from "@/lib/landing-data";
+import { avaColor } from "@/lib/landing-data";
+import { useLeaderboardView } from "@/hooks/useLeaderboard";
 import { useMissionProgress } from "@/store/mission-progress";
 import { useSession } from "@/store/session";
 import { MissionBadge } from "@/components/landing/MissionBadge";
@@ -91,9 +92,13 @@ function MissionList() {
   );
 }
 
+/**
+ * 부문별 순위 — 서버(GET /leaderboard/categories) 기준.
+ * 점수가 아니라 그 부문에서 획득한 배지 수로 줄을 세운다.
+ */
 function LeaderboardList() {
   const [category, setCategory] = useState<MissionCategory>("섬");
-  const rows = CATEGORY_LEADERBOARD[category] ?? [];
+  const { rows, loading } = useLeaderboardView(category);
 
   return (
     <>
@@ -112,18 +117,20 @@ function LeaderboardList() {
         ))}
       </div>
 
-      {rows.length === 0 ? (
+      {loading ? (
+        <p className="m-empty">순위를 불러오는 중…</p>
+      ) : rows.length === 0 ? (
         <p className="m-empty">아직 이 부문에 배지를 받은 사람이 없어요.</p>
       ) : (
         <ol className="m-card m-rank m-rank--full">
-          {rows.map(([name, pts], i) => (
-            <li key={name} className={i < 3 ? "is-top" : ""}>
-              <span className="m-rank__no">{i + 1}</span>
-              <span className="m-rank__ava" style={{ background: avaColor(name) }}>
-                {name[0]}
+          {rows.map((row) => (
+            <li key={row.userId} className={row.rank <= 3 ? "is-top" : ""}>
+              <span className="m-rank__no">{row.rank}</span>
+              <span className="m-rank__ava" style={{ background: avaColor(row.nickname) }}>
+                {row.nickname[0]}
               </span>
-              <span className="m-rank__name">{name}</span>
-              <span className="m-rank__pts">{formatNumber(pts)} P</span>
+              <span className="m-rank__name">{row.nickname}</span>
+              <span className="m-rank__pts">배지 {row.badgeCount}</span>
             </li>
           ))}
         </ol>
