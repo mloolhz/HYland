@@ -2,30 +2,32 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { RouterError } from "@/components/RouterError";
-import { LandingPage } from "@/components/landing/LandingPage";
+import {
+  CommunityRoute,
+  HomeRoute,
+  IslandsRoute,
+  LoginRoute,
+  MissionHubRoute,
+  MyPageRoute,
+  NotFoundRoute,
+  SignupRoute,
+  SportsRoute,
+} from "@/routes/ResponsiveRoutes";
 import { AuthLayout } from "@/layouts/AuthLayout";
 import { CommunityLayout } from "@/layouts/CommunityLayout";
-import { Community } from "@/pages/Community";
 import { FindAccount } from "@/pages/FindAccount";
-import { Login } from "@/pages/Login";
 import { OAuthCallback } from "@/pages/OAuthCallback";
 import { OAuthNickname } from "@/pages/OAuthNickname";
 import { MyActivity } from "@/pages/MyActivity";
 import { MyCommentsPage } from "@/pages/MyCommentsPage";
 import { MyLikedPage } from "@/pages/MyLikedPage";
 import { MyPostsPage } from "@/pages/MyPostsPage";
-import { NotFound } from "@/pages/NotFound";
 import { Notifications } from "@/pages/Notifications";
 import { UserProfilePage } from "@/pages/UserProfilePage";
 import { PostDetail } from "@/pages/PostDetail";
-import { Signup } from "@/pages/Signup";
-import { IslandExplorer } from "@/pages/IslandExplorer";
-import { MissionHub } from "@/pages/MissionHub";
-import { MyPage } from "@/pages/MyPage";
 import { MyPageSettings } from "@/pages/MyPageSettings";
 import { MyPageProfileEdit } from "@/pages/MyPageProfileEdit";
 import { AiRecommend } from "@/pages/AiRecommend";
-import { Sports } from "@/pages/Sports";
 import { FacilityDetail } from "@/pages/FacilityDetail";
 import { AdminSubmissions } from "@/pages/AdminSubmissions";
 import { AdminReports } from "@/pages/AdminReports";
@@ -61,25 +63,29 @@ import "./styles/admin.css";
 import "./styles/route-fade.css";
 import "./styles/safety.css";
 import "./styles/legal.css";
+// 모바일 전용 화면 (768px 이하)
+import "./styles/mobile.css";
+import "./styles/mobile-screens.css";
+import "./styles/mobile-pages.css";
 
 const router = createBrowserRouter([
-  { path: "/", element: <LandingPage />, errorElement: <RouterError /> },
+  { path: "/", element: <HomeRoute />, errorElement: <RouterError /> },
   {
     element: <CommunityLayout />,
     errorElement: <RouterError />,
     children: [
-      { path: "islands", element: <IslandExplorer /> },
+      { path: "islands", element: <IslandsRoute /> },
       { path: "island-bti", element: <IslandBtiIntro /> },
       { path: "island-bti/test", element: <IslandBtiTest /> },
       { path: "island-bti/result", element: <IslandBtiResult /> },
-      { path: "missions", element: <MissionHub /> },
-      { path: "leaderboard", element: <MissionHub /> },
-      { path: "sports", element: <Sports /> },
+      { path: "missions", element: <MissionHubRoute /> },
+      { path: "leaderboard", element: <MissionHubRoute /> },
+      { path: "sports", element: <SportsRoute /> },
       { path: "sports/facility/:facilityId", element: <FacilityDetail /> },
       { path: "safety", element: <Safety /> },
       { path: "legal/:doc", element: <LegalDocumentPage /> },
       { path: "ai-recommend", element: <AiRecommend /> },
-      { path: "community", element: <Community /> },
+      { path: "community", element: <CommunityRoute /> },
       { path: "community/write", element: <RequireAuth><WritePost /></RequireAuth> },
       { path: "community/my-posts", element: <RequireAuth><MyPostsPage /></RequireAuth> },
       { path: "community/my-comments", element: <RequireAuth><MyCommentsPage /></RequireAuth> },
@@ -91,7 +97,7 @@ const router = createBrowserRouter([
       // 검수 권한은 서버가 확인한다 (ADMIN 아니면 403)
       { path: "admin/submissions", element: <RequireAuth><AdminSubmissions /></RequireAuth> },
       { path: "admin/reports", element: <RequireAuth><AdminReports /></RequireAuth> },
-      { path: "mypage", element: <RequireAuth><MyPage /></RequireAuth> },
+      { path: "mypage", element: <RequireAuth><MyPageRoute /></RequireAuth> },
       { path: "mypage/settings", element: <RequireAuth><MyPageSettings /></RequireAuth> },
       { path: "mypage/settings/profile", element: <RequireAuth><MyPageProfileEdit /></RequireAuth> },
     ],
@@ -100,8 +106,8 @@ const router = createBrowserRouter([
     element: <AuthLayout />,
     errorElement: <RouterError />,
     children: [
-      { path: "login", element: <Login /> },
-      { path: "signup", element: <Signup /> },
+      { path: "login", element: <LoginRoute /> },
+      { path: "signup", element: <SignupRoute /> },
       { path: "find-account", element: <FindAccount /> },
       // 간편 로그인 — 제공사가 code 를 들고 돌아오는 자리
       { path: "oauth/callback/:provider", element: <OAuthCallback /> },
@@ -109,7 +115,7 @@ const router = createBrowserRouter([
       { path: "signup/nickname", element: <RequireAuth><OAuthNickname /></RequireAuth> },
     ],
   },
-  { path: "*", element: <NotFound /> },
+  { path: "*", element: <NotFoundRoute /> },
 ]);
 
 createRoot(document.getElementById("root")!).render(

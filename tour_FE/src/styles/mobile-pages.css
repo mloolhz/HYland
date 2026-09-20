@@ -1,0 +1,232 @@
+/* ══════════════════════════════════════════════════════════
+   모바일 셸 안에서 기존 페이지를 얹기 위한 보정
+
+   페이지 CSS 는 데스크톱 고정 헤더(74px) 자리를 스스로 비워 두는데,
+   모바일 셸은 .m-main 이 상단바만큼 이미 띄워 준다. 그대로 두면 두 번
+   비워져 화면 위가 텅 빈다. 여기서 그 몫을 걷어내고, 상단바에 붙어야
+   하는 sticky 위치만 셸 기준으로 다시 잡는다.
+
+   모든 규칙은 html.is-mobile-app (모바일 셸이 켜진 동안에만 붙는다)
+   아래에 둬서 데스크톱에는 닿지 않는다.
+   ══════════════════════════════════════════════════════════ */
+
+html.is-mobile-app {
+  --head-h: 0px;
+  --page-intro-band-h: 0px;
+}
+
+/* 74px 를 그대로 박아 둔 페이지 */
+html.is-mobile-app .sf-page {
+  padding-top: 0;
+}
+
+/* 상단바 아래에 붙는 sticky — 셸 기준으로 다시 */
+html.is-mobile-app .cm-page {
+  --cm-nav-h: var(--m-top-h);
+  --cm-sticky-top: calc(var(--m-top-h) + 8px);
+}
+
+/* 옆칸 요약처럼 세로로 쌓이면 의미가 없어지는 sticky 는 푼다 */
+html.is-mobile-app .rv-summary,
+html.is-mobile-app .cm-sidebar-sticky {
+  position: static;
+  max-height: none;
+}
+
+/* 페이지 안에 남아 있는 데스크톱 전용 장식 — 셸이 대신한다 */
+html.is-mobile-app .site-head,
+html.is-mobile-app footer#guide,
+html.is-mobile-app .scroll-top-btn,
+html.is-mobile-app .auth-home-link {
+  display: none;
+}
+
+/* 공용 컨테이너 여백 — 모바일 셸 기준으로 */
+html.is-mobile-app .container {
+  padding: 0 var(--m-gutter);
+}
+
+/* ───────────── 섬 탐험 ───────────── */
+/* 헤더 설명이 nowrap 이라 좁은 화면에서 옆으로 뚫고 나갔다 */
+html.is-mobile-app .isl-header-copy {
+  min-width: 0;
+}
+
+html.is-mobile-app .isl-header-desc {
+  white-space: normal;
+  word-break: keep-all;
+}
+
+html.is-mobile-app .isl-header-title {
+  word-break: keep-all;
+}
+
+/* ───────────── 섬 안전정보 ───────────── */
+/*
+  4열 표(시설유형·시설명·주소·연락처)는 좁은 화면에서 가로 스크롤로만 볼 수
+  있었다. 행을 통째로 카드처럼 세로로 펼친다.
+*/
+html.is-mobile-app .sf-table-wrap {
+  overflow-x: visible;
+}
+
+html.is-mobile-app .sf-table thead {
+  display: none;
+}
+
+html.is-mobile-app .sf-table,
+html.is-mobile-app .sf-table tbody,
+html.is-mobile-app .sf-table tr,
+html.is-mobile-app .sf-table td {
+  display: block;
+  width: 100%;
+}
+
+html.is-mobile-app .sf-table tbody tr {
+  padding: 14px 16px;
+  border-top: 1px solid #eef4f6;
+}
+
+html.is-mobile-app .sf-table tbody tr:first-child {
+  border-top: 0;
+}
+
+html.is-mobile-app .sf-table tbody td {
+  padding: 0;
+  border: 0;
+}
+
+html.is-mobile-app .sf-table tbody td + td {
+  margin-top: 4px;
+}
+
+/* 시설 유형 — 이름 위에 붙는 작은 라벨 */
+html.is-mobile-app .sf-table tbody td:first-child {
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #17657a;
+}
+
+html.is-mobile-app .sf-table__name {
+  font-size: 15px;
+}
+
+html.is-mobile-app .sf-table__tel {
+  display: inline-block;
+  margin-top: 2px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: #eaf5f8;
+}
+
+/* ───────────── 손가락으로 누를 수 있는 크기 ─────────────
+   데스크톱에서 마우스로 집던 작은 텍스트 링크들이 폰에서는 20px 남짓이라
+   누르기 어려웠다. 모바일에서만 세로 여백을 줘 40px 이상으로 만든다. */
+html.is-mobile-app .mp-settings-back,
+html.is-mobile-app .cm-subpage-back,
+html.is-mobile-app .cm-post-nick,
+html.is-mobile-app .cm-action-btn,
+html.is-mobile-app .cm-thread-fake,
+html.is-mobile-app .auth-footer-link,
+html.is-mobile-app .auth-find-link {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+}
+
+html.is-mobile-app .cm-action-btn {
+  padding: 8px 12px;
+}
+
+html.is-mobile-app .auth-footer-link a,
+html.is-mobile-app .auth-tab,
+html.is-mobile-app .auth-logo {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ───────────── 상단바와 겹치는 제목·뒤로가기 ─────────────
+   셸 상단바가 이미 화면 이름과 뒤로가기를 들고 있다. 페이지가 같은 걸
+   한 번 더 그리면 같은 글자가 두 줄로 겹쳐 보이고 자리만 먹는다. */
+html.is-mobile-app .mp-settings-back,
+html.is-mobile-app .mp-settings-title,
+html.is-mobile-app .cm-subpage-back,
+html.is-mobile-app .noti-page-head h1,
+html.is-mobile-app .cm-header-band {
+  display: none;
+}
+
+/* 커뮤니티 히어로 배너를 걷어낸 만큼 위를 다시 띄운다 */
+html.is-mobile-app .cm-page .cm-write,
+html.is-mobile-app .cm-subpage {
+  padding-top: 16px;
+}
+
+/* ───────────── AI 추천 ─────────────
+   .ai-page 는 100vh 를 통째로 쓰고 위에 헤더(74px)+40px 를 비워 둔다.
+   모바일 셸은 상단바·탭바가 그 높이를 이미 먹고 있어 화면이 잘렸고,
+   시작 화면은 위가 과하게 비었다. 셸이 남긴 높이에 맞춘다. */
+html.is-mobile-app .ai-page,
+html.is-mobile-app .ai-page--intro {
+  height: calc(100svh - var(--m-top-h) - var(--m-tab-h) - var(--m-safe-b) - 8px);
+  min-height: 0;
+  max-height: none;
+  padding-top: 12px;
+  justify-content: center;
+}
+
+html.is-mobile-app .ai-chat-spacer--grow {
+  min-height: 0;
+}
+
+html.is-mobile-app .ai-settings-panel__bti a {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ═══════════ 모바일 404 ═══════════ */
+.m-404 {
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100svh - var(--m-top-h) - var(--m-tab-h) - var(--m-safe-b));
+  text-align: center;
+}
+
+.m-404__code {
+  margin: 0;
+  font-size: 68px;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--navy);
+  opacity: 0.16;
+}
+
+.m-404__title {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.m-404__desc {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--muted);
+  word-break: keep-all;
+}
+
+.m-404__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.m-404__actions .m-btn {
+  text-decoration: none;
+}

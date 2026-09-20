@@ -21,6 +21,7 @@ import { buildApplyMessage } from "@/lib/ai-trip-labels";
 import { getAiSessionId } from "@/lib/ai-session-id";
 import { renderBoldText } from "@/lib/render-bold-text";
 import { CONTAINER } from "@/constants/layout";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { useIslandBti } from "@/context/ProfileCharacterContext";
 import type { AiResponse, WeatherInfo } from "@/types/ai-recommend";
 import type { RecommendationResponse } from "@/types/recommendation";
@@ -170,6 +171,7 @@ export function AiRecommend() {
   const introOuterRef = useRef<HTMLElement>(null);
   const introRef = useRef<HTMLDivElement>(null);
   const [introTopOffset, setIntroTopOffset] = useState<number | null>(null);
+  const isMobile = useIsMobile();
 
   // StrictMode의 개발 모드 mount→unmount→remount 시뮬레이션에서 cleanup만 있으면
   // remount 시 true로 복구되지 않아 이후 모든 타이핑이 첫 틱에서 즉시 중단된다.
@@ -610,7 +612,9 @@ export function AiRecommend() {
       className={`ai-page${hasStarted ? "" : " ai-page--intro"}`}
       ref={introOuterRef}
       style={
-        !hasStarted && introTopOffset !== null
+        // 모바일 셸에서는 상단바·탭바가 화면을 이미 깎아 놨다. 100vh 기준으로
+        // 잰 이 여백을 그대로 얹으면 시작 화면이 아래로 한참 밀린다.
+        !hasStarted && !isMobile && introTopOffset !== null
           ? { justifyContent: "flex-start", paddingTop: introTopOffset }
           : undefined
       }

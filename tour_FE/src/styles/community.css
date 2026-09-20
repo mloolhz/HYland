@@ -3143,7 +3143,13 @@ div.cm-post-row[role="link"] {
 }
 
 @media (max-width: 768px) {
-  .cm-list-hide-mobile {
+  /*
+    목록 머리글의 .cm-list-col-center 가 display:flex 로 더 셈이 높아,
+    글쓴이·작성일 칸이 모바일에서 안 숨겨지고 3칸 그리드 밖으로 흘러넘쳤다.
+    머리글까지 확실히 덮도록 선택자를 같이 올린다.
+  */
+  .cm-list-hide-mobile,
+  .cm-post-row-header .cm-list-hide-mobile {
     display: none;
   }
 

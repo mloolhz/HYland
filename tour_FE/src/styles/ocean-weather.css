@@ -173,9 +173,18 @@
 }
 
 @media (max-width: 520px) {
+  /* 줄바꿈을 켜지 않으면 width:100% 인 지표 묶음이 같은 줄에 남아
+     "오늘 인천 앞바다" 글자와 수치가 카드 밖으로 밀려났다. */
+  .incheon-wx {
+    flex-wrap: wrap;
+    row-gap: 8px;
+    padding: 10px 12px;
+  }
   .incheon-wx__metrics {
     width: 100%;
     margin-left: 0;
+    justify-content: space-between;
+    gap: 8px;
   }
   .ow-panel__metrics {
     gap: 16px;
