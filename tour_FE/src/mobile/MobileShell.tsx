@@ -1,42 +1,15 @@
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useLocation } from "react-router-dom";
-import { AuthSheetProvider, useAuthSheet } from "./auth/AuthSheetProvider";
+import { AuthSheetProvider } from "./auth/AuthSheetProvider";
 import { MobileFooter } from "./MobileFooter";
 import { MobileNavDrawer } from "./MobileNavDrawer";
 import { MobileTopBar } from "./MobileTopBar";
+import { useMobileAuthLinkIntercept } from "./useMobileAuthLinkIntercept";
 
 function MobileShellInner({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
-  const { openAuth } = useAuthSheet();
+  const interceptAuthLinks = useMobileAuthLinkIntercept();
   const [menuOpen, setMenuOpen] = useState(false);
-
-  /**
-   * 화면 곳곳에 흩어진 "로그인" 링크(<Link to="/login">)를 한곳에서 가로챈다.
-   *
-   * 모바일에는 로그인 페이지가 없고 바텀시트가 그 자리를 대신한다. 링크마다
-   * 고쳐 다니면 새로 추가되는 링크를 놓치므로, 셸에서 클릭을 잡아 시트를 연다.
-   * 보던 화면을 떠나지 않으니 로그인 후 그대로 이어서 쓸 수 있다.
-   *
-   * 캡처 단계에서 잡아야 한다. 버블 단계면 <Link> 의 onClick 이 먼저 돌아
-   * 이미 navigate() 가 끝난 뒤라 preventDefault 가 소용없다.
-   */
-  const interceptAuthLinks = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (e.defaultPrevented || e.button !== 0) return;
-      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-
-      const anchor = (e.target as HTMLElement).closest("a");
-      const href = anchor?.getAttribute("href");
-      if (!href) return;
-
-      const [path] = href.split("?");
-      if (path !== "/login" && path !== "/signup") return;
-
-      e.preventDefault();
-      openAuth(path === "/signup" ? "signup" : "login");
-    },
-    [openAuth],
-  );
 
   return (
     <div className="m-app" onClickCapture={interceptAuthLinks}>

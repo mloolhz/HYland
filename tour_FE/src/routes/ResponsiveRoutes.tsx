@@ -1,6 +1,6 @@
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { LandingPage } from "@/components/landing/LandingPage";
-import { MobileAuthRedirect } from "@/mobile/MobileAppShell";
+import { MobileAppShell, MobileAuthRedirect } from "@/mobile/MobileAppShell";
 import { MobileHome } from "@/mobile/home/MobileHome";
 import { MobileIslands } from "@/mobile/screens/MobileIslands";
 import { MobileSports } from "@/mobile/screens/MobileSports";
@@ -31,7 +31,11 @@ export function HomeRoute() {
 
   if (!isMobile) return <LandingPage />;
 
-  return <MobileHome />;
+  return (
+    <MobileAppShell>
+      <MobileHome />
+    </MobileAppShell>
+  );
 }
 
 export function LoginRoute() {
@@ -74,5 +78,9 @@ export function NotFoundRoute() {
 
   if (!isMobile) return <NotFound />;
 
-  return <MobileNotFound />;
+  return (
+    <MobileAppShell>
+      <MobileNotFound />
+    </MobileAppShell>
+  );
 }
