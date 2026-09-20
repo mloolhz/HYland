@@ -39,19 +39,56 @@ function num(v: string): number | null {
   return Number.isNaN(n) || n <= MISSING ? null : n;
 }
 
+const MIN_PARSED_STATIONS = 20;
+
 /** sea_obs 응답(콤마구분 텍스트, EUC-KR)을 지점ID→관측값 맵으로 파싱 */
 function parseSeaObs(text: string): Record<string, Obs> {
   const out: Record<string, Obs> = {};
   for (const line of text.split("\n")) {
     if (!line.trim() || line.startsWith("#")) continue;
     const p = line.split(",").map((c) => c.trim());
-    if (p.length < 14) continue;
-    // TP,TM,STN_ID,STN_KO,LON,LAT,WH,WD,WS,WS_GST,TW,TA,PA,HM
-    const [, tm, sid, , , , wh, , ws, , tw, ta] = p;
-    if (!sid) continue;
-    out[sid] = { wh: num(wh), ws: num(ws), tw: num(tw), ta: num(ta), tm };
+    if (p.length < 12) continue;
+
+    let tm: string | undefined;
+    let sid: string | undefined;
+    let wh: string | undefined;
+    let ws: string | undefined;
+    let tw: string | undefined;
+    let ta: string | undefined;
+
+    const rowType = p[0];
+    // 2024~ 기상청 typ01: "B, TM, STN_ID, …" (help=1 샘플과 동일)
+    if (rowType === "B" || rowType === "A") {
+      if (p.length < 14) continue;
+      tm = p[1];
+      sid = p[2];
+      wh = p[6];
+      ws = p[8];
+      tw = p[10];
+      ta = p[11];
+    } else if (/^\d{10,12}$/.test(rowType)) {
+      // 구형: TM이 첫 필드 (행 구분자 없음)
+      tm = p[0];
+      sid = p[1];
+      wh = p[5];
+      ws = p[7];
+      tw = p[9];
+      ta = p[10];
+    } else {
+      continue;
+    }
+
+    if (!sid || !/^\d+$/.test(sid)) continue;
+    out[sid] = { wh: num(wh), ws: num(ws), tw: num(tw), ta: num(ta), tm: tm ?? "" };
   }
   return out;
+}
+
+function decodeSeaObsBody(buf: ArrayBuffer): Record<string, Obs> {
+  const eucKr = parseSeaObs(new TextDecoder("euc-kr").decode(buf));
+  if (Object.keys(eucKr).length >= MIN_PARSED_STATIONS) return eucKr;
+  const utf8 = parseSeaObs(new TextDecoder("utf-8").decode(buf));
+  return Object.keys(utf8).length > Object.keys(eucKr).length ? utf8 : eucKr;
 }
 
 // ── 1시간 캐시 ──
@@ -60,12 +97,17 @@ const TTL = 60 * 60 * 1000; // 1시간
 
 async function getSeaObs(): Promise<Record<string, Obs>> {
   if (cache && Date.now() - cache.at < TTL) return cache.data;
-  const key = process.env.KMA_API_KEY;
+  const key = process.env.KMA_API_KEY?.trim();
   if (!key) throw new Error("KMA_API_KEY가 .env에 없어요");
   const res = await fetch(`${KMA_URL}?stn=0&help=1&authKey=${key}`);
+  if (!res.ok) throw new Error(`기상청 HTTP ${res.status}`);
   const buf = await res.arrayBuffer();
-  const text = new TextDecoder("euc-kr").decode(buf); // 기상청은 EUC-KR
-  const data = parseSeaObs(text);
+  const data = decodeSeaObsBody(buf);
+  if (Object.keys(data).length < MIN_PARSED_STATIONS) {
+    throw new Error(
+      `해양 관측 파싱 결과가 비어 있어요 (지점 ${Object.keys(data).length}개). KMA 키·응답 형식을 확인하세요`,
+    );
+  }
   cache = { data, at: Date.now() };
   return data;
 }
