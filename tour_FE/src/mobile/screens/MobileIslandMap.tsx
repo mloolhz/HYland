@@ -281,17 +281,33 @@ export function MobileIslandMap({
 
   const reset = useCallback(() => animateTo(IDENTITY), [animateTo]);
 
+  // 목록·드롭다운으로 고른 섬도 지도 탭과 같이 이름표·「섬 정보 보기」가 뜨게,
+  // 선택이 바뀌면 이동이 끝날 때까지 settledId 를 비운다.
+  useEffect(() => {
+    setSettledId(null);
+  }, [selectedId]);
+
   // 섬을 누르면 그 섬으로, 권역을 고르면 그 권역으로 확대 (전체면 원위치).
   // 고정 배율에서는 권역 가운데에 맞추면 가장자리 섬이 화면 밖에 남을 수 있어
   // 섬이 선택돼 있을 땐 그 섬 자체를 가운데에 둔다.
   useEffect(() => {
     if (size.w === 0) return;
+
+    if (selectedId) {
+      const islandBox = boxes.islands.get(selectedId);
+      if (islandBox) {
+        focusBox(islandBox);
+        return;
+      }
+    }
+
     if (!activeRegion) {
       reset();
       return;
     }
-    const box = (selectedId && boxes.islands.get(selectedId)) || boxes.regions.get(activeRegion);
-    if (box) focusBox(box);
+
+    const regionBox = boxes.regions.get(activeRegion);
+    if (regionBox) focusBox(regionBox);
   }, [activeRegion, selectedId, focusNonce, boxes, size, focusBox, reset]);
 
   /**

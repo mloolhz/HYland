@@ -135,6 +135,11 @@ export function MobileIslands() {
     });
   }, [query, region]);
 
+  /** 지도 탭 — 권역 칩 아래 가로 섬 목록 (지도 위 레이아웃) */
+  const mapIslandList = useMemo(() => {
+    return ISLANDS.filter((island) => !region || island.region === region);
+  }, [region]);
+
   const selectedIsland = selectedId ? (ISLAND_MAP[selectedId] ?? null) : null;
 
   return (
@@ -211,6 +216,21 @@ export function MobileIslands() {
 
       {view === "map" ? (
         <>
+          <div className="m-chips m-chips--islands" role="listbox" aria-label="섬 선택">
+            {mapIslandList.map((island) => (
+              <button
+                key={island.id}
+                type="button"
+                role="option"
+                aria-selected={selectedId === island.id}
+                className={`m-chip${selectedId === island.id ? " is-on" : ""}`}
+                onClick={() => selectIsland(island.id, false)}
+              >
+                {island.name}
+              </button>
+            ))}
+          </div>
+
           <MobileIslandMap
             selectedId={selectedId}
             activeRegion={region}

@@ -964,6 +964,11 @@ html.is-mobile-app .isl-detail-backdrop {
   word-break: keep-all;
 }
 
+/* 지도 탭 — 권역 칩 아래 섬 이름 가로 목록 */
+.m-chips--islands {
+  margin-bottom: 4px;
+}
+
 /* ═══════════ 지도 확대·이동 뷰어 (시안) ═══════════ */
 .m-map {
   display: flex;
