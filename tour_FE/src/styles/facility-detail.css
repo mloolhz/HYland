@@ -120,7 +120,7 @@
 .fd-link {
   color: #2563eb;
   text-decoration: none;
-  word-break: break-all;
+  word-break: keep-all;
 }
 
 .fd-link:hover {

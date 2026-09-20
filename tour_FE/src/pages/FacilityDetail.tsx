@@ -9,6 +9,7 @@ import {
   resolveSportIslandRegion,
 } from "@/lib/sports-region";
 import { CONTAINER } from "@/constants/layout";
+import { externalLinkLabel } from "@/lib/external-link-label";
 
 /**
  * 활동명으로 레저스포츠 탭의 종목을 찾는다.
@@ -167,8 +168,9 @@ export function FacilityDetail() {
                       href={facility.homepage}
                       target="_blank"
                       rel="noopener noreferrer"
+                      title={facility.homepage}
                     >
-                      {facility.homepage}
+                      {externalLinkLabel(facility.homepage, facility.name)}
                     </a>
                   )
                 }
