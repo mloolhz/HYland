@@ -4,6 +4,7 @@ import { IslandBtiContainer } from "@/components/island-bti/IslandBtiContainer";
 import { IslandBtiCharacterVisual } from "@/components/island-bti/IslandBtiCharacterVisual";
 import { useIslandBti, useProfileCharacter } from "@/context/ProfileCharacterContext";
 import { getMyIslandBtiProfileCharacter } from "@/data/profile-characters";
+import { ISLAND_BTI_ISLAND_FEATURES } from "@/data/island-bti/island-matches";
 import {
   getIslandBtiAxisRatios,
   getIslandBtiPercentages,
@@ -72,8 +73,6 @@ export function IslandBtiResult() {
   }
 
   const axisRatios = getIslandBtiAxisRatios(calculation.scores);
-  const rankLabels = ["1순위", "2순위", "3순위", "4순위"];
-  const topIsland = profile.recommendedIslands[0];
   const highlightActivities = profile.recommendedActivities.slice(0, 3);
   const themeStyle = { "--island-bti-theme": profile.themeColor } as CSSProperties;
   const aiRecommendEnabled = ISLAND_BTI_AI_RECOMMEND_PATH !== null;
@@ -128,13 +127,6 @@ export function IslandBtiResult() {
               {profile.name}
             </h2>
             <p className="ibti-result-tagline">{profile.tagline}</p>
-
-            {topIsland ? (
-              <div className="ibti-result-highlight ibti-result-highlight--island">
-                <span className="ibti-result-highlight__label">대표 추천 섬</span>
-                <strong className="ibti-result-highlight__value">{topIsland}</strong>
-              </div>
-            ) : null}
 
             {highlightActivities.length > 0 ? (
               <div className="ibti-result-highlight">
@@ -218,21 +210,16 @@ export function IslandBtiResult() {
 
             <div className="ibti-result-section">
               <h3 className="ibti-result-section__title">추천 섬</h3>
-              <ol className="ibti-island-rank">
+              <ul className="ibti-island-cards">
                 {profile.recommendedIslands.map((island, index) => (
                   <li key={island}>
-                    <span className="ibti-island-rank__label">
-                      {rankLabels[index] ?? `${index + 1}순위`}
-                    </span>
-                    <span className="ibti-island-rank__name">{island}</span>
+                    <h4 className="ibti-island-card__name">{island}</h4>
+                    <p className="ibti-island-card__feature">{ISLAND_BTI_ISLAND_FEATURES[island]}</p>
+                    <span className="ibti-island-card__reason-label">추천 이유</span>
+                    <p className="ibti-island-card__reason">{profile.recommendedIslandReasons[index]}</p>
                   </li>
                 ))}
-              </ol>
-            </div>
-
-            <div className="ibti-result-section">
-              <h3 className="ibti-result-section__title">추천 이유</h3>
-              <p className="ibti-result-text">{profile.recommendationReason}</p>
+              </ul>
             </div>
 
             <div className="ibti-result-section">

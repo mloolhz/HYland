@@ -54,6 +54,7 @@ export interface IslandBtiResultData {
   description: string[];
   recommendedActivities: string[];
   recommendedIslands: string[];
+  recommendedIslandReasons: string[];
   recommendationReason: string;
   travelTip: string;
   bestMatch: IslandBtiResultCode;
