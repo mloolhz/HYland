@@ -1,9 +1,11 @@
 /**
- * 심사용 — 스크린샷에 있는 커뮤니티 글 9건만 삭제 (재실행 시 0건이면 OK)
+ * 심사용 — 스크린샷에 있는 커뮤니티 글 9건만 삭제 (재실행 시 매칭 0건이면 중단)
  *
- * EC2: docker compose exec api npx tsx prisma/scripts/purge-judge-community-posts.ts
+ * EC2 (api 이미지를 pull 반영해 재빌드한 뒤):
+ *   docker compose up -d --build api
+ *   docker compose exec api npm run db:purge:judge-posts
  */
-import { prisma } from "../../src/prisma";
+import { prisma } from "../src/prisma";
 
 function dayRangeKst(date: string) {
   const start = new Date(`${date}T00:00:00+09:00`);
