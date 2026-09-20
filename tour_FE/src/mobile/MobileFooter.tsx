@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+import { LEGAL_CONTEST_LABEL } from "@/content/legal";
 import { demoProps } from "@/components/landing/ToastProvider";
 
 /**
@@ -12,18 +14,14 @@ export function MobileFooter() {
       <div className="m-foot__inner">
         <p className="m-foot__brand">인천섬 레저누리</p>
         <nav className="m-foot__links" aria-label="푸터 링크">
-          <a href="#" {...demoProps("개인정보처리방침 페이지는 준비 중이에요 📄")}>
-            개인정보처리방침
-          </a>
-          <a href="#" {...demoProps("이용약관 페이지는 준비 중이에요 📄")}>
-            이용약관
-          </a>
-          <a href="#" {...demoProps("제휴 문의 페이지는 준비 중이에요 🤝")}>
+          <Link to="/legal/privacy">개인정보처리방침</Link>
+          <Link to="/legal/terms">이용약관</Link>
+          <button type="button" className="m-foot__link-btn" {...demoProps("제휴 문의 페이지는 추후에 안내할 예정이에요.")}>
             제휴 문의
-          </a>
+          </button>
         </nav>
         <p className="m-foot__info">
-          문의: contact@islandquest.kr
+          {LEGAL_CONTEST_LABEL}
           <br />
           제작: HYland 팀
         </p>

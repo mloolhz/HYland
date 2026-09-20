@@ -1373,7 +1373,8 @@ html.is-mobile-app body {
   margin: -8px 0;
 }
 
-.m-foot__links a {
+.m-foot__links a,
+.m-foot__links .m-foot__link-btn {
   /* 손가락으로 누를 자리 — 글자만 두면 21px 밖에 안 나온다 */
   display: inline-flex;
   align-items: center;
@@ -1382,6 +1383,15 @@ html.is-mobile-app body {
   font-weight: 600;
   color: #b6c4d8;
   text-decoration: none;
+}
+
+.m-foot__links .m-foot__link-btn {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  cursor: pointer;
 }
 
 .m-foot__info,

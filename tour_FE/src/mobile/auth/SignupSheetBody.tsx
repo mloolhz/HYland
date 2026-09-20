@@ -17,6 +17,7 @@ import {
   validateNickname,
   validateUserId,
 } from "@/lib/authValidation";
+import { TermsAgreement } from "@/components/auth/TermsAgreement";
 
 type DupState = "idle" | "checking" | "ok" | "taken" | "invalid";
 
@@ -166,8 +167,6 @@ export function SignupSheetBody({
     if (step < 3) onStepChange(step + 1);
     else void submit();
   };
-
-  const allAgreed = terms.terms && terms.privacy && terms.marketing;
 
   return (
     <div className="m-auth m-signup">
@@ -396,46 +395,12 @@ export function SignupSheetBody({
         {step === 3 && (
           <>
             <h3 className="m-signup__title">약관에 동의해주세요</h3>
-
-            <button
-              type="button"
-              className={`m-terms__all${allAgreed ? " is-on" : ""}`}
-              onClick={() => {
-                const next = !allAgreed;
-                setTerms({ terms: next, privacy: next, marketing: next });
-              }}
-            >
-              <span className="m-terms__check" aria-hidden="true">
-                ✓
-              </span>
-              전체 동의
-            </button>
-
-            <ul className="m-terms__list">
-              {(
-                [
-                  { key: "terms", label: "이용약관 동의", required: true },
-                  { key: "privacy", label: "개인정보 처리방침 동의", required: true },
-                  { key: "marketing", label: "마케팅 정보 수신 동의", required: false },
-                ] as const
-              ).map((item) => (
-                <li key={item.key}>
-                  <label className="m-terms__row">
-                    <input
-                      type="checkbox"
-                      checked={terms[item.key]}
-                      onChange={(e) => setTerms((prev) => ({ ...prev, [item.key]: e.target.checked }))}
-                    />
-                    <span className="m-terms__check" aria-hidden="true">
-                      ✓
-                    </span>
-                    <span className="m-terms__label">
-                      <em>{item.required ? "필수" : "선택"}</em> {item.label}
-                    </span>
-                  </label>
-                </li>
-              ))}
-            </ul>
+            <TermsAgreement
+              terms={terms.terms}
+              privacy={terms.privacy}
+              marketing={terms.marketing}
+              onChange={setTerms}
+            />
           </>
         )}
 
