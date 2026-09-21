@@ -163,7 +163,9 @@ export function WritePost() {
       setError(
         err instanceof ApiError && err.status === 401
           ? "로그인이 필요해요. 로그인 후 다시 시도해주세요."
-          : "글을 저장하지 못했어요. 잠시 후 다시 시도해주세요.",
+          : err instanceof ApiError && err.status === 403
+            ? err.message
+            : "글을 저장하지 못했어요. 잠시 후 다시 시도해주세요.",
       );
     }
   };

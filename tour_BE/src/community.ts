@@ -161,11 +161,14 @@ router.post("/posts", requireAuth, async (req: Request, res: Response) => {
       return res.status(400).json({ error: "글 종류가 올바르지 않아요" });
     }
 
-    // 공지는 관리자만 — 일반 계정이 isNotice 를 보내도 무시한다
+    // 공지는 관리자만
     let isNotice = false;
     if (req.body?.isNotice === true) {
       const author = await prisma.user.findUnique({ where: { id: me }, select: { role: true } });
-      isNotice = author?.role === "ADMIN";
+      if (author?.role !== "ADMIN") {
+        return res.status(403).json({ error: "공지사항은 관리자 계정으로만 등록할 수 있어요." });
+      }
+      isNotice = true;
     }
 
     // 공지는 특정 섬 후기가 아니므로 "느낀 특징" 태그를 받지 않는다
@@ -209,7 +212,7 @@ router.post("/posts", requireAuth, async (req: Request, res: Response) => {
       include: { author: { select: authorSelect }, images: true },
     });
 
-    res.status(201).json({ id: post.id, title: post.title });
+    res.status(201).json({ id: post.id, title: post.title, isNotice: post.isNotice });
     // 글 수로 채워지는 미션(첫 후기·이야기꾼)을 다시 센다
     void syncAutoQuests(me);
   } catch (err) {

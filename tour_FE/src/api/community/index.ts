@@ -81,7 +81,7 @@ export function createPost(input: {
   tags?: ReviewTagId[];
   /** 관리자만 반영된다 (서버가 권한을 확인) */
   isNotice?: boolean;
-}): Promise<{ id: string; title: string }> {
+}): Promise<{ id: string; title: string; isNotice?: boolean }> {
   return request("/community/posts", { method: "POST", body: JSON.stringify(input) });
 }
 

@@ -4,6 +4,7 @@ import { CommunityHeader } from "@/components/community/CommunityHeader";
 import { FilterBar, type FilterValue, type ViewKey } from "@/components/community/FilterBar";
 import { GalleryGrid } from "@/components/community/GalleryGrid";
 import { Lightbox } from "@/components/community/Lightbox";
+import { NoticeBoard } from "@/components/community/NoticeBoard";
 import { PostList } from "@/components/community/PostList";
 import { ProfileCard } from "@/components/community/ProfileCard";
 import { SelectedIslands } from "@/components/community/SelectedIslands";
@@ -275,6 +276,8 @@ export function Community() {
           }}
           onClear={() => updateQuery({ activities: new Set(), resetPage: true })}
         />
+
+        {notices.length > 0 ? <NoticeBoard notices={notices} /> : null}
 
         <div className="cm-layout">
           <section className="cm-feed" aria-label="커뮤니티 피드">
