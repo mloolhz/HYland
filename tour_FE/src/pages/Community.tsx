@@ -4,14 +4,12 @@ import { CommunityHeader } from "@/components/community/CommunityHeader";
 import { FilterBar, type FilterValue, type ViewKey } from "@/components/community/FilterBar";
 import { GalleryGrid } from "@/components/community/GalleryGrid";
 import { Lightbox } from "@/components/community/Lightbox";
-import { NoticeBoard } from "@/components/community/NoticeBoard";
 import { PostList } from "@/components/community/PostList";
 import { ProfileCard } from "@/components/community/ProfileCard";
 import { SelectedIslands } from "@/components/community/SelectedIslands";
 import { SelectedActivities } from "@/components/community/SelectedActivities";
 import { CONTAINER } from "@/constants/layout";
-import { usePosts, usePostsStatus } from "@/lib/post-store";
-import { ReviewTagSummary } from "@/components/community/ReviewTagSummary";
+import { usePosts } from "@/lib/post-store";
 import { normalizeReviewTags, type ReviewTagId } from "@/constants/review-tags";
 import {
   filterPosts,
@@ -48,7 +46,6 @@ type LightboxState = {
 
 export function Community() {
   const posts = usePosts();
-  const postsStatus = usePostsStatus();
   const location = useLocation();
   const enterFade = Boolean((location.state as CommunityEnterFadeState | null)?.communityEnterFade);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -277,17 +274,8 @@ export function Community() {
           onClear={() => updateQuery({ activities: new Set(), resetPage: true })}
         />
 
-        {notices.length > 0 ? <NoticeBoard notices={notices} /> : null}
-
         <div className="cm-layout">
           <section className="cm-feed" aria-label="커뮤니티 피드">
-            {(category === "all" || category === "review") && <ReviewTagSummary
-              posts={posts}
-              island={islands.size === 1 ? [...islands][0] : undefined}
-              selected={tags}
-              status={postsStatus}
-              onSelect={(next) => updateQuery({ tags: next, resetPage: true })}
-            />}
             <div
               key={`${view}-${category}-${sort}-${[...islands].join(",")}-${[...activities].join(",")}-${tags.join(",")}-${query}-${safePage}`}
               className="cm-results-fade"

@@ -4,6 +4,7 @@ import { usePosts, usePostsStatus } from "@/lib/post-store";
 import {
   commentCount,
   filterPosts,
+  getNoticePosts,
   postSummary,
   sortPosts,
   type SortKey,
@@ -11,7 +12,6 @@ import {
 import { formatRelativeTime } from "@/lib/time";
 import { getIslandColors } from "@/constants/island";
 import { AuthorAvatar } from "@/components/community/AuthorAvatar";
-import { NoticeBoard } from "@/components/community/NoticeBoard";
 import { useSession } from "@/store/session";
 import { useAuthSheet } from "../auth/AuthSheetProvider";
 import type { Post } from "@/types/community";
@@ -149,8 +149,9 @@ export function MobileCommunity() {
   }, [posts, category, sort, query]);
 
   const visible = list.slice(0, limit);
-  // 공지는 목록(filterPosts)에서 빠지므로 위에 따로 보여 준다
-  const notices = useMemo(() => posts.filter((p) => p.isNotice), [posts]);
+  /** 공지는 filterPosts 에서 빠지므로 글 목록 맨 위에 붙인다 (별도 공지 박스 없음) */
+  const notices = useMemo(() => getNoticePosts(posts), [posts]);
+  const feed = useMemo(() => [...notices, ...visible], [notices, visible]);
 
   return (
     <div className="m-screen m-cm">
@@ -192,10 +193,8 @@ export function MobileCommunity() {
         />
       </form>
 
-      <NoticeBoard notices={notices} className="cm-notice-board--mobile" />
-
       <div className="m-cm__bar">
-        <span className="m-isl__count">{list.length}개의 글</span>
+        <span className="m-isl__count">{list.length + notices.length}개의 글</span>
         <div className="m-seg m-seg--sm">
           <button
             type="button"
@@ -218,14 +217,14 @@ export function MobileCommunity() {
         <p className="m-empty">글을 불러오는 중…</p>
       ) : status === "error" ? (
         <p className="m-empty">글을 불러오지 못했어요. 잠시 후 다시 시도해주세요.</p>
-      ) : list.length === 0 ? (
+      ) : list.length === 0 && notices.length === 0 ? (
         <p className="m-empty">
           {query.trim() ? "검색 결과가 없습니다." : "이 분류에 해당하는 글이 아직 없습니다."}
         </p>
       ) : (
         <>
           <ul className="m-cm__feed">
-            {visible.map((post) => (
+            {feed.map((post) => (
               <PostCard key={post.id} post={post} />
             ))}
           </ul>
