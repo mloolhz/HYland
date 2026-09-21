@@ -12,6 +12,7 @@ import { MobileFooter } from "@/mobile/MobileFooter";
 import { MobileNavDrawer } from "@/mobile/MobileNavDrawer";
 import { MobileTopBar } from "@/mobile/MobileTopBar";
 import { useMobileAuthLinkIntercept } from "@/mobile/useMobileAuthLinkIntercept";
+import { GuestBtiAiSessionReset } from "@/components/GuestBtiAiSessionReset";
 
 function CommunityLayoutBody() {
   const isMobile = useIsMobile();
@@ -39,6 +40,7 @@ function CommunityLayoutBody() {
 
   return (
     <>
+      <GuestBtiAiSessionReset />
       {!isMobile && <SiteHeader />}
       {!isMobile && <ScrollToTop />}
 

@@ -12,3 +12,7 @@ export function getAiSessionId(): string {
   }
   return id;
 }
+
+export function clearAiSessionId(): void {
+  sessionStorage.removeItem(SESSION_KEY);
+}

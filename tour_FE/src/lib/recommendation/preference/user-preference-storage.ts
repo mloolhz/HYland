@@ -1,4 +1,5 @@
 import { CURRENT_USER_ID } from "@/constants/auth";
+import { isMemberSession } from "@/lib/member-session";
 import type { IslandBtiResultRecord } from "@/types/island-bti";
 import type { UserPreference } from "@/types/recommendation";
 import { PREFERENCE_BLEND_WEIGHTS } from "@/lib/recommendation/config/recommendation-weights";
@@ -7,6 +8,10 @@ import {
 } from "@/lib/recommendation/preference/bti-preference.mapper";
 
 export const USER_PREFERENCE_STORAGE_KEY = "hyland:user-preference";
+
+function preferenceStorage(): Storage {
+  return isMemberSession() ? localStorage : sessionStorage;
+}
 
 function isUserPreference(value: unknown): value is UserPreference {
   if (!value || typeof value !== "object") return false;
@@ -24,7 +29,7 @@ export function loadUserPreference(): UserPreference | null {
   if (typeof window === "undefined") return null;
 
   try {
-    const raw = window.localStorage.getItem(USER_PREFERENCE_STORAGE_KEY);
+    const raw = preferenceStorage().getItem(USER_PREFERENCE_STORAGE_KEY);
     if (!raw) return null;
     const parsed: unknown = JSON.parse(raw);
     return isUserPreference(parsed) ? parsed : null;
@@ -37,7 +42,7 @@ export function saveUserPreference(preference: UserPreference): void {
   if (typeof window === "undefined") return;
 
   try {
-    window.localStorage.setItem(USER_PREFERENCE_STORAGE_KEY, JSON.stringify(preference));
+    preferenceStorage().setItem(USER_PREFERENCE_STORAGE_KEY, JSON.stringify(preference));
   } catch (error) {
     console.warn("Failed to save user preference:", error);
   }
@@ -64,5 +69,6 @@ export function upsertUserPreferenceFromBtiResult(
 
 export function clearUserPreference(): void {
   if (typeof window === "undefined") return;
-  window.localStorage.removeItem(USER_PREFERENCE_STORAGE_KEY);
+  localStorage.removeItem(USER_PREFERENCE_STORAGE_KEY);
+  sessionStorage.removeItem(USER_PREFERENCE_STORAGE_KEY);
 }

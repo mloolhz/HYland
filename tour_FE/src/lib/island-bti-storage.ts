@@ -1,7 +1,19 @@
 import { isIslandBtiResultCode } from "@/data/island-bti/results";
+import { isMemberSession } from "@/lib/member-session";
 import type { IslandBtiAxisScores, IslandBtiResultRecord } from "@/types/island-bti";
 
 export const ISLAND_BTI_HISTORY_STORAGE_KEY = "hyland:island-bti:history";
+
+/** 비회원(탭 sessionStorage) — 화면을 벗어나면 비우는 용도 */
+export const ISLAND_BTI_GUEST_HISTORY_STORAGE_KEY = "hyland:island-bti:history:guest";
+
+function historyStorage(): Storage {
+  return isMemberSession() ? localStorage : sessionStorage;
+}
+
+function historyStorageKey(): string {
+  return isMemberSession() ? ISLAND_BTI_HISTORY_STORAGE_KEY : ISLAND_BTI_GUEST_HISTORY_STORAGE_KEY;
+}
 
 export const ISLAND_BTI_HISTORY_MAX = 50;
 
@@ -40,7 +52,7 @@ export function loadIslandBtiHistory(): IslandBtiResultRecord[] {
   if (typeof window === "undefined") return [];
 
   try {
-    const raw = window.localStorage.getItem(ISLAND_BTI_HISTORY_STORAGE_KEY);
+    const raw = historyStorage().getItem(historyStorageKey());
     if (!raw) return [];
     const parsed: unknown = JSON.parse(raw);
     return sortHistoryByTestedAt(parseIslandBtiHistory(parsed));
@@ -53,12 +65,21 @@ export function saveIslandBtiHistory(history: IslandBtiResultRecord[]): boolean 
   if (typeof window === "undefined") return false;
 
   try {
-    window.localStorage.setItem(ISLAND_BTI_HISTORY_STORAGE_KEY, JSON.stringify(history));
+    const storage = historyStorage();
+    const key = historyStorageKey();
+    if (history.length === 0) storage.removeItem(key);
+    else storage.setItem(key, JSON.stringify(history));
     return true;
   } catch (error) {
     console.warn("Failed to save Island BTI history:", error);
     return false;
   }
+}
+
+/** 비회원 세션·화면 이탈 시 — 회원 localStorage 기록은 건드리지 않음 */
+export function clearGuestIslandBtiHistory(): void {
+  if (typeof window === "undefined") return;
+  sessionStorage.removeItem(ISLAND_BTI_GUEST_HISTORY_STORAGE_KEY);
 }
 
 export function sortHistoryByTestedAt(history: IslandBtiResultRecord[]): IslandBtiResultRecord[] {
