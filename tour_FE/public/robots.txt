@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /mypage
+Disallow: /notifications
+Disallow: /oauth/
+Disallow: /community/write
+
+Sitemap: https://icnsumleisurenuri.com/sitemap.xml
