@@ -73,7 +73,7 @@ export function CommunitySection() {
           </div>
         </div>
         <div className="live-card live-card--example reveal rv-r">
-          <p className="live-card-example-label">최신 후기</p>
+          <p className="live-card-example-label">예시 후기</p>
           {posts !== null && posts.length === 0 ? (
             <p className="live-card-empty">
               아직 올라온 후기가 없어요. 섬에 다녀왔다면 첫 후기를 남겨 주세요!
