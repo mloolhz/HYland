@@ -23,7 +23,7 @@ import type {
   IslandBtiResultCode,
   IslandBtiResultRecord,
 } from "@/types/island-bti";
-import { readToken } from "@/lib/token";
+import { resetGuestEphemeralPersistence } from "@/lib/guest-ephemeral-state";
 import { useSession } from "@/store/session";
 
 type ProfileCharacterContextValue = {
@@ -56,14 +56,18 @@ function toCurrentResult(record: IslandBtiResultRecord): CurrentIslandBtiResult 
 export function ProfileCharacterProvider({ children }: { children: ReactNode }) {
   const { isLoggedIn, loading: sessionLoading } = useSession();
   const [selectedCharacterId, setSelectedCharacterId] = useState(DEFAULT_PROFILE_CHARACTER_ID);
-  const [history, setHistory] = useState<IslandBtiResultRecord[]>(() =>
-    readToken() ? loadIslandBtiHistory() : [],
-  );
+  // JWT 확인 전 localStorage BTI를 읽으면 비회원 화면에도 유형 칩이 뜬다 — 세션 확정 후에만 로드
+  const [history, setHistory] = useState<IslandBtiResultRecord[]>([]);
   const [isProfileSelectModalOpen, setProfileSelectModalOpen] = useState(false);
 
   useEffect(() => {
     if (sessionLoading) return;
-    setHistory(isLoggedIn ? loadIslandBtiHistory() : []);
+    if (!isLoggedIn) {
+      resetGuestEphemeralPersistence({ ignoreToken: true });
+      setHistory([]);
+      return;
+    }
+    setHistory(loadIslandBtiHistory());
   }, [isLoggedIn, sessionLoading]);
 
   const latestResult = useMemo(() => getLatestIslandBtiResult(history), [history]);

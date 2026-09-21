@@ -22,6 +22,7 @@ import { renderBoldText } from "@/lib/render-bold-text";
 import { CONTAINER } from "@/constants/layout";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useIslandBti } from "@/context/ProfileCharacterContext";
+import { useSession } from "@/store/session";
 import type { AiResponse, WeatherInfo } from "@/types/ai-recommend";
 import type { RecommendationResponse } from "@/types/recommendation";
 import { AI_RECOMMEND_COPY } from "@/pages/aiRecommendCopy";
@@ -149,6 +150,7 @@ export function AiRecommend() {
   const navigate = useNavigate();
   const locationState = (location.state as LocationState | null) ?? null;
   const initialMessage = locationState?.initialMessage?.trim();
+  const { loading: sessionLoading } = useSession();
   const { hasResult, islandBtiResultCode } = useIslandBti();
   const [sessionId] = useState(() => getAiSessionId());
 
@@ -509,8 +511,9 @@ export function AiRecommend() {
 
   // 섬BTI 별칭(예: "파도 작전대장")을 넣은 인기 섬 칩. 검사 전이면 검사로 유도한다.
   const btiResultData = islandBtiResultCode ? getIslandBtiResult(islandBtiResultCode) : null;
+  // 세션 확인 전에는 generic 칩 (JWT·localStorage BTI가 잠깐 섞이는 것 방지)
   const btiChipLabel =
-    hasResult && btiResultData
+    !sessionLoading && hasResult && btiResultData
       ? `${btiResultData.name} 유형 추천 섬 코스 받기`
       : "섬BTI 추천 섬 코스 받기";
 
