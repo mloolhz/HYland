@@ -105,6 +105,8 @@ export function runRecommendationEngine(
   const userPreference = resolveUserPreference(options);
   const visitedIslandIds = resolveVisitedIds(options);
   const useIslandBti = request.useIslandBti === true && userPreference !== null;
+  const fixedIslandNames = request.fixedIslandNames ?? [];
+  const fixedIslandNameSet = new Set(fixedIslandNames);
   const contexts = buildMockIslandTravelContexts(request.trip.travelDate);
   const contextMap = new Map(contexts.map((ctx) => [ctx.islandId, ctx]));
 
@@ -113,11 +115,12 @@ export function runRecommendationEngine(
   const communityPosts = getPostsSnapshot();
 
   for (const island of ISLAND_RECOMMENDATION_FEATURES) {
+    if (fixedIslandNameSet.size > 0 && !fixedIslandNameSet.has(island.name)) continue;
     const context = contextMap.get(island.islandId);
     if (!context) continue;
 
     const hardFilter = applyHardFilters(island, context, request.trip);
-    if (!hardFilter.passed) continue;
+    if (!hardFilter.passed && fixedIslandNameSet.size === 0) continue;
 
     const islandBtiMatch =
       useIslandBti && userPreference
@@ -227,7 +230,11 @@ export function runRecommendationEngine(
     });
   }
 
-  const recommendations = pickTopIslands(candidates);
+  const recommendations = fixedIslandNames.length > 0
+    ? fixedIslandNames
+        .map((name) => candidates.find((candidate) => candidate.islandName === name))
+        .filter((item): item is IslandRecommendationItem => item !== undefined)
+    : pickTopIslands(candidates);
 
   const userTraits =
     useIslandBti && userPreference

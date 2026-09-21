@@ -80,7 +80,7 @@ export function IslandBtiResult() {
   const handleAiRecommend = () => {
     if (!ISLAND_BTI_AI_RECOMMEND_PATH) return;
 
-    navigate(ISLAND_BTI_AI_RECOMMEND_PATH, {
+    navigate(`${ISLAND_BTI_AI_RECOMMEND_PATH}?islandBti=${profile.code}`, {
       state: {
         islandBti: {
           code: profile.code,

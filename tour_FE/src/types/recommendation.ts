@@ -66,6 +66,10 @@ export type RecommendationRequest = {
   trip: TripIntent;
   /** 기본 true — false면 이번 여행 조건 중심 */
   useIslandBti?: boolean;
+  /** 섬BTI 결과 화면에서 진입한 경우 공통 매핑의 세 섬으로 결과를 고정 */
+  fixedIslandBtiCode?: IslandBtiResultCode;
+  /** 엔진 내부에서 fixedIslandBtiCode에 해당하는 후보만 완성하기 위해 사용 */
+  fixedIslandNames?: string[];
 };
 
 /** 세부 추천 점수 (0~100) */

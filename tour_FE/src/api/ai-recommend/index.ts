@@ -18,6 +18,7 @@ type RecommendPayload = {
   tips?: string[];
   followups?: string[];
   weather?: WeatherInfo;
+  btiIslands?: Array<{ islandName: string; reason: string }>;
 };
 
 function toAiResponse(data: RecommendPayload): AiResponse {
@@ -32,6 +33,7 @@ function toAiResponse(data: RecommendPayload): AiResponse {
     tips: data.tips,
     followups: data.followups,
     weather: data.weather,
+    btiIslands: data.btiIslands,
   };
 }
 

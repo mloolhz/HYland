@@ -10,7 +10,7 @@ import {
   type ChatHistoryItem,
   type QuestionSource,
 } from "@/api/ai-recommend";
-import { postRecommendations } from "@/api/recommendation";
+import { getFixedIslandBtiRecommendations, postRecommendations } from "@/api/recommendation";
 import { loadPosts } from "@/lib/post-store";
 import { getBtiPreferences, type BtiIslandPreference } from "@/api/bti-preferences";
 import { getIslandBtiResult } from "@/data/island-bti/results";
@@ -25,6 +25,7 @@ import { CONTAINER } from "@/constants/layout";
 import { useIslandBti } from "@/context/ProfileCharacterContext";
 import type { AiResponse, WeatherInfo } from "@/types/ai-recommend";
 import type { RecommendationResponse } from "@/types/recommendation";
+import type { IslandBtiResultCode } from "@/types/island-bti";
 import { AI_RECOMMEND_COPY } from "@/pages/aiRecommendCopy";
 import { TYPEWRITER_CHARS_PER_TICK, TYPEWRITER_TICK_MS } from "@/hooks/useStreamTypewriter";
 
@@ -60,7 +61,7 @@ type AiTurn = {
   suggestedQuestions: string[] | null;
   /** 재시도 시 원래 출처를 그대로 다시 보내기 위해 보관 */
   questionSource?: QuestionSource;
-  /** 섬BTI 인기 섬 칩 응답 (null=조회 중, []=데이터 부족) */
+  /** 섬BTI 고정 추천 섬 응답 (null=조회 중, []=데이터 부족) */
   btiIslands?: BtiIslandPreference[] | null;
 };
 
@@ -160,6 +161,7 @@ export function AiRecommend() {
   const location = useLocation();
   const navigate = useNavigate();
   const locationState = (location.state as LocationState | null) ?? null;
+  const btiCodeFromQuery = new URLSearchParams(location.search).get("islandBti");
   const initialMessage = locationState?.initialMessage?.trim();
   const { hasResult, islandBtiResultCode } = useIslandBti();
   const [sessionId] = useState(() => getAiSessionId());
@@ -334,7 +336,8 @@ export function AiRecommend() {
     });
   }, []);
 
-  const runStructuredRecommendation = useCallback(async () => {
+  const runStructuredRecommendation = useCallback(async (forcedBtiCode?: IslandBtiResultCode) => {
+    const fixedIslandBtiCode = forcedBtiCode ?? (hasResult ? islandBtiResultCode ?? undefined : undefined);
     return postRecommendations({
       trip: {
         travelDate: tripForm.travelDate,
@@ -346,14 +349,19 @@ export function AiRecommend() {
         intensity: tripForm.intensity,
       },
       useIslandBti: hasResult,
+      fixedIslandBtiCode,
     });
-  }, [tripForm, hasResult]);
+  }, [tripForm, hasResult, islandBtiResultCode]);
 
   const executeTurn = useCallback(
     async (
       displayText: string,
       promptText: string,
-      options: { withRecommendation: boolean; questionSource?: QuestionSource },
+      options: {
+        withRecommendation: boolean;
+        questionSource?: QuestionSource;
+        fixedIslandBtiCode?: IslandBtiResultCode;
+      },
     ) => {
       if (loading) return;
 
@@ -406,7 +414,9 @@ export function AiRecommend() {
             // 섬BTI별 섬 선호도 집계용 스냅샷 (검사 이력이 없으면 생략)
             islandBti: hasResult ? islandBtiResultCode ?? undefined : undefined,
           }
-        : undefined;
+        : hasResult && islandBtiResultCode
+          ? { islandBti: islandBtiResultCode }
+          : undefined;
 
       // TOP3 단계에서 미리 조회하면 상세 답변 단계에서 같은 날짜를 다시 검색하지 않고 재사용한다.
       let weather: WeatherInfo | null = null;
@@ -417,8 +427,11 @@ export function AiRecommend() {
         // 직접 입력한 질문에만 쓰는 걸로 분리했다. 대신 비슷한 조건의 다른 세션이
         // 이어서 물어본 질문을 예상 질문 칩으로 보여준다.
         if (options.withRecommendation) {
+          const recommendationPromise = options.fixedIslandBtiCode
+            ? getFixedIslandBtiRecommendations(options.fixedIslandBtiCode)
+            : runStructuredRecommendation();
           const [recommendation, weatherResult] = await Promise.all([
-            runStructuredRecommendation().catch((err) => {
+            recommendationPromise.catch((err) => {
               console.error("[ai-recommend] 구조화 추천 실패", err);
               return null;
             }),
@@ -521,9 +534,10 @@ export function AiRecommend() {
     [executeTurn],
   );
 
-  const applyTripConditions = useCallback(async () => {
+  const applyTripConditions = useCallback(async (fixedIslandBtiCode?: IslandBtiResultCode) => {
     await executeTurn(AI_RECOMMEND_COPY.applyLabel, buildApplyMessage(tripForm), {
       withRecommendation: true,
+      fixedIslandBtiCode,
     });
   }, [executeTurn, tripForm]);
 
@@ -537,14 +551,14 @@ export function AiRecommend() {
     [executeTurn],
   );
 
-  // 섬BTI 별칭(예: "파도 작전대장")을 넣은 인기 섬 칩. 검사 전이면 검사로 유도한다.
+  // 섬BTI 별칭(예: "파도 작전대장")을 넣은 추천 섬 칩. 검사 전이면 검사로 유도한다.
   const btiResultData = islandBtiResultCode ? getIslandBtiResult(islandBtiResultCode) : null;
   const btiChipLabel =
     hasResult && btiResultData
-      ? `${btiResultData.name} 유형의 인기 섬 확인하기`
-      : "섬BTI로 인기 섬 확인하기";
+      ? `${btiResultData.name} 유형의 추천 섬 확인하기`
+      : "섬BTI로 추천 섬 확인하기";
 
-  // 칩 클릭 → 섬BTI 유형별 인기 섬을 백엔드에서 받아 대화에 답변으로 띄운다.
+  // 칩 클릭 → 결과 화면과 같은 공통 매핑을 백엔드에서 받아 대화에 띄운다.
   const handleBtiPopularChip = useCallback(() => {
     if (!hasResult || !islandBtiResultCode) {
       navigate("/island-bti/test");
@@ -628,18 +642,24 @@ export function AiRecommend() {
       return;
     }
 
-    if (locationState?.islandBti) {
+    const entryBtiCode = btiCodeFromQuery ?? locationState?.islandBti?.code;
+    const entryProfile = entryBtiCode ? getIslandBtiResult(entryBtiCode) : null;
+    if (entryProfile) {
       initialHandled.current = true;
       setBootstrapped(true);
       setSettingsOpen(false);
-      void applyTripConditions();
-      navigate(location.pathname, { replace: true, state: null });
+      // 결과 페이지에서 다시 들어오면 모듈 캐시에 남은 예전 TOP3가 함께 보이지 않게
+      // 대화를 초기화하고, 전달받은 유형 코드를 추천 계산에 직접 고정한다.
+      cachedTurns = [];
+      setTurns([]);
+      void applyTripConditions(entryProfile.code);
       return;
     }
 
     setBootstrapped(true);
   }, [
     applyTripConditions,
+    btiCodeFromQuery,
     initialMessage,
     location.pathname,
     locationState?.islandBti,
@@ -680,7 +700,7 @@ export function AiRecommend() {
                   {q}
                 </button>
               ))}
-              {/* 섬BTI 인기 섬 — 고정 칩 (별칭 반영). 예전엔 입력창 아래 별도 버튼이었다. */}
+              {/* 섬BTI 추천 섬 — 고정 칩 (별칭 반영). 예전엔 입력창 아래 별도 버튼이었다. */}
               <button
                 type="button"
                 className="ai-example-chip ai-example-chip--bti"
@@ -753,7 +773,7 @@ export function AiRecommend() {
 
                     {turn.phase === "detail-loading" && (
                       <LoadingDots
-                        label={turn.btiIslands === null ? "인기 섬을 찾고 있어요" : AI_RECOMMEND_COPY.loading}
+        label={turn.btiIslands === null ? "추천 섬을 찾고 있어요" : AI_RECOMMEND_COPY.loading}
                       />
                     )}
 
@@ -761,7 +781,7 @@ export function AiRecommend() {
                       <div className="ai-bubble ai-bubble--assistant ai-fade-up">
                         {turn.btiIslands.length > 0 ? (
                           <>
-                            <p className="ai-rec-lead">같은 섬BTI 유형이 특히 많이 찾은 섬이에요.</p>
+                            <p className="ai-rec-lead">내 섬BTI 유형과 잘 맞는 추천 섬이에요.</p>
                             <ol className="ai-bti-islands">
                               {turn.btiIslands.map((it, i) => (
                                 <li key={it.islandName} className="ai-bti-islands__item">

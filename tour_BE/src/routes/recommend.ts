@@ -4,6 +4,7 @@ import { prisma } from "../prisma";
 import { askGemini, askGeminiStream } from "../services/gemini";
 import { buildCommunityTips, findIslandNamesInText } from "../services/community-tips";
 import { ISLAND_GUIDE_PROMPT } from "../services/island-guide";
+import { ISLAND_BTI_ISLAND_MATCHES } from "../../../tour_FE/src/data/island-bti/island-matches";
 
 // 커넥션 풀을 하나만 쓰도록 앱 공용 Prisma 클라이언트(../prisma)를 재사용한다.
 // DATABASE_URL 파싱과 driver adapter 구성은 그쪽에 모여 있다.
@@ -49,6 +50,34 @@ interface PersonaInput {
   islandBti?: string;
   /** TOP3 단계에서 이미 조회한 날씨 — 있으면 재검색하지 않고 그대로 재사용 */
   weather?: WeatherInfo;
+}
+
+type IslandBtiCode = keyof typeof ISLAND_BTI_ISLAND_MATCHES;
+
+function getIslandBtiMatches(persona?: PersonaInput) {
+  const code = persona?.islandBti?.toUpperCase() as IslandBtiCode | undefined;
+  return code && code in ISLAND_BTI_ISLAND_MATCHES ? ISLAND_BTI_ISLAND_MATCHES[code] : null;
+}
+
+function isIslandBtiRecommendationQuestion(question: string): boolean {
+  const normalized = question.replace(/\s+/g, "").toUpperCase();
+  const mentionsBti = normalized.includes("섬BTI") || normalized.includes("내유형");
+  return mentionsBti && /(추천|좋아하는섬|어울리는섬|맞는섬)/.test(normalized);
+}
+
+function buildFixedIslandBtiResponse(question: string, persona?: PersonaInput) {
+  if (!isIslandBtiRecommendationQuestion(question)) return null;
+  const matches = getIslandBtiMatches(persona);
+  if (!matches) return null;
+
+  return {
+    text: "섬BTI 결과에서 선정된 세 곳을 그대로 안내할게요. 각 섬은 같은 유형 안에서도 서로 다른 여행 매력을 보여줘요.",
+    recommendations: [],
+    course: null,
+    tips: [],
+    followups: matches.map(({ island }) => `${island} 자세히 알려줘`),
+    btiIslands: matches.map(({ island, reason }) => ({ islandName: island, reason })),
+  };
 }
 
 function buildHistorySection(history?: HistoryItem[]): string {
@@ -423,6 +452,13 @@ router.post("/recommend/stream", async (req, res) => {
 
   try {
     console.log("[stream] 요청 받음, question:", question);
+    const fixedBtiResponse = buildFixedIslandBtiResponse(question, persona);
+    if (fixedBtiResponse) {
+      writeSSE(res, "done", fixedBtiResponse);
+      res.end();
+      saveRecommendation(question, fixedBtiResponse, persona, sessionId, questionSource);
+      return;
+    }
     const prompt = buildRecommendPrompt(question, history, persona);
     const grounded = needsWeatherSearch(persona);
 
@@ -481,6 +517,13 @@ router.post("/recommend", async (req, res) => {
 
     if (!question || typeof question !== "string") {
       return res.status(400).json({ error: "question이 필요합니다." });
+    }
+
+    const fixedBtiResponse = buildFixedIslandBtiResponse(question, persona);
+    if (fixedBtiResponse) {
+      res.json(fixedBtiResponse);
+      saveRecommendation(question, fixedBtiResponse, persona, sessionId, questionSource);
+      return;
     }
 
     const prompt = buildRecommendPrompt(question, history, persona);
@@ -680,41 +723,14 @@ router.get("/popular-questions", async (req, res) => {
 // query ?code=AWCP 로 특정 유형만, 생략하면 전체 유형을 반환한다.
 router.get("/bti-preferences", async (req, res) => {
   try {
-    const code = typeof req.query.code === "string" ? req.query.code : undefined;
-
-    const rows = await prisma.recommendation.findMany({
-      where: { islandBti: code ? code : { not: null } },
-      select: { islandBti: true, response: true },
-    });
-
-    // islandBti별로 response.recommendations[].islandName 등장 횟수를 집계한다.
-    const counters = new Map<string, Map<string, number>>();
-    for (const row of rows) {
-      if (!row.islandBti) continue;
-      const recommendations = (row.response as { recommendations?: { islandName?: string }[] } | null)
-        ?.recommendations;
-      if (!Array.isArray(recommendations)) continue;
-
-      let islandCounts = counters.get(row.islandBti);
-      if (!islandCounts) {
-        islandCounts = new Map();
-        counters.set(row.islandBti, islandCounts);
-      }
-
-      for (const item of recommendations) {
-        if (!item?.islandName) continue;
-        islandCounts.set(item.islandName, (islandCounts.get(item.islandName) ?? 0) + 1);
-      }
-    }
-
-    const preferences = [...counters.entries()].map(([islandBti, islandCounts]) => ({
-      islandBti,
-      sampleCount: rows.filter((r) => r.islandBti === islandBti).length,
-      topIslands: [...islandCounts.entries()]
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 3)
-        .map(([islandName, count]) => ({ islandName, count })),
-    }));
+    const requestedCode = typeof req.query.code === "string" ? req.query.code.toUpperCase() : undefined;
+    const preferences = Object.entries(ISLAND_BTI_ISLAND_MATCHES)
+      .filter(([code]) => !requestedCode || code === requestedCode)
+      .map(([islandBti, matches]) => ({
+        islandBti,
+        sampleCount: 0,
+        topIslands: matches.map(({ island }) => ({ islandName: island, count: 0 })),
+      }));
 
     res.json({ preferences });
   } catch (err) {

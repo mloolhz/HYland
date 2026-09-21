@@ -47,6 +47,17 @@ export function AiResponseContent({ response, onFollowup }: AiResponseContentPro
 
       <p className="ai-response-text" style={{ whiteSpace: "pre-line" }}>{renderBoldText(response.text)}</p>
 
+      {response.btiIslands && response.btiIslands.length > 0 && (
+        <div className="ai-response-islands ai-fade-up">
+          {response.btiIslands.map(({ islandName, reason }) => (
+            <p key={islandName} className="ai-island-note-text">
+              <span className="ai-island-note-text__name">{islandName}</span>
+              {reason}
+            </p>
+          ))}
+        </div>
+      )}
+
       {islandCharacteristics.length > 0 && (
         <div className="ai-response-islands ai-fade-up">
           {islandCharacteristics.map(({ name, editorial }) => (

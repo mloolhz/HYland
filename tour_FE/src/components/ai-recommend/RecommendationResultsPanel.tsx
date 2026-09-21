@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { AiCourseTimeline } from "@/components/ai-recommend/AiCourseTimeline";
 import { ISLAND_BTI_RESULTS } from "@/data/island-bti/results";
+import { ISLAND_MAP } from "@/lib/island-data";
 import type { RecommendationResponse } from "@/types/recommendation";
 import type { WeatherInfo } from "@/types/ai-recommend";
 
@@ -153,11 +154,13 @@ export function RecommendationResultsPanel({ response, weather }: Recommendation
             </div>
           ) : null}
 
-          <div className="ai-rec-island-card__actions">
-            <Link to={`/islands/${item.islandId}`} className="ai-rec-island-card__link">
-              {item.islandName} 자세히 보기
-            </Link>
-          </div>
+          {ISLAND_MAP[item.islandId]?.name === item.islandName ? (
+            <div className="ai-rec-island-card__actions">
+              <Link to={`/islands/${item.islandId}`} className="ai-rec-island-card__link">
+                {item.islandName} 자세히 보기
+              </Link>
+            </div>
+          ) : null}
         </article>
       ))}
     </div>

@@ -35,6 +35,7 @@ export type WeatherInfo = {
 export type AiResponse = {
   text: string;
   recommendations: RecItem[];
+  btiIslands?: Array<{ islandName: string; reason: string }>;
   course?: { title: string; steps: CourseStep[] };
   tips?: string[];
   followups?: string[];

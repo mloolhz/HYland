@@ -4,7 +4,7 @@ import { getBtiPreferences, type BtiIslandPreference } from "@/api/bti-preferenc
 import { getIslandBtiResult } from "@/data/island-bti/results";
 import { useIslandBti } from "@/context/ProfileCharacterContext";
 
-/** 입력창 아래 버튼 하나로 노출되는 섬BTI별 인기 섬 · 미검사자 유도 */
+/** 입력창 아래 버튼 하나로 노출되는 섬BTI별 고정 추천 섬 · 미검사자 유도 */
 export function IslandBtiPreferenceCard() {
   const navigate = useNavigate();
   const { hasResult, islandBtiResultCode } = useIslandBti();
@@ -36,8 +36,8 @@ export function IslandBtiPreferenceCard() {
   const resultData = islandBtiResultCode ? getIslandBtiResult(islandBtiResultCode) : null;
   const buttonLabel =
     hasResult && islandBtiResultCode
-      ? `${resultData ? resultData.name : islandBtiResultCode} 유형이 선호하는 섬 ${expanded ? "숨기기" : "보기"}`
-      : "섬BTI 검사하고 인기 섬 확인하기";
+      ? `${resultData ? resultData.name : islandBtiResultCode} 유형의 추천 섬 ${expanded ? "숨기기" : "보기"}`
+      : "섬BTI 검사하고 추천 섬 확인하기";
 
   return (
     <div className="ai-bti-pref">
