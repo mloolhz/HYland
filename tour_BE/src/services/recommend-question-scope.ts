@@ -2,7 +2,9 @@
  * AI 추천 입구 — 질문이 **인천 섬** 여행·레저 서비스 범위인지 LLM이 판단한다.
  * 0~1 점수 + 임의 임계값 대신 inScope + 판단 이유를 받는다.
  */
-import { askGemini } from "./gemini";
+// 추천 본문과 같은 모델(OpenAI)로 판단한다. Gemini flash-lite 는 "가족 당일치기 코스 추천"
+// 같은 첫 화면 예시 질문까지 "인천 섬 언급이 없다"며 범위 밖으로 막는 일이 있었다.
+import { askGemini } from "./openai";
 
 /** 유사도 비교 기준 — 일반 '관광 코스'가 아니라 **인천 섬** 전용 서비스 */
 export const SCOPE_ANCHOR_TOPIC =
@@ -48,6 +50,7 @@ function buildScopeCheckPrompt(question: string, history?: ScopeCheckPromptHisto
 - inScope=false: 프로그래밍·과제·번역 등 여행과 무관한 요청, 여행 포장이지만 실제 목적이 다른 작업
 - "인천"만 있고 섬·배편·레저 없이 내륙 관광만 원하면 inScope=false (reason에 내륙/타지역 등 구체적 근거)
 
+- inScope=true: 지역을 말하지 않은 일반 여행·코스·레저 요청 (예: "가족 당일치기 코스 추천", "커플끼리 즐기는 코스", "비 오는 날 실내 코스", "힐링 여행 추천", "초보도 할 수 있는 레저"). 이 질문은 인천 섬 전용 서비스 안에서 한 것이므로 인천 섬 여행 질문으로 봅니다. 다른 지역을 명시했을 때만 범위 밖입니다.
 앞부분만 여행처럼 보여도 "실제 목적지·주제" 기준으로 판단하세요.
 애매하지만 인천 "섬" 여행으로 해석 가능하면 inScope=true, 명확히 범위 밖이면 false.
 ${historyBlock}

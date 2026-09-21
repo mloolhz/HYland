@@ -1,7 +1,8 @@
 import { Router, Response } from "express";
 import { Prisma } from "@prisma/client";
 import { prisma } from "../prisma";
-import { askGemini, askGeminiStream } from "../services/gemini";
+import { askGemini, askGeminiStream } from "../services/openai";
+import { getSeaWeatherSummary } from "../weather";
 import { buildCommunityTips, findIslandNamesInText } from "../services/community-tips";
 import {
   buildOutOfScopeRecommendResponse,
@@ -10,10 +11,26 @@ import {
 import { ISLAND_PROFILES } from "../data/islandProfiles";
 import { ISLAND_EDITORIALS } from "../data/islandEditorial";
 import { ISLAND_GUIDE_PROMPT } from "../services/island-guide";
+import { rateLimit } from "../lib/rate-limit";
+import {
+  attachFacilities,
+  buildFacilityPromptSection,
+  loadFacilities,
+  type FacilityHints,
+} from "../services/facility-context";
 
 // 커넥션 풀을 하나만 쓰도록 앱 공용 Prisma 클라이언트(../prisma)를 재사용한다.
 // DATABASE_URL 파싱과 driver adapter 구성은 그쪽에 모여 있다.
 const router = Router();
+
+/**
+ * OpenAI 를 부르는 요청만 IP 별로 제한한다.
+ * 보통 대화는 1분에 몇 번이 고작이라, 이 선을 넘는 건 반복 호출로 본다.
+ */
+const aiLimit = rateLimit("ai", [
+  { limit: 8, ms: 60_000 },
+  { limit: 60, ms: 60 * 60_000 },
+]);
 
 const SPORTS = [
   { sportId: "kayak", name: "카약", islands: ["무의도"] },
@@ -30,6 +47,26 @@ const SPORTS = [
   { sportId: "monorail", name: "모노레일", islands: ["강화도"] },
   { sportId: "trekking", name: "트레킹", islands: ["백령도"] },
 ];
+
+/**
+ * 모델이 시설을 안 골랐을 때 서버가 대신 고를 단서 —
+ * 추천 카드의 (섬, 종목명)과 답변 본문에 나온 섬 (나온 순서대로).
+ */
+function facilityHints(answer: {
+  text?: unknown;
+  recommendations?: unknown;
+}): FacilityHints {
+  const recs = Array.isArray(answer.recommendations) ? answer.recommendations : [];
+  const pairs = recs
+    .map((r: { sportId?: string; islandName?: string }) => ({
+      islandName: r.islandName ?? "",
+      activity: SPORTS.find((sp) => sp.sportId === r.sportId)?.name ?? "",
+    }))
+    .filter((p) => p.islandName && p.activity);
+  const text = typeof answer.text === "string" ? answer.text : "";
+  const islands = findIslandNamesInText(text).sort((a, b) => text.indexOf(a) - text.indexOf(b));
+  return { pairs, islands };
+}
 
 interface HistoryItem {
   role: "user" | "assistant";
@@ -107,26 +144,14 @@ function needsWeatherSearch(persona?: PersonaInput): boolean {
   return !!(persona?.travelDate && !persona?.weather);
 }
 
-function buildWeatherDateLabel(travelDate: string, travelEndDate?: string): string {
-  return travelEndDate && travelEndDate !== travelDate
-    ? `${travelDate} ~ ${travelEndDate}`
-    : travelDate;
-}
-
-/** TOP3 단계 등에서 답변 본문 없이 날씨만 빠르게 조회할 때 쓰는 최소 프롬프트 */
-function buildWeatherOnlyPrompt(travelDate: string, travelEndDate?: string): string {
-  const dateLabel = buildWeatherDateLabel(travelDate, travelEndDate);
-
-  return `
-검색 도구를 사용해 "${dateLabel}" 기준 인천 섬 지역(강화도·영흥도·무의도·덕적도·자월도·석모도·백령도 등)의 실제 날씨 예보를 검색하세요.
-검색에 성공하면 마크다운(\`\`\`) 없이 순수 JSON만 출력하세요:
-{
-  "date": "검색한 날짜(${dateLabel})",
-  "summary": "간단한 날씨 요약 (예: '맑음, 최고 27도', '오후부터 비, 강수확률 70%' 등)",
-  "recommendation": "날씨를 반영한 짧은 활동 추천도 한 문장 (강수확률이 높으면 실내·체험 활동 위주로, 맑으면 야외·수상 레저 위주로 추천)"
-}
-검색에 실패했거나 신뢰할 만한 정보를 찾지 못하면 정확히 이 JSON만 출력하세요: { "unavailable": true }
-`.trim();
+/**
+ * 날씨가 필요한데 아직 없으면(travelDate 있고 weather 없음) 기상청(KMA) API로 받아 채운다.
+ * OpenAI는 웹검색이 없어 모델이 날씨를 직접 못 찾으므로, 서버에서 미리 넣어준다(옵션 C).
+ */
+async function withWeather(persona?: PersonaInput): Promise<PersonaInput | undefined> {
+  if (!needsWeatherSearch(persona)) return persona;
+  const weather = await getSeaWeatherSummary();
+  return weather ? { ...persona, weather } : persona;
 }
 
 function buildWeatherSection(persona?: PersonaInput): string {
@@ -139,24 +164,12 @@ ${JSON.stringify(persona.weather)}
 이 정보를 recommendations·course·tips 선택에 반영하고, 응답 JSON의 "weather" 필드에 그대로(또는 문장만 자연스럽게 다듬어) 포함하세요.`;
   }
 
-  if (!persona?.travelDate) {
-    return "";
-  }
-
-  const dateLabel = buildWeatherDateLabel(persona.travelDate, persona.travelEndDate);
-
+  // 날씨가 아직 없으면(서버 조회 실패 등) 모델에 검색을 지시하지 않는다.
+  // OpenAI는 웹검색이 없어 지어낼 위험이 있으므로 "weather" 필드는 생략시킨다.
   return `
 
-[날씨 검색 지시]
-검색 도구를 사용해 "${dateLabel}" 기준 인천 섬 지역(강화도·영흥도·무의도·덕적도·자월도·석모도·백령도 등)의 실제 날씨 예보를 검색하세요.
-검색에 성공하면 응답 JSON에 "weather" 필드를 아래 형식으로 포함하세요:
-{
-  "date": "검색한 날짜(${dateLabel})",
-  "summary": "간단한 날씨 요약 (예: '맑음, 최고 27도', '오후부터 비, 강수확률 70%' 등)",
-  "recommendation": "날씨를 반영한 활동 추천도 설명. 강수확률이 높으면 실내·체험 활동 추천도를 높이고 카약·서핑 같은 수상 레저 추천도는 낮추는 식으로, 맑으면 반대로 구체적으로 안내하세요."
-}
-이 날씨 정보를 recommendations·course·tips 선택에도 실제로 반영하세요(비 예보면 실내·체험 위주, 맑으면 수상 레저·야외 활동 위주).
-날씨 검색에 실패했거나 신뢰할 만한 정보를 찾지 못하면 "weather" 필드를 아예 생략하세요(추측으로 채우지 마세요).`;
+[날씨 정보 없음]
+확인된 날씨 정보가 없습니다. 날씨를 추측하지 말고 응답 JSON의 "weather" 필드는 생략하세요.`;
 }
 
 function buildPersonaSection(persona?: PersonaInput): string {
@@ -179,6 +192,7 @@ function buildRecommendPrompt(
   question: string,
   history?: HistoryItem[],
   persona?: PersonaInput,
+  facilitySection = "",
 ): string {
   const excludedSportIds = extractRecommendedSportIds(history);
 
@@ -199,7 +213,9 @@ ${ISLAND_GUIDE_PROMPT}
 종목 목록:
 ${JSON.stringify(SPORTS, null, 2)}
 
-[섬별 특징 데이터] (네이버 검색 데이터 기반)
+${facilitySection}
+
+[섬별 특징 데이터] (포털 검색 트렌드 기반)
 ${JSON.stringify(ISLAND_PROFILES, null, 2)}
 
 위 데이터를 활용해 추천하세요:
@@ -208,6 +224,7 @@ ${JSON.stringify(ISLAND_PROFILES, null, 2)}
 - 관심 활동이 섬의 activities와 겹치는 곳을 우선 추천하세요.
 - 조건(persona)이 설정된 TOP3 섬 추천은 계절 매칭 > 동행/연령 매칭 > 활동 매칭 순으로 순위를 정하세요.
 - 추천 시 프로필 데이터가 있는 섬에는 "이 섬은 OO철에 인기 있고 OO 활동이 대표적"처럼 데이터 근거를 자연스럽게 녹이세요.
+- 이 데이터를 근거로 밝힐 때는 "검색 트렌드를 보면"처럼 표현하고, 특정 포털·업체 이름은 쓰지 마세요. 실제 시설 근거는 [레저 시설 데이터]의 한국관광공사 관광정보를 우선하세요.
 - 이 데이터는 섬 선택·추천 근거 강화용입니다. recommendations와 course의 종목·섬은 반드시 위 종목 목록(SPORTS)만 사용하세요. 프로필에 없는 섬은 기존 규칙대로 추천하되 프로필 근거를 억지로 만들지 마세요.
 
 [섬별 현지 특징] (웹 조사 + 현지 전화 인터뷰 기반)
@@ -244,6 +261,7 @@ ${buildWeatherSection(persona)}
       { "time": "10:00", "activity": "섬 · 종목명", "desc": "한 줄 설명" }
     ]
   },
+  "facilityIds": ["[레저 시설 데이터]의 id, 답변에 언급한 시설만 최대 3개"],
   "tips": ["팁 1~3개"],
   "followups": ["후속 질문 칩 2~3개"],
   "weather": { "date": "...", "summary": "...", "recommendation": "..." }
@@ -364,12 +382,14 @@ function salvageGeminiResponse(cleaned: string) {
   const tips = extractJsonField(cleaned, "tips");
   const followups = extractJsonField(cleaned, "followups");
   const weather = extractJsonField(cleaned, "weather");
+  const facilityIds = extractJsonField(cleaned, "facilityIds");
   return {
     text: extractTextField(cleaned) || cleaned,
     recommendations: Array.isArray(recommendations) ? recommendations : [],
     course: course ?? undefined,
     tips: Array.isArray(tips) ? tips : [],
     followups: Array.isArray(followups) ? followups : [],
+    facilityIds: Array.isArray(facilityIds) ? facilityIds : [],
     ...(weather ? { weather } : {}),
   };
 }
@@ -439,7 +459,7 @@ function streamErrorMessage(err: unknown): string {
   return "추천 생성 중 오류가 발생했습니다.";
 }
 
-router.post("/recommend/stream", async (req, res) => {
+router.post("/recommend/stream", aiLimit, async (req, res) => {
   console.log("[stream] 라우트 진입");
 
   const { question, history, persona, sessionId, questionSource } = req.body;
@@ -479,12 +499,17 @@ router.post("/recommend/stream", async (req, res) => {
 
   try {
     console.log("[stream] 요청 받음, question:", question);
-    const prompt = buildRecommendPrompt(question, history, persona);
-    const grounded = needsWeatherSearch(persona);
+    const [personaW, facilities] = await Promise.all([withWeather(persona), loadFacilities()]);
+    const prompt = buildRecommendPrompt(
+      question,
+      history,
+      personaW,
+      buildFacilityPromptSection(facilities),
+    );
 
-    console.log("[stream] Gemini 스트림 호출 시작");
+    console.log("[stream] OpenAI 스트림 호출 시작");
     try {
-      for await (const chunk of askGeminiStream(prompt, { grounded })) {
+      for await (const chunk of askGeminiStream(prompt)) {
         chunkCount++;
         if (chunkCount <= 5 || chunkCount % 10 === 0) {
           console.log("[stream] 청크 수신", chunkCount);
@@ -493,13 +518,13 @@ router.post("/recommend/stream", async (req, res) => {
         writeSSE(res, "chunk", { text: chunk });
       }
     } catch (streamErr) {
-      console.error("[stream] Gemini 스트림 실패, 논스트리밍 폴백 시도:", streamErr);
+      console.error("[stream] OpenAI 스트림 실패, 논스트리밍 폴백 시도:", streamErr);
       if (streamErr instanceof Error) {
         console.error("[stream] 스트림 실패 메시지:", streamErr.message);
         console.error("[stream] 스트림 실패 스택:", streamErr.stack);
       }
 
-      const raw = await askGemini(prompt, { grounded });
+      const raw = await askGemini(prompt);
       fullText = raw;
       chunkCount = 1;
       console.log("[stream] 논스트리밍 폴백 성공, 전체 길이:", fullText.length);
@@ -512,14 +537,15 @@ router.post("/recommend/stream", async (req, res) => {
 
     console.log("[stream] 스트림 종료, 전체 길이:", fullText.length);
     console.log("[stream] JSON 파싱 시도");
-    const parsed = parseGeminiResponse(fullText);
-    console.log("[stream] 파싱 성공");
+    const answer = parseGeminiResponse(fullText);
+    const parsed = attachFacilities(answer, facilities, facilityHints(answer));
+    console.log("[stream] 파싱 성공, 시설 카드", parsed.facilities.length);
 
     writeSSE(res, "done", parsed);
     res.end();
 
     console.log("[stream] DB 저장 호출");
-    saveRecommendation(question, parsed, persona, sessionId, questionSource);
+    saveRecommendation(question, parsed, personaW, sessionId, questionSource);
   } catch (err) {
     console.error("[stream] 에러 발생:", err);
     if (err instanceof Error) {
@@ -531,7 +557,7 @@ router.post("/recommend/stream", async (req, res) => {
   }
 });
 
-router.post("/recommend", async (req, res) => {
+router.post("/recommend", aiLimit, async (req, res) => {
   try {
     const { question, history, persona, sessionId, questionSource } = req.body;
 
@@ -545,9 +571,16 @@ router.post("/recommend", async (req, res) => {
       return res.json(buildOutOfScopeRecommendResponse());
     }
 
-    const prompt = buildRecommendPrompt(question, history, persona);
-    const raw = await askGemini(prompt, { grounded: needsWeatherSearch(persona) });
-    const parsed = parseGeminiResponse(raw);
+    const [personaW, facilities] = await Promise.all([withWeather(persona), loadFacilities()]);
+    const prompt = buildRecommendPrompt(
+      question,
+      history,
+      personaW,
+      buildFacilityPromptSection(facilities),
+    );
+    const raw = await askGemini(prompt);
+    const answer = parseGeminiResponse(raw);
+    const parsed = attachFacilities(answer, facilities, facilityHints(answer));
 
     // Gemini가 추천한 섬에 방문객 다수가 남긴 팁이 있으면 함께 보여준다.
     // 조건 패널과 같은 합의 로직을 재사용한다.
@@ -568,7 +601,7 @@ router.post("/recommend", async (req, res) => {
 
     res.json(parsed);
 
-    saveRecommendation(question, parsed, persona, sessionId, questionSource);
+    saveRecommendation(question, parsed, personaW, sessionId, questionSource);
   } catch (err) {
     console.error("추천 처리 오류:", err);
     res.status(500).json({ error: "추천 생성 중 오류가 발생했습니다." });
@@ -671,7 +704,7 @@ router.get("/suggested-questions", async (req, res) => {
 
 // TOP3 구조화 추천 단계 등에서 답변 본문 없이 날씨만 빠르게 조회.
 // 실패해도 500이 아니라 { weather: null }로 응답해 FE가 조용히 생략할 수 있게 한다.
-router.post("/weather", async (req, res) => {
+router.post("/weather", aiLimit, async (req, res) => {
   const { travelDate, travelEndDate } = req.body;
 
   if (!travelDate || typeof travelDate !== "string") {
@@ -679,24 +712,9 @@ router.post("/weather", async (req, res) => {
   }
 
   try {
-    const prompt = buildWeatherOnlyPrompt(
-      travelDate,
-      typeof travelEndDate === "string" ? travelEndDate : undefined,
-    );
-    const raw = await askGemini(prompt, { grounded: true });
-    const parsed = parseGeminiResponse(raw);
-
-    if (!parsed || parsed.unavailable || typeof parsed.summary !== "string") {
-      return res.json({ weather: null });
-    }
-
-    res.json({
-      weather: {
-        date: typeof parsed.date === "string" ? parsed.date : travelDate,
-        summary: parsed.summary,
-        recommendation: typeof parsed.recommendation === "string" ? parsed.recommendation : "",
-      },
-    });
+    // 옵션 C: OpenAI엔 웹검색이 없어, 기상청(KMA) 해양기상 API로 날씨를 받는다.
+    const weather = await getSeaWeatherSummary();
+    res.json({ weather: weather ?? null });
   } catch (err) {
     console.error("날씨 조회 실패:", err);
     res.json({ weather: null });

@@ -19,6 +19,8 @@ import notificationsRouter from "./notifications";
 import recommendRouter from "./routes/recommend";
 
 const app = express();
+// nginx 한 겹 뒤에서 돈다 — X-Forwarded-For 의 실제 접속 IP 를 req.ip 로 쓴다 (요청 횟수 제한용)
+app.set("trust proxy", 1);
 app.use(cors()); // 프론트(다른 포트)에서 호출 허용
 app.use(express.json({ limit: "8mb" })); // 인증샷 업로드가 base64 로 온다
 // 로컬 개발용 테스트 콘솔(public/index.html). 배포에서는 /index.html 이 SPA 로 가야 하고,

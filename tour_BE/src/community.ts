@@ -160,7 +160,16 @@ router.post("/posts", requireAuth, async (req: Request, res: Response) => {
     if (!type || !(type in TYPE_TO_DB)) {
       return res.status(400).json({ error: "글 종류가 올바르지 않아요" });
     }
-    if (type === "review" && !isValidReviewTags(tags)) {
+
+    // 공지는 관리자만 — 일반 계정이 isNotice 를 보내도 무시한다
+    let isNotice = false;
+    if (req.body?.isNotice === true) {
+      const author = await prisma.user.findUnique({ where: { id: me }, select: { role: true } });
+      isNotice = author?.role === "ADMIN";
+    }
+
+    // 공지는 특정 섬 후기가 아니므로 "느낀 특징" 태그를 받지 않는다
+    if (type === "review" && !isNotice && !isValidReviewTags(tags)) {
       return res.status(400).json({ error: "이 섬에서 느낀 특징을 1개 이상, 최대 5개까지 선택해주세요." });
     }
 
@@ -185,7 +194,8 @@ router.post("/posts", requireAuth, async (req: Request, res: Response) => {
         summary: summary?.trim() || null,
         island: island?.trim() || "인천 섬",
         activity: activity?.trim() || "기타",
-        tags: type === "review" ? tags : [],
+        tags: type === "review" && !isNotice ? tags : [],
+        isNotice,
         badge: badge && badge in BADGE_TO_DB ? BADGE_TO_DB[badge as keyof typeof BADGE_TO_DB] : null,
         images: Array.isArray(images)
           ? {

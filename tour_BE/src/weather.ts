@@ -138,6 +138,44 @@ function shape(islandId: string, obs: Obs | undefined, meta: { stnId: string; st
   };
 }
 
+/**
+ * AI 추천용 날씨 요약 (옵션 C — 기상청 해양기상 API 재사용).
+ * OpenAI는 웹검색이 없어, 실시간 날씨는 여기서 받아 프롬프트에 넣는다.
+ * islandId가 있으면 그 섬 기준, 없으면 인천(영종) 대표 관측소 기준.
+ * 반환값은 recommend가 쓰는 { date, summary, recommendation } 형태.
+ */
+export async function getSeaWeatherSummary(
+  islandId?: string,
+): Promise<{ date: string; summary: string; recommendation: string } | null> {
+  try {
+    const key = islandId && ISLAND_BUOY[islandId] ? islandId : "yeongj";
+    const meta = ISLAND_BUOY[key];
+    const obs = await getSeaObs();
+    const s = shape(key, obs[meta.stnId], meta);
+
+    const parts: string[] = [];
+    if (s.airTemp != null) parts.push(`기온 ${s.airTemp}℃`);
+    if (s.waveHeight != null) parts.push(`파고 ${s.waveHeight}m`);
+    if (s.windSpeed != null) parts.push(`바람 ${s.windSpeed}m/s`);
+    if (s.waterTemp != null) parts.push(`수온 ${s.waterTemp}℃`);
+    if (parts.length === 0) return null;
+
+    // 기상청 관측시각(YYYYMMDDHHMM) → "YYYY-MM-DD HH:mm"
+    const tm = s.observedAt || "";
+    const date = /^\d{12}$/.test(tm)
+      ? `${tm.slice(0, 4)}-${tm.slice(4, 6)}-${tm.slice(6, 8)} ${tm.slice(8, 10)}:${tm.slice(10, 12)}`
+      : new Date().toISOString().slice(0, 10);
+
+    return {
+      date,
+      summary: `${meta.stnName} 앞바다 현재 관측 — ${parts.join(", ")}`,
+      recommendation: s.activity.label, // 예: "해양 레저 하기 좋아요" / "비추천"
+    };
+  } catch {
+    return null;
+  }
+}
+
 const router = Router();
 
 // ── 전체 섬 해양 날씨 ──

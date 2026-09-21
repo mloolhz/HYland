@@ -28,7 +28,7 @@ function originOf(sources: { sourceType: string }[]): string {
   return sources.some((s) => s.sourceType === "WEB_RESEARCH") ? "웹 조사" : "관광공사";
 }
 
-type SportRow = {
+export type SportRow = {
   id: number;
   name: string;
   categoryId: string;
@@ -44,7 +44,7 @@ type SportRow = {
 };
 
 /** 프론트 LeisureFacility 와 같은 모양 */
-function shape(s: SportRow) {
+export function shape(s: SportRow) {
   return {
     id: String(s.id),
     name: s.name,
@@ -62,7 +62,7 @@ function shape(s: SportRow) {
   };
 }
 
-const listSelect = {
+export const listSelect = {
   id: true,
   name: true,
   categoryId: true,
