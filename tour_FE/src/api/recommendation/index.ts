@@ -1,5 +1,9 @@
 import { runRecommendationEngine } from "@/lib/recommendation/engine/recommendation-engine";
 import { enrichRecommendationsWithLlm } from "@/lib/recommendation/llm/description.mock";
+import {
+  buildBtiResultReasonByIsland,
+  getIslandBtiRecommendedDisplay,
+} from "@/lib/island-bti-recommended-display";
 import { formatTripDateRangeLabel } from "@/lib/trip-date";
 import type { RecommendationRequest, RecommendationResponse } from "@/types/recommendation";
 
@@ -29,6 +33,24 @@ export async function postRecommendations(
   const tripSummary = buildTripSummary(request.trip);
   const enriched = enrichRecommendationsWithLlm(engineResult, tripSummary, request.trip);
   return delay(enriched);
+}
+
+/** 섬BTI 결과와 같은 3섬 + 여행 조건 기반 코스·시설 카드 */
+export async function postBtiIslandCourseRecommendations(
+  islandBtiCode: string,
+  request: RecommendationRequest,
+): Promise<RecommendationResponse> {
+  const display = getIslandBtiRecommendedDisplay(islandBtiCode);
+  const engineResult = runRecommendationEngine(
+    { ...request, useIslandBti: true },
+    {
+      fixedIslandNamesInOrder: display.map((row) => row.islandName),
+      btiResultReasonByIsland: buildBtiResultReasonByIsland(display),
+    },
+  );
+  const tripSummary = buildTripSummary(request.trip);
+  const enriched = enrichRecommendationsWithLlm(engineResult, tripSummary, request.trip);
+  return delay({ ...enriched, btiFixedIslands: true });
 }
 
 export { runRecommendationEngine };

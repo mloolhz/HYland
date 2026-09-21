@@ -137,4 +137,6 @@ export type RecommendationResponse = {
   userIslandBti: IslandBtiResultCode | null;
   userTraits: string[];
   recommendations: IslandRecommendationItem[];
+  /** 섬BTI 결과와 동일한 3섬 + AI 코스(시설·타임라인) */
+  btiFixedIslands?: boolean;
 };

@@ -41,7 +41,12 @@ export function RecommendationResultsPanel({ response, weather }: Recommendation
         </div>
       )}
 
-      {response.useIslandBti && response.userIslandBti ? (
+      {response.btiFixedIslands ? (
+        <p className="ai-rec-results__lead">
+          섬BTI 결과에서 안내한 섬과 같아요. 아래는 설정한 여행 조건에 맞춘 이동·활동 코스예요. (필터
+          아이콘에서 날짜·동행·관심 활동을 바꿀 수 있어요.)
+        </p>
+      ) : response.useIslandBti && response.userIslandBti ? (
         <p className="ai-rec-results__lead">
           {response.userIslandBti}
           {ISLAND_BTI_RESULTS[response.userIslandBti]

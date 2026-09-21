@@ -9,9 +9,8 @@ import {
   type ChatHistoryItem,
   type QuestionSource,
 } from "@/api/ai-recommend";
-import { postRecommendations } from "@/api/recommendation";
+import { postBtiIslandCourseRecommendations, postRecommendations } from "@/api/recommendation";
 import { loadPosts } from "@/lib/post-store";
-import { getBtiPreferences, type BtiIslandPreference } from "@/api/bti-preferences";
 import { getIslandBtiResult } from "@/data/island-bti/results";
 import { AiRecommendComposer } from "@/components/ai-recommend/AiRecommendComposer";
 import { AiResponseContent } from "@/components/ai-recommend/AiResponseContent";
@@ -60,8 +59,6 @@ type AiTurn = {
   suggestedQuestions: string[] | null;
   /** 재시도 시 원래 출처를 그대로 다시 보내기 위해 보관 */
   questionSource?: QuestionSource;
-  /** 섬BTI 인기 섬 칩 응답 (null=조회 중, []=데이터 부족) */
-  btiIslands?: BtiIslandPreference[] | null;
 };
 
 function createId() {
@@ -321,7 +318,11 @@ export function AiRecommend() {
     async (
       displayText: string,
       promptText: string,
-      options: { withRecommendation: boolean; questionSource?: QuestionSource },
+      options: {
+        withRecommendation: boolean;
+        questionSource?: QuestionSource;
+        loadRecommendation?: () => Promise<RecommendationResponse | null>;
+      },
     ) => {
       if (loading) return;
 
@@ -385,8 +386,9 @@ export function AiRecommend() {
         // 직접 입력한 질문에만 쓰는 걸로 분리했다. 대신 비슷한 조건의 다른 세션이
         // 이어서 물어본 질문을 예상 질문 칩으로 보여준다.
         if (options.withRecommendation) {
+          const loadRecommendation = options.loadRecommendation ?? runStructuredRecommendation;
           const [recommendation, weatherResult] = await Promise.all([
-            runStructuredRecommendation().catch((err) => {
+            loadRecommendation().catch((err) => {
               console.error("[ai-recommend] 구조화 추천 실패", err);
               return null;
             }),
@@ -509,45 +511,29 @@ export function AiRecommend() {
   const btiResultData = islandBtiResultCode ? getIslandBtiResult(islandBtiResultCode) : null;
   const btiChipLabel =
     hasResult && btiResultData
-      ? `${btiResultData.name} 유형의 인기 섬 확인하기`
-      : "섬BTI로 인기 섬 확인하기";
+      ? `${btiResultData.name} 유형 추천 섬 코스 받기`
+      : "섬BTI 추천 섬 코스 받기";
 
-  // 칩 클릭 → 섬BTI 유형별 인기 섬을 백엔드에서 받아 대화에 답변으로 띄운다.
+  // 칩 — 섬BTI 결과와 같은 3섬 + 조건 패널(날짜·동행 등)로 코스·시설 카드 생성
   const handleBtiPopularChip = useCallback(() => {
     if (!hasResult || !islandBtiResultCode) {
       navigate("/island-bti/test");
       return;
     }
     setBootstrapped(true);
-    setSettingsOpen(false);
-    const turnId = createId();
     const label = btiResultData
-      ? `${btiResultData.name} 유형이 좋아하는 섬은?`
-      : "내 섬BTI 유형이 좋아하는 섬은?";
-    setTurns((prev) => [
-      ...prev,
-      {
-        id: turnId,
-        displayText: label,
-        promptText: label,
-        hasTop3: false,
-        phase: "detail-loading",
-        recommendation: null,
-        weather: null,
-        assistant: null,
-        streamText: "",
-        suggestedQuestions: null,
-        questionSource: "chip",
-        btiIslands: null,
-      },
-    ]);
-    void getBtiPreferences(islandBtiResultCode).then((entries) => {
-      const islands = entries[0]?.topIslands ?? [];
-      setTurns((prev) =>
-        prev.map((t) => (t.id === turnId ? { ...t, phase: "done", btiIslands: islands } : t)),
-      );
+      ? `${btiResultData.name} 유형 추천 섬 — 여행 코스`
+      : "내 섬BTI 추천 섬 — 여행 코스";
+    void executeTurn(label, label, {
+      withRecommendation: true,
+      questionSource: "chip",
+      loadRecommendation: () =>
+        postBtiIslandCourseRecommendations(islandBtiResultCode, {
+          trip: tripForm,
+          useIslandBti: true,
+        }),
     });
-  }, [hasResult, islandBtiResultCode, navigate, btiResultData]);
+  }, [btiResultData, executeTurn, hasResult, islandBtiResultCode, navigate, tripForm]);
 
   // turns 배열이 바뀔 때(새 턴 추가) 그 턴의 질문 말풍선을 채팅 영역 최상단에 한 번
   // 스냅한다. 그 아래로 답변이 채워지는 동안은 자동으로 따라 스크롤하지 않으며,
@@ -706,31 +692,7 @@ export function AiRecommend() {
                         </div>
                       )}
 
-                    {turn.phase === "detail-loading" && (
-                      <LoadingDots
-                        label={turn.btiIslands === null ? "인기 섬을 찾고 있어요" : AI_RECOMMEND_COPY.loading}
-                      />
-                    )}
-
-                    {turn.btiIslands != null && (
-                      <div className="ai-bubble ai-bubble--assistant ai-fade-up">
-                        {turn.btiIslands.length > 0 ? (
-                          <>
-                            <p className="ai-rec-lead">같은 섬BTI 유형이 특히 많이 찾은 섬이에요.</p>
-                            <ol className="ai-bti-islands">
-                              {turn.btiIslands.map((it, i) => (
-                                <li key={it.islandName} className="ai-bti-islands__item">
-                                  <span className="ai-bti-islands__rank">{i + 1}</span>
-                                  {it.islandName}
-                                </li>
-                              ))}
-                            </ol>
-                          </>
-                        ) : (
-                          <p className="ai-response-text">아직 같은 유형의 추천 데이터가 부족해요.</p>
-                        )}
-                      </div>
-                    )}
+                    {turn.phase === "detail-loading" && <LoadingDots label={AI_RECOMMEND_COPY.loading} />}
 
                     {turn.assistant ? (
                       <div className="ai-bubble ai-bubble--assistant">

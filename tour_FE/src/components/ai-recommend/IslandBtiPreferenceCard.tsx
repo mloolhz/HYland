@@ -1,43 +1,30 @@
 import { useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { getBtiPreferences, type BtiIslandPreference } from "@/api/bti-preferences";
+import { Link, useNavigate } from "react-router-dom";
 import { getIslandBtiResult } from "@/data/island-bti/results";
+import { getIslandBtiRecommendedDisplay } from "@/lib/island-bti-recommended-display";
 import { useIslandBti } from "@/context/ProfileCharacterContext";
 
-/** 입력창 아래 버튼 하나로 노출되는 섬BTI별 인기 섬 · 미검사자 유도 */
+/** 입력창 아래 — 섬BTI 결과 3섬 요약 + AI 추천에서 코스 받기 */
 export function IslandBtiPreferenceCard() {
   const navigate = useNavigate();
   const { hasResult, islandBtiResultCode } = useIslandBti();
   const [expanded, setExpanded] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [topIslands, setTopIslands] = useState<BtiIslandPreference[] | null>(null);
 
   const handleClick = useCallback(() => {
     if (!hasResult || !islandBtiResultCode) {
       navigate("/island-bti/test");
       return;
     }
-
-    if (expanded) {
-      setExpanded(false);
-      return;
-    }
-
-    setExpanded(true);
-    if (topIslands === null) {
-      setLoading(true);
-      void getBtiPreferences(islandBtiResultCode).then((entries) => {
-        setTopIslands(entries[0]?.topIslands ?? []);
-        setLoading(false);
-      });
-    }
-  }, [expanded, hasResult, islandBtiResultCode, navigate, topIslands]);
+    setExpanded((open) => !open);
+  }, [hasResult, islandBtiResultCode, navigate]);
 
   const resultData = islandBtiResultCode ? getIslandBtiResult(islandBtiResultCode) : null;
+  const topIslands = islandBtiResultCode ? getIslandBtiRecommendedDisplay(islandBtiResultCode) : [];
+
   const buttonLabel =
     hasResult && islandBtiResultCode
-      ? `${resultData ? resultData.name : islandBtiResultCode} 유형이 선호하는 섬 ${expanded ? "숨기기" : "보기"}`
-      : "섬BTI 검사하고 인기 섬 확인하기";
+      ? `${resultData ? resultData.name : islandBtiResultCode} 유형 추천 섬 ${expanded ? "숨기기" : "보기"}`
+      : "섬BTI 검사하고 추천 섬 코스 받기";
 
   return (
     <div className="ai-bti-pref">
@@ -53,24 +40,20 @@ export function IslandBtiPreferenceCard() {
         </span>
       </button>
 
-      {expanded && (
+      {expanded && topIslands.length > 0 && (
         <div className="ai-bti-pref-panel">
-          {loading ? (
-            <span className="ai-bti-pref-panel__loading">불러오는 중…</span>
-          ) : topIslands && topIslands.length > 0 ? (
-            <ul className="ai-bti-pref-panel__list">
-              {topIslands.map((item, index) => (
-                <li key={item.islandName} className="ai-bti-pref-panel__item">
-                  <span className="ai-bti-pref-panel__rank">{index + 1}</span>
-                  {item.islandName}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <span className="ai-bti-pref-panel__empty">
-              아직 같은 유형의 추천 데이터가 부족해요.
-            </span>
-          )}
+          <ul className="ai-bti-pref-panel__list">
+            {topIslands.map((item, index) => (
+              <li key={item.islandName} className="ai-bti-pref-panel__item">
+                <span className="ai-bti-pref-panel__rank">{index + 1}</span>
+                {item.islandName}
+              </li>
+            ))}
+          </ul>
+          <p className="ai-bti-pref-panel__hint">
+            위 섬은 결과 화면과 같아요.{" "}
+            <Link to="/ai-recommend">AI 추천</Link>에서 「추천 섬 코스 받기」로 일정·시설까지 확인하세요.
+          </p>
         </div>
       )}
     </div>

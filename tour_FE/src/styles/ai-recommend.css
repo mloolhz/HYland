@@ -254,6 +254,13 @@ body:has(.ai-page) {
   color: #5a6b82;
 }
 
+.ai-bti-pref-panel__hint {
+  margin: 10px 0 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #5a6b82;
+}
+
 .ai-bubble {
   max-width: 92%;
   border-radius: 16px;
@@ -1913,4 +1920,39 @@ body:has(.ai-page)::-webkit-scrollbar-button {
   color: #fff;
   background: #2563eb;
   border-radius: 5px;
+}
+
+.ai-bti-islands--stacked {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 10px;
+}
+
+.ai-bti-islands__card {
+  display: block;
+  padding: 10px 12px;
+  background: #f4f7fc;
+  border: 1px solid #dbe4ef;
+  border-radius: 8px;
+}
+
+.ai-bti-islands__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ai-bti-islands__name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a3a6b;
+}
+
+.ai-bti-islands__reason {
+  margin: 8px 0 0;
+  padding-left: 28px;
+  font-size: 13px;
+  line-height: 1.55;
+  font-weight: 400;
+  color: #4a5f7a;
 }

@@ -31,6 +31,7 @@ import {
   scoreSportsMatch,
 } from "@/lib/recommendation/facility/island-sports-index";
 import { LEISURE_FACILITY_LINKS } from "@/data/leisure-facility-links";
+import { resolveIslandId } from "@/lib/recommendation/vocabulary/activity-vocabulary";
 import { getPrimaryInfoSource, sourceButtonLabel } from "@/lib/sport-booking-resolve";
 import { getUserTraitLabelsFromBti } from "@/lib/recommendation/preference/bti-preference.mapper";
 import { cosineSimilarityScore } from "@/lib/recommendation/preference/similarity";
@@ -45,6 +46,10 @@ import type {
 export type RecommendationEngineOptions = {
   userPreference?: UserPreference | null;
   visitedIslandIds?: string[];
+  /** 섬BTI 결과 화면과 동일한 섬만, 이 순서로 카드 생성 */
+  fixedIslandNamesInOrder?: string[];
+  /** 섬BTI 결과 화면 추천 이유 — 카드 상단 근거로 앞에 붙임 */
+  btiResultReasonByIsland?: Record<string, string>;
 };
 
 function resolveUserPreference(options?: RecommendationEngineOptions): UserPreference | null {
@@ -114,10 +119,19 @@ export function runRecommendationEngine(
   const contextMap = new Map(contexts.map((ctx) => [ctx.islandId, ctx]));
 
   const candidates: IslandRecommendationItem[] = [];
+  const fixedIslandNames = options?.fixedIslandNamesInOrder;
+  const allowedIslandIds = fixedIslandNames
+    ? new Set(
+        fixedIslandNames
+          .map((name) => resolveIslandId(name))
+          .filter((id): id is string => id != null),
+      )
+    : null;
   // 후기 스냅샷은 섬마다 같으므로 루프 밖에서 한 번만 읽는다.
   const communityPosts = getPostsSnapshot();
 
   for (const island of ISLAND_RECOMMENDATION_FEATURES) {
+    if (allowedIslandIds && !allowedIslandIds.has(island.islandId)) continue;
     const context = contextMap.get(island.islandId);
     if (!context) continue;
 
@@ -232,18 +246,42 @@ export function runRecommendationEngine(
     });
   }
 
-  // 조건 패널 TOP3는 블랙키위 프로필의 계절 → 동행/유형 → 활동 우선순위를 먼저 적용한다.
-  // 프로필이 없는 섬끼리는 기존 종합 점수로 정렬된다.
-  const recommendations = pickTopIslands(
-    candidates,
-    hasIslandProfileConditions(request.trip)
-      ? (a, b) =>
-          compareIslandProfileMatch(
-            scoreIslandProfileMatch(a.islandName, request.trip),
-            scoreIslandProfileMatch(b.islandName, request.trip),
-          )
-      : undefined,
-  );
+  let recommendations: IslandRecommendationItem[];
+
+  if (fixedIslandNames && fixedIslandNames.length > 0) {
+    const byId = new Map(candidates.map((item) => [item.islandId, item]));
+    const btiReasons = options?.btiResultReasonByIsland ?? {};
+    recommendations = fixedIslandNames
+      .map((displayName) => {
+        const islandId = resolveIslandId(displayName);
+        if (!islandId) return undefined;
+        const item = byId.get(islandId);
+        if (!item) return undefined;
+        const btiReason = btiReasons[displayName];
+        if (!btiReason) return item;
+        return {
+          ...item,
+          recommendationReasons: [
+            btiReason,
+            ...item.recommendationReasons.filter((reason) => reason !== btiReason),
+          ].slice(0, 4),
+        };
+      })
+      .filter((item): item is IslandRecommendationItem => item != null);
+  } else {
+    // 조건 패널 TOP3는 블랙키위 프로필의 계절 → 동행/유형 → 활동 우선순위를 먼저 적용한다.
+    // 프로필이 없는 섬끼리는 기존 종합 점수로 정렬된다.
+    recommendations = pickTopIslands(
+      candidates,
+      hasIslandProfileConditions(request.trip)
+        ? (a, b) =>
+            compareIslandProfileMatch(
+              scoreIslandProfileMatch(a.islandName, request.trip),
+              scoreIslandProfileMatch(b.islandName, request.trip),
+            )
+        : undefined,
+    );
+  }
 
   const userTraits =
     useIslandBti && userPreference
