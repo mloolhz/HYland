@@ -20,6 +20,29 @@ export function avaColor(name: string): string {
   return AVA_COLORS[sum % AVA_COLORS.length];
 }
 
+export type LandingExampleReview = {
+  isl: string;
+  name: string;
+  act: string;
+  text: string;
+};
+
+/** 랜딩 커뮤니티 카드 — 실제 글이 아닌 UI 예시(플레이스홀더). */
+export const COMMUNITY_LANDING_EXAMPLE_REVIEWS: LandingExampleReview[] = [
+  {
+    isl: "00도",
+    name: "김00",
+    act: "사이클",
+    text: "섬 일주 사이클 코스가 평지라 초보도 편하게 달릴 수 있었어요.",
+  },
+  {
+    isl: "△△도",
+    name: "이00",
+    act: "하이킹",
+    text: "해안 트레킹 하며 바다 풍경이 정말 인상적이었어요.",
+  },
+];
+
 export function formatNumber(n: number): string {
   return n.toLocaleString("ko-KR");
 }
