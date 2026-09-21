@@ -1,4 +1,5 @@
 import {
+  memo,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -11,6 +12,12 @@ import {
 import { IslandExplorerMap } from "@/components/island/IslandExplorerMap";
 import { ISLAND_MAP_AREAS, ISLAND_MAP_VIEWBOX } from "@/components/island/island-map-areas";
 import type { IslandRegionName } from "@/lib/island-data";
+
+/**
+ * 부모(섬 탐험 화면)는 섬을 누를 때 주소(?island=)까지 바꿔 한 번 더 렌더된다.
+ * 그게 확대 애니메이션 도중에 지도 SVG 전체를 다시 그리지 않도록 막는다.
+ */
+const MemoIslandExplorerMap = memo(IslandExplorerMap);
 
 const MAP_RATIO = ISLAND_MAP_VIEWBOX.height / ISLAND_MAP_VIEWBOX.width;
 const MIN_SCALE = 1;
@@ -181,8 +188,39 @@ export function MobileIslandMap({
    */
   const rafRef = useRef<number | null>(null);
   const fallbackRef = useRef<number | null>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const zoomLabelRef = useRef<HTMLSpanElement>(null);
+  /** 화면에 실제로 적용된 값 — 움직이는 동안은 state 보다 앞서 간다 */
   const transformRef = useRef(transform);
-  transformRef.current = transform;
+
+  /**
+   * 움직이는 동안은 React 렌더 없이 style 만 바꾼다.
+   *
+   * 예전에는 프레임마다 setTransform 을 불러 지도 SVG(섬 170여 개 히트 영역)
+   * 전체가 초당 60번 다시 렌더됐다. 폰에서는 이게 프레임을 넘겨 확대·이동이
+   * 뚝뚝 끊겼다. 값은 끝났을 때 한 번만 state 로 올린다 (commitTransform).
+   */
+  const applyTransform = useCallback((t: Transform) => {
+    transformRef.current = t;
+    const stage = stageRef.current;
+    if (stage) stage.style.transform = `translate(${t.x}px, ${t.y}px) scale(${t.k})`;
+    const label = zoomLabelRef.current;
+    if (label) label.textContent = `${t.k.toFixed(1)}배`;
+  }, []);
+
+  const commitTransform = useCallback((t: Transform) => {
+    transformRef.current = t;
+    setTransform(t);
+  }, []);
+
+  /**
+   * 움직이는 동안만 지도를 별도 레이어로 올리고(will-change) 무거운 효과를 멈춘다.
+   * 레이어를 계속 올려 두면 확대 후에도 처음 배율로 그린 그림을 늘려 보여 줘
+   * 흐려지므로, 멈추면 내려서 최종 배율로 한 번 선명하게 다시 그리게 한다.
+   */
+  const setStageMoving = useCallback((on: boolean) => {
+    stageRef.current?.classList.toggle("is-moving", on);
+  }, []);
 
   const stopAnimation = useCallback(() => {
     if (rafRef.current !== null) {
@@ -197,14 +235,17 @@ export function MobileIslandMap({
 
   useEffect(() => stopAnimation, [stopAnimation]);
 
-  /** 손가락으로 끌거나 핀치할 때 — 프레임마다 바로 반영 */
+  /** 손가락으로 끌거나 핀치할 때 — 프레임마다 화면에만 반영, 손을 떼면 commit */
   const setTransformNow = useCallback(
     (next: Transform) => {
-      stopAnimation();
-      setMoving(false);
-      setTransform(next);
+      if (rafRef.current !== null) {
+        stopAnimation();
+        setMoving(false);
+      }
+      setStageMoving(true);
+      applyTransform(next);
     },
-    [stopAnimation],
+    [applyTransform, setStageMoving, stopAnimation],
   );
 
   /** 버튼·섬 선택처럼 프로그램이 옮길 때 — 미끄러지듯 이동 */
@@ -214,6 +255,9 @@ export function MobileIslandMap({
 
       /** 도착 — 이제 이 섬의 이름표를 띄워도 된다 */
       const arrive = () => {
+        setStageMoving(false);
+        applyTransform(target);
+        commitTransform(target);
         setMoving(false);
         setSettledId(selectedIdRef.current);
       };
@@ -225,18 +269,21 @@ export function MobileIslandMap({
         Math.abs(from.y - target.y) < 0.5;
       // 화면이 안 보이면 rAF 가 멈춘다 — 보간할 이유도 없으니 바로 목표값으로
       if (same || (typeof document !== "undefined" && document.visibilityState === "hidden")) {
-        setTransform(target);
         arrive();
         return;
       }
 
       setMoving(true);
-      const started = performance.now();
+      setStageMoving(true);
+      let started: number | null = null;
 
       const step = (now: number) => {
+        // 첫 프레임을 기준으로 잡는다 — 섬을 누른 직후 렌더가 무거워 첫 프레임이
+        // 늦게 오면, 그만큼 건너뛰어 지도가 한 번에 튀어 보였다
+        if (started === null) started = now;
         const p = Math.min(1, (now - started) / ANIM_MS);
         const e = 1 - Math.pow(1 - p, 3); // easeOutCubic
-        setTransform({
+        applyTransform({
           k: from.k + (target.k - from.k) * e,
           x: from.x + (target.x - from.x) * e,
           y: from.y + (target.y - from.y) * e,
@@ -246,6 +293,10 @@ export function MobileIslandMap({
           return;
         }
         rafRef.current = null;
+        if (fallbackRef.current !== null) {
+          window.clearTimeout(fallbackRef.current);
+          fallbackRef.current = null;
+        }
         arrive();
       };
       rafRef.current = requestAnimationFrame(step);
@@ -253,11 +304,10 @@ export function MobileIslandMap({
       // 탭이 숨겨져 rAF 가 멈춘 경우 — 끝난 것으로 치고 목표값을 박는다
       fallbackRef.current = window.setTimeout(() => {
         stopAnimation();
-        setTransform(target);
         arrive();
-      }, ANIM_MS + 400);
+      }, ANIM_MS + 600);
     },
-    [stopAnimation],
+    [applyTransform, commitTransform, setStageMoving, stopAnimation],
   );
 
   /** 원본 좌표 상자의 가운데가 화면 가운데로 오게 FOCUS_ZOOM 배로 확대한다 */
@@ -355,13 +405,26 @@ export function MobileIslandMap({
   );
   const lastTap = useRef(0);
 
+  /** 손을 뗐을 때 — 화면에만 반영해 둔 값을 state 로 올린다 */
+  const finishGesture = useCallback(() => {
+    const wasMoving = stageRef.current?.classList.contains("is-moving");
+    if (!wasMoving && rafRef.current === null) return;
+    stopAnimation();
+    setStageMoving(false);
+    setMoving(false);
+    commitTransform(transformRef.current);
+  }, [commitTransform, setStageMoving, stopAnimation]);
+
   const onPointerDown = useCallback(
     (e: ReactPointerEvent<HTMLDivElement>) => {
       pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
-      stopAnimation();
+      // 이동 중에 손을 대면 그 자리에서 멈춘다 (값은 손을 뗄 때 올린다)
+      if (rafRef.current !== null) stopAnimation();
 
       const current = transformRef.current;
       if (pointers.current.size === 2) {
+        // 핀치하는 동안은 이름표 배율이 안 맞으니 잠깐 숨긴다
+        setMoving(true);
         const [a, b] = [...pointers.current.values()];
         gesture.current = {
           dist: Math.hypot(a.x - b.x, a.y - b.y),
@@ -427,6 +490,7 @@ export function MobileIslandMap({
     (e: ReactPointerEvent<HTMLDivElement>) => {
       pointers.current.delete(e.pointerId);
       if (pointers.current.size < 2) gesture.current = null;
+      if (pointers.current.size === 0) finishGesture();
 
       // 더블탭 — 확대/원위치 토글. 끌던 중이면 탭으로 치지 않는다
       const start = panStart.current;
@@ -452,7 +516,7 @@ export function MobileIslandMap({
       }
       lastTap.current = now;
     },
-    [animateTo, size],
+    [animateTo, finishGesture, size],
   );
 
   // 데스크톱에서 확인할 때를 위한 휠 확대
@@ -460,11 +524,12 @@ export function MobileIslandMap({
     (e: ReactWheelEvent<HTMLDivElement>) => {
       if (!e.ctrlKey && Math.abs(e.deltaY) < 2) return;
       const current = transformRef.current;
-      setTransformNow(
+      stopAnimation();
+      commitTransform(
         clampTransform({ ...current, k: current.k * (e.deltaY > 0 ? 0.92 : 1.08) }, size.w, size.h),
       );
     },
-    [setTransformNow, size],
+    [commitTransform, stopAnimation, size],
   );
 
   const zoomBy = useCallback(
@@ -475,7 +540,6 @@ export function MobileIslandMap({
     [animateTo, size],
   );
 
-  const zoomLabel = useMemo(() => `${transform.k.toFixed(1)}배`, [transform.k]);
   const zoomed = transform.k > 1.02;
 
   return (
@@ -492,11 +556,12 @@ export function MobileIslandMap({
       >
         <div
           className="m-map__stage"
+          ref={stageRef}
           style={{
             transform: `translate(${transform.x}px, ${transform.y}px) scale(${transform.k})`,
           }}
         >
-          <IslandExplorerMap
+          <MemoIslandExplorerMap
             selectedId={selectedId}
             activeRegion={activeRegion}
             onSelect={onSelect}
@@ -509,7 +574,9 @@ export function MobileIslandMap({
       </div>
 
       <div className="m-map__controls">
-        <span className="m-map__zoom">{zoomLabel}</span>
+        <span className="m-map__zoom" ref={zoomLabelRef}>
+          {`${transform.k.toFixed(1)}배`}
+        </span>
         <div className="m-map__btns">
           <button
             type="button"

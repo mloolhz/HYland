@@ -310,10 +310,19 @@ export function PostDetail() {
                 </div>
 
                 <div className="cm-detail-tags">
-                  <span className="cm-tag-island" style={{ background: region.bg, color: region.text }}>
-                    {post.island}
-                  </span>
-                  <span className="cm-tag-activity">{post.activity}</span>
+                  {post.isNotice ? (
+                    <span className="cm-list-chip cm-list-chip-notice">공지</span>
+                  ) : (
+                    <>
+                      <span
+                        className="cm-tag-island"
+                        style={{ background: region.bg, color: region.text }}
+                      >
+                        {post.island}
+                      </span>
+                      <span className="cm-tag-activity">{post.activity}</span>
+                    </>
+                  )}
                   {post.badge && <span className="cm-badge-rare">{post.badge}</span>}
                 </div>
               </div>

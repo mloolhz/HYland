@@ -6,6 +6,18 @@ export const AI_RECOMMEND_COPY = {
     "\uBE44 \uC624\uB294 \uB0A0 \uC2E4\uB0B4 \uCF54\uC2A4 \uCD94\uCC9C",
     "\uD790\uB9C1 \uC5EC\uD589 \uCD94\uCC9C",
   ],
+  /**
+   * Mobile intro 2x2 cards, same order as exampleQuestions. Long questions wrapped
+   * unevenly on phones, so cards show a short title/sub and still send the full question.
+   */
+  exampleCards: [
+    { icon: "\uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67", title: "\uAC00\uC871 \uB2F9\uC77C\uCE58\uAE30", sub: "\uC544\uC774\uC640 \uD558\uB8E8 \uCF54\uC2A4" },
+    { icon: "\uD83D\uDC91", title: "\uCEE4\uD50C \uC5EC\uD589", sub: "\uB458\uC774 \uC990\uAE30\uB294 \uCF54\uC2A4" },
+    { icon: "\u2614", title: "\uBE44 \uC624\uB294 \uB0A0", sub: "\uC2E4\uB0B4 \uCCB4\uD5D8 \uCF54\uC2A4" },
+    { icon: "\uD83C\uDF3F", title: "\uD790\uB9C1 \uC5EC\uD589", sub: "\uC26C\uC5B4 \uAC00\uB294 \uC12C" },
+  ],
+  btiCardTitle: "\uC12CBTI \uB9DE\uCDA4 \uCF54\uC2A4",
+  btiCardSubGuest: "\uAC80\uC0AC\uD558\uACE0 \uB098\uC5D0\uAC8C \uB9DE\uB294 \uC12C \uCF54\uC2A4 \uBC1B\uAE30",
   title: "\uC778\uCC9C\uC12C \uB808\uC800\uB204\uB9AC AI \uCD94\uCC9C",
   emptyPrompt: "\uC6D0\uD558\uB294 \uC5EC\uD589 \uC870\uAC74\uC744 \uC785\uB825\uD574\uBCF4\uC138\uC694.",
   loading: "AI\uAC00 \uCD94\uCC9C\uC744 \uC900\uBE44\uD558\uACE0 \uC788\uC5B4\uC694",

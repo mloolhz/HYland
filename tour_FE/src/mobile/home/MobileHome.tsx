@@ -1,6 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { HERO_SLIDES, HERO_SLIDE_DURATION_MS } from "@/lib/landing-images";
+import {
+  HERO_SLIDES,
+  HERO_SLIDE_DURATION_MS,
+  LANDING_IMAGE_1,
+  LANDING_IMAGE_2,
+} from "@/lib/landing-images";
 import { SPORTS_DATA, type CategoryKey } from "@/data/sports";
 import { IncheonWeatherBar } from "@/components/landing/IncheonWeatherBar";
 import { useSession } from "@/store/session";
@@ -9,6 +14,7 @@ import { useBadgeStats } from "@/hooks/useBadgeStats";
 import { getLevelPercent, isMaxLevel } from "@/lib/user-profile";
 import { useAuthSheet } from "../auth/AuthSheetProvider";
 import { ChevronRightIcon, SafetyIcon, SparkIcon, TrophyIcon, IslandIcon } from "../MobileIcons";
+import { MobilePhoto } from "../MobilePhoto";
 
 const CATEGORIES: { key: CategoryKey; icon: string; label: string }[] = [
   { key: "water", icon: "⛵", label: "해상 레저" },
@@ -19,14 +25,14 @@ const CATEGORIES: { key: CategoryKey; icon: string; label: string }[] = [
 
 const AI_COURSES = [
   {
-    photo: "/landing-1.png",
+    photo: LANDING_IMAGE_1,
     level: "초급",
     title: "하나개 카약 체험",
     loc: "무의도 · 2시간",
     to: "/sports?category=water",
   },
   {
-    photo: "/landing-2.png",
+    photo: LANDING_IMAGE_2,
     level: "중급",
     title: "무의바다누리길 트레일",
     loc: "소무의도 · 2.5km",
@@ -192,13 +198,7 @@ function LeisureRail() {
         {items.map((sport) => (
           <Link key={sport.id} to={`/sports?category=${category}`} className="m-rail__card">
             <div className="m-rail__thumb">
-              {sport.photo?.trim() ? (
-                <img src={sport.photo} alt="" loading="lazy" />
-              ) : (
-                <span className="m-rail__emoji">
-                  {CATEGORIES.find((c) => c.key === category)?.icon}
-                </span>
-              )}
+              <MobilePhoto src={sport.photo} />
               <span className="m-rail__tag">{sport.diff}</span>
             </div>
             <b className="m-rail__title">{sport.name}</b>
@@ -221,7 +221,7 @@ function AiRail() {
         {AI_COURSES.map((course) => (
           <Link key={course.title} to={course.to} className="m-rail__card m-rail__card--wide">
             <div className="m-rail__thumb">
-              <img src={course.photo} alt="" loading="lazy" />
+              <MobilePhoto src={course.photo} />
               <span className="m-rail__tag m-rail__tag--lv">{course.level}</span>
             </div>
             <b className="m-rail__title">{course.title}</b>

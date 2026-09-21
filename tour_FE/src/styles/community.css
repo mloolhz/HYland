@@ -489,9 +489,27 @@ div.cm-post-row[role="link"]:hover {
   cursor: pointer;
 }
 
+/* 공지 — 글 목록 맨 위에 이어 붙되 일반 글과 한눈에 구분되게 */
 .cm-post-row-notice {
-  background: var(--cm-surface);
-  cursor: default;
+  position: relative;
+  background: #f3f8ff;
+  cursor: pointer;
+}
+
+.cm-post-row-notice::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: #2d2e6b;
+}
+
+div.cm-post-row-notice[role="link"]:hover {
+  background: #e8f1fd;
+}
+
+.cm-post-list .cm-post-row-notice:has(+ .cm-post-row:not(.cm-post-row-notice)) {
+  border-bottom: 1px solid #cfe0f7;
 }
 
 .cm-list-chip {
@@ -510,8 +528,8 @@ div.cm-post-row[role="link"]:hover {
 }
 
 .cm-list-chip-notice {
-  background: #e6f1fb;
-  color: var(--cm-navy-deep);
+  background: #2d2e6b;
+  color: #fff;
 }
 
 .cm-list-title-col {
@@ -638,7 +656,8 @@ div.cm-post-row[role="link"]:hover {
 }
 
 .cm-list-title-notice {
-  font-weight: 500;
+  font-weight: 700;
+  color: #2d2e6b;
 }
 
 .cm-list-reply-count {
@@ -3580,4 +3599,131 @@ div.cm-post-row[role="link"] {
 .rp-btn:disabled {
   opacity: 0.55;
   cursor: not-allowed;
+}
+
+/* ── 공지사항 (목록 위 고정, NoticeBoard) ── */
+.cm-notice-board {
+  margin-bottom: 16px;
+  padding: 14px 16px 10px;
+  border: 1px solid #cfe0f7;
+  border-left: 4px solid #2d2e6b;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f3f8ff 0%, #ffffff 100%);
+  box-shadow: 0 4px 14px rgba(45, 46, 107, 0.06);
+}
+
+.cm-notice-board__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.cm-notice-board__title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  color: #2d2e6b;
+}
+
+.cm-notice-board__count {
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.cm-notice-board__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cm-notice-board__list li + li {
+  border-top: 1px dashed #d8e4f4;
+}
+
+.cm-notice-board__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 2px;
+  color: #1e293b;
+  text-decoration: none;
+}
+
+.cm-notice-board__item:hover .cm-notice-board__item-title {
+  color: #1f4fb8;
+  text-decoration: underline;
+}
+
+.cm-notice-board__chip {
+  flex: none;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #2d2e6b;
+  color: #fff;
+  font-size: 11.5px;
+  font-weight: 800;
+}
+
+.cm-notice-board__item-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14.5px;
+  font-weight: 700;
+}
+
+.cm-notice-board__date {
+  flex: none;
+  font-size: 12.5px;
+  color: #94a3b8;
+}
+
+.cm-notice-board__more {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 6px 0 2px;
+  border: 0;
+  border-top: 1px solid #e2ebf7;
+  background: none;
+  color: #1f4fb8;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cm-notice-board--mobile {
+  margin-bottom: 4px;
+  padding: 12px 14px 8px;
+}
+
+.cm-notice-board--mobile .cm-notice-board__item {
+  align-items: flex-start;
+}
+
+/* 폰에서는 한 줄로 자르면 제목이 거의 안 보여 두 줄까지 보여 준다 */
+.cm-notice-board--mobile .cm-notice-board__item-title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  white-space: normal;
+  font-size: 14px;
+  line-height: 1.4;
+  word-break: keep-all;
+}
+
+.cm-notice-board--mobile .cm-notice-board__chip,
+.cm-notice-board--mobile .cm-notice-board__date {
+  margin-top: 1px;
+}
+
+.cm-notice-board--mobile .cm-notice-board__date {
+  font-size: 11.5px;
 }

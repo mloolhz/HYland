@@ -11,6 +11,7 @@ import {
 import { formatRelativeTime } from "@/lib/time";
 import { getIslandColors } from "@/constants/island";
 import { AuthorAvatar } from "@/components/community/AuthorAvatar";
+import { NoticeBoard } from "@/components/community/NoticeBoard";
 import { useSession } from "@/store/session";
 import { useAuthSheet } from "../auth/AuthSheetProvider";
 import type { Post } from "@/types/community";
@@ -39,10 +40,16 @@ function PostCard({ post }: { post: Post }) {
       <Link to={`/community/${post.id}`} className="m-card m-post">
         <div className="m-post__body">
           <div className="m-post__top">
-            <span className="m-post__island" style={{ background: colors.bg, color: colors.text }}>
-              {post.island}
-            </span>
-            <span className="m-post__activity">{post.activity}</span>
+            {post.isNotice ? (
+              <span className="m-post__island m-post__island--notice">공지</span>
+            ) : (
+              <>
+                <span className="m-post__island" style={{ background: colors.bg, color: colors.text }}>
+                  {post.island}
+                </span>
+                <span className="m-post__activity">{post.activity}</span>
+              </>
+            )}
             {post.isResolved && <span className="m-post__solved">해결됨</span>}
           </div>
 
@@ -142,6 +149,8 @@ export function MobileCommunity() {
   }, [posts, category, sort, query]);
 
   const visible = list.slice(0, limit);
+  // 공지는 목록(filterPosts)에서 빠지므로 위에 따로 보여 준다
+  const notices = useMemo(() => posts.filter((p) => p.isNotice), [posts]);
 
   return (
     <div className="m-screen m-cm">
@@ -182,6 +191,8 @@ export function MobileCommunity() {
           aria-label="글 검색"
         />
       </form>
+
+      <NoticeBoard notices={notices} className="cm-notice-board--mobile" />
 
       <div className="m-cm__bar">
         <span className="m-isl__count">{list.length}개의 글</span>

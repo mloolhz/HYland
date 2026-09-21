@@ -1,7 +1,7 @@
 /** public 히어로 이미지 — ASCII 경로 사용 (한글 파일명 URL 인코딩 이슈 회피) */
-export const LANDING_IMAGE_1 = "/landing-1.png";
-export const LANDING_IMAGE_2 = "/landing-2.png";
-export const LEISURE_SPORTS_HERO = "/leisure-sports-hero.png";
+export const LANDING_IMAGE_1 = "/landing-1.webp";
+export const LANDING_IMAGE_2 = "/landing-2.webp";
+export const LEISURE_SPORTS_HERO = "/leisure-sports-hero.webp";
 
 /** 히어로 슬라이드 1장당 표시 시간 — JS 타이머·CSS 켄번즈·페이드와 동일 */
 export const HERO_SLIDE_DURATION_MS = 6000;

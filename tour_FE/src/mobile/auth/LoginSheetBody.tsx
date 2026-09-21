@@ -51,7 +51,7 @@ export function LoginSheetBody({ onSwitchToSignup, onDone }: LoginSheetBodyProps
 
   return (
     <div className="m-auth">
-      <p className="m-auth__lead">인천 168개 섬의 레저를 여권에 기록해보세요</p>
+      <p className="m-auth__lead">인천 섬 레저를 섬 여권에 기록해보세요</p>
 
       <MobileSocialButtons providers={providers} />
 

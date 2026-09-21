@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
+  AiRateLimitError,
   getAiRecommendation,
   getAiRecommendationStream,
   getSuggestedQuestions,
@@ -467,6 +468,8 @@ export function AiRecommend() {
           if (!streamed) throw new Error("스트림 응답 없음");
           response = streamed;
         } catch (streamErr) {
+          // 횟수 제한은 폴백해도 똑같이 막히고, 요청만 한 번 더 쌓인다
+          if (streamErr instanceof AiRateLimitError) throw streamErr;
           console.warn("[ai-recommend] 스트리밍 실패, 논스트리밍 폴백", streamErr);
           response = await getAiRecommendation(
             promptText,
@@ -489,7 +492,7 @@ export function AiRecommend() {
       } catch (err) {
         console.error(AI_RECOMMEND_COPY.requestFailedLog, err);
         setTurns((prev) => prev.map((t) => (t.id === turnId ? { ...t, phase: "done" } : t)));
-        setErrorMsg(AI_RECOMMEND_COPY.error);
+        setErrorMsg(err instanceof AiRateLimitError ? err.message : AI_RECOMMEND_COPY.error);
         setLoading(false);
       }
     },
@@ -634,23 +637,47 @@ export function AiRecommend() {
             <h1 className="ai-intro__title">어떤 섬 여행을 떠나볼까요?</h1>
 
             <div className="ai-example-chips">
-              {AI_RECOMMEND_COPY.exampleQuestions.map((q) => (
-                <button
-                  key={q}
-                  type="button"
-                  className="ai-example-chip"
-                  onClick={() => void sendMessage(q, "chip")}
-                >
-                  {q}
-                </button>
-              ))}
+              {/* 데스크톱은 질문 문장 칩, 모바일은 아이콘·짧은 제목 카드(2x2)로 보인다.
+                  어느 쪽이든 누르면 원래 질문 문장을 보낸다. */}
+              {AI_RECOMMEND_COPY.exampleQuestions.map((q, i) => {
+                const card = AI_RECOMMEND_COPY.exampleCards[i];
+                return (
+                  <button
+                    key={q}
+                    type="button"
+                    className="ai-example-chip"
+                    aria-label={q}
+                    onClick={() => void sendMessage(q, "chip")}
+                  >
+                    <span className="ai-example-chip__full">{q}</span>
+                    {card && (
+                      <span className="ai-example-chip__card" aria-hidden="true">
+                        <span className="ai-example-chip__icon">{card.icon}</span>
+                        <b>{card.title}</b>
+                        <small>{card.sub}</small>
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
               {/* 섬BTI 인기 섬 — 고정 칩 (별칭 반영). 예전엔 입력창 아래 별도 버튼이었다. */}
               <button
                 type="button"
                 className="ai-example-chip ai-example-chip--bti"
+                aria-label={btiChipLabel}
                 onClick={handleBtiPopularChip}
               >
-                {btiChipLabel}
+                <span className="ai-example-chip__full">{btiChipLabel}</span>
+                <span className="ai-example-chip__card" aria-hidden="true">
+                  <span className="ai-example-chip__icon">✨</span>
+                  <b>{AI_RECOMMEND_COPY.btiCardTitle}</b>
+                  <small>
+                    {!sessionLoading && hasResult && btiResultData
+                      ? `${btiResultData.name} 유형 추천 섬`
+                      : AI_RECOMMEND_COPY.btiCardSubGuest}
+                  </small>
+                  <span className="ai-example-chip__arrow">›</span>
+                </span>
               </button>
             </div>
 

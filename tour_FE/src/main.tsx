@@ -16,32 +16,12 @@ import {
 } from "@/routes/ResponsiveRoutes";
 import { AuthLayout } from "@/layouts/AuthLayout";
 import { CommunityLayout } from "@/layouts/CommunityLayout";
-import { FindAccount } from "@/pages/FindAccount";
-import { OAuthCallback } from "@/pages/OAuthCallback";
-import { OAuthNickname } from "@/pages/OAuthNickname";
-import { MyActivity } from "@/pages/MyActivity";
-import { MyCommentsPage } from "@/pages/MyCommentsPage";
-import { MyLikedPage } from "@/pages/MyLikedPage";
-import { MyPostsPage } from "@/pages/MyPostsPage";
-import { Notifications } from "@/pages/Notifications";
-import { UserProfilePage } from "@/pages/UserProfilePage";
-import { PostDetail } from "@/pages/PostDetail";
-import { MyPageSettings } from "@/pages/MyPageSettings";
-import { MyPageProfileEdit } from "@/pages/MyPageProfileEdit";
-import { AiRecommend } from "@/pages/AiRecommend";
-import { FacilityDetail } from "@/pages/FacilityDetail";
-import { AdminSubmissions } from "@/pages/AdminSubmissions";
-import { AdminReports } from "@/pages/AdminReports";
-import { WritePost } from "@/pages/WritePost";
-import { IslandBtiIntro } from "@/pages/IslandBtiIntro";
-import { IslandBtiTest } from "@/pages/IslandBtiTest";
-import { IslandBtiResult } from "@/pages/IslandBtiResult";
-import { LegalDocumentPage } from "@/pages/LegalDocumentPage";
 import { ProfileCharacterProvider } from "@/context/ProfileCharacterContext";
 import { SessionProvider } from "@/store/session";
 import { VisitedIslandsProvider } from "@/store/visited-islands";
 import { MissionProgressProvider } from "@/store/mission-progress";
 import { RequireAuth } from "@/components/RequireAuth";
+import { lazyPage } from "@/routes/lazy-page";
 import { resetGuestEphemeralPersistence } from "@/lib/guest-ephemeral-state";
 import "./index.css";
 import "./styles/auth.css";
@@ -78,31 +58,31 @@ const router = createBrowserRouter([
     errorElement: <RouterError />,
     children: [
       { path: "islands", element: <IslandsRoute /> },
-      { path: "island-bti", element: <IslandBtiIntro /> },
-      { path: "island-bti/test", element: <IslandBtiTest /> },
-      { path: "island-bti/result", element: <IslandBtiResult /> },
+      { path: "island-bti", lazy: lazyPage(() => import("@/pages/IslandBtiIntro"), "IslandBtiIntro") },
+      { path: "island-bti/test", lazy: lazyPage(() => import("@/pages/IslandBtiTest"), "IslandBtiTest") },
+      { path: "island-bti/result", lazy: lazyPage(() => import("@/pages/IslandBtiResult"), "IslandBtiResult") },
       { path: "missions", element: <MissionHubRoute /> },
       { path: "leaderboard", element: <MissionHubRoute /> },
       { path: "sports", element: <SportsRoute /> },
-      { path: "sports/facility/:facilityId", element: <FacilityDetail /> },
+      { path: "sports/facility/:facilityId", lazy: lazyPage(() => import("@/pages/FacilityDetail"), "FacilityDetail") },
       { path: "safety", element: <SafetyRoute /> },
-      { path: "legal/:doc", element: <LegalDocumentPage /> },
-      { path: "ai-recommend", element: <AiRecommend /> },
+      { path: "legal/:doc", lazy: lazyPage(() => import("@/pages/LegalDocumentPage"), "LegalDocumentPage") },
+      { path: "ai-recommend", lazy: lazyPage(() => import("@/pages/AiRecommend"), "AiRecommend") },
       { path: "community", element: <CommunityRoute /> },
-      { path: "community/write", element: <RequireAuth><WritePost /></RequireAuth> },
-      { path: "community/my-posts", element: <RequireAuth><MyPostsPage /></RequireAuth> },
-      { path: "community/my-comments", element: <RequireAuth><MyCommentsPage /></RequireAuth> },
-      { path: "community/liked", element: <RequireAuth><MyLikedPage /></RequireAuth> },
-      { path: "community/me", element: <RequireAuth><MyActivity /></RequireAuth> },
-      { path: "community/users/:userId", element: <UserProfilePage /> },
-      { path: "community/:id", element: <PostDetail /> },
-      { path: "notifications", element: <Notifications /> },
+      { path: "community/write", lazy: lazyPage(() => import("@/pages/WritePost"), "WritePost", { auth: true }) },
+      { path: "community/my-posts", lazy: lazyPage(() => import("@/pages/MyPostsPage"), "MyPostsPage", { auth: true }) },
+      { path: "community/my-comments", lazy: lazyPage(() => import("@/pages/MyCommentsPage"), "MyCommentsPage", { auth: true }) },
+      { path: "community/liked", lazy: lazyPage(() => import("@/pages/MyLikedPage"), "MyLikedPage", { auth: true }) },
+      { path: "community/me", lazy: lazyPage(() => import("@/pages/MyActivity"), "MyActivity", { auth: true }) },
+      { path: "community/users/:userId", lazy: lazyPage(() => import("@/pages/UserProfilePage"), "UserProfilePage") },
+      { path: "community/:id", lazy: lazyPage(() => import("@/pages/PostDetail"), "PostDetail") },
+      { path: "notifications", lazy: lazyPage(() => import("@/pages/Notifications"), "Notifications") },
       // 검수 권한은 서버가 확인한다 (ADMIN 아니면 403)
-      { path: "admin/submissions", element: <RequireAuth><AdminSubmissions /></RequireAuth> },
-      { path: "admin/reports", element: <RequireAuth><AdminReports /></RequireAuth> },
+      { path: "admin/submissions", lazy: lazyPage(() => import("@/pages/AdminSubmissions"), "AdminSubmissions", { auth: true }) },
+      { path: "admin/reports", lazy: lazyPage(() => import("@/pages/AdminReports"), "AdminReports", { auth: true }) },
       { path: "mypage", element: <RequireAuth><MyPageRoute /></RequireAuth> },
-      { path: "mypage/settings", element: <RequireAuth><MyPageSettings /></RequireAuth> },
-      { path: "mypage/settings/profile", element: <RequireAuth><MyPageProfileEdit /></RequireAuth> },
+      { path: "mypage/settings", lazy: lazyPage(() => import("@/pages/MyPageSettings"), "MyPageSettings", { auth: true }) },
+      { path: "mypage/settings/profile", lazy: lazyPage(() => import("@/pages/MyPageProfileEdit"), "MyPageProfileEdit", { auth: true }) },
     ],
   },
   {
@@ -111,11 +91,11 @@ const router = createBrowserRouter([
     children: [
       { path: "login", element: <LoginRoute /> },
       { path: "signup", element: <SignupRoute /> },
-      { path: "find-account", element: <FindAccount /> },
+      { path: "find-account", lazy: lazyPage(() => import("@/pages/FindAccount"), "FindAccount") },
       // 간편 로그인 — 제공사가 code 를 들고 돌아오는 자리
-      { path: "oauth/callback/:provider", element: <OAuthCallback /> },
+      { path: "oauth/callback/:provider", lazy: lazyPage(() => import("@/pages/OAuthCallback"), "OAuthCallback") },
       // 간편 로그인으로 처음 가입한 사람의 닉네임 확인
-      { path: "signup/nickname", element: <RequireAuth><OAuthNickname /></RequireAuth> },
+      { path: "signup/nickname", lazy: lazyPage(() => import("@/pages/OAuthNickname"), "OAuthNickname", { auth: true }) },
     ],
   },
   { path: "*", element: <NotFoundRoute /> },

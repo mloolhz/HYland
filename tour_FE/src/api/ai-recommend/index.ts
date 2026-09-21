@@ -18,6 +18,7 @@ type RecommendPayload = {
   tips?: string[];
   followups?: string[];
   weather?: WeatherInfo;
+  facilities?: AiResponse["facilities"];
 };
 
 function toAiResponse(data: RecommendPayload): AiResponse {
@@ -32,6 +33,7 @@ function toAiResponse(data: RecommendPayload): AiResponse {
     tips: data.tips,
     followups: data.followups,
     weather: data.weather,
+    facilities: Array.isArray(data.facilities) ? data.facilities : [],
   };
 }
 
@@ -123,6 +125,20 @@ function handleSSEEvents(
 /** 질문 출처 — "chip"은 인기질문·AI followup 칩 클릭, "user"는 직접 입력 */
 export type QuestionSource = "user" | "chip";
 
+/** 서버가 요청 횟수 제한(429)으로 막았을 때 — 다시 시도해도 같은 결과라 폴백하지 않는다 */
+export class AiRateLimitError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "AiRateLimitError";
+  }
+}
+
+async function throwIfRateLimited(res: Response) {
+  if (res.status !== 429) return;
+  const body = (await res.json().catch(() => null)) as { error?: string } | null;
+  throw new AiRateLimitError(body?.error ?? "질문이 너무 많아요. 잠시 후 다시 시도해 주세요.");
+}
+
 export async function getAiRecommendation(
   userMessage: string,
   history?: ChatHistoryItem[],
@@ -136,6 +152,7 @@ export async function getAiRecommendation(
     body: JSON.stringify({ question: userMessage, history, persona, sessionId, questionSource }),
   });
 
+  await throwIfRateLimited(res);
   if (!res.ok) {
     throw new Error("추천 요청 실패");
   }
@@ -160,6 +177,7 @@ export async function getAiRecommendationStream(
     body: JSON.stringify({ question: userMessage, history, persona, sessionId, questionSource }),
   });
 
+  await throwIfRateLimited(res);
   if (!res.ok) {
     throw new Error("추천 요청 실패");
   }

@@ -363,6 +363,24 @@
   white-space: nowrap;
 }
 
+/* 불러오는 중·빈 자리 — 자리만 잡아 두고 흐리게 */
+.mis-lb-preview__pd.is-empty .mis-lb-preview__ava {
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: none;
+}
+
+.mis-lb-preview__pd.is-empty .mis-lb-preview__medal {
+  opacity: 0.35;
+}
+
+.mis-lb-preview__empty {
+  margin: 18px 0 8px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #dce7f6;
+  text-align: center;
+}
+
 @media (max-width: 1024px) {
   .mis-lb-preview {
     min-height: auto;

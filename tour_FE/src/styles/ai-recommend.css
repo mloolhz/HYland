@@ -150,6 +150,11 @@ body:has(.ai-page) {
   border-color: #a8c0ef;
 }
 
+/* 모바일 셸에서만 쓰는 카드 모양 (mobile-pages.css) — 데스크톱은 질문 문장만 */
+.ai-example-chip__card {
+  display: none;
+}
+
 /* 섬BTI별 섬 선호도 버튼 (intro 화면, 입력창 아래) */
 .ai-bti-pref {
   width: 100%;
@@ -590,6 +595,98 @@ body:has(.ai-page) {
 }
 
 /* Tips */
+/* AI 답변에 나온 실제 시설 (한국관광공사 OpenAPI 로 수집한 DB 와 대조된 것만) */
+.ai-facility {
+  margin-bottom: 14px;
+}
+
+.ai-facility__title {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0e2b52;
+}
+
+.ai-facility__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ai-facility__card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border: 1px solid #d6e4fa;
+  border-radius: 12px;
+  background: #fff;
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.ai-facility__card:hover {
+  border-color: #a8c0ef;
+  box-shadow: 0 4px 14px rgba(30, 60, 120, 0.08);
+}
+
+.ai-facility__photo {
+  flex: none;
+  width: 64px;
+  height: 64px;
+  border-radius: 10px;
+  object-fit: cover;
+  background: #eef3fc;
+}
+
+.ai-facility__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ai-facility__meta {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.ai-facility__name {
+  font-size: 14.5px;
+  font-weight: 800;
+  color: #1e293b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ai-facility__tel {
+  font-size: 12px;
+  color: #475569;
+}
+
+.ai-facility__badge {
+  flex: none;
+  align-self: flex-start;
+  padding: 3px 7px;
+  border-radius: 6px;
+  background: #e8f1ff;
+  color: #1f4fb8;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.ai-facility__source {
+  margin: 6px 2px 0;
+  font-size: 11.5px;
+  color: #94a3b8;
+}
+
 .ai-tips {
   margin-bottom: 14px;
   padding: 12px 14px;

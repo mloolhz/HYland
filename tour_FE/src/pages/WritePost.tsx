@@ -10,6 +10,7 @@ import { uploadImage } from "@/api/uploads";
 import { submitMissionProof } from "@/api/submissions";
 import { useMissionQuests } from "@/hooks/useMissionQuests";
 import { ApiError } from "@/api/auth";
+import { useSession } from "@/store/session";
 import type { PostType } from "@/types/community";
 import { ReviewTagPicker } from "@/components/community/ReviewTags";
 import { isValidReviewTags, type ReviewTagId } from "@/constants/review-tags";
@@ -56,6 +57,10 @@ export function WritePost() {
   const [imageError, setImageError] = useState("");
   const [error, setError] = useState("");
   const [asMissionProof, setAsMissionProof] = useState(false);
+  const { user } = useSession();
+  const isAdmin = user?.role === "ADMIN";
+  /** 관리자 공지 — 특정 섬 후기가 아니라서 섬·활동·특징 태그·미션 인증을 받지 않는다 */
+  const [asNotice, setAsNotice] = useState(false);
   /** 어떤 섬을 다녀왔는지 — 인증에는 반드시 있어야 한다 */
   const [islandQuestId, setIslandQuestId] = useState<number | null>(null);
   /** 레저 배지는 곁들이 — 카테고리를 먼저 고르고 그 안에서 종목을 고른다 */
@@ -108,7 +113,12 @@ export function WritePost() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!title.trim() || !island || !activity || !content.trim()) {
+    if (asNotice) {
+      if (!title.trim() || !content.trim()) {
+        setError("제목과 내용을 입력해주세요.");
+        return;
+      }
+    } else if (!title.trim() || !island || !activity || !content.trim()) {
       setError("제목, 섬, 활동, 내용은 모두 입력해주세요.");
       return;
     }
@@ -117,7 +127,7 @@ export function WritePost() {
       setError("어느 섬을 다녀왔는지 선택해주세요.");
       return;
     }
-    if (type === "review" && !isValidReviewTags(tags)) {
+    if (type === "review" && !asNotice && !isValidReviewTags(tags)) {
       setError("이 섬에서 느낀 특징을 1개 이상, 최대 5개까지 선택해주세요.");
       return;
     }
@@ -134,10 +144,11 @@ export function WritePost() {
         type,
         title: title.trim(),
         content: content.trim(),
-        island,
-        activity,
+        island: asNotice ? undefined : island,
+        activity: asNotice ? undefined : activity,
         images,
-        tags: type === "review" ? tags : undefined,
+        tags: type === "review" && !asNotice ? tags : undefined,
+        isNotice: asNotice || undefined,
       });
       // 미션 인증으로 냈으면 검수 대기로 보낸다.
       // 섬은 필수, 레저 배지는 골랐을 때만 — 한 글로 두 건을 낼 수 있다.
@@ -166,6 +177,25 @@ export function WritePost() {
           <h1 className="cm-write-title">글 작성하기</h1>
 
           <form className="cm-write-form" onSubmit={handleSubmit}>
+            {isAdmin && (
+              <div className="cm-write-field cm-write-proof">
+                <label className="cm-write-proof-toggle">
+                  <input
+                    type="checkbox"
+                    checked={asNotice}
+                    onChange={(e) => {
+                      setAsNotice(e.target.checked);
+                      if (e.target.checked) setAsMissionProof(false);
+                    }}
+                  />
+                  <span>
+                    공지사항으로 등록
+                    <span className="cm-write-optional"> — 관리자 전용, 목록 맨 위에 고정돼요</span>
+                  </span>
+                </label>
+              </div>
+            )}
+
             <div className="cm-write-field">
               <label className="cm-write-label">유형</label>
               <div className="cm-filter-pills" role="radiogroup" aria-label="글 유형">
@@ -204,49 +234,51 @@ export function WritePost() {
               />
             </div>
 
-            <div className="cm-write-row">
-              <div className="cm-write-field">
-                <label className="cm-write-label" htmlFor="write-island">
-                  섬
-                </label>
-                <select
-                  id="write-island"
-                  className="cm-write-input"
-                  value={island}
-                  onChange={(e) => setIsland(e.target.value)}
-                >
-                  <option value="">섬 선택</option>
-                  {ISLAND_CATALOG.map((i) => (
-                    <option key={i.name} value={i.name}>
-                      {i.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+            {!asNotice && (
+              <div className="cm-write-row">
+                <div className="cm-write-field">
+                  <label className="cm-write-label" htmlFor="write-island">
+                    섬
+                  </label>
+                  <select
+                    id="write-island"
+                    className="cm-write-input"
+                    value={island}
+                    onChange={(e) => setIsland(e.target.value)}
+                  >
+                    <option value="">섬 선택</option>
+                    {ISLAND_CATALOG.map((i) => (
+                      <option key={i.name} value={i.name}>
+                        {i.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-              <div className="cm-write-field">
-                <label className="cm-write-label" htmlFor="write-activity">
-                  활동
-                </label>
-                <select
-                  id="write-activity"
-                  className="cm-write-input"
-                  value={activity}
-                  onChange={(e) => setActivity(e.target.value)}
-                >
-                  <option value="">활동 선택</option>
-                  {COMMUNITY_ACTIVITY_OPTIONS.map((group) => (
-                    <optgroup key={group.key} label={group.label}>
-                      {group.activities.map((name) => (
-                        <option key={name} value={name}>
-                          {name}
-                        </option>
-                      ))}
-                    </optgroup>
-                  ))}
-                </select>
+                <div className="cm-write-field">
+                  <label className="cm-write-label" htmlFor="write-activity">
+                    활동
+                  </label>
+                  <select
+                    id="write-activity"
+                    className="cm-write-input"
+                    value={activity}
+                    onChange={(e) => setActivity(e.target.value)}
+                  >
+                    <option value="">활동 선택</option>
+                    {COMMUNITY_ACTIVITY_OPTIONS.map((group) => (
+                      <optgroup key={group.key} label={group.label}>
+                        {group.activities.map((name) => (
+                          <option key={name} value={name}>
+                            {name}
+                          </option>
+                        ))}
+                      </optgroup>
+                    ))}
+                  </select>
+                </div>
               </div>
-            </div>
+            )}
 
             <div className="cm-write-field">
               <label className="cm-write-label" htmlFor="write-content">
@@ -262,106 +294,106 @@ export function WritePost() {
               />
             </div>
 
-            {type === "review" && <ReviewTagPicker value={tags} onChange={setTags} />}
+            {type === "review" && !asNotice && <ReviewTagPicker value={tags} onChange={setTags} />}
 
-            <div className="cm-write-field cm-write-proof">
-              <label className="cm-write-proof-toggle">
-                <input
-                  type="checkbox"
-                  checked={asMissionProof}
-                  onChange={(e) => {
-                    setAsMissionProof(e.target.checked);
-                    // 인증은 사진이 근거다 — 켜는 순간 유형을 인증샷으로 바꾼다
-                    if (e.target.checked) setType("photo");
-                  }}
-                />
-                <span>
-                  미션 인증으로 제출하기
-                  <span className="cm-write-optional"> — 관리자 확인 후 배지가 지급돼요</span>
-                </span>
-              </label>
+            {!asNotice && (
+              <div className="cm-write-field cm-write-proof">
+                <label className="cm-write-proof-toggle">
+                  <input
+                    type="checkbox"
+                    checked={asMissionProof}
+                    onChange={(e) => {
+                      setAsMissionProof(e.target.checked);
+                      // 인증은 사진이 근거다 — 켜는 순간 유형을 인증샷으로 바꾼다
+                      if (e.target.checked) setType("photo");
+                    }}
+                  />
+                  <span>
+                    미션 인증으로 제출하기
+                    <span className="cm-write-optional"> — 관리자 확인 후 배지가 지급돼요</span>
+                  </span>
+                </label>
 
-              {asMissionProof && (
-                <div className="cm-write-proof-body">
-                  {/* 섬 — 필수. 승인되면 이 섬이 방문 기록으로 남는다 */}
-                  <div className="cm-write-proof-step">
-                    <span className="cm-write-proof-step-label">
-                      1. 어느 섬을 다녀왔나요? <b className="cm-write-required">필수</b>
-                    </span>
-                    <select
-                      className="cm-write-select"
-                      value={islandQuestId ?? ""}
-                      onChange={(e) => {
-                        const id = e.target.value ? Number(e.target.value) : null;
-                        setIslandQuestId(id);
-                        // 글의 섬 항목도 같이 맞춰 준다 — 두 번 고르게 하지 않는다
-                        const picked = islandQuests.find((q) => q.id === id);
-                        if (picked) setIsland(picked.title.replace(/ 방문$/, ""));
-                      }}
-                      aria-label="인증할 섬 선택"
-                    >
-                      <option value="">섬 선택</option>
-                      {islandQuests.map((q) => (
-                        <option key={q.id} value={q.id}>
-                          {q.title.replace(/ 방문$/, "")}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* 레저 배지 — 곁들이. 카테고리를 먼저 고른다 */}
-                  <div className="cm-write-proof-step">
-                    <span className="cm-write-proof-step-label">
-                      2. 레저 배지도 함께 인증할까요?{" "}
-                      <span className="cm-write-optional">(선택)</span>
-                    </span>
-                    <div className="cm-filter-pills" role="radiogroup" aria-label="레저 카테고리">
-                      {LEISURE_CATEGORIES.map((c) => (
-                        <button
-                          key={c}
-                          type="button"
-                          role="radio"
-                          aria-checked={leisureCategory === c}
-                          className={`cm-filter-pill${leisureCategory === c ? " is-active" : ""}`}
-                          onClick={() => {
-                            setLeisureCategory(c);
-                            setLeisureQuestId(null);
-                          }}
-                        >
-                          {c}
-                        </button>
-                      ))}
-                    </div>
-                    {leisureQuests.length > 0 ? (
+                {asMissionProof && (
+                  <div className="cm-write-proof-body">
+                    {/* 섬 — 필수. 승인되면 이 섬이 방문 기록으로 남는다 */}
+                    <div className="cm-write-proof-step">
+                      <span className="cm-write-proof-step-label">
+                        1. 어느 섬을 다녀왔나요? <b className="cm-write-required">필수</b>
+                      </span>
                       <select
                         className="cm-write-select"
-                        value={leisureQuestId ?? ""}
-                        onChange={(e) =>
-                          setLeisureQuestId(e.target.value ? Number(e.target.value) : null)
-                        }
-                        aria-label="인증할 레저 배지 선택"
+                        value={islandQuestId ?? ""}
+                        onChange={(e) => {
+                          const id = e.target.value ? Number(e.target.value) : null;
+                          setIslandQuestId(id);
+                          // 글의 섬 항목도 같이 맞춰 준다 — 두 번 고르게 하지 않는다
+                          const picked = islandQuests.find((q) => q.id === id);
+                          if (picked) setIsland(picked.title.replace(/ 방문$/, ""));
+                        }}
+                        aria-label="인증할 섬 선택"
                       >
-                        <option value="">선택 안 함</option>
-                        {leisureQuests.map((q) => (
+                        <option value="">섬 선택</option>
+                        {islandQuests.map((q) => (
                           <option key={q.id} value={q.id}>
-                            {q.icon} {q.title} ({q.current}/{q.target} {q.unit})
+                            {q.title.replace(/ 방문$/, "")}
                           </option>
                         ))}
                       </select>
-                    ) : (
-                      <p className="cm-write-hint">
-                        {leisureCategory} 배지는 모두 모았어요.
-                      </p>
-                    )}
-                  </div>
+                    </div>
 
-                  <p className="cm-write-proof-note">
-                    인증샷이 있어야 제출할 수 있어요. 승인되면 진행도가 1 올라가고, 목표를 채우면
-                    배지를 받습니다.
-                  </p>
-                </div>
-              )}
-            </div>
+                    {/* 레저 배지 — 곁들이. 카테고리를 먼저 고른다 */}
+                    <div className="cm-write-proof-step">
+                      <span className="cm-write-proof-step-label">
+                        2. 레저 배지도 함께 인증할까요?{" "}
+                        <span className="cm-write-optional">(선택)</span>
+                      </span>
+                      <div className="cm-filter-pills" role="radiogroup" aria-label="레저 카테고리">
+                        {LEISURE_CATEGORIES.map((c) => (
+                          <button
+                            key={c}
+                            type="button"
+                            role="radio"
+                            aria-checked={leisureCategory === c}
+                            className={`cm-filter-pill${leisureCategory === c ? " is-active" : ""}`}
+                            onClick={() => {
+                              setLeisureCategory(c);
+                              setLeisureQuestId(null);
+                            }}
+                          >
+                            {c}
+                          </button>
+                        ))}
+                      </div>
+                      {leisureQuests.length > 0 ? (
+                        <select
+                          className="cm-write-select"
+                          value={leisureQuestId ?? ""}
+                          onChange={(e) =>
+                            setLeisureQuestId(e.target.value ? Number(e.target.value) : null)
+                          }
+                          aria-label="인증할 레저 배지 선택"
+                        >
+                          <option value="">선택 안 함</option>
+                          {leisureQuests.map((q) => (
+                            <option key={q.id} value={q.id}>
+                              {q.icon} {q.title} ({q.current}/{q.target} {q.unit})
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <p className="cm-write-hint">{leisureCategory} 배지는 모두 모았어요.</p>
+                      )}
+                    </div>
+
+                    <p className="cm-write-proof-note">
+                      인증샷이 있어야 제출할 수 있어요. 승인되면 진행도가 1 올라가고, 목표를 채우면
+                      배지를 받습니다.
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
 
             <div className="cm-write-field">
               <span className="cm-write-label">

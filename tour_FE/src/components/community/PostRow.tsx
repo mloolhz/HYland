@@ -43,6 +43,23 @@ export function PostRow({
   const hasImages = (post.images?.length ?? 0) > 0;
   const gridClass = `cm-post-row-grid cm-post-row-grid--${columns}`;
 
+  const goToPost = () => {
+    navigate(`/community/${post.id}`, { state: { fromSearch: linkSearch } });
+  };
+
+  // 공지 줄도 일반 글처럼 눌러서 들어갈 수 있어야 한다 (예전엔 눌러도 반응이 없었다)
+  const noticeLinkProps = {
+    role: "link" as const,
+    tabIndex: 0,
+    onClick: goToPost,
+    onKeyDown: (e: React.KeyboardEvent) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        goToPost();
+      }
+    },
+  };
+
   if (post.isNotice) {
     const noticeIsland = (
       <span className="cm-list-island">
@@ -72,7 +89,7 @@ export function PostRow({
 
     if (columns === "liked") {
       return (
-        <div className={`cm-post-row cm-post-row-notice ${gridClass}`}>
+        <div className={`cm-post-row cm-post-row-notice ${gridClass}`} {...noticeLinkProps}>
           <span className="cm-list-unlike" />
           {noticeIsland}
           {noticeTitle}
@@ -84,7 +101,7 @@ export function PostRow({
     }
 
     return (
-      <div className={`cm-post-row cm-post-row-notice ${gridClass}`}>
+      <div className={`cm-post-row cm-post-row-notice ${gridClass}`} {...noticeLinkProps}>
         {noticeIsland}
         {noticeTitle}
         {columns === "community" && (
@@ -130,10 +147,6 @@ export function PostRow({
   );
 
   const className = `cm-post-row ${gridClass}${compact ? " cm-post-row-compact" : ""}`;
-
-  const goToPost = () => {
-    navigate(`/community/${post.id}`, { state: { fromSearch: linkSearch } });
-  };
 
   const goToAuthor = (e: React.MouseEvent) => {
     e.preventDefault();

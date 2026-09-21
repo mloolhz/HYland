@@ -1,7 +1,9 @@
 
 @font-face {
   font-family: "IncheonMICEOTF";
-  src: url("/fonts/IncheonMICEOTF-Light.otf") format("opentype");
+  src:
+    url("/fonts/IncheonMICEOTF-Light.woff2") format("woff2"),
+    url("/fonts/IncheonMICEOTF-Light.otf") format("opentype");
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -9,7 +11,9 @@
 
 @font-face {
   font-family: "IncheonMICEOTF";
-  src: url("/fonts/IncheonMICEOTF-Medium.otf") format("opentype");
+  src:
+    url("/fonts/IncheonMICEOTF-Medium.woff2") format("woff2"),
+    url("/fonts/IncheonMICEOTF-Medium.otf") format("opentype");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -17,7 +21,9 @@
 
 @font-face {
   font-family: "IncheonMICEOTF";
-  src: url("/fonts/IncheonMICEOTF-Bold.otf") format("opentype");
+  src:
+    url("/fonts/IncheonMICEOTF-Bold.woff2") format("woff2"),
+    url("/fonts/IncheonMICEOTF-Bold.otf") format("opentype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -230,7 +236,7 @@ html.site-menu-open{overflow:hidden;overscroll-behavior:none}
 .cat i{font-style:normal;width:52px;height:52px;border-radius:12px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.32);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;font-size:22px;transition:.18s}
 .cat:hover i{background:rgba(255,255,255,.30);border-color:rgba(255,255,255,.6)}
 .cat--featured{color:#CFE8FF;font-weight:800}
-.cat--featured i{background:#fff;border:2px solid var(--blue2);box-shadow:0 6px 20px rgba(15,95,204,.32)}
+.cat--featured i{background:rgba(255,255,255,.86);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:2px solid var(--blue2);box-shadow:0 6px 20px rgba(15,95,204,.32)}
 .passport-cover--link{display:block;text-decoration:none;color:inherit;border-radius:12px;cursor:pointer;outline:none}
 .passport-cover--link:hover .passport-cover__book{transform:translateY(-3px)}
 .passport-cover--link:focus-visible{outline:3px solid var(--blue2);outline-offset:3px;border-radius:12px}
@@ -493,6 +499,13 @@ html.site-menu-open{overflow:hidden;overscroll-behavior:none}
 .feed--example{height:auto;overflow:visible;justify-content:flex-start}
 .review-item{display:flex;gap:11px;background:#F4F7FB;border:1px solid #E8EEF5;border-radius:10px;padding:11px 14px;opacity:0;transform:translateY(16px);transition:opacity .4s,transform .4s;flex:none}
 .review-item--example{opacity:1;transform:none}
+.review-item--link{align-items:center;text-decoration:none;color:inherit;transition:border-color .15s,background .15s}
+.review-item--link:hover{border-color:var(--sky2);background:#EEF4FC}
+.review-item--link .r-body{flex:1}
+.r-time{font-size:11px;color:#94A3B8;margin-left:auto}
+.r-thumb{width:44px;height:44px;border-radius:8px;object-fit:cover;flex:none}
+.feed--example[aria-busy="true"]{min-height:172px}
+.live-card-empty{margin:4px 0 6px;font-size:14px;color:var(--muted);line-height:1.6}
 .review-item.show{opacity:1;transform:none}
 .review-item.hide{opacity:0;transform:translateY(-16px)}
 .r-ava{width:36px;height:36px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;font-weight:900}

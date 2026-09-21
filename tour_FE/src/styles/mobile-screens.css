@@ -261,6 +261,42 @@ html.is-mobile-app .isl-detail-backdrop {
   z-index: 190;
 }
 
+/* 섬 상세 바텀시트 — 아래에서 올라오고, 쓸어내리면 닫힌다 (MobileIslandSheet) */
+html.is-mobile-app .m-isl-sheet {
+  transition: transform 0.34s cubic-bezier(0.32, 0.72, 0, 1);
+  will-change: transform;
+  overscroll-behavior: contain;
+}
+
+html.is-mobile-app .isl-detail-backdrop {
+  transition: opacity 0.3s ease;
+}
+
+.m-isl-sheet__grip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 22px;
+  margin-bottom: -8px;
+  background: var(--sky);
+  cursor: grab;
+  touch-action: none;
+}
+
+.m-isl-sheet__grip span {
+  width: 42px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(45, 46, 107, 0.22);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.is-mobile-app .m-isl-sheet,
+  html.is-mobile-app .isl-detail-backdrop {
+    transition: none;
+  }
+}
+
 /* ═══════════ 레저스포츠 ═══════════ */
 .m-tiles {
   display: grid;
@@ -298,14 +334,6 @@ html.is-mobile-app .isl-detail-backdrop {
   object-fit: cover;
 }
 
-.m-tile__emoji {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 34px;
-}
 
 .m-tile__title {
   font-size: 14.5px;
@@ -339,14 +367,6 @@ html.is-mobile-app .isl-detail-backdrop {
   object-fit: cover;
 }
 
-.m-sport-detail__emoji {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 54px;
-}
 
 .m-sport-detail__name {
   margin: 0;
@@ -996,7 +1016,26 @@ html.is-mobile-app .isl-detail-backdrop {
   width: 100%;
   height: 100%;
   transform-origin: 50% 50%;
+}
+
+/*
+  확대·이동 중 (MobileIslandMap 이 is-moving 을 붙였다 뗐다 한다)
+  - 지도를 별도 레이어로 올려 매 프레임 다시 그리지 않고 GPU 로 옮기기만 한다
+  - 레이어 안에서 뭔가 움직이면 결국 매 프레임 다시 그려야 하므로
+    배 흔들림·선택 강조 트랜지션을 잠깐 멈춘다
+*/
+.m-map__stage.is-moving {
   will-change: transform;
+}
+
+.m-map__stage.is-moving .isl-boat-icon {
+  animation-play-state: paused;
+}
+
+.m-map__stage.is-moving .isl-hit-area,
+.m-map__stage.is-moving .isl-explorer,
+.m-map__stage.is-moving .isl-region-pill {
+  transition: none;
 }
 
 /* 확대·이동은 JS 가 프레임마다 값을 넣는다 (MobileIslandMap.animateTo).
@@ -1324,4 +1363,10 @@ html.is-mobile-app .isl-detail-backdrop {
   font-size: 20px;
   line-height: 1.25;
   color: var(--navy);
+}
+
+/* 관리자 공지 — 섬·활동 대신 "공지" 표시 */
+.m-post__island--notice {
+  background: var(--navy);
+  color: #fff;
 }

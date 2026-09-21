@@ -9,9 +9,9 @@ import {
 } from "@/lib/island-data";
 import { useSession } from "@/store/session";
 import { useVisitedIslands } from "@/store/visited-islands";
-import { IslandDetailPanel } from "@/components/island/IslandDetailPanel";
 import { IslandWeatherPanel } from "@/components/island/IslandWeatherPanel";
 import { MobileIslandMap } from "./MobileIslandMap";
+import { MobileIslandSheet } from "./MobileIslandSheet";
 import { useAuthSheet } from "../auth/AuthSheetProvider";
 import { ChevronRightIcon } from "../MobileIcons";
 
@@ -25,7 +25,7 @@ function readIslandId(param: string | null): string | null {
 /**
  * 모바일 섬 탐험
  *
- * 데스크톱은 큰 SVG 지도 옆에 상세 패널을 붙인 2단이다. 폰에서 168개 섬을
+ * 데스크톱은 큰 SVG 지도 옆에 상세 패널을 붙인 2단이다. 폰에서 18개 섬을
  * 지도에서 손가락으로 집는 건 어려워서, 검색·권역 칩이 붙은 목록을 기본으로
  * 두고 지도는 한 번 탭해서 여는 다른 보기로 뺐다.
  */
@@ -304,7 +304,7 @@ export function MobileIslands() {
         </>
       )}
 
-      <IslandDetailPanel island={detailOpen ? selectedIsland : null} onClose={closeDetail} />
+      <MobileIslandSheet island={detailOpen ? selectedIsland : null} onClose={closeDetail} />
     </div>
   );
 }

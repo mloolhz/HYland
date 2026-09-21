@@ -1,3 +1,5 @@
+import type { LeisureFacility } from "@/api/leisure";
+
 export type CourseStep = {
   /** 하루 일정 전체를 잡는 코스에만 넣는다. 단순 종목·활동 나열이면 생략. */
   time?: string;
@@ -39,6 +41,8 @@ export type AiResponse = {
   tips?: string[];
   followups?: string[];
   weather?: WeatherInfo;
+  /** 답변에 언급된 실제 시설 — 서버가 DB 와 대조해 검증한 것만 온다 */
+  facilities?: LeisureFacility[];
 };
 
 export type ChatMessage =

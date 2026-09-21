@@ -1147,14 +1147,6 @@ html.is-mobile-app body {
   object-fit: cover;
 }
 
-.m-rail__emoji {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 34px;
-}
 
 .m-rail__tag {
   position: absolute;

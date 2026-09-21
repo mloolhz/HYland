@@ -14,7 +14,9 @@
 .isl-header {
   position: relative;
   min-height: var(--page-intro-band-h);
-  padding: 0;
+  /* 진행률 카드가 띠 높이(168px)보다 커서 위아래가 띠 끝에 딱 붙었다.
+     띠가 늘어나더라도 카드 위아래에 숨 쉴 틈을 둔다 */
+  padding: 24px 0;
   display: flex;
   align-items: center;
   overflow: visible;

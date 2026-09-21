@@ -2,6 +2,7 @@ import type { AiResponse } from "@/types/ai-recommend";
 import { getIslandEditorialByName } from "@/data/island-editorial";
 import { renderBoldText } from "@/lib/render-bold-text";
 import { AiCourseTimeline } from "./AiCourseTimeline";
+import { AiFacilityCards } from "./AiFacilityCards";
 import { AiRecCard } from "./AiRecCard";
 
 type AiResponseContentProps = {
@@ -56,6 +57,10 @@ export function AiResponseContent({ response, onFollowup }: AiResponseContentPro
             </p>
           ))}
         </div>
+      )}
+
+      {response.facilities && response.facilities.length > 0 && (
+        <AiFacilityCards facilities={response.facilities} />
       )}
 
       {response.recommendations.length > 0 && (

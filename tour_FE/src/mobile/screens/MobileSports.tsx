@@ -18,13 +18,7 @@ import { fetchFacilitiesByActivity, islandsOf, type LeisureFacility } from "@/ap
 import { FacilityGrid } from "@/components/sports/FacilityGrid";
 import { SportCommunityLink } from "@/components/sports/SportCommunityLink";
 import { ChevronLeftIcon, ChevronRightIcon } from "../MobileIcons";
-
-const CATEGORY_EMOJI: Record<CategoryKey, string> = {
-  water: "⛵",
-  land: "🥾",
-  exp: "🎯",
-  heal: "🌿",
-};
+import { MobilePhoto } from "../MobilePhoto";
 
 function readCategory(value: string | null): CategoryKey {
   return value && value in SPORTS_DATA ? (value as CategoryKey) : "water";
@@ -83,13 +77,7 @@ function SportDetail({
       </button>
 
       <div className="m-sport-detail__hero">
-        {sport.photo?.trim() ? (
-          <img src={sport.photo} alt="" />
-        ) : (
-          <span className="m-sport-detail__emoji" aria-hidden="true">
-            {CATEGORY_EMOJI[category]}
-          </span>
-        )}
+        <MobilePhoto src={sport.photo} lazy={false} />
         <span className="m-rail__tag">{sport.diff}</span>
       </div>
 
@@ -268,13 +256,7 @@ export function MobileSports() {
               onClick={() => setParams({ sport: sport.id })}
             >
               <span className="m-tile__thumb">
-                {sport.photo?.trim() ? (
-                  <img src={sport.photo} alt="" loading="lazy" />
-                ) : (
-                  <span className="m-tile__emoji" aria-hidden="true">
-                    {CATEGORY_EMOJI[category]}
-                  </span>
-                )}
+                <MobilePhoto src={sport.photo} />
                 <span className="m-rail__tag">{sport.diff}</span>
               </span>
               <b className="m-tile__title">{sport.name}</b>
