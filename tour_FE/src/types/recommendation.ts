@@ -139,4 +139,6 @@ export type RecommendationResponse = {
   recommendations: IslandRecommendationItem[];
   /** 섬BTI 결과와 동일한 3섬 + AI 코스(시설·타임라인) */
   btiFixedIslands?: boolean;
+  /** btiFixedIslands일 때 유형 별칭(예: 느긋한 섬유영자) */
+  btiTypeName?: string;
 };

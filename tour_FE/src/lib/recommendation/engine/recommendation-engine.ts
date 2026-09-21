@@ -1,4 +1,7 @@
-import { ISLAND_RECOMMENDATION_FEATURES } from "@/data/island-recommendation-features";
+import {
+  getIslandRecommendationFeature,
+  ISLAND_RECOMMENDATION_FEATURES,
+} from "@/data/island-recommendation-features";
 import { getIslandEditorial } from "@/data/island-editorial";
 import { getUniqueIslandIdsFromEarnedStamps } from "@/lib/passport/stamp-island-link";
 import { buildMockIslandTravelContexts } from "@/lib/recommendation/context/travel-context.mock";
@@ -36,6 +39,7 @@ import { getPrimaryInfoSource, sourceButtonLabel } from "@/lib/sport-booking-res
 import { getUserTraitLabelsFromBti } from "@/lib/recommendation/preference/bti-preference.mapper";
 import { cosineSimilarityScore } from "@/lib/recommendation/preference/similarity";
 import { loadUserPreference } from "@/lib/recommendation/preference/user-preference-storage";
+import type { IslandBtiResultCode } from "@/types/island-bti";
 import type {
   IslandRecommendationItem,
   RecommendationRequest,
@@ -50,6 +54,8 @@ export type RecommendationEngineOptions = {
   fixedIslandNamesInOrder?: string[];
   /** 섬BTI 결과 화면 추천 이유 — 카드 상단 근거로 앞에 붙임 */
   btiResultReasonByIsland?: Record<string, string>;
+  /** preference 없이 BTI 고정 추천할 때 코드 */
+  btiResultCode?: IslandBtiResultCode;
 };
 
 function resolveUserPreference(options?: RecommendationEngineOptions): UserPreference | null {
@@ -114,12 +120,15 @@ export function runRecommendationEngine(
 ): RecommendationResponse {
   const userPreference = resolveUserPreference(options);
   const visitedIslandIds = resolveVisitedIds(options);
-  const useIslandBti = request.useIslandBti === true && userPreference !== null;
+  const fixedIslandNames = options?.fixedIslandNamesInOrder;
+  const btiResultCode = options?.btiResultCode ?? userPreference?.islandBti ?? null;
+  const useIslandBti =
+    request.useIslandBti === true &&
+    (userPreference !== null || Boolean(fixedIslandNames?.length && btiResultCode));
   const contexts = buildMockIslandTravelContexts(request.trip.travelDate);
   const contextMap = new Map(contexts.map((ctx) => [ctx.islandId, ctx]));
 
   const candidates: IslandRecommendationItem[] = [];
-  const fixedIslandNames = options?.fixedIslandNamesInOrder;
   const allowedIslandIds = fixedIslandNames
     ? new Set(
         fixedIslandNames
@@ -255,7 +264,10 @@ export function runRecommendationEngine(
       .map((displayName) => {
         const islandId = resolveIslandId(displayName);
         if (!islandId) return undefined;
-        const item = byId.get(islandId);
+        let item = byId.get(islandId);
+        if (!item) {
+          item = buildMinimalFixedIslandItem(islandId, displayName, request, visitedIslandIds);
+        }
         if (!item) return undefined;
         const btiReason = btiReasons[displayName];
         if (!btiReason) return item;
@@ -283,15 +295,62 @@ export function runRecommendationEngine(
     );
   }
 
+  const effectiveBtiCode =
+    (userPreference?.islandBti as IslandBtiResultCode | undefined) ??
+    (btiResultCode as IslandBtiResultCode | null);
+
   const userTraits =
-    useIslandBti && userPreference
-      ? getUserTraitLabelsFromBti(userPreference.islandBti, userPreference.vector)
+    useIslandBti && userPreference && effectiveBtiCode
+      ? getUserTraitLabelsFromBti(effectiveBtiCode, userPreference.vector)
       : [];
 
   return {
     useIslandBti,
-    userIslandBti: userPreference?.islandBti ?? null,
+    userIslandBti: effectiveBtiCode,
     userTraits,
     recommendations,
+  };
+}
+
+/** 필터·컨텍스트로 후보에서 빠져도 섬BTI 고정 3섬은 카드를 만든다 */
+function buildMinimalFixedIslandItem(
+  islandId: string,
+  displayName: string,
+  request: RecommendationRequest,
+  visitedIslandIds: Set<string>,
+): IslandRecommendationItem | undefined {
+  const island = getIslandRecommendationFeature(islandId);
+  if (!island) return undefined;
+
+  const partialScores = {
+    islandBtiMatch: 75,
+    currentTripMatch: scoreCurrentTripMatch(request.trip, island),
+    facilityMatch: scoreFacilityMatch(islandId, request.trip).score,
+    sportsMatch: scoreSportsMatch(islandId, request.trip, new Set()).score,
+    communityMatch: 50,
+    weather: 70,
+    transport: 70,
+    condition: 65,
+    exploration: visitedIslandIds.has(islandId) ? 40 : 70,
+  };
+
+  return {
+    islandId,
+    islandName: displayName,
+    finalScore: computeFinalScore(partialScores, true),
+    scores: partialScores,
+    recommendationReasons: [`섬BTI 결과에서 안내한 ${displayName}이에요.`],
+    tags: buildRecommendationTags(partialScores, visitedIslandIds.has(islandId)),
+    islandCharacteristic: getIslandEditorial(islandId) ?? undefined,
+    estimatedBudget: island.averageBudget,
+    recommendedActivities: pickRecommendedActivities(island.activities, request.trip.activities, {
+      sportNames: getIslandSports(islandId).map((s) => s.name),
+      facilityActivities: [...(getIslandFacilitySummary(islandId)?.byActivity.keys() ?? [])],
+    }),
+    facilityHighlights: [],
+    sportHighlights: [],
+    externalLinks: [],
+    communityCautions: [],
+    communityHighlights: [],
   };
 }

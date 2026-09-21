@@ -301,20 +301,37 @@ export function AiRecommend() {
     });
   }, []);
 
+  const buildTripRequest = useCallback(
+    () => ({
+      travelDate: tripForm.travelDate,
+      travelEndDate: tripForm.travelEndDate ?? tripForm.travelDate,
+      duration: tripForm.duration,
+      companion: tripForm.companion,
+      travelMood: tripForm.travelMood,
+      activities: tripForm.activities,
+      intensity: tripForm.intensity,
+    }),
+    [tripForm],
+  );
+
+  const loadBtiFixedRecommendation = useCallback(
+    (code: string) =>
+      postBtiIslandCourseRecommendations(code, {
+        trip: buildTripRequest(),
+        useIslandBti: true,
+      }),
+    [buildTripRequest],
+  );
+
   const runStructuredRecommendation = useCallback(async () => {
+    if (hasResult && islandBtiResultCode) {
+      return loadBtiFixedRecommendation(islandBtiResultCode);
+    }
     return postRecommendations({
-      trip: {
-        travelDate: tripForm.travelDate,
-        travelEndDate: tripForm.travelEndDate ?? tripForm.travelDate,
-        duration: tripForm.duration,
-        companion: tripForm.companion,
-        travelMood: tripForm.travelMood,
-        activities: tripForm.activities,
-        intensity: tripForm.intensity,
-      },
-      useIslandBti: hasResult,
+      trip: buildTripRequest(),
+      useIslandBti: false,
     });
-  }, [tripForm, hasResult]);
+  }, [buildTripRequest, hasResult, islandBtiResultCode, loadBtiFixedRecommendation]);
 
   const executeTurn = useCallback(
     async (
@@ -530,13 +547,9 @@ export function AiRecommend() {
     void executeTurn(label, label, {
       withRecommendation: true,
       questionSource: "chip",
-      loadRecommendation: () =>
-        postBtiIslandCourseRecommendations(islandBtiResultCode, {
-          trip: tripForm,
-          useIslandBti: true,
-        }),
+      loadRecommendation: () => loadBtiFixedRecommendation(islandBtiResultCode),
     });
-  }, [btiResultData, executeTurn, hasResult, islandBtiResultCode, navigate, tripForm]);
+  }, [btiResultData, executeTurn, hasResult, islandBtiResultCode, loadBtiFixedRecommendation, navigate]);
 
   // turns 배열이 바뀔 때(새 턴 추가) 그 턴의 질문 말풍선을 채팅 영역 최상단에 한 번
   // 스냅한다. 그 아래로 답변이 채워지는 동안은 자동으로 따라 스크롤하지 않으며,
@@ -577,15 +590,22 @@ export function AiRecommend() {
       initialHandled.current = true;
       setBootstrapped(true);
       setSettingsOpen(false);
-      void applyTripConditions();
+      const { code, name } = locationState.islandBti;
+      const turnLabel = `${name} 유형 추천 섬 — 여행 코스`;
+      void executeTurn(turnLabel, turnLabel, {
+        withRecommendation: true,
+        questionSource: "chip",
+        loadRecommendation: () => loadBtiFixedRecommendation(code),
+      });
       navigate(location.pathname, { replace: true, state: null });
       return;
     }
 
     setBootstrapped(true);
   }, [
-    applyTripConditions,
+    executeTurn,
     initialMessage,
+    loadBtiFixedRecommendation,
     location.pathname,
     locationState?.islandBti,
     navigate,

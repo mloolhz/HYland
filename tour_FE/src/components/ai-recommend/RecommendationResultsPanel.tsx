@@ -43,8 +43,21 @@ export function RecommendationResultsPanel({ response, weather }: Recommendation
 
       {response.btiFixedIslands ? (
         <p className="ai-rec-results__lead">
-          섬BTI 결과에서 안내한 섬과 같아요. 아래는 설정한 여행 조건에 맞춘 이동·활동 코스예요. (필터
-          아이콘에서 날짜·동행·관심 활동을 바꿀 수 있어요.)
+          {response.btiTypeName ? (
+            <>
+              <strong>{response.btiTypeName}</strong>
+              {response.userIslandBti ? `(${response.userIslandBti})` : null} 유형의 섬BTI 결과를
+              바탕으로, 결과 화면에서 안내한{" "}
+              <strong>{response.recommendations.map((r) => r.islandName).join(" · ")}</strong>에
+              맞춰 여행 코스를 추천해 드릴게요. 아래는 설정하신 날짜·동행·관심 활동을 반영한
+              이동·체험 코스예요.
+            </>
+          ) : (
+            <>
+              섬BTI 결과에서 안내한 섬과 같아요. 아래는 설정한 여행 조건에 맞춘 이동·활동 코스예요.
+            </>
+          )}{" "}
+          (필터 아이콘에서 날짜·동행·관심 활동을 바꿀 수 있어요.)
         </p>
       ) : response.useIslandBti && response.userIslandBti ? (
         <p className="ai-rec-results__lead">

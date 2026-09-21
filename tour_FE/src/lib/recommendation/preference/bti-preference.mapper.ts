@@ -1,5 +1,12 @@
+import { CURRENT_USER_ID } from "@/constants/auth";
 import { getIslandBtiResult } from "@/data/island-bti/results";
-import type { IslandBtiAxisScores, IslandBtiResultCode } from "@/types/island-bti";
+import { PREFERENCE_BLEND_WEIGHTS } from "@/lib/recommendation/config/recommendation-weights";
+import type {
+  IslandBtiAxisScores,
+  IslandBtiAxisValue,
+  IslandBtiResultCode,
+} from "@/types/island-bti";
+import type { UserPreference } from "@/types/recommendation";
 import {
   PREFERENCE_FEATURE_KEYS,
   type PreferenceFeatureKey,
@@ -47,6 +54,33 @@ const FEATURE_AXIS_WEIGHTS: Record<PreferenceFeatureKey, Partial<Record<keyof Is
   culture: { L: 0.35, P: 0.25, I: 0.2, C: 0.1, B: 0.1 },
   food: { C: 0.35, L: 0.25, B: 0.2, F: 0.1, W: 0.1 },
 };
+
+/** 결과 코드 4글자 → 축 점수(0~5). 저장된 scores 없을 때 엔진·성향 라벨용 */
+export function buildAxisScoresFromResultCode(code: IslandBtiResultCode): IslandBtiAxisScores {
+  const base: IslandBtiAxisScores = { A: 2, B: 2, W: 2, L: 2, C: 2, I: 2, P: 2, F: 2 };
+  const letters = code.split("") as IslandBtiAxisValue[];
+  for (const letter of letters) {
+    if (letter in base) base[letter] = 4;
+  }
+  return base;
+}
+
+export function buildUserPreferenceFromBtiCode(
+  code: IslandBtiResultCode,
+  userId: string = CURRENT_USER_ID,
+): UserPreference {
+  const scores = buildAxisScoresFromResultCode(code);
+  const testedAt = new Date().toISOString();
+  return {
+    userId,
+    islandBti: code,
+    vector: buildPreferenceVectorFromBtiScores(scores),
+    btiWeight: PREFERENCE_BLEND_WEIGHTS.islandBti,
+    source: "island-bti",
+    testedAt,
+    updatedAt: testedAt,
+  };
+}
 
 export function buildPreferenceVectorFromBtiScores(scores: IslandBtiAxisScores): PreferenceVector {
   const normalized = normalizeAxisScores(scores);
