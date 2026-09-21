@@ -4,16 +4,8 @@ import type { IslandBtiAxisScores, IslandBtiResultRecord } from "@/types/island-
 
 export const ISLAND_BTI_HISTORY_STORAGE_KEY = "hyland:island-bti:history";
 
-/** 비회원(탭 sessionStorage) — 화면을 벗어나면 비우는 용도 */
+/** @deprecated 비회원은 더 이상 저장하지 않음 — legacy 키 정리용 */
 export const ISLAND_BTI_GUEST_HISTORY_STORAGE_KEY = "hyland:island-bti:history:guest";
-
-function historyStorage(): Storage {
-  return isMemberSession() ? localStorage : sessionStorage;
-}
-
-function historyStorageKey(): string {
-  return isMemberSession() ? ISLAND_BTI_HISTORY_STORAGE_KEY : ISLAND_BTI_GUEST_HISTORY_STORAGE_KEY;
-}
 
 export const ISLAND_BTI_HISTORY_MAX = 50;
 
@@ -50,9 +42,11 @@ export function parseIslandBtiHistory(raw: unknown): IslandBtiResultRecord[] {
 
 export function loadIslandBtiHistory(): IslandBtiResultRecord[] {
   if (typeof window === "undefined") return [];
+  // 비회원은 디스크에 저장하지 않음 — 새로고침·탭 재진입 시 초기화
+  if (!isMemberSession()) return [];
 
   try {
-    const raw = historyStorage().getItem(historyStorageKey());
+    const raw = localStorage.getItem(ISLAND_BTI_HISTORY_STORAGE_KEY);
     if (!raw) return [];
     const parsed: unknown = JSON.parse(raw);
     return sortHistoryByTestedAt(parseIslandBtiHistory(parsed));
@@ -63,12 +57,12 @@ export function loadIslandBtiHistory(): IslandBtiResultRecord[] {
 
 export function saveIslandBtiHistory(history: IslandBtiResultRecord[]): boolean {
   if (typeof window === "undefined") return false;
+  if (!isMemberSession()) return true;
 
   try {
-    const storage = historyStorage();
-    const key = historyStorageKey();
-    if (history.length === 0) storage.removeItem(key);
-    else storage.setItem(key, JSON.stringify(history));
+    const key = ISLAND_BTI_HISTORY_STORAGE_KEY;
+    if (history.length === 0) localStorage.removeItem(key);
+    else localStorage.setItem(key, JSON.stringify(history));
     return true;
   } catch (error) {
     console.warn("Failed to save Island BTI history:", error);

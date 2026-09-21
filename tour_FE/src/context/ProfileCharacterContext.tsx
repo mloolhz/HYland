@@ -23,6 +23,7 @@ import type {
   IslandBtiResultCode,
   IslandBtiResultRecord,
 } from "@/types/island-bti";
+import { readToken } from "@/lib/token";
 import { useSession } from "@/store/session";
 
 type ProfileCharacterContextValue = {
@@ -55,12 +56,14 @@ function toCurrentResult(record: IslandBtiResultRecord): CurrentIslandBtiResult 
 export function ProfileCharacterProvider({ children }: { children: ReactNode }) {
   const { isLoggedIn, loading: sessionLoading } = useSession();
   const [selectedCharacterId, setSelectedCharacterId] = useState(DEFAULT_PROFILE_CHARACTER_ID);
-  const [history, setHistory] = useState<IslandBtiResultRecord[]>(() => loadIslandBtiHistory());
+  const [history, setHistory] = useState<IslandBtiResultRecord[]>(() =>
+    readToken() ? loadIslandBtiHistory() : [],
+  );
   const [isProfileSelectModalOpen, setProfileSelectModalOpen] = useState(false);
 
   useEffect(() => {
     if (sessionLoading) return;
-    setHistory(loadIslandBtiHistory());
+    setHistory(isLoggedIn ? loadIslandBtiHistory() : []);
   }, [isLoggedIn, sessionLoading]);
 
   const latestResult = useMemo(() => getLatestIslandBtiResult(history), [history]);

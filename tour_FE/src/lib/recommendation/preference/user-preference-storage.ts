@@ -9,10 +9,6 @@ import {
 
 export const USER_PREFERENCE_STORAGE_KEY = "hyland:user-preference";
 
-function preferenceStorage(): Storage {
-  return isMemberSession() ? localStorage : sessionStorage;
-}
-
 function isUserPreference(value: unknown): value is UserPreference {
   if (!value || typeof value !== "object") return false;
   const candidate = value as UserPreference;
@@ -27,9 +23,10 @@ function isUserPreference(value: unknown): value is UserPreference {
 
 export function loadUserPreference(): UserPreference | null {
   if (typeof window === "undefined") return null;
+  if (!isMemberSession()) return null;
 
   try {
-    const raw = preferenceStorage().getItem(USER_PREFERENCE_STORAGE_KEY);
+    const raw = localStorage.getItem(USER_PREFERENCE_STORAGE_KEY);
     if (!raw) return null;
     const parsed: unknown = JSON.parse(raw);
     return isUserPreference(parsed) ? parsed : null;
@@ -40,9 +37,10 @@ export function loadUserPreference(): UserPreference | null {
 
 export function saveUserPreference(preference: UserPreference): void {
   if (typeof window === "undefined") return;
+  if (!isMemberSession()) return;
 
   try {
-    preferenceStorage().setItem(USER_PREFERENCE_STORAGE_KEY, JSON.stringify(preference));
+    localStorage.setItem(USER_PREFERENCE_STORAGE_KEY, JSON.stringify(preference));
   } catch (error) {
     console.warn("Failed to save user preference:", error);
   }

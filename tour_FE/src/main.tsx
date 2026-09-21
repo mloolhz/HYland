@@ -42,6 +42,7 @@ import { SessionProvider } from "@/store/session";
 import { VisitedIslandsProvider } from "@/store/visited-islands";
 import { MissionProgressProvider } from "@/store/mission-progress";
 import { RequireAuth } from "@/components/RequireAuth";
+import { resetGuestEphemeralPersistence } from "@/lib/guest-ephemeral-state";
 import "./index.css";
 import "./styles/auth.css";
 import "./styles/community.css";
@@ -67,6 +68,8 @@ import "./styles/legal.css";
 import "./styles/mobile.css";
 import "./styles/mobile-screens.css";
 import "./styles/mobile-pages.css";
+
+resetGuestEphemeralPersistence();
 
 const router = createBrowserRouter([
   { path: "/", element: <HomeRoute />, errorElement: <RouterError /> },

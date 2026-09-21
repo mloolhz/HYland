@@ -1,10 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { useIslandBti } from "@/context/ProfileCharacterContext";
-import { clearAiSessionId } from "@/lib/ai-session-id";
-import { clearGuestIslandBtiHistory } from "@/lib/island-bti-storage";
-import { isMemberSession } from "@/lib/member-session";
-import { clearUserPreference } from "@/lib/recommendation/preference/user-preference-storage";
+import { resetGuestEphemeralPersistence } from "@/lib/guest-ephemeral-state";
 import { useSession } from "@/store/session";
 
 const EPHEMERAL_ROUTE_PREFIXES = ["/island-bti", "/ai-recommend"];
@@ -15,11 +12,9 @@ function isEphemeralRoute(pathname: string): boolean {
   );
 }
 
-function resetGuestBtiAndAiSession(clearHistoryState: () => void): void {
-  if (isMemberSession()) return;
-  clearGuestIslandBtiHistory();
-  clearUserPreference();
-  clearAiSessionId();
+function resetGuestBtiAndAiSession(clearHistoryState: () => void, isLoggedIn: boolean): void {
+  if (isLoggedIn) return;
+  resetGuestEphemeralPersistence();
   clearHistoryState();
 }
 
@@ -43,7 +38,7 @@ export function GuestBtiAiSessionReset() {
     pathnameRef.current = pathname;
 
     if (isEphemeralRoute(previous) && !isEphemeralRoute(pathname)) {
-      resetGuestBtiAndAiSession(clearHistory);
+      resetGuestBtiAndAiSession(clearHistory, isLoggedIn);
     }
   }, [pathname, isLoggedIn, loading, clearHistory]);
 
@@ -51,7 +46,7 @@ export function GuestBtiAiSessionReset() {
     return () => {
       if (loading || isLoggedIn) return;
       if (isEphemeralRoute(pathnameRef.current)) {
-        resetGuestBtiAndAiSession(clearHistory);
+        resetGuestBtiAndAiSession(clearHistory, isLoggedIn);
       }
     };
   }, [isLoggedIn, loading, clearHistory]);
